@@ -1,0 +1,56 @@
+/* Racing the Beam — Atari-inspired theme */
+
+:root {
+  /* Atari-inspired orange/red accent */
+  --vp-c-brand-1: #e85d04;
+  --vp-c-brand-2: #dc2f02;
+  --vp-c-brand-3: #f48c06;
+  --vp-c-brand-soft: rgba(232, 93, 4, 0.14);
+}
+
+.dark {
+  --vp-c-brand-1: #f48c06;
+  --vp-c-brand-2: #e85d04;
+  --vp-c-brand-3: #faa307;
+  --vp-c-brand-soft: rgba(244, 140, 6, 0.16);
+}
+
+/* Coming Soon badge */
+.coming-soon {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 0.85em;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+/* Lesson status indicators */
+.lesson-status {
+  text-align: center;
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+  border: 1px dashed var(--vp-c-divider);
+}
+
+.lesson-status h2 {
+  border: none;
+  margin: 0 0 0.5rem;
+}
+
+.lesson-status p {
+  margin: 0;
+  color: var(--vp-c-text-2);
+}
+
+/* Hero customization */
+.VPHero .text {
+  background: linear-gradient(135deg, #e85d04, #f48c06, #dc2f02);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}

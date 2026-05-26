@@ -1,0 +1,31 @@
+{
+  "name": "racing-the-beam",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Racing the Beam — Learn Atari 2600 assembly programming from scratch. 72 hands-on lessons from zero to homebrew mastery.",
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blendsdk/racing-the-beam.git"
+  },
+  "keywords": [
+    "atari-2600",
+    "6502",
+    "assembly",
+    "retro-gaming",
+    "homebrew"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blendsdk/racing-the-beam/issues"
+  },
+  "homepage": "https://blendsdk.github.io/racing-the-beam/",
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

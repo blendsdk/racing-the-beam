@@ -1,2 +1,19 @@
 # Build artifacts
 build/
+
+# Research material (local only)
+research_material/
+
+# Plans (local only — not published)
+plans/
+
+# Node.js
+node_modules/
+
+# VitePress
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+docs/.vitepress/.temp/
+
+# Cline rules (local only)
+.clinerules/
