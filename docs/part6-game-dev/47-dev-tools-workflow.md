@@ -9,7 +9,7 @@
 
 **What you'll learn:**
 
-- DASM assembler advanced features
+- ACME assembler advanced features
 - Build automation with Make
 - Version control for assembly projects
 - Testing and verification workflows

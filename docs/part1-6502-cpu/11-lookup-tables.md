@@ -9,7 +9,7 @@
 
 **What you'll learn:**
 
-- Storing data in ROM with .byte directives
+- Storing data in ROM with `!byte` directives
 - Indexed table lookups
 - Sprite data, sine tables, level data
 - Trading ROM space for CPU cycles

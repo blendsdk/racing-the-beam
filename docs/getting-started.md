@@ -4,24 +4,27 @@ Welcome to **Racing the Beam** — a step-by-step masterclass in Atari 2600 asse
 
 ## What You'll Need
 
-### 1. DASM Assembler
+### 1. ACME Cross-Assembler
 
-DASM is the standard assembler for Atari 2600 development.
+ACME is the 6502 cross-assembler we use throughout this course. It's lightweight, well-documented, and produces clean binary output perfect for Atari 2600 ROMs.
+
+**Linux** (apt):
+```bash
+sudo apt install acme
+```
 
 **macOS** (Homebrew):
 ```bash
-brew install dasm
+brew install acme
 ```
 
-**Linux** (build from source):
+**From source**:
 ```bash
-git clone https://github.com/dasm-assembler/dasm.git
-cd dasm
-make
-sudo cp bin/dasm /usr/local/bin/
+# See https://sourceforge.net/projects/acme-crossass/
+# or https://github.com/meonwax/acme
 ```
 
-**Windows**: Download from [dasm-assembler releases](https://github.com/dasm-assembler/dasm/releases)
+> **Note:** This course was built and tested with ACME v0.97. Run `acme --version` to check yours.
 
 ### 2. Stella Emulator
 
@@ -48,16 +51,16 @@ cd racing-the-beam
 
 ## Your First Build
 
-Once you have DASM and Stella installed, you can build and run the starter project:
+Once you have ACME and Stella installed, you can build and run the starter project:
 
 ```bash
 make
 ```
 
-This will assemble `src/main.asm` into `build/main.bin`. Open it in Stella:
+This will assemble `src/main.asm` into `build/game.bin`. Open it in Stella:
 
 ```bash
-stella build/main.bin
+stella build/game.bin
 ```
 
 ## How This Course Works
