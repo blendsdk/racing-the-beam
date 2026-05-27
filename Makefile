@@ -27,7 +27,7 @@ ASM_FLAGS = -f plain -o $(ROM)
 
 # =============================================================================
 
-.PHONY: all run clean
+.PHONY: all run clean lesson01 demo01
 
 all: $(ROM)
 
@@ -46,3 +46,18 @@ run: $(ROM)
 clean:
 	rm -rf $(BUILD_DIR)
 	@echo "=== Cleaned ==="
+
+# =============================================================================
+# Lesson Targets
+# =============================================================================
+
+# --- Lesson 01: Number Systems ---
+lesson01: | $(BUILD_DIR)
+	@echo "=== Building Lesson 01: Number Systems ==="
+	$(ASM) -f plain -o $(BUILD_DIR)/lesson01.bin lessons/part0-foundations/01-number-systems/01-number-systems.asm
+	@echo "=== Built $(BUILD_DIR)/lesson01.bin ($$(wc -c < $(BUILD_DIR)/lesson01.bin) bytes) ==="
+
+demo01: | $(BUILD_DIR)
+	@echo "=== Building Demo 01: Hex Color Chart ==="
+	$(ASM) -f plain -o $(BUILD_DIR)/demo01.bin lessons/part0-foundations/01-number-systems/demo-01.asm
+	@echo "=== Built $(BUILD_DIR)/demo01.bin ($$(wc -c < $(BUILD_DIR)/demo01.bin) bytes) ==="
