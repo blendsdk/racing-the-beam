@@ -27,7 +27,7 @@ ASM_FLAGS = -f plain -o $(ROM)
 
 # =============================================================================
 
-.PHONY: all run clean lesson01 demo01
+.PHONY: all run clean lesson01 demo01 lesson02
 
 all: $(ROM)
 
@@ -61,3 +61,9 @@ demo01: | $(BUILD_DIR)
 	@echo "=== Building Demo 01: Hex Color Chart ==="
 	$(ASM) -f plain -o $(BUILD_DIR)/demo01.bin lessons/part0-foundations/01-number-systems/demo-01.asm
 	@echo "=== Built $(BUILD_DIR)/demo01.bin ($$(wc -c < $(BUILD_DIR)/demo01.bin) bytes) ==="
+
+# --- Lesson 02: Meet Stella — Your Debugger and Best Friend ---
+lesson02: | $(BUILD_DIR)
+	@echo "=== Building Lesson 02: Meet Stella ==="
+	$(ASM) -f plain -o $(BUILD_DIR)/lesson02.bin lessons/part0-foundations/02-stella-debugger/02-stella-debugger.asm
+	@echo "=== Built $(BUILD_DIR)/lesson02.bin ($$(wc -c < $(BUILD_DIR)/lesson02.bin) bytes) ==="
