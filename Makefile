@@ -27,7 +27,7 @@ ASM_FLAGS = -f plain -o $(ROM)
 
 # =============================================================================
 
-.PHONY: all run clean lesson01 demo01 lesson02
+.PHONY: all run clean lesson01 demo01 lesson02 lesson03
 
 all: $(ROM)
 
@@ -67,3 +67,9 @@ lesson02: | $(BUILD_DIR)
 	@echo "=== Building Lesson 02: Meet Stella ==="
 	$(ASM) -f plain -o $(BUILD_DIR)/lesson02.bin lessons/part0-foundations/02-stella-debugger/02-stella-debugger.asm
 	@echo "=== Built $(BUILD_DIR)/lesson02.bin ($$(wc -c < $(BUILD_DIR)/lesson02.bin) bytes) ==="
+
+# --- Lesson 03: Anatomy of the Atari 2600 ---
+lesson03: | $(BUILD_DIR)
+	@echo "=== Building Lesson 03: Anatomy of the Atari 2600 ==="
+	$(ASM) -f plain -o $(BUILD_DIR)/lesson03.bin lessons/part0-foundations/03-anatomy-of-2600/03-anatomy-of-2600.asm
+	@echo "=== Built $(BUILD_DIR)/lesson03.bin ($$(wc -c < $(BUILD_DIR)/lesson03.bin) bytes) ==="

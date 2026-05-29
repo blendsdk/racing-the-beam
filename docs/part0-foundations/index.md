@@ -8,7 +8,7 @@ Before we write a single line of assembly, we need to understand the tools and t
 |---|--------|--------|
 | 01 | [Number Systems — Binary, Hexadecimal, and You](./01-number-systems) | ✅ Complete |
 | 02 | [Meet Stella — Your Debugger and Best Friend](./02-stella-debugger) | ✅ Complete |
-| 03 | [Anatomy of the Atari 2600](./03-anatomy-of-2600) | 🔒 Coming Soon |
+| 03 | [Anatomy of the Atari 2600](./03-anatomy-of-2600) | ✅ Complete |
 
 ## What You'll Learn
 
