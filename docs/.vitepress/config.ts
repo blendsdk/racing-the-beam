@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Racing the Beam',
-  description: 'Learn Atari 2600 assembly programming from scratch — 72 hands-on lessons from zero to homebrew mastery',
+  description: 'Learn Atari 2600 assembly programming from scratch — 78 hands-on lessons from zero to homebrew mastery',
   base: '/racing-the-beam/',
 
   head: [
     ['meta', { name: 'theme-color', content: '#e85d04' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Racing the Beam — Atari 2600 Programming' }],
-    ['meta', { property: 'og:description', content: '72 hands-on lessons from zero to homebrew mastery' }],
+    ['meta', { property: 'og:description', content: '78 hands-on lessons from zero to homebrew mastery' }],
   ],
 
   themeConfig: {
@@ -165,6 +165,19 @@ export default defineConfig({
             { text: '70 — Capstone: Breakout', link: '/part10-capstones/70-breakout' },
             { text: '71 — Capstone: Maze Explorer', link: '/part10-capstones/71-maze-explorer' },
             { text: '72 — Capstone: Your Own Game', link: '/part10-capstones/72-your-game' },
+          ],
+        },
+        {
+          text: 'Part 11: Legendary Techniques 🔮',
+          collapsed: true,
+          items: [
+            { text: 'Overview (Coming Soon)', link: '/part11-legendary/' },
+            { text: '73 — Cosmic Ark Starfield', link: '/part11-legendary/' },
+            { text: '74 — Skipdraw Sprite Kernel', link: '/part11-legendary/' },
+            { text: '75 — Pseudo-3D Road', link: '/part11-legendary/' },
+            { text: '76 — Procedural Worlds (LFSR)', link: '/part11-legendary/' },
+            { text: '77 — Interlaced Flicker', link: '/part11-legendary/' },
+            { text: '78 — Room & Object Engine', link: '/part11-legendary/' },
           ],
         },
         {

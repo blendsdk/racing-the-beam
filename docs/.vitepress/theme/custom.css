@@ -54,3 +54,13 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Code-heavy ASM listings: smaller font + a little more column width
+   so wide assembly lines fit without horizontal scrolling. */
+.vp-doc div[class*='language-'] code {
+  font-size: 0.82rem;
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: 768px; /* up from the default 688px */
+}

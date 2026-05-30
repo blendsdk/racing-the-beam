@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Racing the Beam
   text: Atari 2600 Programming from Scratch
-  tagline: 72 hands-on lessons taking you from absolute beginner to homebrew game developer
+  tagline: 78 hands-on lessons taking you from absolute beginner to homebrew game developer
   actions:
     - theme: brand
       text: Start Learning →
@@ -23,7 +23,7 @@ features:
     title: From Zero to Game
     details: Start with number systems and end with complete playable games — Pong, Breakout, Maze Explorer, and your own creation.
   - icon: ⚡
-    title: 72 Structured Lessons
+    title: 78 Structured Lessons
     details: Carefully sequenced curriculum covering CPU, graphics, sound, game logic, kernel design, and advanced techniques.
   - icon: 🔧
     title: Real Hardware Ready
@@ -45,3 +45,4 @@ features:
 | 8 | **Advanced** | 56–65 | Bankswitching, illegal opcodes, DPC+, compression, cartridge building |
 | 9 | **DSL Path** | 66–68 | batari BASIC analysis, automatable patterns, kernel architecture |
 | 10 | **Capstones** | 69–72 | Pong, Breakout, Maze Explorer, your own game |
+| 11 | **Legendary Techniques** 🔮 | 73–78 | Cosmic Ark starfield, skipdraw, pseudo-3D road, procedural worlds, interlaced flicker, Adventure engine *(coming soon)* |
