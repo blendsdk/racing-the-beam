@@ -511,6 +511,8 @@ When you run this ROM in Stella, you'll see **five horizontal color bands** fill
 
 ![Bitmask demo showing five colored bands — each band represents a different bitmask operation on the hex value $1A](/images/lesson01/bitmask-demo.png)
 
+<RomPlayer rom="/roms/part0-foundations/01-number-systems/01-number-systems.bin" title="Lesson 01 — Number Systems" />
+
 **Try this in the Stella debugger** (press the backtick key `` ` ``):
 - Look at RAM addresses `$80` through `$85`
 - You should see: `1A 0A 10 5E E5` — the exact values from our bitmask operations
@@ -521,6 +523,8 @@ When you run this ROM in Stella, you'll see **five horizontal color bands** fill
 The demo ROM below creates a visual "hex color chart" — 16 rows of colors where each row shows a different hue at 8 luminance levels. This is a practical reference for the Atari 2600's NTSC color palette.
 
 ![Hex color chart showing all 128 NTSC colors organized by hue and luminance](/images/lesson01/hex-color-chart.png)
+
+<RomPlayer rom="/roms/part0-foundations/01-number-systems/demo-01.bin" title="Lesson 01 — Hex Color Chart Demo" />
 
 The source code for this demo is at `lessons/part0-foundations/01-number-systems/demo-01.asm`.
 

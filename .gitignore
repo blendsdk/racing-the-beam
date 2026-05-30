@@ -1,5 +1,6 @@
-# Build artifacts
+# Build artifacts (local scratch; published ROMs live in docs/public/roms/ and are committed)
 build/
+
 
 # Research material (local only)
 research_material/

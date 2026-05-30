@@ -346,6 +346,8 @@ When you run this ROM in Stella, the emulation view shows **three equal horizont
 
 ![Stella emulating the Lesson 02 landmark ROM — three equal horizontal color bands: red, green, and blue from top to bottom](/images/lesson02/landmark-rom.png)
 
+<RomPlayer rom="/roms/part0-foundations/02-stella-debugger/02-stella-debugger.bin" title="Lesson 02 — Stella Debugger" />
+
 Now press `` ` `` to open the debugger and confirm the landmarks:
 
 - Find the **RAM view** and read addresses `$80` through `$83`. You should see `DE AD BE EF`.

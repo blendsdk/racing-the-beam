@@ -310,6 +310,8 @@ When you run this ROM in Stella, the whole screen fills with **horizontal color 
 
 ![Stella running the Lesson 03 tour ROM — a full-screen rainbow of horizontal color bands that scroll downward, produced by writing a different COLUBK value on every scanline](/images/lesson03/rainbow.png)
 
+<RomPlayer rom="/roms/part0-foundations/03-anatomy-of-2600/03-anatomy-of-2600.bin" title="Lesson 03 — Anatomy of the 2600" />
+
 Now connect it back to the chips:
 
 - Every visible band is a `[TIA]` `STA COLUBK` write.
