@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Javatari Player</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: #000; height: 100%; }
+    #javatari { text-align: center; }
+    #javatari-screen { box-shadow: 0 0 0 transparent; }
+  </style>
+</head>
+<body>
+  <div id="javatari"><div id="javatari-screen"></div></div>
+  <script>
+    // Read ?cart=<url> and configure Javatari before loading the engine.
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var cart = params.get('cart') || '';
+      window.Javatari = {
+        CARTRIDGE_URL: cart,
+        AUTO_START: true,
+        AUTO_POWER_ON_DELAY: 0,
+        SCREEN_FULLSCREEN_MODE: -2,   // disable fullscreen control in embed
+        ALLOW_URL_PARAMETERS: false   // we set config explicitly; ignore other params
+      };
+    })();
+  </script>
+  <script src="javatari.js"></script>
+</body>
+</html>

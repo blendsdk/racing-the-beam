@@ -27,7 +27,8 @@ ASM_FLAGS = -f plain -o $(ROM)
 
 # =============================================================================
 
-.PHONY: all run clean lesson01 demo01 lesson02 lesson03
+.PHONY: all run clean roms lesson01 demo01 lesson02 lesson03
+
 
 all: $(ROM)
 
@@ -47,9 +48,15 @@ clean:
 	rm -rf $(BUILD_DIR)
 	@echo "=== Cleaned ==="
 
+# Build all lesson ROMs into docs/public/roms/ (published, committed assets)
+roms:
+	@echo "=== Building all lesson ROMs ==="
+	bash scripts/build-roms.sh
+
 # =============================================================================
 # Lesson Targets
 # =============================================================================
+
 
 # --- Lesson 01: Number Systems ---
 lesson01: | $(BUILD_DIR)
