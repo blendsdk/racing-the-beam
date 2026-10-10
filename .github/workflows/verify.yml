@@ -1,0 +1,31 @@
+name: Verify
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install ACME assembler
+        run: sudo apt-get update && sudo apt-get install -y acme
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify ROMs and documentation
+        run: bash scripts/verify.sh
