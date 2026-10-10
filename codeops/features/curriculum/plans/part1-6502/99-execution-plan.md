@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 18:53
-> **Progress**: 4/5 tasks (80%)
+> **Last Updated**: 2026-10-10 19:28
+> **Progress**: 5/5 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -133,7 +133,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 
 ## Phase 5: Lesson 11 — Lookup Tables
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: clean tree at `cc60ceb` (recorded 2026-10-10 18:56)
 > **Reasoning**: high — correctness-sensitive 6502 teaching content under independent hardware review
 
 ### Step 5.1: Lesson 11 — Lookup Tables
@@ -141,7 +141,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 11 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 11 · AR-2, AR-3, AR-5, AR-6, AR-8
 **Objective**: Deliver lesson 11 end to end through the mandatory three sessions and close Part 1.
 
-- [ ] 5.1.1 Lesson 11 — Lookup Tables: Session A freezes ST-11.1–ST-11.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson11): Lookup Tables`
+- [x] 5.1.1 Lesson 11 — Lookup Tables: Session A freezes ST-11.1–ST-11.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson11): Lookup Tables` ✅ (completed: 2026-10-10 19:28)
 
 **Session sub-steps (the task's checklist):**
 

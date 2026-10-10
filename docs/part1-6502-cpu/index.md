@@ -13,7 +13,7 @@ Master the 6507 — the heart of the Atari 2600. Learn registers, arithmetic, br
 | 08 | [The Stack and Subroutines — Functions in Assembly](./08-stack-and-subroutines) | ✅ Complete |
 | 09 | [Bitwise Operations — The Power of Bits](./09-bitwise-operations) | ✅ Complete |
 | 10 | [Addressing Modes — How the CPU Finds Data](./10-addressing-modes) | ✅ Complete |
-| 11 | Lookup Tables — Data-Driven Programming | 🔒 Coming Soon |
+| 11 | [Lookup Tables — Data-Driven Programming](./11-lookup-tables) | ✅ Complete |
 
 ## What You'll Learn
 

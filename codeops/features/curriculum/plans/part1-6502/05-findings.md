@@ -44,6 +44,11 @@ One row per review batch. Identifiers and area tokens only.
 | SR-035 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md ("Band 10 stores two pointers" — stores happen in Reset) | fixed |
 | SR-036 | 4 | MINOR | 10-addressing-modes.asm + docs/part1-6502-cpu/10-addressing-modes.md (`BandPtr` "three bytes away" false) | fixed — true relationship stated |
 | SR-037 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md ("both tables are page-aligned" — only TableUp is) | fixed — "sit together inside one page" |
+| SR-038 | 5 | MINOR | 11-lookup-tables.asm + docs/part1-6502-cpu/11-lookup-tables.md:452/:465 + exercise-02-solution.asm (the COLUBK-ordering rule contradicted the code: real constraint is before the release line's *visible pixels*) | fixed — wording corrected in all three asm files + all doc spots |
+| SR-039 | 5 | MINOR | docs/part1-6502-cpu/11-lookup-tables.md:496 ("Four instructions per band and a call"; the body is six instructions + `JSR`) | fixed — names the actual seven-step body |
+| SR-040 | 5 | MINOR | docs/part1-6502-cpu/11-lookup-tables.md:15 (prerequisites attributed `!byte` tables to Lesson 04; they debut in Lesson 08) | fixed — parenthetical now "RAM variables and the frame skeleton"; `!byte` credited to Lesson 08 |
+| SR-041 | 5 | MINOR | exercise-01/-03 solutions (`!align 15, 0` used ACME's `$EA` default fill; Lesson 10's documented convention is the explicit zero fill) | fixed — `!align 15, 0, 0`; pad bytes now `$00`; ROMs rebuilt; addresses/behaviour unchanged |
+| SR-042 | 5 | MINOR | docs/part1-6502-cpu/11-lookup-tables.md:555 ("a few seconds later" wall-clock claim vs the sampled captures; pattern displacement is 4 steps ≈ 1 s) | fixed — "later in the same session" |
 
 ## Batch notes
 
@@ -119,3 +124,21 @@ One row per review batch. Identifiers and area tokens only.
 - Accepted notes (no action): lesson 11's stub has no back-link — repo-wide stub convention, not
   this diff; the auditor's inability to re-run `verify.sh` (no shell) was covered by the parent's
   green runs.
+- **Phase 5 batch (lesson 11):** reviewers `atari2600-reviewer` (2 minors + 2 open questions) and
+  `curriculum-auditor` (2 minors + 3 open questions), dispatched in parallel on the lesson-11
+  change set; findings merged and renumbered SR-038–SR-042. **No CRITICAL or MAJOR findings; no
+  re-review required** (minor content corrections only).
+- **ST-11 task-note evidence:** debugger log — offset `$80` cycles `00…0f` held exactly 16 frames
+  per value (`OffsetLoaded $F030`; author log shows the wrap `15@241 → 0@257`); fetch probe at
+  `WaveFetch $F056` yields exactly 16 unique (X, A) pairs `00→1a … 0f→ec` — the index never
+  leaves 0…15; frame steady at scanline 257 (`StartFrame $F016`). Solutions: ex-1 16 equal
+  constant-brightness bands; ex-2 durations `08,0C,…,44` (8…68 frames) with the cycle restarting
+  at frame 609; ex-3 valid rotations of WaveA / reversed WaveB with a palette flip ~every 2 s.
+- Screenshot provenance: `lookup-wave.png` = table order (offset 0); `lookup-wave-shifted.png` =
+  the same colors rotated by exactly 4 entries; both titles show `11-lookup-tables`; parent
+  verified visually (no blank/duplicate step at the seam).
+- Accepted notes (no action): Lesson 12's stub has no prev-link until Part 2 is authored (the
+  forward link follows the Lesson 06 pattern, per the frozen spec); README unchanged (no
+  curriculum-listing change).
+- **Part 1 complete (5/5 tasks).** RD-01 set to Done on the feature and portfolio roadmaps with
+  this batch.
