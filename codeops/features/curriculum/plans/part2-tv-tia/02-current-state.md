@@ -94,8 +94,8 @@ findings ledger.
 ### Internal Dependencies
 
 - Part 1 lessons 04–11 (prerequisites and pattern); `include/vcs.asm`, `include/macro.asm`;
-  `docs/reference/{tia-registers,color-chart,glossary}.md`; both skills; the three specialists;
-  `scripts/build-roms.sh`, `scripts/capture-screenshot.sh`, `scripts/verify.sh`.
+  both skills; the three specialists; `scripts/build-roms.sh`, `scripts/capture-screenshot.sh`,
+  `scripts/verify.sh`.
 
 ### External Dependencies
 

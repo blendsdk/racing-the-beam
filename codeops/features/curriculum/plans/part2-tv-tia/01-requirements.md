@@ -38,7 +38,7 @@
 | Identifiers | Existing slugs and endpoints verbatim; Part 1 naming conventions | AR-8 |
 | Forward mentions | Name-only context notes for later-part mechanisms; never used in code or exercises | AR-9 |
 | Part index | Rebuilt to the Part 1 format in the lesson-12 phase; rows flip per lesson | AR-10 |
-| Video standard | NTSC only (262 lines, ~60.2 Hz) | AR-11 |
+| Video standard | NTSC only (262 lines; ~60 Hz — ≈59.9 Hz derived in lesson 12) | AR-11 |
 | Commits and records | One atomic commit per lesson (`git-commit` push mode); ledger, progress header, roadmap per lesson | AR-12 |
 
 ## Acceptance Criteria
@@ -51,7 +51,7 @@ Plan-local criteria only (RD-02 owns the lesson acceptance criteria):
    lesson artifacts (AR-4).
 3. Each lesson phase completes only after both specialist reviews report no critical/major
    findings (AR-5).
-4. Every timing, cycle, or frame claim is backed by a recorded state-log observation or a static
-   cycle ledger, and the task record states which (AR-6).
+4. Every timing, cycle, or frame claim is backed by a recorded state-log observation plus a static
+   cycle ledger, and the task record states both (AR-6).
 5. Roadmap rows reflect Plan Created on plan creation and Done when all seven lessons ship
    (AR-12).

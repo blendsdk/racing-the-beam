@@ -64,8 +64,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-12.1–ST-12.5, including the four band colors/heights and the 3/37/192/30 phase map ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 12); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/12-the-ntsc-frame/12-the-ntsc-frame.asm` + its three solutions; write `docs/part2-tv-and-tia/12-the-ntsc-frame.md`; capture `frame-anatomy.png`; run `npm run roms`; **rebuild `docs/part2-tv-and-tia/index.md` to the Part 1 format (AR-10)** and update prev/next (AR-3, AR-6, AR-8).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-12.1–ST-12.6, including the four band colors/heights and the 3/37/192/30 phase map ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 12); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/12-the-ntsc-frame/12-the-ntsc-frame.asm` + its three solutions; write `docs/part2-tv-and-tia/12-the-ntsc-frame.md`; run `npm run roms`; capture `frame-anatomy.png` from the committed ROM path; embed `<RomPlayer>`; **rebuild `docs/part2-tv-and-tia/index.md` to the Part 1 format with `🔒 Coming Soon` rows (AR-10)** and update prev/next (RD-02 AC 1; AR-6, AR-8, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-12.* confirmed; frame-integrity edge check (steady scanline; blank-on in HBLANK); both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -88,8 +88,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-13.1–ST-13.5, including the 16 hue bands and the 8-step luminance cycle (128 colors) ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 13); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/13-colors/13-colors.asm` + its three solutions; write `docs/part2-tv-and-tia/13-colors.md`; capture `palette-hues.png` and `palette-dim.png`; run `npm run roms`; update part index row 13 and prev/next (AR-3, AR-6, AR-8; forward mentions per AR-9).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-13.1–ST-13.6, including the 16 hue bands, the descending luminance sequence (7→0, wrap), and the 128-color cycle ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 13); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/13-colors/13-colors.asm` + its three solutions; write `docs/part2-tv-and-tia/13-colors.md`; run `npm run roms`; capture `palette-hues.png` and `palette-dim.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 13 and prev/next (RD-02 AC 1; AR-6, AR-8, AR-9, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-13.* confirmed; full-cycle luminance observation; both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -112,8 +112,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-14.1–ST-14.5, including the 96/96 split and the late-mode tear signature ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 14); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/14-wsync-and-timing/14-wsync-and-timing.asm` + its three solutions; write `docs/part2-tv-and-tia/14-wsync-and-timing.md`; capture `wsync-aligned.png` and `wsync-torn.png`; run `npm run roms`; update part index row 14 and prev/next (AR-3, AR-6, AR-8).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-14.1–ST-14.6, including the 96/96 split and the late-mode static tear (≈25 cycles into the visible portion) ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 14); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/14-wsync-and-timing/14-wsync-and-timing.asm` + its three solutions; write `docs/part2-tv-and-tia/14-wsync-and-timing.md`; run `npm run roms`; capture `wsync-aligned.png` and `wsync-torn.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 14 and prev/next (RD-02 AC 1; AR-6, AR-8, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-14.* confirmed; aligned-stability check (same boundary line across sampled frames); both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -136,8 +136,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-15.1–ST-15.5, including the timer budgets (37-line VBLANK, 30-line overscan) and the hue cadence ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 15); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/15-the-timer/15-the-timer.asm` + its three solutions; write `docs/part2-tv-and-tia/15-the-timer.md`; capture `timer-frame.png`; run `npm run roms`; update part index row 15 and prev/next (AR-3, AR-6, AR-8).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-15.1–ST-15.6, including the timer budgets (37-line VBLANK = `TIM64T` 43, 30-line overscan = 35) and the hue cadence ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 15); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/15-the-timer/15-the-timer.asm` + its three solutions; write `docs/part2-tv-and-tia/15-the-timer.md`; run `npm run roms`; capture `timer-frame.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 15 and prev/next (RD-02 AC 1; AR-6, AR-8, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-15.* confirmed; `INTIM`/overrun check; both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -160,8 +160,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-16.1–ST-16.5, including the 24/72/48/48 zone table and its boundary scanlines ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 16); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/16-horizontal-zones/16-horizontal-zones.asm` + its three solutions; write `docs/part2-tv-and-tia/16-horizontal-zones.md`; capture `zones.png`; run `npm run roms`; update part index row 16 and prev/next (AR-3, AR-6, AR-8, AR-9).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-16.1–ST-16.6, including the 24/72/48/48 zone table and its cumulative boundary lines ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 16); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/16-horizontal-zones/16-horizontal-zones.asm` + its three solutions; write `docs/part2-tv-and-tia/16-horizontal-zones.md`; run `npm run roms`; capture `zones.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 16 and prev/next (RD-02 AC 1; AR-6, AR-8, AR-9, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-16.* confirmed; zone-boundary scanline check; both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -184,8 +184,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-17.1–ST-17.5, including the 76-cycle ledger and the over-budget drift signature ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 17); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/17-cycle-counting/17-cycle-counting.asm` + its three solutions; write `docs/part2-tv-and-tia/17-cycle-counting.md`; capture `cycle-ruler.png`; run `npm run roms`; update part index row 17 and prev/next (AR-3, AR-6, AR-8).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-17.1–ST-17.6, including the 76-cycle ledger and the +6-cycle over-budget figures (≈8-line stretch, ≈270-line frame) ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 17); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/17-cycle-counting/17-cycle-counting.asm` + its three solutions; write `docs/part2-tv-and-tia/17-cycle-counting.md`; run `npm run roms`; capture `cycle-ruler.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 17 and prev/next (RD-02 AC 1; AR-6, AR-8, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-17.* confirmed; per-iteration cycle check (two state-log hits, same scanline); both specialist reviews report no critical/major findings (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`
@@ -208,8 +208,8 @@ carry the state-log + ledger evidence of AR-6.
 
 **Session sub-steps (the task's checklist):**
 
-1. **Session A — freeze the specification (red phase):** re-affirm ST-18.1–ST-18.5, including the four column boundaries and the two animation states ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 18); record the red baseline. No implementation logic read (AR-2).
-2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/18-mid-scanline-changes/18-mid-scanline-changes.asm` + its three solutions; write `docs/part2-tv-and-tia/18-mid-scanline-changes.md`; capture `columns.png` and `columns-shifted.png`; run `npm run roms`; update part index row 18 and prev/next (**next links forward to `/part3-playfield/19-playfield-basics`** — the lesson-11 pattern) (AR-3, AR-6, AR-8).
+1. **Session A — freeze the specification (red phase):** re-affirm ST-18.1–ST-18.6, including the pinned write cycles (≈14 / 36 / 49 / 63, +4-cycle shift) and the two animation states ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 18); record the red baseline. No implementation logic read (AR-2).
+2. **Session B — implement:** preflight per `vcs-lesson-production`; author `lessons/part2-tv-and-tia/18-mid-scanline-changes/18-mid-scanline-changes.asm` + its three solutions; write `docs/part2-tv-and-tia/18-mid-scanline-changes.md`; run `npm run roms`; capture `columns.png` and `columns-shifted.png` from the committed ROM path; embed `<RomPlayer>`; update part index row 18 and prev/next (**next links forward to `/part3-playfield/19-playfield-basics`** — the lesson-11 pattern) (RD-02 AC 1; AR-6, AR-8, AR-10).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green; all ST-18.* confirmed; per-line write-cycle check; both specialist reviews report no critical/major findings; Part 2 is complete (AR-4, AR-5, AR-6).
 
 **Verify**: `bash scripts/verify.sh`

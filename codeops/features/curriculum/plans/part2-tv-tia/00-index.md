@@ -50,6 +50,7 @@ screenshot, or site machinery (AR-7).
 | 03 | [Lesson Specifications](03-lesson-specs.md) | Per-lesson technical specs for 12–18 |
 | 07 | [Testing Strategy](07-testing-strategy.md) | Frozen observational ST cases and verification |
 | 99 | [Execution Plan](99-execution-plan.md) | 7 phases, three sessions each, task checklists |
+| PF | [Preflight Report](00-preflight-report.md) | Pre-execution audit: 21 findings, all resolved |
 
 ## Quick Reference
 
@@ -65,7 +66,7 @@ bash scripts/capture-screenshot.sh \
   docs/public/roms/part2-tv-and-tia/12-the-ntsc-frame/12-the-ntsc-frame.bin \
   docs/public/images/lesson12/frame-anatomy.png
 # runtime evidence for timing claims (AR-6): breakpoint state logs
-stella -dbg.logbreaks 1 -logtoconsole 1 -break '$F0XX' <rom>
+stella -dbg.logbreaks 1 -logtoconsole 1 -break '<addr>' <rom>
 ```
 
 ### Key Decisions
@@ -81,7 +82,7 @@ stella -dbg.logbreaks 1 -logtoconsole 1 -break '$F0XX' <rom>
 | Machinery | None new — existing pipeline only | AR-7 |
 | Forward mentions | Name-only context notes for later-part mechanisms; never used in code or exercises | AR-9 |
 | Part index | Rebuilt to the Part 1 format in the lesson-12 phase; rows flip per lesson | AR-10 |
-| Video standard | NTSC only (262 lines, ~60.2 Hz) | AR-11 |
+| Video standard | NTSC only (262 lines; ~60 Hz — ≈59.9 Hz derived in lesson 12) | AR-11 |
 
 ## Specialist Agents
 
@@ -93,8 +94,8 @@ stella -dbg.logbreaks 1 -logtoconsole 1 -break '$F0XX' <rom>
 
 _Detection evidence: `codeops/specialists/{lesson-author,atari2600-reviewer,curriculum-auditor}.md`
 define the three roles; `codeops/codeops.json` routes both reviewers read-only with independent
-review enabled and stop-on-major. The on-demand check (`analyze-agents`, recorded 2026-10-10 in
-`codeops/specialist-check.json`) found no additional gap, and RD-02 AC 3 requires both reviewers._
+review enabled and stop-on-major. The on-demand check (`analyze-agents`) was re-run after this plan was created, recording both plans in
+`codeops/specialist-check.json`, and it found no additional gap, and RD-02 AC 3 requires both reviewers._
 
 ## Related Files
 

@@ -20,7 +20,7 @@ with an ST row, the implementation is wrong.
 screenshots captured from the committed ROM path and pixel-checked; full-cycle observations from
 burst captures for animated states; and Stella state logs
 (`stella -dbg.logbreaks 1 -logtoconsole 1 -break '$addr'`, format
-`BP: <frame> <scanline> <x> <y> | <flags> <A> <X> <Y> <SP> |`) with the static cycle ledgers —
+`BP: <frame> <scanline> <cycles> <pixels> | <flags> <A> <X> <Y> <SP> |`) with the static cycle ledgers —
 the timing standard of AR-6.
 
 > Rows quote behavioral expectations in self-contained language so they can be handed to a
@@ -32,71 +32,78 @@ the timing standard of AR-6.
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-12.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
-| ST-12.2 | Run the ROM; inspect one frame | Four equal 48-line bands, `$42`, `$84`, `$C8`, `$1A` top to bottom; 192 visible lines total; release line counted inside band 0 | Screenshot `frame-anatomy.png` matches | 03 §Lesson 12 |
-| ST-12.3 | Keep running; observe over several seconds | The picture is identical every frame — no roll, no shift; the frame is 262 lines | Full-cycle observation (burst captures); state log at the loop top shows a constant scanline | 03 §Lesson 12 |
-| ST-12.4 | Debugger: breakpoints at the four phase boundaries | Phase lengths 3 / 37 / 192 / 30 lines; the scanline deltas in the log match the frame ledger | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 12 |
-| ST-12.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (RAM-colored bands; 48/96/48 split; 16-band ladder of 12 lines) | `verify.sh` + manual runs | RD-02 AC 1 / AR-3 |
+| ST-12.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
+| ST-12.2 | Run the ROM; inspect one frame | Four equal 48-line bands, `$42`, `$84`, `$C8`, `$1A` top to bottom; 192 visible lines total | Screenshot `frame-anatomy.png` matches | 03 §Lesson 12 |
+| ST-12.3 | Keep running; observe over several seconds | The picture is identical every frame — no roll, no shift; the band boundaries stay at the same scanlines | Full-cycle observation (burst captures); state log at the loop top shows a constant scanline | 03 §Lesson 12 |
+| ST-12.4 | Debugger: breakpoints at the four phase boundaries | Phase lengths 3 / 37 / 192 / 30 lines; the scanline deltas in the log match the frame ledger | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 12 |
+| ST-12.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (RAM-colored bands; 48/96/48 split; 16-band ladder of 12 lines) | `verify.sh` + manual runs | RD-02 AC 1 / AR-8 |
+| ST-12.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (11) and next (13) links resolve; the part-index row 12 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 13
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-13.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
+| ST-13.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
 | ST-13.2 | Run the ROM; inspect the first frame | 16 equal 12-line bands in hue order 0–15 at the first luminance step | Screenshot `palette-hues.png` matches | 03 §Lesson 13 |
 | ST-13.3 | Keep running through one full luminance cycle | The picture steps through all 8 luminance levels in order, each step stable; across one cycle all 128 colors appear | Full-cycle observation; second screenshot `palette-dim.png` | 03 §Lesson 13 |
 | ST-13.4 | Debugger: watch the luminance step counter and the `COLUBK` value | The counter advances once per ~120 frames; the written byte equals the hue × 16 plus the step's luminance × 2 | State log + ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 13 |
-| ST-13.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (swapped axes; chart-match table; one-hue fade); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-13.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (swapped axes; chart-match table; one-hue fade); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-13.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (12) and next (14) links resolve; the part-index row 13 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 14
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-14.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
+| ST-14.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
 | ST-14.2 | Aligned mode: inspect frames over several seconds | Exactly two equal halves (`$42` top, `$84` bottom); the boundary line is identical in every captured frame | Screenshot `wsync-aligned.png` + burst comparison | 03 §Lesson 14 |
-| ST-14.3 | Late mode: capture two frames a moment apart | The boundary is visibly torn/moved between the frames (the frames differ at the boundary region) | Screenshot `wsync-torn.png` + observed difference | 03 §Lesson 14 |
-| ST-14.4 | Debugger: two consecutive lines' write positions | The aligned write lands in HBLANK every line; the late write lands after HBLANK with the documented cycle offset; both match the ledger | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 14 |
-| ST-14.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (moved split; repaired budget; ledger check); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-14.3 | Late mode: capture one frame | The boundary line shows the frozen static tear — it paints `$42` for the first N clocks, then `$84`; the capture is identical across frames and differs from the aligned capture at the boundary line | Screenshot `wsync-torn.png` + frame comparison | 03 §Lesson 14 |
+| ST-14.4 | Debugger: two consecutive lines' write positions | The aligned write lands in HBLANK every line; the late write lands ≈25 cycles into the visible portion (pinned in 03); both match the ledger | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 14 |
+| ST-14.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (moved split; repaired budget; ledger check); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-14.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (13) and next (15) links resolve; the part-index row 14 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 15
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-15.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
-| ST-15.2 | Run the ROM; inspect the frame and observe | Four equal 48-line bands, stable; the hues advance one step about every 30 frames | Screenshot `timer-frame.png` + observation | 03 §Lesson 15 |
-| ST-15.3 | Check the timer budgets | VBLANK (37 lines) and overscan (30 lines) are paced as designed; `INTIM` reaches zero within the budgeted window; the per-frame work fits (no overrun) | State log + ledger in the task notes (AR-6) | 03 §Lesson 15 |
-| ST-15.4 | Debugger: `TIM64T` value, `INTIM` polling, compute region | Written values and polling behavior match the ledger; the compute code runs while `INTIM` > 0 | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 15 |
-| ST-15.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (timer VBLANK; overscan value; split work); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-15.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
+| ST-15.2 | Run the ROM; inspect the frame and observe | Four equal 48-line bands, stable; the hues (n, n+4, n+8, n+12) mod 16 at luminance 8 advance with n by 1 about every 30 frames | Screenshot `timer-frame.png` + observation | 03 §Lesson 15 |
+| ST-15.3 | Check the timer budgets | VBLANK (37 lines; `TIM64T` = 43) and overscan (30 lines; 35) are paced as pinned; `INTIM` reaches zero within the budgeted window; the per-frame work fits (no overrun) | State log + ledger in the task notes (AR-6) | 03 §Lesson 15 |
+| ST-15.4 | Debugger: `TIM64T` value, `INTIM` polling, compute region | Written values and polling behavior match the ledger; the compute code runs while `INTIM` > 0 | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 15 |
+| ST-15.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (timer VBLANK; overscan value; split work); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-15.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (14) and next (16) links resolve; the part-index row 15 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 16
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-16.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
+| ST-16.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
 | ST-16.2 | Run the ROM; inspect the frame | Four zones of 24 / 72 / 48 / 48 lines with colors `$02`, `$84`, `$46`, `$C4` top to bottom; boundaries exact | Screenshot `zones.png` matches | 03 §Lesson 16 |
-| ST-16.3 | Check the table-driven boundaries | The paint loop consumes the 4-entry ROM table; measured boundary scanlines are 24 / 96 / 144 / 192 | State log + pixel check | 03 §Lesson 16 |
-| ST-16.4 | Debugger: zone boundary scanlines and the table walk | Boundary scanlines at breakpoints match the table; each entry is used exactly once per frame | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 16 |
-| ST-16.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (fifth zone; rebalanced zones; RAM table); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-16.3 | Check the table-driven boundaries | The paint loop consumes the 4-entry ROM table; the boundary positions are the cumulative lines painted: 24 / 96 / 144 / 192 (the release line is inside zone 0) | State log + pixel check | 03 §Lesson 16 |
+| ST-16.4 | Debugger: zone boundary scanlines and the table walk | Boundary scanlines at breakpoints match the table; each entry is used exactly once per frame | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 16 |
+| ST-16.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (fifth zone; rebalanced zones; RAM table); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-16.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (15) and next (17) links resolve; the part-index row 16 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 17
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-17.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
-| ST-17.2 | Run the ROM; inspect the two-section ruler | Section 1: stable stepped bands; section 2: the documented drift signature; the section boundary is exact | Screenshot `cycle-ruler.png` matches | 03 §Lesson 17 |
-| ST-17.3 | Verify the cycle ledger | Section 1's loop counts exactly 76 cycles and stays aligned for its 96 lines; section 2's documented excess produces exactly the stated drift | State log + static ledger (AR-6) | 03 §Lesson 17 |
-| ST-17.4 | Debugger: two consecutive iterations of section 1 | Both iterations hit the checkpoint at the same scanline; the per-iteration cycle gap matches the ledger | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 17 |
-| ST-17.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (hand count verified; trimmed to 76; full ledger); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-17.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
+| ST-17.2 | Run the ROM; inspect the two-section ruler | Section 1: stable stepped bands (16 hues at luminance 8, one step per 6 lines); section 2: the +6-cycle over-budget staircase (≈8 lines of stretch); the section boundary is exact | Screenshot `cycle-ruler.png` matches | 03 §Lesson 17 |
+| ST-17.3 | Verify the cycle ledger | Section 1's loop counts exactly 76 cycles and stays aligned for its 96 lines; section 2's +6-cycle excess produces the pinned ≈8-line stretch (frame ≈270 lines) | State log + static ledger (AR-6) | 03 §Lesson 17 |
+| ST-17.4 | Debugger: two consecutive iterations of section 1 | Both iterations hit the checkpoint at the same scanline; the per-iteration cycle gap matches the ledger | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 17 |
+| ST-17.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (hand count verified; trimmed to 76; full ledger); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-17.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (16) and next (18) links resolve; the part-index row 17 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ### Lesson 18
 
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
-| ST-18.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
-| ST-18.2 | Run the ROM; inspect the first state | Four vertical columns (`$42`, `$84`, `$C8`, `$1A`) spanning all 192 lines; boundaries at the documented approximate positions | Screenshot `columns.png` matches | 03 §Lesson 18 |
-| ST-18.3 | Wait for the shift state | The columns shift by the designed cycle offset; the two screenshots differ as designed | Screenshot `columns-shifted.png` + pixel difference | 03 §Lesson 18 |
-| ST-18.4 | Debugger: the per-line `COLUBK` writes | Write cycles match the ledger; the boundary-position math (cycle → color clocks → position) checks out | State-log observation in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 18 |
-| ST-18.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (moved boundary; fifth column; smooth animation); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
+| ST-18.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
+| ST-18.2 | Run the ROM; inspect the first state | Four vertical columns (`$42`, `$84`, `$C8`, `$1A`) spanning all 192 lines; base color written in HBLANK; boundaries at ≈cycles 36 / 49 / 63 after each `WSYNC` | Screenshot `columns.png` matches | 03 §Lesson 18 |
+| ST-18.3 | Wait for the shift state | The three boundary writes shift by +4 cycles (two pinned states); the two screenshots differ accordingly | Screenshot `columns-shifted.png` + pixel difference | 03 §Lesson 18 |
+| ST-18.4 | Debugger: the per-line `COLUBK` writes | Write cycles match the ledger; the boundary-position math (cycle → color clocks → position) checks out | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 18 |
+| ST-18.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (moved boundary; fifth column; smooth animation); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
+| ST-18.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; prev (17) and next (Lesson 19) links resolve; the part-index row 18 links the lesson | Build output + page check | RD-02 AC 1 / AR-10 |
 
 ## Red phase (Session A, every lesson)
 
@@ -119,8 +126,9 @@ the timing standard of AR-6.
 - [ ] Session A freezes each lesson's ST set with a red baseline before implementation
 - [ ] Specification expectations are never edited to match an implementation
 - [ ] `bash scripts/verify.sh` passes for every lesson commit (AR-4)
-- [ ] Every timing/cycle/frame claim carries a state-log observation or a static cycle ledger (AR-6)
+- [ ] Every timing/cycle/frame claim carries a state-log observation plus a static cycle ledger (AR-6)
 - [ ] Screenshots captured from committed ROM paths; titles verified; states pixel-checked
 - [ ] Committed ROMs regenerate byte-identically (`npm run roms`; drift check clean)
 - [ ] Both reviewers report no critical/major findings per lesson (AR-5)
 - [ ] Part index rows flip per lesson; README verified unchanged (AR-10)
+- [ ] Each lesson's page renders with a working `<RomPlayer>` and prev/next links (ST-NN.6)

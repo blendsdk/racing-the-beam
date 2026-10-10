@@ -8,7 +8,7 @@
 |---|----------|-----------------|-------------------|---------------|--------|
 | 1 | Scope | Which lessons does this plan cover, and in what order? | RD-02 only (12–18) sequential / include later RDs / parallel lessons | **User:** RD-02 only — lessons 12–18 strictly sequential; each lesson is the next one's prerequisite | ✅ Resolved |
 | 2 | Technical | How is the work phased and sessioned? | One phase per lesson with Sessions A/B/C / one phase per session / one phase for all seven | **AI (auto-design):** 7 phases, one per lesson; Session A freezes that lesson's ST cases, Session B implements, Session C verifies to green and hardens — the Part 1 ordering | ✅ Resolved |
-| 3 | Scope | Which lessons need a standalone `demo-NN.asm`? | Only where needed (main ROM cannot visualize the concept) / one demo per lesson / no demos | **User:** only where needed — decided per lesson in the specification with a reason; expectation 0–2 for this part | ✅ Resolved |
+| 3 | Scope | Which lessons need a standalone `demo-NN.asm`? | Only where needed (main ROM cannot visualize the concept) / one demo per lesson / no demos | **User:** only where needed — decided per lesson in the specification with a reason; resolved for this part: 0 (all seven main ROMs are directly visual) | ✅ Resolved |
 | 4 | Technical | What fills every task's Verify line? | `bash scripts/verify.sh` / an additional gate | **User-confirmed:** `bash scripts/verify.sh`; targeted Stella state-log evidence remains per-task evidence, not the gate | ✅ Resolved |
 | 5 | Technical | Who reviews, and what blocks completion? | Both specialists per lesson + no critical/major / single reviewer | **AI (auto-design):** `atari2600-reviewer` and `curriculum-auditor` gate every lesson; no critical/major findings (RD-02 AC 3) | ✅ Resolved |
 | 6 | Technical | What evidence standard governs timing/cycle/frame claims (Part 2 is the course's timing core)? | Stella state-log breakpoints + static cycle ledgers + labeled witnesses / static reasoning only / simulator tracing | **AI (auto-design):** state-log observations at labelled checkpoints are the primary runtime evidence; every timing claim carries a static cycle ledger; scratch witnesses only for what-if experiments, clearly labeled and deleted | ✅ Resolved |
@@ -16,7 +16,7 @@
 | 8 | Naming & terminology | What are the lesson folder/doc/image/ROM identifiers? | Existing slugs verbatim / new naming | **AI (auto-design):** the existing endpoints verbatim (`12-the-ntsc-frame` … `18-mid-scanline-changes`); folder/doc/image/ROM naming per the Part 1 convention | ✅ Resolved |
 | 9 | Scope | May lessons name later-part registers and concepts (COLUP0/1/PF, scoreboard/playfield/sprite zones) they cannot yet use? | Name-only reference notes / avoid entirely / introduce early | **AI (auto-design):** name-only references are allowed as context notes marked as belonging to later parts; lesson code and exercises use only ≤ Part 2 mechanisms; the auditor verifies | ✅ Resolved |
 | 10 | Integration points | The Part 2 index page is a minimal stub; how is it integrated? | Rebuild to the Part 1 format and flip rows per lesson / leave as is / rebuild at the end | **AI (auto-design):** rebuild in the lesson-12 phase to the Part 1 format (lesson rows + What You'll Learn); each lesson flips its own row to ✅ | ✅ Resolved |
-| 11 | Technical | Which video standard do the lessons target? | NTSC only / NTSC + PAL | **AI (auto-design):** NTSC only (262 lines, ~60.2 Hz); PAL appears only as a noted aside | ✅ Resolved |
+| 11 | Technical | Which video standard do the lessons target? | NTSC only / NTSC + PAL | **AI (auto-design):** NTSC only (262 lines; ~60 Hz — lesson 12 derives ≈59.9 Hz from `228 × 262` clocks); PAL appears only as a noted aside | ✅ Resolved |
 | 12 | Technical | Commit and record-keeping per lesson? | One atomic `feat(lessonNN)` commit + plan/ledger/roadmap updates / batch commits | **AI (auto-design):** one atomic commit per lesson via the `git-commit` skill in push mode with `Ref:`/`Task:` trailers; findings ledger, progress header, and roadmap transitions per Part 1 practice | ✅ Resolved |
 
 ### Resolution Notes
@@ -53,7 +53,7 @@ remain per-task evidence; they do not change the gate.
 
 **AR-6.** Decision: timing, cycle, and frame claims use the Part 1 evidence method — a `stella
 -dbg.logbreaks 1 -logtoconsole 1 -break '$addr'` state log at labelled checkpoints (format
-`BP: <frame> <scanline> <x> <y> | <flags> <A> <X> <Y> <SP> |`), plus a static cycle ledger for
+`BP: <frame> <scanline> <cycles> <pixels> | <flags> <A> <X> <Y> <SP> |`), plus a static cycle ledger for
 every claim. Scratch witnesses are allowed only to provoke what-if states (never to produce
 lesson screenshots), are clearly labeled in the task record, and are deleted afterwards.
 Evidence: Part 1 lessons 08–11 executed this method; requirements AR-6 claim discipline.
@@ -66,7 +66,7 @@ lesson. Reopen trigger: a lesson needs a later-part mechanism for its stated out
 
 **AR-10.** Decision: rebuild `docs/part2-tv-and-tia/index.md` to the Part 1 format (Lessons
 table with status rows + What You'll Learn) during the lesson-12 phase; each lesson flips its own
-row to ✅ Complete with a link. Evidence: `docs/part1-6502-cpu/index.md` format.
+row to ✅ Complete with a link; unshipped rows read `🔒 Coming Soon` until flipped. Evidence: `docs/part1-6502-cpu/index.md` format.
 
 **AR-12.** Decision: one atomic commit per lesson — `feat(lessonNN): <Lesson title>` via the
 `git-commit` skill in push mode with `Ref:`/`Task:` trailers; the findings ledger and execution

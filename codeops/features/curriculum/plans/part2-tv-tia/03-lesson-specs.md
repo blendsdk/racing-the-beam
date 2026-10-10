@@ -11,18 +11,23 @@ implementation.
 
 ## Shared design rules (apply to every lesson)
 
-- **Structure is fixed here; exact cycle plumbing is derived in the walkthrough** and recorded in
-  a static cycle ledger with state-log evidence (AR-6).
+- **The specification pins every observable parameter** (colors, counts, cadences, offsets);
+  Session A hand-derives cumulative values and freezes the ST numbers; the walkthrough derives
+  the instruction-level plumbing that realizes them, with the static cycle ledger and state-log
+  evidence (AR-6).
+- **Vocabulary:** *band* = an equal stripe painted with one color; *zone* = a horizontal strip
+  with its own TIA setup; *column* = a vertical bar created by a mid-scanline write.
 - **Geometry wording is exact** (Part 1 review discipline): the release line is counted inside
   the top band's lines so "N equal bands" is literally true; code, comments, and the document
   must agree.
 - **Frame skeleton continuity**: `!cpu 6502` + `include/vcs.asm` + `include/macro.asm`, origin
-  `* = $F000`, `Reset` calling `+clean_start`, vectors at `$FFFA`; lessons 13–18 reuse the macro
-  frame; lesson 12 writes the frame explicitly and maps it to the macros the reader has used
-  since lesson 04.
+  `* = $F000`, `Reset` calling `+clean_start`, vectors at `$FFFA`; lesson 12 writes the frame
+  explicitly with counted `WSYNC` blanking and maps it to the macros the reader has used since
+  lesson 04; lessons 13–14 carry that explicit counted frame; from lesson 15 the macro frame
+  (`+vsync` / `+set_timer` / `+wait_timer`) is the norm, opened up in lesson 15's walkthrough.
 - **`STA WSYNC` before the overscan blank-on** (blank-on must land in HBLANK) — the Part 1
   review finding.
-- **NTSC only** (262 lines, ~60.2 Hz; AR-11). PAL appears as a noted aside at most.
+- **NTSC only** (262 lines; ~60 Hz — lesson 12 derives ≈59.9 Hz from `228 × 262` clocks; AR-11). PAL appears as a noted aside at most.
 - **Forward mentions are name-only** (`COLUP0`/`COLUP1`/`COLUPF`, the scoreboard/playfield/sprite
   zone taxonomy); code, exercises, and solutions use only mechanisms taught by that lesson (AR-9).
 - The document's embedded listings are byte-identical to the `.asm` files; Key Takeaways ≤ 7
@@ -30,11 +35,13 @@ implementation.
 
 ---
 
-## Lesson 12: The NTSC Frame — Building the Picture Line by Line
+## Lesson 12: The NTSC Frame — 262 Scanlines of Precision
 
 - **Goal:** understand how the 2600 paints a television picture and write the canonical 262-line
   frame explicitly, line by line.
-- **Concepts:** the NTSC signal and the 262-scanline frame at ~60.2 Hz; VSYNC (3 lines), VBLANK
+- **Concepts:** the NTSC signal and the 262-scanline frame at ~60 Hz (lesson 12 derives ≈59.9 Hz:
+  `228 × 262` color clocks ÷ 3.579545 MHz; others quote 60.2 because broadcast NTSC's line is
+  227.5 clocks while the TIA's is 228); VSYNC (3 lines), VBLANK
   (37), visible (192), overscan (30); 76 CPU cycles per scanline (228 color clocks); why the
   frame is drawn every iteration of the main loop; the frame written out — and how it maps to
   `+vsync` / `+set_timer` / `+wait_timer`, which the reader has used all along.
@@ -55,9 +62,9 @@ implementation.
   `./12-the-ntsc-frame`; sidebar entry exists (`config.ts:59`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 12): ST-12.1 assembly &
   drift · ST-12.2 band structure · ST-12.3 stability and frame length · ST-12.4 debugger phase
-  map · ST-12.5 solutions and screenshot.
+  map · ST-12.5 solutions and screenshot · ST-12.6 site integration.
 
-## Lesson 13: Colors — The 128-Color Palette
+## Lesson 13: Colors — Painting the Screen
 
 - **Goal:** choose colors deliberately; understand the palette byte and the luminance axis.
 - **Concepts:** the NTSC palette byte `%HHHHLLL0` — hue (16) × luminance (8) = 128 colors; hue
@@ -65,37 +72,43 @@ implementation.
   the picture's background color; the object color registers (`COLUP0`, `COLUP1`, `COLUPF`)
   named as reference — they color objects introduced in later parts (AR-9).
 - **ROM:** `13-colors.asm` — "palette explorer": **16 equal bands of 12 lines**, band k = hue k
-  (0–15) at the current luminance level; the luminance steps through all 8 levels, one step every
-  ~2 seconds (~120 frames), so one full cycle shows all 128 colors; the doc's table maps band →
-  hue → an example use.
-- **Expected screen:** 16 equal hue bands; the whole picture steps through 8 luminance levels
-  (bright to dark and back), each step stable.
+  (0–15) at the current luminance level; the sequence starts at level 7 (brightest) and descends
+  one level every ~2 seconds (120 frames), wrapping 7→0→7, so one full cycle shows all 128
+  colors; the doc's table maps band → hue → an example use.
+- **Expected screen:** 16 equal hue bands; the whole picture descends through the 8 luminance
+  levels 7→0 and wraps back to 7; each step stable.
 - **Demo ROM:** none — the main ROM is a live palette chart (AR-3).
 - **Exercises:** 1. swap the axes: 8 luminance bands cycling hue — `exercise-01-solution.asm`;
-  2. a "chart match": a lookup table of named colors (from `docs/reference/color-chart.md`)
-  shown as labeled bands — `exercise-02-solution.asm`; 3. *(Stretch)* a one-hue fade: a single
+  2. a "chart match": a lookup table of the course-local named colors in the lesson's
+  band→name table (e.g. `$42` red, `$84` blue, `$C8` green, `$1A` gold) whose bands match those
+  colors — the names live in the table and figure caption, not on screen —
+  `exercise-02-solution.asm`; 3. *(Stretch)* a one-hue fade: a single
   band breathing through all 8 luminance levels — `exercise-03-solution.asm`.
-- **Screenshots:** `docs/public/images/lesson13/palette-hues.png` (a bright step) and
-  `…/palette-dim.png` (a dim step) — the two captures prove the luminance cycle.
+- **Screenshots:** `docs/public/images/lesson13/palette-hues.png` (level 7, brightest) and
+  `…/palette-dim.png` (level 1, dim) — the two captures prove the luminance cycle.
 - **Integration:** prev → Lesson 12; next → Lesson 14; part-index row 13 → ✅ Complete linking
   `./13-colors`; sidebar entry exists (`config.ts:60`). Estimated time: 45 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 13): ST-13.1 assembly &
   drift · ST-13.2 hue frame · ST-13.3 luminance cycle and 128 colors · ST-13.4 debugger state ·
-  ST-13.5 solutions and screenshots.
+  ST-13.5 solutions and screenshots · ST-13.6 site integration.
 
-## Lesson 14: WSYNC and Timing — Aligning with the Beam
+## Lesson 14: WSYNC and Timing — Synchronizing with the Beam
 
 - **Goal:** control exactly where code lands relative to the electron beam; understand `WSYNC`
   and the 76-cycle scanline budget.
-- **Concepts:** the 76-cycle line and HBLANK; what `WSYNC` actually waits for; why untimed writes
-  produce moving, torn pictures; the discipline "finish your line's work in the line".
+- **Concepts:** the 76-cycle line and HBLANK; what `WSYNC` actually waits for; why an unanchored
+  write lands where it lands (a misplaced, torn edge) and why varying per-frame work turns that
+  into visible motion; the discipline "finish your line's work in the line".
 - **ROM:** `14-wsync-and-timing.asm` — "the anchored split": the visible area is **split 96/96**
   — top half `$42` (red), bottom half `$84` (blue) — with the color boundary stable at exactly the
-  middle line in the aligned mode. A second, deliberately late mode (same picture, writes landing
-  after the line's HBLANK) shows the boundary as a moving, torn edge. The two modes alternate
-  every ~2 seconds; the walkthrough carries the cycle ledger for both.
+  middle line in the aligned mode. A second, deliberately late mode (same picture; the boundary
+  write lands ≈25 CPU cycles into the visible portion, mid-picture) shows the boundary line as a
+  **static tear** — the line paints `$42` for the first N clocks, then `$84`, identical every
+  frame. The two modes alternate every ~2 seconds; the walkthrough carries the cycle ledger for
+  both (the "movement" real games show comes from varying per-frame work — lesson 17 shows it).
 - **Expected screen:** aligned mode — two equal halves, the boundary rock-stable against a
-  reference; late mode — the same two colors with a visibly torn, drifting boundary.
+  reference; late mode — the same two colors with the boundary line torn at a fixed, documented
+  position (identical every frame).
 - **Demo ROM:** none — the main ROM contrasts both timing regimes directly (AR-3).
 - **Exercises:** 1. move the split to another line (one constant) — `exercise-01-solution.asm`;
   2. repair the torn mode: make the late write land in HBLANK (budget fix) —
@@ -107,18 +120,20 @@ implementation.
   `./14-wsync-and-timing`; sidebar entry exists (`config.ts:61`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 14): ST-14.1 assembly &
   drift · ST-14.2 aligned frame · ST-14.3 late-mode contrast · ST-14.4 debugger timing check ·
-  ST-14.5 solutions and screenshots.
+  ST-14.5 solutions and screenshots · ST-14.6 site integration.
 
-## Lesson 15: The Timer — Pacing with the RIOT
+## Lesson 15: The Timer — RIOT Counts for You
 
 - **Goal:** use the RIOT timer for the blanking periods and free CPU time for real work.
-- **Concepts:** `TIM64T`, `TIM1T`, `TIM8T`, `TIM1024T` and `INTIM`; timer counts and why the
+- **Concepts:** `TIM64T`, `TIM1T`, `TIM8T`, `T1024T` (spelled `TIM1024T` in DASM-era sources)
+  and `INTIM`; timer counts and why the
   VBLANK value is chosen for 37 lines; timer waits vs. `WSYNC` counting; spending the freed
   cycles — computing the next frame while the beam blanks.
 - **ROM:** `15-the-timer.asm` — "time to think": the frame's VBLANK is a `TIM64T` wait (explicit
   register writes and `INTIM` polling), and the freed CPU time computes the next frame's picture:
-  **four equal 48-line bands** whose hues rotate one step every ~30 frames (~0.5 s), computed
-  from a counter in RAM; overscan also paced by the timer.
+  **four equal 48-line bands** at hues (n, n+4, n+8, n+12) mod 16, luminance 8, where n starts at
+  0 and advances by 1 every 30 frames (~0.5 s); the VBLANK wait is `TIM64T` = 43 and the overscan
+  wait is 35 (≈37 and ≈30 lines with the poll and HBLANK anchoring — derived in the walkthrough).
 - **Expected screen:** a stable four-band picture whose hues advance in step every half second —
   the visible proof that the computation fits inside the blanking budget.
 - **Demo ROM:** none — the animation is the timer's visible result (AR-3).
@@ -133,22 +148,25 @@ implementation.
   `./15-the-timer`; sidebar entry exists (`config.ts:62`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 15): ST-15.1 assembly &
   drift · ST-15.2 frame and animation · ST-15.3 timer budgets · ST-15.4 debugger state ·
-  ST-15.5 solutions and screenshot.
+  ST-15.5 solutions and screenshot · ST-15.6 site integration.
 
-## Lesson 16: Horizontal Zones — Structuring the Frame
+## Lesson 16: Horizontal Zones — Splitting the Screen
 
 - **Goal:** split the picture into horizontal zones with distinct TIA setups — the multi-zone
   architecture every later part fills in.
-- **Concepts:** vertical zones and their boundaries; the standard layout taxonomy — scoreboard,
+- **Concepts:** horizontal zones — strips stacked vertically, each with its own TIA setup; the
+  standard layout taxonomy — scoreboard,
   playfield, and sprite zones — named as context for later parts (AR-9); changing `COLUBK` at
   zone boundaries; a zone table (`lines`, `color`) driving the paint loop.
 - **ROM:** `16-horizontal-zones.asm` — "three-zone sky": **four zones of 24 / 72 / 48 / 48
   lines** (total 192): a dark top zone `$02` (the scoreboard area), a sky zone `$84`, a horizon
   zone `$46` (dark red), and a ground zone `$C4` (dim green); the paint loop reads a 4-entry ROM
-  table (lines, color) — a direct lookup-table application (lesson 11).
+  table (lines, color) — a direct lookup-table application (lesson 11); boundaries are counted
+  as cumulative lines painted (zone 0 ends at line 24, and so on).
 - **Expected screen:** four zones of exactly the stated heights with distinct colors; stable.
 - **Demo ROM:** none — the zone structure is the visible picture (AR-3).
-- **Exercises:** 1. add a fifth zone via the table — `exercise-01-solution.asm`; 2. rebalance the
+- **Exercises:** 1. split the sky zone into a fifth zone via the table (e.g. 24/72/48/24/24, total 192) —
+  `exercise-01-solution.asm`; 2. rebalance the
   zones (e.g. 48/96/24/24) keeping the total — `exercise-02-solution.asm`; 3. *(Stretch)* move
   the zone table into RAM so boundaries can be edited live in the debugger —
   `exercise-03-solution.asm`.
@@ -157,9 +175,9 @@ implementation.
   `./16-horizontal-zones`; sidebar entry exists (`config.ts:63`). Estimated time: 45 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 16): ST-16.1 assembly &
   drift · ST-16.2 zone frame · ST-16.3 table-driven boundaries · ST-16.4 debugger state ·
-  ST-16.5 solutions and screenshot.
+  ST-16.5 solutions and screenshot · ST-16.6 site integration.
 
-## Lesson 17: Cycle Counting — The 76-Cycle Budget
+## Lesson 17: Cycle Counting — The Heart of Beam Racing
 
 - **Goal:** count CPU cycles by hand and budget a kernel's scanlines.
 - **Concepts:** 76 cycles per scanline; instruction cycle costs (and their categories); counting
@@ -167,9 +185,11 @@ implementation.
   scanlines and the ledger discipline.
 - **ROM:** `17-cycle-counting.asm` — "the cycle ruler": two 96-line sections. Section 1 is a
   hand-counted **exactly-76-cycle** loop (no `WSYNC` inside; aligned at the section start) that
-  steps a color ramp; section 2 is the same loop with a deliberate over-budget addition
-  (documented in the ledger), so its color steps land progressively later — the drift renders as
-  a visible staircase/tear signature. The exact numbers are frozen in the walkthrough's ledger.
+  steps a 16-color ramp (the 16 hues at luminance 8, `$10,$20,…,$F0`, one step per 6 lines).
+  Section 2 is the same loop with a deliberate +6-cycle over-budget addition: over 96 iterations
+  it consumes 96 × 82 = 7,872 cycles ≈ 103.6 beam lines, stretching the section by ≈8 lines (the
+  staircase signature) and extending the frame to ≈270 total lines instead of 262 — the ledger
+  records the exact figures and Session A freezes them.
 - **Expected screen:** section 1 — perfectly stable stepped bands; section 2 — the same ramp
   with the documented drift pattern; both captured for the ST comparison.
 - **Demo ROM:** none — the two-section ruler visualizes the budget directly (AR-3).
@@ -182,7 +202,7 @@ implementation.
   `./17-cycle-counting`; sidebar entry exists (`config.ts:64`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 17): ST-17.1 assembly &
   drift · ST-17.2 ruler structure · ST-17.3 cycle ledger verification · ST-17.4 debugger timing
-  check · ST-17.5 solutions and screenshot.
+  check · ST-17.5 solutions and screenshot · ST-17.6 site integration.
 
 ## Lesson 18: Mid-Scanline Changes — Racing the Beam
 
@@ -193,9 +213,10 @@ implementation.
   deterministic timing as the basis for later sprite techniques (name-only, AR-9).
 - **ROM:** `18-mid-scanline-changes.asm` — "color columns": every visible line paints **four
   vertical columns** — `$42`, `$84`, `$C8`, `$1A` (the lesson-12 palette) — with boundaries at
-  roughly the quarter points; the write cycles are hand-timed after each `WSYNC`. Every ~2
-  seconds the columns shift by a small cycle offset, so the widths animate; the walkthrough maps
-  write cycle → boundary position with the cycle ledger.
+  roughly the quarter points; the base color is written in HBLANK (~cycle 14) and the three boundaries at
+  ≈cycles 36 / 49 / 63 (the visible quarter points; exact NOP counts derived with the ledger).
+  Every ~2 seconds the three boundary writes shift by +4 cycles each, so the widths animate; the
+  walkthrough maps write cycle → boundary position with the cycle ledger.
 - **Expected screen:** four stable vertical columns spanning all 192 lines; two animated states
   (default widths and shifted widths) captured.
 - **Demo ROM:** none — the columns are the beam race made visible (AR-3).
@@ -209,4 +230,4 @@ implementation.
   `./18-mid-scanline-changes`; sidebar entry exists (`config.ts:65`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 18): ST-18.1 assembly &
   drift · ST-18.2 column frame · ST-18.3 animation states · ST-18.4 debugger timing check ·
-  ST-18.5 solutions and screenshots.
+  ST-18.5 solutions and screenshots · ST-18.6 site integration.
