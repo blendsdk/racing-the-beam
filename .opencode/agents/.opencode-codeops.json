@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "source": "opencode-codeops",
+  "version": "2.1.1",
+  "installedAt": "2026-10-10T11:51:08.890Z",
+  "agents": [
+    "concurrency-auditor.md",
+    "correctness-reviewer.md",
+    "demanding-executor.md",
+    "design-challenger.md",
+    "executor.md",
+    "explorer.md",
+    "financial-integrity-auditor.md",
+    "performance-auditor.md",
+    "preflight-auditor.md",
+    "security-auditor.md",
+    "semantics-reviewer.md",
+    "spec-test-author.md"
+  ]
+}
