@@ -5,8 +5,8 @@ build/
 # Research material (local only)
 research_material/
 
-# Plans (local only — not published)
-plans/
+# Plans (local only — not published; root-anchored so CodeOps plans under codeops/ stay versioned)
+/plans/
 
 # Node.js
 node_modules/

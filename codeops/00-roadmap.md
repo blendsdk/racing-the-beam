@@ -13,7 +13,7 @@
 
 | Feature | Roadmap | Stage Summary | Progress | Status | Last Updated |
 |---------|---------|---------------|----------|--------|--------------|
-| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · backlog | 0/11 RDs | ⬜ | 2026-10-10 |
+| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · 1 plan executing | 0/11 RDs | 🔄 | 2026-10-10 |
 
 ## Archived
 
