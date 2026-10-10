@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10
-> **Progress**: 0/5 tasks (0%)
+> **Last Updated**: 2026-10-10 15:14
+> **Progress**: 1/5 tasks (20%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -49,7 +49,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 07 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 07 · AR-2, AR-3, AR-5, AR-6, AR-8
 **Objective**: Deliver lesson 07 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 07 — Branches and Loops: Session A freezes ST-07.1–ST-07.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson07): Branches and Loops`
+- [x] 1.1.1 Lesson 07 — Branches and Loops: Session A freezes ST-07.1–ST-07.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson07): Branches and Loops` ✅ (completed: 2026-10-10 15:14)
 
 **Session sub-steps (the task's checklist):**
 

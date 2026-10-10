@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Racing the Beam — Learn Atari 2600 assembly programming from scratch. 72 hands-on lessons from zero to homebrew mastery.",
+  "description": "Racing the Beam — Learn Atari 2600 assembly programming from scratch. 78 hands-on lessons from zero to homebrew mastery.",
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

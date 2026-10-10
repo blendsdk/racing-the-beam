@@ -9,7 +9,7 @@ Master the 6507 — the heart of the Atari 2600. Learn registers, arithmetic, br
 | 04 | [Registers and Memory — The CPU's Workspace](./04-registers-and-memory) | ✅ Complete |
 | 05 | [Arithmetic — Adding and Subtracting](./05-arithmetic) | ✅ Complete |
 | 06 | [Flags and Comparisons — How the CPU Decides](./06-flags-and-comparisons) | ✅ Complete |
-| 07 | Branches and Loops — Conditional Execution | 🔒 Coming Soon |
+| 07 | [Branches and Loops — Conditional Execution](./07-branches-and-loops) | ✅ Complete |
 | 08 | The Stack and Subroutines — Functions in Assembly | 🔒 Coming Soon |
 | 09 | Bitwise Operations — The Power of Bits | 🔒 Coming Soon |
 | 10 | Addressing Modes — How the CPU Finds Data | 🔒 Coming Soon |

@@ -85,7 +85,7 @@ Most instructions silently update Z and N based on the value they produce. An `L
     BEQ GameOver    ; …so you can branch on "Lives == 0" immediately
 ```
 
-Knowing *which* instructions touch *which* flags is part of learning the 6502, but the rule of thumb is simple: **anything that produces a value in a register usually updates Z and N**; only `ADC`, `SBC`, and the compares touch **C**; only `ADC`/`SBC` touch **V**.
+Knowing *which* instructions touch *which* flags is part of learning the 6502, but the rule of thumb is simple: **anything that produces a value in a register usually updates Z and N**; only `ADC`, `SBC`, and the compares touch **C**; among the instructions in this lesson, only `ADC`/`SBC` *produce* **V** (later instructions such as `BIT`, `CLV`, and `PLP` touch it in other ways).
 
 ### Section 3: `CMP` — Compare by Subtracting and Throwing It Away
 
