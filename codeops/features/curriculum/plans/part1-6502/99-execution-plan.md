@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 16:21
-> **Progress**: 2/5 tasks (40%)
+> **Last Updated**: 2026-10-10 18:00
+> **Progress**: 3/5 tasks (60%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -87,7 +87,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 
 ## Phase 3: Lesson 09 — Bitwise Operations
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: clean tree at `3047fb1` (recorded 2026-10-10 17:23)
 > **Reasoning**: high — correctness-sensitive 6502 teaching content under independent hardware review
 
 ### Step 3.1: Lesson 09 — Bitwise Operations
@@ -95,7 +95,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 09 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 09 · AR-2, AR-3, AR-5, AR-6, AR-8
 **Objective**: Deliver lesson 09 end to end through the mandatory three sessions.
 
-- [ ] 3.1.1 Lesson 09 — Bitwise Operations: Session A freezes ST-09.1–ST-09.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson09): Bitwise Operations`
+- [x] 3.1.1 Lesson 09 — Bitwise Operations: Session A freezes ST-09.1–ST-09.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson09): Bitwise Operations` ✅ (completed: 2026-10-10 18:00)
 
 **Session sub-steps (the task's checklist):**
 

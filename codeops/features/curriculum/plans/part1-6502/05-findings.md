@@ -22,6 +22,16 @@ One row per review batch. Identifiers and area tokens only.
 | SR-013 | 2 | MINOR | docs/part1-6502-cpu/08-stack-and-subroutines.md (unbalanced-stack failure mode misstated for the up-counting loop) | fixed — true failure described; one-band demo attributed to Exercise 2's design |
 | SR-014 | 2 | MINOR | docs/part1-6502-cpu/08-stack-and-subroutines.md (collision-range numbers mixed `$FA`/`$F9` conventions) | fixed — single rule: SP `$F9`, pushes down to `$FA`, keep variables below `$F9` |
 | SR-015 | 2 | MINOR | docs/public/images/lesson08/subroutine-bands.png (bottom-edge artifact) | fixed — same root cause as SR-008; recaptured with the pointer parked; edge verified clean |
+| SR-016 | 3 | MAJOR | lessons/part1-6502-cpu/09-bitwise-operations/exercise-03-solution.asm + docs/part1-6502-cpu/09-bitwise-operations.md Exercise 3 Hint 3 (mirrored `ROR` recipe omitted that `LSR` shifts the byte; followed literally it shifts twice and can store `$00`) | fixed — recipe corrected to `LDA / LSR / LDA / ROR / STA` with the reload rationale in both places; re-walked for all eight single-bit patterns; no other copy remains |
+| SR-017 | 3 | MINOR | exercise-03 solution + doc §5 (redundant `LDA Pattern` after `CMP`; comment claimed `CMP` modified A, contradicting Lesson 06) | fixed — instruction deleted; prose states `CMP` sets C and leaves the byte alone (why the ring needs no reload) |
+| SR-018 | 3 | MINOR | exercise-02 solution comment (`($8, green)` — hue `$8` is not green) | fixed — `($8, dark violet-blue)` |
+| SR-019 | 3 | MINOR | exercise-02 solution comment (`$C4` called "green-blue") | fixed — "a dimmer green, same hue as the ladder's bright green, lower luminance" |
+| SR-020 | 3 | MINOR | doc ("dividing by 16 four times" reads as four divisions by 16) | fixed — "four one-bit shifts divide it by 16 again" |
+| SR-021 | 3 | MINOR | doc (`LSR` cycle note "two for the load, three for the shift-with-store") | fixed — described as a read-modify-write |
+| SR-022 | 3 | MINOR | doc (indexed-address mention in the operand-forms sentence — Lesson 10 forward reference) | fixed — removed |
+| SR-023 | 3 | MINOR | doc Key Takeaways had 8 bullets (template allows 5–7) | fixed — merged the Z/N bullet into the shift/carry bullet → 7 |
+| SR-024 | 3 | MINOR | solutions (six unreferenced checkpoint labels, no comments) | fixed — each labelled a debugger checkpoint with its expected value |
+| SR-025 | 3 | MINOR | doc (`StepShift`/`ReloadStore` mentions implied labels ship in the ROM) | fixed — `acme -l` symbol-list pointer added; second mention says "the `StepShift` symbol" |
 
 ## Batch notes
 
@@ -49,3 +59,29 @@ One row per review batch. Identifiers and area tokens only.
 - Deferred (out of lesson scope): earlier lessons phrase the release-line geometry as
   "192 visible lines"; lesson 08 now states its geometry exactly (49/48/48/48, 193 non-blanked
   scanlines). A cross-lesson wording sweep is not part of this plan.
+- **Phase 3 batch (lesson 09):** reviewers `atari2600-reviewer` (SR-016–SR-018, SR-020–SR-021,
+  open questions) and `curriculum-auditor` (SR-017, SR-019, SR-021–SR-025), dispatched in
+  parallel on the lesson-09 change set; findings merged and renumbered sequentially across both
+  reviewers.
+- One MAJOR (SR-016) and no CRITICAL findings. After the fix pass, the raising reviewer
+  re-reviewed the fix diff once: **no residual findings** — the corrected mirrored recipe walks
+  correctly for all eight single-bit patterns, the deleted instruction was a true no-op, and
+  every reworded claim checks out.
+- Fix-pass re-verification: `verify.sh` green; only `exercise-03-solution.bin` changed bytes
+  (behavior identical — `RingStep` debugger log A = 01, 02, 04, 08, 10, 20, 40, 80 with C set
+  at `$80`, then 01; frame timing unchanged).
+- **ST-09 task-note evidence:** ST-09.4 debugger state log (method refined: `stella
+  -dbg.logbreaks 1 -logtoconsole 1 -break '$addr' <rom>` — run-independent, no reliance on saved
+  Stella settings): mask per band `$80…$01` at 24-scanline spacing (TopBandTest `$F031`,
+  BandTest `$F055`); pattern stepping `$01→$80` at one step per 30 frames (StepShift `$F087`);
+  reload `A = $01` with C = 1 (ReloadStore `$F091`). ST-09.3 full-cycle observation from a
+  56-frame burst of the committed ROM: the bright band visited every band position, advanced
+  bottom→top, and wrapped.
+- Screenshot provenance: the author's two captures were pixel-identical below the title bar to
+  the committed ROM's output but showed a scratch build name in the title bar; the orchestrator
+  recaptured both from `docs/public/roms/part1-6502-cpu/09-bitwise-operations/09-bitwise-operations.bin`
+  (titles now `09-bitwise-operations`; below-title diff AE 0).
+- Accepted notes (no action): the ROM runs some game logic before `+vsync`, so the VSYNC leading
+  edge varies slightly (pulse ≈2.6–2.9 lines); the frame remains exactly 262 lines and emulated
+  output is stable. The `.vitepress/dist` image copies were briefly stale right after the
+  recapture; the next `verify.sh` docs build refreshed them (`dist` is gitignored).
