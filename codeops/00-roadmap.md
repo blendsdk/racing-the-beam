@@ -2,7 +2,7 @@
 
 > **Status**: Active
 > **Last Updated**: 2026-10-10
-> **Features**: 0 / 0 done
+> **Features**: 0 / 1 done
 > **CodeOps Artifact Schema**: 1
 
 ## Legend
@@ -13,6 +13,7 @@
 
 | Feature | Roadmap | Stage Summary | Progress | Status | Last Updated |
 |---------|---------|---------------|----------|--------|--------------|
+| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · backlog | 0/11 RDs | ⬜ | 2026-10-10 |
 
 ## Archived
 
