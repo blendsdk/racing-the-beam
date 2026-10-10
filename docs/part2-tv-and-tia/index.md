@@ -7,7 +7,7 @@ Understand how the Atari 2600 generates video — scanline by scanline, cycle by
 | # | Lesson | Status |
 |---|--------|--------|
 | 12 | [The NTSC Frame — 262 Scanlines of Precision](./12-the-ntsc-frame) | ✅ Complete |
-| 13 | [Colors — Painting the Screen](./13-colors) | 🔒 Coming Soon |
+| 13 | [Colors — Painting the Screen](./13-colors) | ✅ Complete |
 | 14 | [WSYNC and Timing — Synchronizing with the Beam](./14-wsync-and-timing) | 🔒 Coming Soon |
 | 15 | [The Timer — RIOT Counts for You](./15-the-timer) | 🔒 Coming Soon |
 | 16 | [Horizontal Zones — Splitting the Screen](./16-horizontal-zones) | 🔒 Coming Soon |

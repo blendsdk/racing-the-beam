@@ -14,3 +14,8 @@ One row per review batch. Identifiers and area tokens only.
 | SR-005 | 1 | MINOR | lessons/part2-tv-and-tia/12-the-ntsc-frame/exercise-03-solution.asm (luminance-field wording) | fixed |
 | SR-006 | 1 | MINOR | docs/part2-tv-and-tia/12-the-ntsc-frame.md (RAM range vs stack bytes $FE-$FF) | fixed |
 | SR-007 | 1 | MINOR | docs/part2-tv-and-tia/12-the-ntsc-frame.md (VblankStart X steady-state value; raised by the re-review) | fixed |
+| SR-001 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (release-line HBLANK claim; exact 21-cycle ledger now stated) | fixed |
+| SR-002 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (three palette-scope claims NTSC-qualified) | fixed |
+| SR-003 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (band 11 provenance cell; `$BE` vs Lesson 11's `$B4`) | fixed |
+| SR-004 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (`Band0Write` description: fires after the store) | fixed |
+| SR-005 | 2 | MINOR | review artifact (phase diff stale vs worktree at review time; diff regenerated) | fixed |

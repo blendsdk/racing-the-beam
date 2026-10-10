@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 23:03
-> **Progress**: 1/7 tasks (14%)
+> **Last Updated**: 2026-10-10 23:27
+> **Progress**: 2/7 tasks (29%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -81,7 +81,8 @@ carry the state-log + ledger evidence of AR-6.
 
 ## Phase 2: Lesson 13 — Colors
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: f38d78ac2127bde9262043c3388d932d019d86e3 (clean tree at phase start; scope: strict)
+> **Expected modifications**: `lessons/part2-tv-and-tia/13-colors/` (4 sources) · `docs/part2-tv-and-tia/13-colors.md` · `docs/part2-tv-and-tia/index.md` (row 13) · `docs/public/roms/part2-tv-and-tia/13-colors/` · `docs/public/images/lesson13/` · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — palette claims and luminance behavior under independent hardware review
 
 ### Step 2.1: Lesson 13 — Colors
@@ -89,7 +90,11 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 13 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 13 · AR-2, AR-4, AR-6, AR-9
 **Objective**: Deliver lesson 13 end to end through the mandatory three sessions.
 
-- [ ] 2.1.1 Lesson 13 — Colors: Session A freezes ST-13.1–ST-13.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson13): Colors`
+- [x] 2.1.1 Lesson 13 — Colors: Session A freezes ST-13.1–ST-13.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson13): Colors` ✅ (completed: 2026-10-10 23:27)
+
+**Session A record** (freeze + red baseline, 2026-10-10 23:12): ST-13.1–ST-13.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 13 — sixteen equal 12-line bands, band k = hue k at the current luminance; the sequence starts at level 7 (brightest), descends one step every 120 frames (~2 s), wraps 7→0→7; the palette byte is `hue × 16 + level × 2` (`%HHHHLLL0`, 16 × 8 = 128 colors); a self-contained course-local named-color table in the lesson doc and the solution (PF-002 Option A), with the names in the table/caption, not on screen (PF-011); screenshots `palette-hues.png` (level 7) and `palette-dim.png` (level 1); solutions: 8 luminance bands of 24 lines cycling hue, the static chart-match table, and a single-band 8-level fade; the explicit counted (WSYNC) frame carried from lesson 12 (PF-007). Red baseline confirmed: no lesson sources, ROMs, or images; the document is still the `🔒 Coming Soon` stub; index row 13 still `🔒 Coming Soon`; `verify.sh` green with the lesson absent (expected — nothing references it yet). No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-10-10): Preflight per `vcs-lesson-production` — palette claims checked against `tia-hardware.md` (`%HHHHLLL0`, luminance 0–7, 128 = 16 × 8), registers against `include/vcs.asm`, ACME forms verified, screenshots planned, no demo (AR-3 reason in [03](03-lesson-specs.md) §Lesson 13), style follows lessons 11–12. `bash scripts/verify.sh` green (ROM drift + docs build); all four sources 4,096 bytes. Frame checkpoints unchanged: `StartFrame` 259 every frame, `VblankStart` 0, `VisibleStart` 37, `OverscanStart` 229 (3/37/192/30 over 262 lines). Palette evidence: `LumStep` fires at frames 119, 239, 359 (deltas 120); `Band0Write` walks A = `$0E` → `$0C` → … → `$00` → `$0E` (the full 7→0→7 descent); `BandWrite` shows X = 1…15 with A = `$1E` … `$FE` at level 7 — the byte `hue × 16 + level × 2`, observed live. Screenshots: `palette-hues.png` at level 7 (second appearance, startup badge gone; picture area byte-identical to the first-appearance capture) and `palette-dim.png` at level 1 — cross-proved by band 4 reading `#9E1312`, the exact `$42` rendering from lesson 12's published capture. Solutions pixel-checked: ex 1 eight grey bands 7→0; ex 2 all sixteen named-color bands matching the table byte-for-byte; ex 3 a single red field that brightens between captures. Site (ST-13.6): built page renders with `<RomPlayer>` on the committed ROM, prev/next resolve, index row 13 links the lesson. Reviews: both specialists dispatched on the phase diff (both sessions static — no shell available to them; addresses re-derived by hand and confirmed). Five minor findings (release-line HBLANK ledger wording; three NTSC-unqualified palette claims; band 11's provenance cell; the `Band0Write` wording; the diff/worktree staleness) — all fixed, the diff regenerated, verify green again; no critical or major findings (AR-5).
 
 **Session sub-steps (the task's checklist):**
 
