@@ -54,8 +54,8 @@ expected; changing the structure is not.
 | Assemble all lesson ROMs into `docs/public/roms/` | `npm run roms` | ✅ verified (acme 0.97) |
 | Starter ROM | `acme -f plain -o build/game.bin src/main.asm` (or `make`) | ✅ verified |
 | Docs dev / build / preview | `npm run docs:dev` · `npm run docs:build` · `npm run docs:preview` | build ✅ verified |
-| Stella screenshot | `bash scripts/capture-screenshot.sh <rom.bin> <out.png>` | ⚠️ unverified — needs `stella` + ImageMagick `import` (and `xvfb-run` for headless) |
-| Run in Stella | `stella <rom.bin>` | ⚠️ needs `stella` installed |
+| Stella screenshot | `bash scripts/capture-screenshot.sh <rom.bin> <out.png>` | ✅ verified (Stella 7.0 + ImageMagick) |
+| Run in Stella | `stella <rom.bin>` | ✅ installed (Stella 7.0) |
 
 ### Structure
 
