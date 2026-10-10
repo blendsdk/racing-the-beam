@@ -7,5 +7,13 @@
     "minimumReviewers": 1,
     "stopOnMajorFinding": true
   },
+  "routing": {
+    "maxConcurrentAgents": 4,
+    "roles": {
+      "lesson-author": {"effort": "high"},
+      "atari2600-reviewer": {"effort": "high", "sandbox": "read-only"},
+      "curriculum-auditor": {"effort": "high", "sandbox": "read-only"}
+    }
+  },
   "metrics": {"enabled": false}
 }
