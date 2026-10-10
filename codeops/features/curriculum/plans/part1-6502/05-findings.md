@@ -32,6 +32,18 @@ One row per review batch. Identifiers and area tokens only.
 | SR-023 | 3 | MINOR | doc Key Takeaways had 8 bullets (template allows 5–7) | fixed — merged the Z/N bullet into the shift/carry bullet → 7 |
 | SR-024 | 3 | MINOR | solutions (six unreferenced checkpoint labels, no comments) | fixed — each labelled a debugger checkpoint with its expected value |
 | SR-025 | 3 | MINOR | doc (`StepShift`/`ReloadStore` mentions implied labels ship in the ROM) | fixed — `acme -l` symbol-list pointer added; second mention says "the `StepShift` symbol" |
+| SR-026 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md (ramp wording "a little brighter"/"smooth" — false for the `+$0A` walk) | fixed — accurate hue/brightness description at all four spots |
+| SR-027 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md (fetch count "first five routes … sixth is not a route") | fixed — five memory fetches named; immediate called out as not a route |
+| SR-028 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md (exercise-3 recipe with the main-ROM band lands on `$02`/CXP0FB, not `$00`) | fixed — recipe re-anchored to the demo's band 4 (`$80 + $80`) |
+| SR-029 | 4 | MINOR | exercise-03-solution.asm (table `$1A…$88` vs "pictures are identical" claim) | fixed — table aligned to exercise 1's `$42…$B0`; ROM rebuilt; evidence re-run |
+| SR-030 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md (cycles "same costs" false for stores/RMW) | fixed — LDA qualifier; stores/RMW noted |
+| SR-031 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md ("`(zp),Y` only way to compute a 16-bit address") | fixed — "only way" dropped |
+| SR-032 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md + demo-10.asm ("band k = mode k" across the relative gap) | fixed — "k-th data mode (relative excepted)" + catalog numbers in the table |
+| SR-033 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md (prerequisites credit lesson 09 with indexed reads; they come from lesson 08) | fixed |
+| SR-034 | 4 | MINOR | demo-10.asm (comment calls `CPY` a branch) | fixed — compare named as such |
+| SR-035 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md ("Band 10 stores two pointers" — stores happen in Reset) | fixed |
+| SR-036 | 4 | MINOR | 10-addressing-modes.asm + docs/part1-6502-cpu/10-addressing-modes.md (`BandPtr` "three bytes away" false) | fixed — true relationship stated |
+| SR-037 | 4 | MINOR | docs/part1-6502-cpu/10-addressing-modes.md ("both tables are page-aligned" — only TableUp is) | fixed — "sit together inside one page" |
 
 ## Batch notes
 
@@ -85,3 +97,25 @@ One row per review batch. Identifiers and area tokens only.
   edge varies slightly (pulse ≈2.6–2.9 lines); the frame remains exactly 262 lines and emulated
   output is stable. The `.vitepress/dist` image copies were briefly stale right after the
   recapture; the next `verify.sh` docs build refreshed them (`dist` is gitignored).
+- **Phase 4 batch (lesson 10):** reviewers `atari2600-reviewer` (SR-101–SR-107 + 2 open questions)
+  and `curriculum-auditor` (SR-001–SR-006 + 4 open questions), dispatched in parallel on the
+  lesson-10 change set; findings merged and renumbered SR-026–SR-037. **No CRITICAL or MAJOR
+  findings; no re-review required** (minor content corrections only — the exercise-03 table
+  alignment was the reviewers' own sanctioned remedy).
+- **ST-10 task-note evidence:** debugger log — six fetch sites A=`$42` with checkpoints 16
+  scanlines apart; pointer stores A=`$82`/`$00` (→ `$0082`); the `JMP (ptr)` trampoline reaches
+  `PaintBand` in the same frame/scanline; ramp fetch A=`42,4C,56,60,6A,74` (Y=0…5); demo bands
+  A=`1A…88` as tabled. The `$82` differential used a labeled scratch witness (`$42`→`$77`: five
+  memory bands changed, the immediate and ramp[0] bands stayed) — live debugger `poke` keystrokes
+  do not land on this Wayland setup. Solutions on record: ex-1 A=`$42` then loop `4C…B0`; ex-2
+  flips at frames 121/241; ex-3 rebuilt A=`$42`, loop `4C…B0`.
+- **Session C edge checks (lesson 10):** zero-page wrap witnessed with a scratch witness —
+  `LDA $80,X` with X=0 reads A=`$42` (RAM `$80`); with X=`$80` reads A=`$02` (TIA `$00` read
+  register, not `$42`). Frame integrity — `StartFrame $F022` is reached at a steady scanline 257
+  every frame (stable 262-line frame).
+- **Deferred (out of plan scope):** Lesson 01 names `$1A` "Orange"/yellow-orange family while its
+  own screenshot renders a yellow-green (lesson 10's "yellow-green" matches the rendering) —
+  candidate `fix(lesson01)` follow-up, not actioned in this plan.
+- Accepted notes (no action): lesson 11's stub has no back-link — repo-wide stub convention, not
+  this diff; the auditor's inability to re-run `verify.sh` (no shell) was covered by the parent's
+  green runs.

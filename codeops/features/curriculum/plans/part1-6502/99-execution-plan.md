@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 18:00
-> **Progress**: 3/5 tasks (60%)
+> **Last Updated**: 2026-10-10 18:53
+> **Progress**: 4/5 tasks (80%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -110,7 +110,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 
 ## Phase 4: Lesson 10 — Addressing Modes
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: clean tree at `5a1fd16` (recorded 2026-10-10 18:18)
 > **Reasoning**: high — correctness-sensitive 6502 teaching content under independent hardware review
 
 ### Step 4.1: Lesson 10 — Addressing Modes
@@ -118,7 +118,7 @@ Five phases, one per lesson, strictly sequential — each lesson is the next one
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 10 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 10 · AR-2, AR-3, AR-5, AR-6, AR-8
 **Objective**: Deliver lesson 10 (theory lesson) end to end through the mandatory three sessions.
 
-- [ ] 4.1.1 Lesson 10 — Addressing Modes: Session A freezes ST-10.1–ST-10.5 (red baseline), Session B implements the lesson ROM, `demo-10.asm`, and the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson10): Addressing Modes`
+- [x] 4.1.1 Lesson 10 — Addressing Modes: Session A freezes ST-10.1–ST-10.5 (red baseline), Session B implements the lesson ROM, `demo-10.asm`, and the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson10): Addressing Modes` ✅ (completed: 2026-10-10 18:53)
 
 **Session sub-steps (the task's checklist):**
 
