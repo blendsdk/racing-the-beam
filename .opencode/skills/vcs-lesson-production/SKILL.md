@@ -72,10 +72,14 @@ acme -f plain -o build/lessonNN.bin lessons/partN-topic/NN-slug/NN-slug.asm
 stella build/lessonNN.bin
 
 # screenshot (works on a desktop display or headless via xvfb-run)
-bash scripts/capture-screenshot.sh build/lessonNN.bin docs/public/images/lessonNN/description.png
+# capture from the COMMITTED ROM path so the window title shows the real ROM name
+bash scripts/capture-screenshot.sh docs/public/roms/partN-topic/NN-slug/NN-slug.bin docs/public/images/lessonNN/description.png
 ```
 
 `scripts/verify.sh` is the gate: it must pass before the lesson commit.
+
+Screenshot pitfalls (committed-ROM provenance, pointer parking, moving-state burst captures)
+live in [references/checklists.md](references/checklists.md) under **Screenshots**.
 
 ## Lesson document template
 

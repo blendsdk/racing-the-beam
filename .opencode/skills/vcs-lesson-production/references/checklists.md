@@ -27,11 +27,25 @@ Walk these top to bottom. Any unchecked "hard stop" item means the lesson is not
 
 ## Screenshots (Rule 2)
 
-- [ ] Captured from the real ROM with `scripts/capture-screenshot.sh`
+- [ ] Captured from the **committed ROM path** (`docs/public/roms/…/`), never a scratch or
+      renamed copy — the window title bar is part of the published image and must read the real
+      ROM name (`Stella 7.0: "NN-slug"`)
+- [ ] Pointer parked away from the window before capture (`xdotool mousemove 0 0`) — no cursor
+      or hover artifact in the image
+- [ ] Captured with `scripts/capture-screenshot.sh`
 - [ ] Saved as `docs/public/images/lessonNN/description.png` (PNG, reasonable size)
-- [ ] The image matches the "What You Should See" text exactly
+- [ ] The image matches the "What You Should See" text exactly — pixel-check the state (band
+      counts, positions, colours), not just a glance
+- [ ] Paired screenshots (before/after, two states) verified to actually differ
 - [ ] Alt text describes what the reader sees; the caption connects it to the lesson
 - [ ] Stella UI chrome does not obscure the picture (crop if needed)
+
+**Moving states (walking bands, scrolling waves, animations):** `capture-screenshot.sh` takes a
+single capture after a fixed wait, so it cannot be aimed at a specific animation state by
+waiting longer or shorter. For time-dependent screens, launch Stella on the committed ROM
+yourself, take a burst of captures with the script's own window lookup
+(`xwininfo -root -tree | grep -i stella`), and select the frames you need by pixel analysis
+(which band is bright, which wave offset is shown). Never fake a state with a modified ROM.
 
 ## ROMs + player (Rule 5)
 
