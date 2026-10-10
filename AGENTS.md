@@ -88,7 +88,7 @@ expected; changing the structure is not.
 
 ### Specialist coverage
 
-`check due — run analyze-agents` — `lesson-author`, `atari2600-reviewer`, `curriculum-auditor`
+`up to date (2026-10-10)` — `lesson-author`, `atari2600-reviewer`, `curriculum-auditor`
 
 <!-- CODEOPS-PROJECT:END -->
 
