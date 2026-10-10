@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 23:27
-> **Progress**: 2/7 tasks (29%)
+> **Last Updated**: 2026-10-11 00:15
+> **Progress**: 3/7 tasks (43%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -110,7 +110,8 @@ carry the state-log + ledger evidence of AR-6.
 
 ## Phase 3: Lesson 14 — WSYNC and Timing
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 2acef999b77b8ac77d29c2ce6549c2c056179be0 (clean tree at phase start; scope: strict)
+> **Expected modifications**: `lessons/part2-tv-and-tia/14-wsync-and-timing/` (4 sources) · `docs/part2-tv-and-tia/14-wsync-and-timing.md` · `docs/part2-tv-and-tia/index.md` (row 14) · `docs/public/roms/part2-tv-and-tia/14-wsync-and-timing/` · `docs/public/images/lesson14/` · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — beam-alignment claims are correctness-sensitive under independent hardware review
 
 ### Step 3.1: Lesson 14 — WSYNC and Timing
@@ -118,7 +119,11 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 14 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 14 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 14 end to end through the mandatory three sessions.
 
-- [ ] 3.1.1 Lesson 14 — WSYNC and Timing: Session A freezes ST-14.1–ST-14.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson14): WSYNC and Timing`
+- [x] 3.1.1 Lesson 14 — WSYNC and Timing: Session A freezes ST-14.1–ST-14.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson14): WSYNC and Timing` ✅ (completed: 2026-10-11 00:15)
+
+**Session A record** (freeze + red baseline, 2026-10-10 23:53): ST-14.1–ST-14.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 14 — the anchored split: 96/96 visible lines, red `$42` above, blue `$84` below, the boundary on visible line 97 (Stella scanline 133); aligned mode writes the boundary color right after the line anchor (static ledger: store at line-cycle 10, HBLANK); late mode deliberately spends 43 cycles between the anchor and the color load (a 38-cycle delay routine around the mode check), landing the store at line-cycle 47 — ≈24.3 CPU cycles into the visible portion (the tear's first blue pixel is 76 — measured), a static tear identical every frame; modes alternate every ~120 frames (aligned: frames 1–119, 240–359, …; late: 120–239, 360–479, …); screenshots `wsync-aligned.png` (clean middle boundary) and `wsync-torn.png` (the tear line), each verified against burst captures; solutions: the split moved by one constant (`TOP_LINES = 64`), the late-mode budget repaired by moving the work before the anchor, and the repaired kernel instrumented with the two-breakpoint ledger check (`BudgetStart`/`BudgetEnd`, 5-cycle critical section). Red baseline confirmed: no lesson sources, ROMs, or images; the document is still the `🔒 Coming Soon` stub; index row 14 still `🔒 Coming Soon`; `verify.sh` green with the lesson absent. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-10-11): Preflight per `vcs-lesson-production` — timing claims checked against `timing.md` (76 cycles per line; HBLANK 68 clocks ≈ 22.7 cycles; visible 160; WSYNC semantics), registers against `include/vcs.asm`, ACME forms, screenshots planned, no demo (AR-3 reason in [03](03-lesson-specs.md) §Lesson 14), style follows lessons 12–13. `bash scripts/verify.sh` green (ROM drift + docs build); all four sources 4,096 bytes. Frame checkpoints unchanged: `StartFrame` 259, `VblankStart` 0, `VisibleStart` 37, `OverscanStart` 229 (3/37/192/30, 262 lines). Timing evidence: `TopWrite` logs one hit per line at cycle 11 / pixel −35 — HBLANK, the same position on consecutive lines; the `DEY` right after the store pins the per-line write at cycle 2, well inside HBLANK. `BoundaryWrite` tracks the mode clock: frame 1 cycle 6 / pixel −50 (store cycle 10, HBLANK); frame 120 cycle 43 / pixel +61 (store cycle 47 ≈ 24.3 CPU cycles into the visible portion); frame 240 cycle 6 again. Screenshots: `wsync-aligned.png` — equal 96/96 halves (302 px each), the boundary clean at every sampled column; `wsync-torn.png` — the boundary line's first 76 of 160 pixels red (measured red x 25–480 of the 960 px picture); the store-at-clock-144 arithmetic confirmed in pixels. Bursts: aligned captures 6 s apart pixel-identical; torn captures identical; the modes differ only in the 456×4 tear band (ST-14.2/14.3). Solutions: ex 1 — the split moved to visible line 65 (clean capture; late capture with the 76-pixel tear on visible line 65); ex 2 — clean 96/96 in both sampled windows, pictures identical across them; ex 3 — `BudgetEnd` reads scanline 133, cycle 5 identically in BOTH modes across the flip (frames 118–122): the repair proven live (5 of ~23 HBLANK cycles used). Site (ST-14.6): built page renders with `<RomPlayer>` on the committed ROM, prev/next resolve, index row 14 links the lesson. Reviews: both specialists dispatched on the phase diff (both sessions static — no shell available to them): six minor findings raised and fixed (mode-schedule off-by-one; visible-line numbering; store pixel annotations; ex 2's verification recipe; a typo; the `TopWrite` first-hit entry) plus two recipe notes resolved (ex 3 numeric breakpoint addresses; Stella 7 named as the source of the logged values); no critical or major findings (AR-5).
 
 **Session sub-steps (the task's checklist):**
 

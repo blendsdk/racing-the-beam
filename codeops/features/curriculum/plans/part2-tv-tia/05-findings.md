@@ -19,3 +19,11 @@ One row per review batch. Identifiers and area tokens only.
 | SR-003 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (band 11 provenance cell; `$BE` vs Lesson 11's `$B4`) | fixed |
 | SR-004 | 2 | MINOR | docs/part2-tv-and-tia/13-colors.md (`Band0Write` description: fires after the store) | fixed |
 | SR-005 | 2 | MINOR | review artifact (phase diff stale vs worktree at review time; diff regenerated) | fixed |
+| SR-001 | 3 | MINOR | docs/part2-tv-and-tia/14-wsync-and-timing.md + plan record (mode schedule off-by-one: aligned 1–119, late 120–239; raised by both reviewers) | fixed |
+| SR-002 | 3 | MINOR | lesson 14 sources + document (visible-line numbering now 1-based throughout; the boundary is visible line 97) | fixed |
+| SR-003 | 3 | MINOR | lesson 14 sources + document (store pixel annotations replaced with convention-free wording; the measured tear pixel 76 kept) | fixed |
+| SR-004 | 3 | MINOR | exercise-02-solution.asm + document (ex 2's verification recipe; added the `StoreDone` checkpoint after the store) | fixed |
+| SR-005 | 3 | MINOR | docs/part2-tv-and-tia/14-wsync-and-timing.md:57 ("one wrote" typo) | fixed |
+| SR-006 | 3 | MINOR | docs/part2-tv-and-tia/14-wsync-and-timing.md (`TopWrite` first hit: the scanline 37 entry at cycle 19) | fixed |
+| SR-007 | 3 | MINOR | exercise-03-solution.asm (break recipe now uses the shipped numeric addresses `$F057`/`$F05B`) | fixed |
+| SR-008 | 3 | MINOR (info) | spec "≈25 CPU cycles" vs document "~24" for the late write (measured 24.3; keep the measured value) | accepted |
