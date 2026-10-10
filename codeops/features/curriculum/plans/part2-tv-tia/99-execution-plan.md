@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-10-10 21:58
-> **Progress**: 0/7 tasks (0%)
+> **Last Updated**: 2026-10-10 23:03
+> **Progress**: 1/7 tasks (14%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -52,7 +52,8 @@ carry the state-log + ledger evidence of AR-6.
 
 ## Phase 1: Lesson 12 — The NTSC Frame
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 4d9a7acf3186bed2d4f7f50888db06d83615ff5e (clean tree at phase start; scope: strict)
+> **Expected modifications**: `lessons/part2-tv-and-tia/12-the-ntsc-frame/` (4 sources) · `docs/part2-tv-and-tia/12-the-ntsc-frame.md` · `docs/part2-tv-and-tia/index.md` · `docs/public/roms/part2-tv-and-tia/12-the-ntsc-frame/` · `docs/public/images/lesson12/` · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — the course's core frame-structure claims under independent hardware review
 
 ### Step 1.1: Lesson 12 — The NTSC Frame
@@ -60,7 +61,11 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 12 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 12 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 12 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 12 — The NTSC Frame: Session A freezes ST-12.1–ST-12.6 (red baseline), Session B implements the full artifact set (including the AR-10 index rebuild), Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson12): The NTSC Frame`
+- [x] 1.1.1 Lesson 12 — The NTSC Frame: Session A freezes ST-12.1–ST-12.6 (red baseline), Session B implements the full artifact set (including the AR-10 index rebuild), Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson12): The NTSC Frame` ✅ (completed: 2026-10-10 23:03)
+
+**Session A record** (freeze + red baseline, 2026-10-10 22:45): ST-12.1–ST-12.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 12 — four equal 48-line bands `$42`/`$84`/`$C8`/`$1A` with the release line counted inside band 0, phases 3/37/192/30 = 262 lines, solutions 48/96/48 and the 16 × 12-line ladder, screenshot `frame-anatomy.png`, site checks per ST-12.6. Red baseline confirmed: no lesson sources, ROMs, or images; the document is still the `🔒 Coming Soon` stub; the part index is still the minimal stub; `verify.sh` green with the lesson absent (expected — nothing references it yet). No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-10-10): `bash scripts/verify.sh` green (ROM drift + docs build); all four sources assemble to 4,096 bytes. State logs (AR-6, `stella -dbg.logbreaks 1 -logtoconsole 1 -break '<addr>'`): `StartFrame` reports scanline 259 every frame (frames 1–8; frame 0 is the power-on transient), `VblankStart` 0, `VisibleStart` 37, `OverscanStart` 229 — deltas 3 / 37 / 192 / 30, the frame ledger confirmed line for line. Solutions run and show their stated pictures: ex 1 the four equal bands from RAM; ex 2 the 48/96/48 partition (pixel-measured 1:2:1) with checkpoints at 37 / 84 / 180 / 229; ex 3 sixteen equal 12-line hue bands. Site (ST-12.6): the built page references the committed ROM via `<RomPlayer>` and `frame-anatomy.png`, and index row 12 links the lesson; assets present under `dist/`. Reviews: both specialists dispatched on the phase diff (both sessions reviewed statically — their sessions had no shell/tool access; they verified against the `atari-2600-expert` references and this record's live evidence). Seven findings (1 major, 6 minor: the `zp,X` read-cost claim, debugger-observation wording, scanline-origin consistency across the sources, first-value wording, luminance-field wording, RAM/stack note, and the steady-state `VblankStart` X value) — all fixed; the single bounded re-review confirmed six fixes clean and raised only the steady-state minor, fixed immediately. No critical or major findings remain (AR-5).
 
 **Session sub-steps (the task's checklist):**
 
