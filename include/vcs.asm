@@ -65,9 +65,9 @@ REFP1   = $0C   ; bit 3: reflect player 1
 ; --- Playfield Registers ---
 ; The playfield is 20 bits wide (left half of screen), then mirrored or repeated.
 ; Each "pixel" is 4 color clocks wide = very chunky!
-PF0     = $0D   ; Playfield 0: upper nibble used (bits 4-7), drawn LEFT to RIGHT
-PF1     = $0E   ; Playfield 1: all 8 bits, drawn LEFT to RIGHT  (bit 7 first)
-PF2     = $0F   ; Playfield 2: all 8 bits, drawn RIGHT to LEFT  (bit 0 first)
+PF0     = $0D   ; Playfield 0: bits 4-7 used; bit 4 is the LEFTMOST pixel
+PF1     = $0E   ; Playfield 1: bits 7-0; bit 7 is the LEFTMOST pixel
+PF2     = $0F   ; Playfield 2: bits 0-7; bit 0 is the LEFTMOST pixel (reversed order)
 
 ; --- Sprite Position Reset (Strobe) ---
 ; Writing to these sets the object's horizontal position to wherever the
