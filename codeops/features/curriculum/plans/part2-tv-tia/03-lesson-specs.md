@@ -40,8 +40,7 @@ implementation.
 - **Goal:** understand how the 2600 paints a television picture and write the canonical 262-line
   frame explicitly, line by line.
 - **Concepts:** the NTSC signal and the 262-scanline frame at ~60 Hz (lesson 12 derives ≈59.9 Hz:
-  `228 × 262` color clocks ÷ 3.579545 MHz; others quote 60.2 because broadcast NTSC's line is
-  227.5 clocks while the TIA's is 228); VSYNC (3 lines), VBLANK
+  `228 × 262` color clocks ÷ 3.579545 MHz); VSYNC (3 lines), VBLANK
   (37), visible (192), overscan (30); 76 CPU cycles per scanline (228 color clocks); why the
   frame is drawn every iteration of the main loop; the frame written out — and how it maps to
   `+vsync` / `+set_timer` / `+wait_timer`, which the reader has used all along.
@@ -61,7 +60,7 @@ implementation.
 - **Integration:** prev → Lesson 11; next → Lesson 13; part-index row 12 → ✅ Complete linking
   `./12-the-ntsc-frame`; sidebar entry exists (`config.ts:59`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 12): ST-12.1 assembly &
-  drift · ST-12.2 band structure · ST-12.3 stability and frame length · ST-12.4 debugger phase
+  drift · ST-12.2 band structure · ST-12.3 stability · ST-12.4 debugger phase
   map · ST-12.5 solutions and screenshot · ST-12.6 site integration.
 
 ## Lesson 13: Colors — Painting the Screen
@@ -131,7 +130,7 @@ implementation.
   cycles — computing the next frame while the beam blanks.
 - **ROM:** `15-the-timer.asm` — "time to think": the frame's VBLANK is a `TIM64T` wait (explicit
   register writes and `INTIM` polling), and the freed CPU time computes the next frame's picture:
-  **four equal 48-line bands** at hues (n, n+4, n+8, n+12) mod 16, luminance 8, where n starts at
+  **four equal 48-line bands** at hues (n, n+4, n+8, n+12) mod 16, luminance 7, where n starts at
   0 and advances by 1 every 30 frames (~0.5 s); the VBLANK wait is `TIM64T` = 43 and the overscan
   wait is 35 (≈37 and ≈30 lines with the poll and HBLANK anchoring — derived in the walkthrough).
 - **Expected screen:** a stable four-band picture whose hues advance in step every half second —
@@ -185,7 +184,7 @@ implementation.
   scanlines and the ledger discipline.
 - **ROM:** `17-cycle-counting.asm` — "the cycle ruler": two 96-line sections. Section 1 is a
   hand-counted **exactly-76-cycle** loop (no `WSYNC` inside; aligned at the section start) that
-  steps a 16-color ramp (the 16 hues at luminance 8, `$10,$20,…,$F0`, one step per 6 lines).
+  steps a 16-color ramp (the 16 hues at luminance 7, `$0E,$1E,…,$FE`, one step per 6 lines).
   Section 2 is the same loop with a deliberate +6-cycle over-budget addition: over 96 iterations
   it consumes 96 × 82 = 7,872 cycles ≈ 103.6 beam lines, stretching the section by ≈8 lines (the
   staircase signature) and extending the frame to ≈270 total lines instead of 262 — the ledger

@@ -46,12 +46,13 @@
 
 ### Code Analysis
 
-Part 2 lessons reuse the lesson 04–11 program shape: `!cpu 6502` with `include/vcs.asm` and
+Part 2 lessons build on the lesson 04–11 program shape: `!cpu 6502` with `include/vcs.asm` and
 `include/macro.asm`, origin `* = $F000`, `Reset` calling `+clean_start`, the frame skeleton
 (`+vsync`, `+set_timer`, `+wait_timer`), a kernel painting the visible area through `COLUBK` with
 `STA WSYNC`, and the vectors at `$FFFA`. Part 2's lessons dissect exactly that skeleton: lesson
-12 writes the frame out explicitly so every phase is visible in source; lessons 13–18 refine the
-display and timing techniques inside it. Both build scripts glob the lessons tree, so no tooling
+12 writes the frame out explicitly so every phase is visible in source; lessons 13–14 carry
+that explicit counted frame; from lesson 15 the macro frame returns, opened up in lesson 15's
+walkthrough. Both build scripts glob the lessons tree, so no tooling
 change is needed; the only automated per-lesson gate is the byte-identical ROM drift check in
 `scripts/verify.sh`.
 
@@ -84,7 +85,7 @@ directories.
 
 **Current Behavior:** Part 2 is the course's timing core (frame structure, 76-cycle lines, timer
 budgets, mid-scanline positioning), and none of its claims exist.
-**Required Behavior:** Every timing/cycle/frame claim carries a state-log observation or a static
+**Required Behavior:** Every timing/cycle/frame claim carries a state-log observation plus a static
 cycle ledger (AR-6, plan criteria 4).
 **Fix Required:** Collect evidence per lesson during Session C; record it in the task notes and
 findings ledger.

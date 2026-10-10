@@ -66,7 +66,7 @@ the timing standard of AR-6.
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-15.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
-| ST-15.2 | Run the ROM; inspect the frame and observe | Four equal 48-line bands, stable; the hues (n, n+4, n+8, n+12) mod 16 at luminance 8 advance with n by 1 about every 30 frames | Screenshot `timer-frame.png` + observation | 03 §Lesson 15 |
+| ST-15.2 | Run the ROM; inspect the frame and observe | Four equal 48-line bands, stable; the hues (n, n+4, n+8, n+12) mod 16 at luminance 7 advance with n by 1 about every 30 frames | Screenshot `timer-frame.png` + observation | 03 §Lesson 15 |
 | ST-15.3 | Check the timer budgets | VBLANK (37 lines; `TIM64T` = 43) and overscan (30 lines; 35) are paced as pinned; `INTIM` reaches zero within the budgeted window; the per-frame work fits (no overrun) | State log + ledger in the task notes (AR-6) | 03 §Lesson 15 |
 | ST-15.4 | Debugger: `TIM64T` value, `INTIM` polling, compute region | Written values and polling behavior match the ledger; the compute code runs while `INTIM` > 0 | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 15 |
 | ST-15.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (timer VBLANK; overscan value; split work); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
@@ -88,7 +88,7 @@ the timing standard of AR-6.
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-17.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-02 AC 1–2 / AR-4 |
-| ST-17.2 | Run the ROM; inspect the two-section ruler | Section 1: stable stepped bands (16 hues at luminance 8, one step per 6 lines); section 2: the +6-cycle over-budget staircase (≈8 lines of stretch); the section boundary is exact | Screenshot `cycle-ruler.png` matches | 03 §Lesson 17 |
+| ST-17.2 | Run the ROM; inspect the two-section ruler | Section 1: stable stepped bands (16 hues at luminance 7, one step per 6 lines); section 2: the +6-cycle over-budget staircase (≈8 lines of stretch); the section boundary is exact | Screenshot `cycle-ruler.png` matches | 03 §Lesson 17 |
 | ST-17.3 | Verify the cycle ledger | Section 1's loop counts exactly 76 cycles and stays aligned for its 96 lines; section 2's +6-cycle excess produces the pinned ≈8-line stretch (frame ≈270 lines) | State log + static ledger (AR-6) | 03 §Lesson 17 |
 | ST-17.4 | Debugger: two consecutive iterations of section 1 | Both iterations hit the checkpoint at the same scanline; the per-iteration cycle gap matches the ledger | State-log observation + static cycle ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 17 |
 | ST-17.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (hand count verified; trimmed to 76; full ledger); screenshot exists | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-8 |
@@ -108,8 +108,9 @@ the timing standard of AR-6.
 ## Red phase (Session A, every lesson)
 
 1. Re-affirm the lesson's ST rows against [03-lesson-specs.md](03-lesson-specs.md).
-2. Record the red baseline: no lesson sources, no images, no committed ROMs, stub document,
-   part-index row still "Coming Soon" (the plan's phase baseline captures the tree state).
+2. Record the red baseline: no lesson sources, no images, no committed ROMs, stub document;
+   no part-index row yet (lesson 12) or a "Coming Soon" row (lessons 13–18); the plan's phase
+   baseline captures the tree state.
 
 ## Green phase (Session C, every lesson)
 

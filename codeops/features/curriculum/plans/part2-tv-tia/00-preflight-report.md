@@ -1,6 +1,6 @@
 # Preflight Report: Part 2 — TV & TIA Plan (Lessons 12–18)
 
-> **Status**: FIXES APPLIED — awaiting the iteration-2 verification rescan (execution stays blocked until it passes)
+> **Status**: ✅ PREFLIGHT PASSED — all 22 findings resolved (iteration 2 verified the five majors and 16 resolutions; seven residuals completed and directly verified)
 > **Iteration**: 1 (first scan)
 > **Artifact**: Implementation plan at `codeops/features/curriculum/plans/part2-tv-tia/` (7 documents), ref `feee94c`
 > **Codebase Grounded**: 5 auditor clusters (13 dimensions) + 1 independent challenger; every reference claim re-checked against the repo
@@ -39,9 +39,9 @@ For maximum independence, a fresh-session audit remains an option.
 | Severity | Count | Status |
 |----------|-------|--------|
 | CRITICAL | 0 | — |
-| MAJOR | 5 | 5 resolved (accepted) |
-| MINOR | 11 | 11 resolved (accepted) |
-| OBSERVATION | 5 | 5 resolved (accepted) |
+| MAJOR | 5 | 5 resolved, verified |
+| MINOR | 12 | 12 resolved, verified |
+| OBSERVATION | 5 | 5 resolved, verified |
 
 ### User Decisions (bulk acceptance, 2026-10-10)
 
@@ -310,10 +310,33 @@ per-finding record (option spelled out):
 
 ---
 
+## Iteration 2 — verification rescan
+
+A fresh-context verifier checked all 21 resolutions against the fix commit `9d6aee1`: 16 were
+fully verified; seven residuals were found — one new minor (PF-022) and six missed spots of
+already-accepted resolutions (PF-003-R, PF-007-R, PF-012-R, PF-013-R, PF-017-R, PF-021-R). All
+residuals were completed in the follow-up fix pass and directly verified; no critical or major
+finding remained open at any point.
+
+### PF-022: "luminance 8" is not a representable value 🟡 MINOR (new in iteration 2)
+
+**Dimension:** 6 (Feasibility) · **Location:** `03-lesson-specs.md` §Lesson 15/§Lesson 17;
+`07-testing-strategy.md` ST-15.2/ST-17.2
+**Codebase Evidence:** the palette byte is `%HHHHLLL0` — luminance 0–7
+(`atari-2600-expert/references/tia-hardware.md`); "luminance 8" appears nowhere in the palette.
+**The Problem:** Session A could not freeze a satisfiable oracle for lessons 15/17.
+**Options:** single viable path — pin luminance 7 (brightest; matches lesson 13's 7→0 start),
+with the ramp listed as `$0E,$1E,…,$FE`. Rejected: luminance 0 (renders a near-black ramp —
+fails the visual intent).
+**Recommendation:** luminance 7 — fixed as part of PF-001's accepted resolution.
+
+**User Decision:** Resolved — completed within PF-001's accepted recommendation (single viable option)
+
 ## Verdict
 
-**❌ BLOCKED (pending verification)** — fixes applied for all 21 findings; the iteration-2
-rescan is the remaining gate. The plan is structurally sound (document set complete, register
-gate passed, spec-first ordering correct, all cross-references to code verified; the frame math,
-band arithmetic, timer values, and hardware claims passed independent hardware-semantics
-review); the majors were targeted, low-cost fixes.
+**✅ PREFLIGHT PASSED — 22 findings resolved.** All five majors were verified in iteration 2; all
+minors and observations were resolved (16 verified + seven residuals completed and directly
+verified). The plan is structurally sound (document set complete, register gate passed,
+spec-first ordering correct, all cross-references to code verified; the frame math, band
+arithmetic, timer values, and hardware claims passed independent hardware-semantics review).
+Execution may proceed.

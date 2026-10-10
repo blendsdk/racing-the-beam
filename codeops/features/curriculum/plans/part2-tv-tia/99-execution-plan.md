@@ -60,7 +60,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 12 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 12 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 12 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 12 — The NTSC Frame: Session A freezes ST-12.1–ST-12.5 (red baseline), Session B implements the full artifact set (including the AR-10 index rebuild), Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson12): The NTSC Frame`
+- [ ] 1.1.1 Lesson 12 — The NTSC Frame: Session A freezes ST-12.1–ST-12.6 (red baseline), Session B implements the full artifact set (including the AR-10 index rebuild), Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson12): The NTSC Frame`
 
 **Session sub-steps (the task's checklist):**
 
@@ -84,7 +84,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 13 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 13 · AR-2, AR-4, AR-6, AR-9
 **Objective**: Deliver lesson 13 end to end through the mandatory three sessions.
 
-- [ ] 2.1.1 Lesson 13 — Colors: Session A freezes ST-13.1–ST-13.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson13): Colors`
+- [ ] 2.1.1 Lesson 13 — Colors: Session A freezes ST-13.1–ST-13.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson13): Colors`
 
 **Session sub-steps (the task's checklist):**
 
@@ -108,7 +108,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 14 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 14 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 14 end to end through the mandatory three sessions.
 
-- [ ] 3.1.1 Lesson 14 — WSYNC and Timing: Session A freezes ST-14.1–ST-14.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson14): WSYNC and Timing`
+- [ ] 3.1.1 Lesson 14 — WSYNC and Timing: Session A freezes ST-14.1–ST-14.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson14): WSYNC and Timing`
 
 **Session sub-steps (the task's checklist):**
 
@@ -132,7 +132,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 15 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 15 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 15 end to end through the mandatory three sessions.
 
-- [ ] 4.1.1 Lesson 15 — The Timer: Session A freezes ST-15.1–ST-15.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson15): The Timer`
+- [ ] 4.1.1 Lesson 15 — The Timer: Session A freezes ST-15.1–ST-15.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson15): The Timer`
 
 **Session sub-steps (the task's checklist):**
 
@@ -156,7 +156,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 16 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 16 · AR-2, AR-4, AR-6, AR-9
 **Objective**: Deliver lesson 16 end to end through the mandatory three sessions.
 
-- [ ] 5.1.1 Lesson 16 — Horizontal Zones: Session A freezes ST-16.1–ST-16.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson16): Horizontal Zones`
+- [ ] 5.1.1 Lesson 16 — Horizontal Zones: Session A freezes ST-16.1–ST-16.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson16): Horizontal Zones`
 
 **Session sub-steps (the task's checklist):**
 
@@ -180,7 +180,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 17 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 17 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 17 end to end through the mandatory three sessions.
 
-- [ ] 6.1.1 Lesson 17 — Cycle Counting: Session A freezes ST-17.1–ST-17.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson17): Cycle Counting`
+- [ ] 6.1.1 Lesson 17 — Cycle Counting: Session A freezes ST-17.1–ST-17.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson17): Cycle Counting`
 
 **Session sub-steps (the task's checklist):**
 
@@ -204,7 +204,7 @@ carry the state-log + ledger evidence of AR-6.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 18 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 18 · AR-2, AR-4, AR-6
 **Objective**: Deliver lesson 18 end to end through the mandatory three sessions and close Part 2.
 
-- [ ] 7.1.1 Lesson 18 — Mid-Scanline Changes: Session A freezes ST-18.1–ST-18.5 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson18): Mid-Scanline Changes`
+- [ ] 7.1.1 Lesson 18 — Mid-Scanline Changes: Session A freezes ST-18.1–ST-18.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson18): Mid-Scanline Changes`
 
 **Session sub-steps (the task's checklist):**
 
