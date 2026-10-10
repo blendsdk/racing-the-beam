@@ -45,7 +45,7 @@ the timing standard of AR-6.
 | ST-13.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-02 AC 1–2 / AR-4 |
 | ST-13.2 | Run the ROM; inspect the first frame | 16 equal 12-line bands in hue order 0–15 at the first luminance step | Screenshot `palette-hues.png` matches | 03 §Lesson 13 |
 | ST-13.3 | Keep running through one full luminance cycle | The picture steps through all 8 luminance levels in order, each step stable; across one cycle all 128 colors appear | Full-cycle observation; second screenshot `palette-dim.png` | 03 §Lesson 13 |
-| ST-13.4 | Debugger: watch the luminance step counter and the `COLUBK` value | The counter advances once per ~120 frames; the written byte equals hue<<4 | level<<1 for the displayed step | State log + ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 13 |
+| ST-13.4 | Debugger: watch the luminance step counter and the `COLUBK` value | The counter advances once per ~120 frames; the written byte equals the hue × 16 plus the step's luminance × 2 | State log + ledger in the task notes (AR-6) | RD-02 AC 3 / 03 §Lesson 13 |
 | ST-13.5 | Assemble and run each solution | Each assembles to 4,096 bytes and produces its stated result (swapped axes; chart-match table; one-hue fade); both screenshots exist | `verify.sh` + manual runs + file check | RD-02 AC 1 / AR-3 |
 
 ### Lesson 14
