@@ -1,8 +1,8 @@
 # Ambiguity Register: Part 1 — The 6502 CPU (Lessons 07–11)
 
-> **Status**: ✅ GATE PASSED — all 10 items resolved
+> **Status**: ✅ GATE PASSED — all 11 items resolved
 > **Last Updated**: 2026-10-10
-> **Authority**: `--auto-design` active for this plan chain (policy version 1, root invocation ID `curriculum-plan-part1-2026-10-10`). All 10 items are delegated technical decisions inside the confirmed RD-01 scope; no item is reserved authority or a complexity escalation.
+> **Authority**: `--auto-design` active for this plan chain (policy version 1, root invocation ID `curriculum-plan-part1-2026-10-10`). AR #1–#10 are delegated plan decisions and AR #11 is a delegated runtime decision, all inside the confirmed RD-01 scope; no item is reserved authority or a complexity escalation.
 
 | # | Category | Ambiguity / Gap | Options Presented | User Decision | Status |
 |---|----------|-----------------|-------------------|---------------|--------|
@@ -16,6 +16,7 @@
 | 8 | Technical | What is the commit behavior? | One atomic commit per lesson via the `git-commit` skill in push mode / batch / no commits | **AI (auto-design):** one atomic commit per lesson, `feat(lessonNN): <Lesson title>`, via the `git-commit` skill in push mode | ✅ Resolved |
 | 9 | Technical | What is the content source of truth? | RD-01 + `config.ts` + `atari-2600-expert` refs + `include/vcs.asm` / free-form authoring | **AI (auto-design):** the listed sources; no curriculum structure changes | ✅ Resolved |
 | 10 | Technical | How do the roadmaps stay in sync? | Set RD-01 to Plan Created now / leave both rows untouched | **AI (auto-design):** RD-01 → `Plan Created` (📋) with the plan link; portfolio Stage Summary → `11 RDs · 1 plan created` | ✅ Resolved |
+| 11 | Technical (runtime) | How is the ST-08.3/ST-08.4 stack-pointer evidence produced without an automatable debugger? | Interactive GUI debugger / runtime witness + static ledger / skip the SP checks | **AI (auto-design, runtime):** runtime witness — an instrumented scratch copy (temporary, never committed) exposes the observed SP values at runtime and the capture is checked against the expected values; a static SP ledger accompanies it; expected outcomes unchanged | ✅ Resolved |
 
 ### Resolution Notes
 
@@ -40,3 +41,7 @@
 **AR-9.** Decision: content sources are RD-01's lesson list and `docs/.vitepress/config.ts` for scope/titles, `atari-2600-expert` references for technical claims, `include/vcs.asm` as register/bit ground truth; structure untouched. Evidence: `config.ts:48–52`; requirements AR #6. Rejected alternative: authoring from memory. Confidence: High. Reopen trigger: the ground-truth files move or change.
 
 **AR-10.** Decision: on plan creation RD-01 → `Plan Created` (📋) linked to `plans/part1-6502/00-index.md`, portfolio Stage Summary → `11 RDs · 1 plan created`; Done only at execution completion. Evidence: `00-roadmap.md:18`; `codeops/00-roadmap.md:16`. Rejected alternative: leaving the rows untouched (roadmaps would misstate the stage). Confidence: High. Reopen trigger: the plan is discarded or renamed.
+
+**AR-11 (runtime).** Decision: ST-08.3/ST-08.4 SP evidence uses a scratch instrumented copy of the lesson ROM (temporary, never committed) that makes the observed SP values at the checkpoints visible at runtime, sampled from a capture with the verified pipeline, plus an instruction-by-instruction static SP ledger; the frozen expected outcomes are unchanged. Evidence: the cases need SP values at specific points; Stella's debugger is an interactive GUI with no scripted stepping and `xdotool` is unavailable, while `scripts/capture-screenshot.sh` is verified end-to-end (`AGENTS.md`). Rejected alternatives: installing GUI-automation tooling (new support surface — complexity escalation, AR-7); skipping the SP checks (would drop a frozen ST-08 case). Counterargument: a witness tests an instrumented copy, not the shipped ROM; answered by keeping the copy's only change the checkpoint reads and corroborating against the shipped ROM's static SP ledger. Confidence: Medium-High. Reopen trigger: an automatable debugger becomes available.
+
+**AR-11 amendment (runtime, 2026-10-10 15:57).** The reopen trigger fired: the user installed `xdotool`, and the debugger proved automatable — Stella's `-break <address>` with the debugger's `logBreaks` setting writes the full CPU state at each breakpoint to the system log (`BP: <frame> <scanline> … | <flags> <A> <X> <Y> <SP> |`), headless and deterministic. Used on lesson 08 at seven checkpoints with source-derived register predictions as controls; every observed value matches the static ledger and the author's witness — frame top `$FF`; `DrawScreen` `$FD`; after `PHA` `$FC` with A = X = band index; `PaintBand` `$FA` on all 42,624 hits; after `PLA` A = restored index at `$FD`; exercise-03 ladder `$FF→$FD→$FB→$F9` on all 42,432 deepest hits. The witness and ledger remain corroborating evidence; expected outcomes unchanged. Future lessons may use the log method as the primary observation.

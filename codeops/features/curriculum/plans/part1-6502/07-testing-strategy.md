@@ -38,8 +38,8 @@ E2E testing uses the existing site build; no new harness is created (AR-3).
 | --- | --- | --- | --- | --- |
 | ST-08.1 | Assemble the lesson source and solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output | RD-01 AC 1–2 / AR-3 |
 | ST-08.2 | Run the ROM in Stella | Four equal bands, top to bottom `$42`, `$C8`, `$96`, `$1A`; steady picture | Screenshot `subroutine-bands.png` matches | 03 §Lesson 08 / RD-01 AC 1 |
-| ST-08.3 | Step into the calls; watch SP and the stack | At the frame top SP = `$FF`; each `JSR` lowers SP by 2; every `RTS` restores it; each `PHA` matches a `PLA` with the same value | Debugger observation in the task notes | RD-01 AC 3 / 03 §Lesson 08 |
-| ST-08.4 | Exercise the 3-level nested chain; record the deepest SP | SP reaches exactly `$F9` and returns to `$FF` each frame; no lesson variable lives at `$F9–$FF` | Debugger observation in the task notes | 03 §Lesson 08 / RD-01 AC 3 |
+| ST-08.3 | Step into the calls; watch SP and the stack | At the frame top SP = `$FF`; each `JSR` lowers SP by 2; every `RTS` restores it; each `PHA` matches a `PLA` with the same value | Debugger state log (`-break` + logBreaks) + static SP ledger, in the task notes (AR-11) | RD-01 AC 3 / 03 §Lesson 08 |
+| ST-08.4 | Exercise the 3-level nested chain; record the deepest SP | SP reaches exactly `$F9` and returns to `$FF` each frame; no lesson variable lives at `$F9–$FF` | Debugger state log (`-break` + logBreaks) + static SP ledger, in the task notes (AR-11) | 03 §Lesson 08 / RD-01 AC 3 |
 | ST-08.5 | Assemble and run each solution | Each assembles to exactly 4,096 bytes and produces its stated result (8 bands; caller's X preserved across a clobbering call; nested chain returns to `$FF`); the screenshot exists | `verify.sh` + manual runs | RD-01 AC 1–2 / AR-3 |
 
 ### Lesson 09
