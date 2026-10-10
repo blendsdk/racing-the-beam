@@ -128,15 +128,20 @@ Zero-page addressing uses a **1-byte** address, so the instruction is shorter (2
 ### Building This Lesson
 
 ```bash
-make lesson L=part1/04
-make run-lesson L=part1/04
+npm run roms      # assemble every lesson ROM into docs/public/roms/
 ```
 
-Or assemble directly with ACME:
+Or assemble just this lesson's ROM directly with ACME:
 
 ```bash
 acme -f plain -o build/lesson04.bin \
   lessons/part1-6502-cpu/04-registers-and-memory/04-registers-and-memory.asm
+```
+
+Then run it in Stella:
+
+```bash
+stella build/lesson04.bin
 ```
 
 ### Full Source

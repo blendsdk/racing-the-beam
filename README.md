@@ -1,6 +1,6 @@
 # 🕹️ Racing the Beam
 
-**Learn Atari 2600 assembly programming from scratch — 72 hands-on lessons from zero to homebrew mastery.**
+**Learn Atari 2600 assembly programming from scratch — 78 hands-on lessons from zero to homebrew mastery.**
 
 🌐 **Live Site**: [blendsdk.github.io/racing-the-beam](https://blendsdk.github.io/racing-the-beam/)
 
@@ -23,10 +23,11 @@ A step-by-step masterclass in Atari 2600 game development using 6502 assembly la
 | 8 | Advanced Topics | 56–65 |
 | 9 | The DSL Path | 66–68 |
 | 10 | Capstone Projects | 69–72 |
+| 11 | Legendary Techniques | 73–78 |
 
 ## Prerequisites
 
-- **DASM assembler** — [github.com/dasm-assembler/dasm](https://github.com/dasm-assembler/dasm)
+- **ACME cross-assembler** — [sourceforge.net/projects/acme-crossass](https://sourceforge.net/projects/acme-crossass/)
 - **Stella emulator** — [stella-emu.github.io](https://stella-emu.github.io/)
 - A text editor with 6502 assembly syntax highlighting
 

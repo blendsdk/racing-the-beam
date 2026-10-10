@@ -16,4 +16,4 @@
 
 ---
 
-*This lesson is part of [Racing the Beam](/) — 72 hands-on lessons in Atari 2600 assembly programming.*
+*This lesson is part of [Racing the Beam](/) — 78 hands-on lessons in Atari 2600 assembly programming.*
