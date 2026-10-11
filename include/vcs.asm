@@ -182,8 +182,10 @@ TIM64T  = $0296  ; Set timer: 64 clocks per tick   ← most commonly used!
 T1024T  = $0297  ; Set timer: 1024 clocks per tick
 
 ; Timer usage pattern:
-;   LDA #43         ; 43 × 64 = 2752 cycles ≈ 37 scanlines of VBLANK
-;   STA TIM64T      ; Start counting down
+;   LDA #44         ; 44 ticks: 1 + 43 x 64 = 2753 cycles ≈ 37 VBLANK lines
+;   STA TIM64T      ; Start counting down (the first tick lands 1 cycle later)
 ;   ... do stuff ...
 ;   LDA INTIM       ; Check: is it zero yet?
 ;   BNE .-2         ; No? Keep waiting.
+; (The classic 43/35 are one tick short — 36/29 lines; 44/36 cover the
+;  nominal 37/30.  See Lesson 15 for the derivation.)

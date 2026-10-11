@@ -34,7 +34,7 @@ Reset:
 StartFrame:
     +vsync                  ; 3 lines
     LDA #$02 : STA VBLANK   ; blank
-    +set_timer 43           ; VBLANK ≈ 37 lines
+    +set_timer 44           ; VBLANK = 37 lines (44 ticks)
     ; --- game logic (read inputs, move objects, collisions) ---
     +wait_timer             ; wait out the timer
     LDA #$00 : STA VBLANK   ; picture on
@@ -48,7 +48,7 @@ StartFrame:
     BNE .kernel
 
     LDA #$02 : STA VBLANK   ; blank
-    +set_timer 35           ; overscan ≈ 30 lines
+    +set_timer 36           ; overscan = 30 lines (36 ticks)
     +wait_timer
     JMP StartFrame
 ```

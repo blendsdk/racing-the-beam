@@ -136,8 +136,11 @@ six-digit scoreboard trick.
 | `INSTAT` | `$0285` | Bit 7 = 1 once the timer has underflowed |
 | `TIM1T/8T/64T/1024T` | `$0294–$0297` | **Write = start the timer** with that prescaler (ticks of 1, 8, 64, 1024 CPU cycles) |
 
-Standard timing recipe (as in `include/macro.asm`): use `TIM64T`, write `43` for a full
-VBLANK (~37 scanlines) or `35` for overscan (~30), then busy-wait on `INTIM` reaching 0.
+Standard timing recipe (as in `include/macro.asm`): write `TIM64T` and busy-wait on `INTIM`
+reaching 0. Use **44** for a 37-line VBLANK or **36** for a 30-line overscan: the first tick
+lands one cycle after the write, so `t` ticks cover `1 + (t−1) × 64` cycles. The classic
+`43`/`35` run one tick short (36/29 lines — a 260-line frame; Lesson 15 derives the whole
+arithmetic).
 
 The timer keeps counting after reaching 0 and wraps through `$00→$FF` after 255 further
 ticks, so re-check or re-arm for long waits. Short waits (< 255 ticks) can simply poll

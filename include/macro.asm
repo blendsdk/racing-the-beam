@@ -69,13 +69,16 @@
 ; Set the RIOT 64-cycle interval timer.
 ; Each tick = 64 CPU cycles. One scanline = 76 CPU cycles.
 ;
-; Common values:
-;   43 ticks x 64 = 2752 cycles ~ 36 scanlines (use for 37-line VBLANK)
-;   35 ticks x 64 = 2240 cycles ~ 29 scanlines (use for 30-line overscan)
+; Common values (the first decrement lands one cycle after the write, so
+; t ticks cover 1 + (t-1) x 64 cycles):
+;   44 ticks = 1 + 43 x 64 = 2753 cycles = the 37-line VBLANK, exactly
+;   36 ticks = 1 + 35 x 64 = 2241 cycles = the 30-line overscan, exactly
+;   43/35 are the classic community values: one tick short — 36/29 lines
+;   and a 260-line frame; usually invisible, never the nominal periods.
 ;
-; You get slightly fewer scanlines than the math suggests because setting
-; the timer and waiting for it also consumes some cycles. That's fine —
-; the timer just needs to fill the gap while you do game logic.
+; The poll and a final WSYNC anchor absorb what remains of the last
+; blanked line — the timer just needs to expire before that line ends
+; (Lesson 15 derives the whole arithmetic).
 ; -----------------------------------------------------------------------------
 !macro set_timer .ticks {
     LDA #.ticks

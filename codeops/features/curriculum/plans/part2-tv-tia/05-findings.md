@@ -34,3 +34,4 @@ One row per review batch. Identifiers and area tokens only.
 | SR-005 | 4 | MINOR | the macro-note citation: "use for 37-line VBLANK" clarified as the classic convention the measurement refines | fixed |
 | SR-006 | 4 | MINOR | exercise-03's `ComputeBand` cycle note: the +6 is the JSR, not the RTS | fixed |
 | SR-007 | 4 | MINOR | the phase diff was stale vs the worktree at review time (regenerated after the fixes) | fixed |
+| SR-008 | 4 | MINOR (info) | the part 1 lessons' document annotations still label the classic `+set_timer 43`/`35` snippets as "~37"/"~30 scanlines" (approximate historical labels; the macro's note and Lesson 15 now carry the measured values) — a future `fix(docs)` sweep could align them | recorded — future sweep |

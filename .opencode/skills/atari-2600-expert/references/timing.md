@@ -42,7 +42,8 @@ Numbers in this file are verified against problemkaputt.de's VCS specification (
   using all 228 — less work, same compatibility. This is why NTSC-targeted ROMs "roll" on PAL
   hardware: different totals.
 - VBLANK and overscan are where game logic runs: read controllers, move objects, compute.
-  The RIOT timer (`TIM64T`, values ~43 and ~35) measures these periods while you work.
+  The RIOT timer (`TIM64T`, values `44` and `36` for the exact 37/30 lines; the classic
+  `43`/`35` run one tick short) measures these periods while you work.
 
 ## The CPU's view of a frame
 
@@ -54,8 +55,10 @@ overscan        ; 30 lines: set VBLANK, timer, more logic, wait
 loop
 ```
 
-The timer values in `include/macro.asm` (`43` / `35`) produce roughly the right periods; the
-exact line counts absorb the cost of starting the timer and waiting on it.
+The timer values `44` / `36` produce the exact nominal periods (`t` ticks cover
+`1 + (t−1) × 64` cycles — the first tick lands one cycle after the write); the poll and the
+final `WSYNC` anchor absorb what remains of the last blanked line. The classic `43` / `35`
+run one tick short: 36/29 lines and a 260-line frame (Lesson 15).
 
 ## Cycle budgeting
 
