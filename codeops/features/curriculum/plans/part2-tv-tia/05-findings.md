@@ -47,3 +47,12 @@ One row per review batch. Identifiers and area tokens only.
 | SR-010 | 5 | MINOR (info) | document's forward-looking zone vocabulary (playfield/sprites/scoreboard) — spec'd as later-part context per AR-9 | accepted |
 | SR-011 | 5 | MINOR (info) | prev/next one-way until Lesson 17 ships — the established pattern | accepted |
 | SR-012 | 5 | MINOR (out-of-scope follow-up) | docs/part2-tv-and-tia/15-the-timer.md "What's Next" still described the visible 192 as "one uniform picture" (found by the phase-5 re-review) | fixed — follow-up `fix(lesson15)` commit |
+| SR-001 | 6 | MAJOR | document + source headers ("one color clock" — one CPU cycle is three color clocks) | fixed |
+| SR-002 | 6 | MAJOR | document (the fix pass inverted the padding fact — "could be padded away with one more instruction"; no 1-cycle instruction exists — restated as the parity framing; raised by the bounded re-review, AR-14 amended) | fixed |
+| SR-003 | 6 | MINOR | document + headers (S2Tick "one hit per line": 96 hits over 103 lines, seven skipped lines; "+7 lines" → line advances 1, or 2 at a skip) | fixed |
+| SR-004 | 6 | MINOR | document (wrap count "three times" → seven times across the section) | fixed |
+| SR-005 | 6 | MINOR | document (Key Takeaway "+36 cycles (≈72 px) per hue change" — dimensional slip; now "+36 cycles (108 color clocks)") | fixed |
+| SR-006 | 6 | MINOR | document + headers (stale predictions ~269/~266 vs measured 270/267; 7,872/7,873/577 figure mix-ups → loop totals 7,295/7,871, sections 7,297/7,873, excess 576; "7,295 = 96 lines + 1" phrasing) | fixed |
+| SR-007 | 6 | MINOR | ex-1/ex-3 headers (breakpoint recipes with `'$<label>'` placeholders — literal `$F010`/`$F037`/`$F062`) | fixed |
+| SR-008 | 6 | MINOR | document wording (notch predictions attributed to the `S2Tick` hit cycles; "classic three-line delay" → "little delay loop"; "screen pixels" → "captured-image pixels"; caption ≈18 px → ≈19 px; ex-3 inline tick wording) | fixed |
+| SR-009 | 6 | MINOR (info) | `!align 255, 0` page-alignment query — verified: `ColorRamp = $F100`, max read `$F15F`; constant cycle-14 S1Tick proves no `abs,X` +1 | accepted — no change |

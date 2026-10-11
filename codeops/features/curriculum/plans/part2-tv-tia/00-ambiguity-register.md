@@ -1,7 +1,7 @@
 # Ambiguity Register: Part 2 — TV & TIA (Lessons 12–18)
 
-> **Status**: ✅ GATE PASSED — all 12 items resolved; 1 runtime item added and resolved during execution (AR-13)
-> **Last Updated**: 2026-10-11 09:10
+> **Status**: ✅ GATE PASSED — all 12 items resolved; 2 runtime items added and resolved during execution (AR-13, AR-14)
+> **Last Updated**: 2026-10-11 14:50
 > **Authority**: `--auto-design` active for this plan chain (policy version 1, root invocation ID `curriculum-plan-part2-2026-10-10`). AR #1, #3, #4 are user decisions; AR #2, #5–#12 are delegated technical decisions.
 
 | # | Category | Ambiguity / Gap | Options Presented | User Decision | Status |
@@ -19,6 +19,7 @@
 | 11 | Technical | Which video standard do the lessons target? | NTSC only / NTSC + PAL | **AI (auto-design):** NTSC only (262 lines; ~60 Hz — lesson 12 derives ≈59.9 Hz from `228 × 262` clocks); PAL appears only as a noted aside | ✅ Resolved |
 | 12 | Technical | Commit and record-keeping per lesson? | One atomic `feat(lessonNN)` commit + plan/ledger/roadmap updates / batch commits | **AI (auto-design):** one atomic commit per lesson via the `git-commit` skill in push mode with `Ref:`/`Task:` trailers; findings ledger, progress header, and roadmap transitions per Part 1 practice | ✅ Resolved |
 | 13 | Technical (runtime) | Exercise 1's zone split: the exercise prose says "split the sky zone into a fifth zone", but its illustrative example "(e.g. 24/72/48/24/24, total 192)" describes splitting the ground instead | Prose wins — split the sky (24/48/24/48/48) / example wins — split the ground (24/72/48/24/24) | **AI (auto-design):** the prose action is the requirement and the "e.g." digits are illustrative — exercise 1 ships a sky split (24/48/24/48/48, `$84` then `$86`), total 192, the paint loop untouched but for the table | ✅ Resolved |
+| 14 | Technical (runtime) | Lesson 17's section junction: "aligned at the section start", "no `WSYNC` inside [the loops]" leave the section 1 → section 2 boundary unstated; ST-17.4's "both iterations hit the checkpoint at the same scanline" is impossible for a once-per-line checkpoint at 76 cycles per iteration | WSYNC at the junction / chain by cycle count (phase carry) / compensate the exit's −1 cycle | **AI (auto-design):** chain directly — the exit's spare cycle (BNE not-taken; prologue + loop is odd, 7,296 is unreachable) feeds section 2's prologue, whose first write lands in the next line's HBLANK: exact boundary, no tail line, 16 × 6-line cadence intact; ST-17.4 read as "same in-line cycle position on consecutive scanlines" | ✅ Resolved |
 
 ### Resolution Notes
 
@@ -88,3 +89,28 @@ non-binding next to the explicit prose. Confidence: Med-High — would change if
 the example's exact shape. Policy version: 1. Root invocation ID:
 `curriculum-plan-part2-2026-10-10`. Reopen triggers: the user pins the ground split; a later
 audit reads the example as binding.
+
+**AR-14 (runtime).** Authority: AI — delegated by `--auto-design`. Eligibility: implementation
+mechanics inside the frozen lesson scope (section chaining and one test wording); no product
+behavior, scope, or acceptance-criteria change — the ST outcomes (exact boundary, 96 lines at
+76 cycles, ≈8-line stretch) are preserved. Objective: keep the ruler's cadence exact while
+honoring "no `WSYNC` inside". Evidence: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 17
+("aligned at the section start"; "no `WSYNC` inside"); the exit branch is one cycle cheaper than
+the loop branch, and prologue + loop parity is odd, so no instruction combination ends section 1
+exactly on 96 × 76 = 7,296 cycles. Rejected alternatives: a `WSYNC` at the junction (costs the
+exact boundary — a blank tail line and a 7-line final band, contradicting "one step per 6
+lines"); compensating `NOP`s (parity makes the target unreachable). Strongest counterargument:
+the junction carry makes sections formally coupled; answered by the lesson's own point — counted
+sections chain by cycles, and the spare cycle is ledger evidence, not a defect. Confidence:
+High — would change if a measured run shows the carry breaks the boundary or cadence. Policy
+version: 1. Root invocation ID: `curriculum-plan-part2-2026-10-10`. Reopen triggers: Session C
+measurement contradicts the predicted junction (first section-2 write outside HBLANK of the next
+line); a reviewer pins a `WSYNC` junction.
+
+**AR-14 amendment (phase 6 review round 2).** The evidence clause "no instruction combination ends
+section 1 exactly on 96 × 76 = 7,296 cycles" was overstated and is scoped: straight padding
+cannot land on 7,296 (additions come in steps of two — there is no 1-cycle instruction), but a
+*reshaped* loop (e.g. a `BEQ`-out / `JMP`-back exit with one fewer `NOP`, so the exit path also
+costs three cycles) can be built to land the section exactly. The decision stands unchanged — the
+ROM keeps the simple `BNE` shape and leaves the spare cycle to HBLANK — and the lesson now says
+"padding cannot close it" instead of "unreachable".
