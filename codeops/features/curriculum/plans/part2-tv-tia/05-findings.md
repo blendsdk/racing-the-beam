@@ -27,3 +27,10 @@ One row per review batch. Identifiers and area tokens only.
 | SR-006 | 3 | MINOR | docs/part2-tv-and-tia/14-wsync-and-timing.md (`TopWrite` first hit: the scanline 37 entry at cycle 19) | fixed |
 | SR-007 | 3 | MINOR | exercise-03-solution.asm (break recipe now uses the shipped numeric addresses `$F057`/`$F05B`) | fixed |
 | SR-008 | 3 | MINOR (info) | spec "≈25 CPU cycles" vs document "~24" for the late write (measured 24.3; keep the measured value) | accepted |
+| SR-001 | 4 | MINOR (correction) | spec 03 §Lesson 15 pinned `TIM64T` 43/35 for the blanking; measured in Stella (M6532 preloads the prescaler at divider−1: the first tick lands one cycle after the write), 43/35 give 36/29-line blanking (a 260-line frame); corrected to 44/36 (exact 37/30 lines, 262-line frame) across the four sources, the spec, the Session A record, and the test oracle (07 ST-15.3) — authorization recorded here; both specialists verified the model, the hardware spec corroborates the first-tick behavior | fixed |
+| SR-002 | 4 | MAJOR (auditor) | the course's timer notes contradicted the corrected lesson: `tia-hardware.md` 139-140, `timing.md` 45/57-58, `kernels.md` 37 and `include/vcs.asm` 185 still presented 43/35 as the nominal 37/30 values (macro.asm's note was already accurate) | fixed — follow-up `chore(skills)` commit in this phase (user-approved at the phase ask) |
+| SR-003 | 4 | MAJOR (atari) | the two ledger tables costed `STA TIM64T` as a 3-cycle zero-page write; it is a 4-cycle absolute write (store at cycles 15/16; last ticks 2,768/2,257; line cycles 32/53) — corrected in the sources, the document, and the phase records | fixed |
+| SR-004 | 4 | MINOR | document line 37's TS comment: 44 ticks × 64 = 2,816 (2,753 covered after the write) | fixed |
+| SR-005 | 4 | MINOR | the macro-note citation: "use for 37-line VBLANK" clarified as the classic convention the measurement refines | fixed |
+| SR-006 | 4 | MINOR | exercise-03's `ComputeBand` cycle note: the +6 is the JSR, not the RTS | fixed |
+| SR-007 | 4 | MINOR | the phase diff was stale vs the worktree at review time (regenerated after the fixes) | fixed |

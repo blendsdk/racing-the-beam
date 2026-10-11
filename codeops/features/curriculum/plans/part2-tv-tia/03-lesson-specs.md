@@ -131,8 +131,9 @@ implementation.
 - **ROM:** `15-the-timer.asm` — "time to think": the frame's VBLANK is a `TIM64T` wait (explicit
   register writes and `INTIM` polling), and the freed CPU time computes the next frame's picture:
   **four equal 48-line bands** at hues (n, n+4, n+8, n+12) mod 16, luminance 7, where n starts at
-  0 and advances by 1 every 30 frames (~0.5 s); the VBLANK wait is `TIM64T` = 43 and the overscan
-  wait is 35 (≈37 and ≈30 lines with the poll and HBLANK anchoring — derived in the walkthrough).
+  0 and advances by 1 every 30 frames (~0.5 s); the VBLANK wait is `TIM64T` = 44 and the overscan
+  wait is 36 (exactly 37 and 30 lines: the timer's first tick lands one cycle after the write, then
+  every 64 — the classic 43/35 in `include/macro.asm` run a line short; derived in the walkthrough).
 - **Expected screen:** a stable four-band picture whose hues advance in step every half second —
   the visible proof that the computation fits inside the blanking budget.
 - **Demo ROM:** none — the animation is the timer's visible result (AR-3).
