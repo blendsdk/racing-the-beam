@@ -503,7 +503,7 @@ At hue changes (every six iterations), the write's position within its line is f
 
 ## What You Should See
 
-A tall picture in two regimes: the top half is sixteen perfectly flat bands — the 16 hues at luminance 7 in wheel order (`$0E` white, `$1E` yellow, `$2E` gold, `$3E` orange, `$4E` red, `$5E` pink, … `$FE`), each six lines tall — and the bottom half is the same ramp with a twist: the bands are slightly taller (≈6.5 lines instead of six) and a dozen of the hue boundaries carry a visible notch, stepping left-to-right in a sawtooth, because those writes left HBLANK and repaint mid-line.
+A tall picture in two regimes: the top half is sixteen perfectly flat bands — the 16 hues at luminance 7 in wheel order (`$0E` light gray, `$1E` gold, `$2E` orange, `$3E` peach, `$4E` red, `$5E` pink, … `$FE`), each six lines tall — and the bottom half is the same ramp with a twist: the bands are slightly taller (≈6.5 lines instead of six) and a dozen of the hue boundaries carry a visible notch, stepping left-to-right in a sawtooth, because those writes left HBLANK and repaint mid-line.
 
 ![Stella running the Lesson 17 ROM: 16 flat six-line hue bands on top; below, the same ramp drifting — taller bands with staircase notches at the boundaries](/images/lesson17/cycle-ruler.png)
 
