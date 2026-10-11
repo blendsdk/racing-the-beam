@@ -572,4 +572,4 @@ stella -dbg.logbreaks 1 -logtoconsole 1 -break '$F05B' \
 
 ## What's Next
 
-The timer now handles the frame's vertical blanks — but the visible 192 lines are still one uniform picture, and every real 2600 game needs the screen to change as the beam travels down it. [Lesson 16: Horizontal Zones](/part2-tv-and-tia/16-horizontal-zones) keeps this frame skeleton and starts cutting the picture into zones — different colors, different objects, each zone with its own line budget, all of it timed by the counts and timers you now have in your toolbox.
+The timer now handles the frame's vertical blanks — but the visible 192 lines are still four bands whose layout is hard-wired, and every real 2600 game needs the screen to change as the beam travels down it. [Lesson 16: Horizontal Zones](/part2-tv-and-tia/16-horizontal-zones) keeps this frame skeleton and starts cutting the picture into zones — different colors, different objects, each zone with its own line budget, all of it timed by the counts and timers you now have in your toolbox.
