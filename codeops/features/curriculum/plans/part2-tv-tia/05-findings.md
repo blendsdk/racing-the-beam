@@ -35,3 +35,15 @@ One row per review batch. Identifiers and area tokens only.
 | SR-006 | 4 | MINOR | exercise-03's `ComputeBand` cycle note: the +6 is the JSR, not the RTS | fixed |
 | SR-007 | 4 | MINOR | the phase diff was stale vs the worktree at review time (regenerated after the fixes) | fixed |
 | SR-008 | 4 | MINOR (info) | the part 1 lessons' document annotations still label the classic `+set_timer 43`/`35` snippets as "~37"/"~30 scanlines" (approximate historical labels; the macro's note and Lesson 15 now carry the measured values) — a future `fix(docs)` sweep could align them | recorded — future sweep |
+| SR-001 | 5 | MAJOR | docs/part2-tv-and-tia/16-horizontal-zones.md (the intro's "one picture per frame" premise contradicted Lessons 12/13/15's multi-band frames; raised by both reviewers) | fixed — intro rewritten around the data-driven layout; description reworded |
+| SR-002 | 5 | MAJOR | docs/part2-tv-and-tia/16-horizontal-zones.md + exercise-03-solution.asm (the live-edit recipe broke the 192-line total while claiming the frame stayed 262; corrected to a total-preserving recipe — witness re-run 24/48/96/24 at 262 lines) | fixed |
+| SR-003 | 5 | MINOR | docs/part2-tv-and-tia/16-horizontal-zones.md (overscan checkpoint addresses `$F04B`/`$F057` are mid-instruction; actual `$F04A`/`$F056` — re-run on the committed ROM) | fixed |
+| SR-004 | 5 | MINOR | source header + document (HBLANK stated as "69 color clocks = 23 cycles"; the course figure is 68 ≈ 22.7, Lessons 12/14) | fixed |
+| SR-005 | 5 | MINOR | document ex-2 hint ("24 + 48 = 72 painted lines" → 48) | fixed |
+| SR-006 | 5 | MINOR | document ex-3 hint + source comments (heights must be ≥ 2 — height 0/1 wraps the countdown) | fixed |
+| SR-007 | 5 | MINOR | document ex-3 hint (malformed inline span `LDA $80+`,X) | fixed |
+| SR-008 | 5 | MINOR | document Theory 4 ("olive"/"salmon" vs Lesson 13's hue names — now "muted gold"/"pale red") | fixed |
+| SR-009 | 5 | MINOR (info) | exercise-01-solution.asm header misquoted the spec's example numbers (AR-13 resolution wording) | fixed |
+| SR-010 | 5 | MINOR (info) | document's forward-looking zone vocabulary (playfield/sprites/scoreboard) — spec'd as later-part context per AR-9 | accepted |
+| SR-011 | 5 | MINOR (info) | prev/next one-way until Lesson 17 ships — the established pattern | accepted |
+| SR-012 | 5 | MINOR (out-of-scope follow-up) | docs/part2-tv-and-tia/15-the-timer.md "What's Next" still described the visible 192 as "one uniform picture" (found by the phase-5 re-review) | fixed — follow-up `fix(lesson15)` commit |

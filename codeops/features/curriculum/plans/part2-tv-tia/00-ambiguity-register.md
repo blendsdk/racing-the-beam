@@ -1,7 +1,7 @@
 # Ambiguity Register: Part 2 — TV & TIA (Lessons 12–18)
 
-> **Status**: ✅ GATE PASSED — all 12 items resolved
-> **Last Updated**: 2026-10-10 21:56
+> **Status**: ✅ GATE PASSED — all 12 items resolved; 1 runtime item added and resolved during execution (AR-13)
+> **Last Updated**: 2026-10-11 09:10
 > **Authority**: `--auto-design` active for this plan chain (policy version 1, root invocation ID `curriculum-plan-part2-2026-10-10`). AR #1, #3, #4 are user decisions; AR #2, #5–#12 are delegated technical decisions.
 
 | # | Category | Ambiguity / Gap | Options Presented | User Decision | Status |
@@ -18,6 +18,7 @@
 | 10 | Integration points | The Part 2 index page is a minimal stub; how is it integrated? | Rebuild to the Part 1 format and flip rows per lesson / leave as is / rebuild at the end | **AI (auto-design):** rebuild in the lesson-12 phase to the Part 1 format (lesson rows + What You'll Learn); each lesson flips its own row to ✅ | ✅ Resolved |
 | 11 | Technical | Which video standard do the lessons target? | NTSC only / NTSC + PAL | **AI (auto-design):** NTSC only (262 lines; ~60 Hz — lesson 12 derives ≈59.9 Hz from `228 × 262` clocks); PAL appears only as a noted aside | ✅ Resolved |
 | 12 | Technical | Commit and record-keeping per lesson? | One atomic `feat(lessonNN)` commit + plan/ledger/roadmap updates / batch commits | **AI (auto-design):** one atomic commit per lesson via the `git-commit` skill in push mode with `Ref:`/`Task:` trailers; findings ledger, progress header, and roadmap transitions per Part 1 practice | ✅ Resolved |
+| 13 | Technical (runtime) | Exercise 1's zone split: the exercise prose says "split the sky zone into a fifth zone", but its illustrative example "(e.g. 24/72/48/24/24, total 192)" describes splitting the ground instead | Prose wins — split the sky (24/48/24/48/48) / example wins — split the ground (24/72/48/24/24) | **AI (auto-design):** the prose action is the requirement and the "e.g." digits are illustrative — exercise 1 ships a sky split (24/48/24/48/48, `$84` then `$86`), total 192, the paint loop untouched but for the table | ✅ Resolved |
 
 ### Resolution Notes
 
@@ -72,3 +73,18 @@ row to ✅ Complete with a link; unshipped rows read `🔒 Coming Soon` until fl
 `git-commit` skill in push mode with `Ref:`/`Task:` trailers; the findings ledger and execution
 plan's progress header update per ruling batch and task, and the roadmap moves RD-02 to
 `Plan Created` now and `Done` when all seven lessons ship.
+
+**AR-13 (runtime).** Authority: AI — delegated by `--auto-design`. Eligibility: an
+implementation-visible detail inside the frozen lesson scope (exercise geometry); no product
+behavior, scope, or acceptance-criteria change — ST-16.5 checks only "fifth zone". Objective:
+ship exercise 1 faithfully to its stated action. Evidence: [03-lesson-specs.md](03-lesson-specs.md)
+§Lesson 16 exercise 1 — "split the sky zone into a fifth zone via the table (e.g. 24/72/48/24/24,
+total 192)"; the parenthetical digits describe a ground split, while the action names the sky;
+both shapes total 192. Rejected alternatives: following the example digits (contradicts the
+stated action — a sky split claimed but a ground split shipped); shipping both shapes (one
+solution file per exercise; a second variant adds no lesson value). Strongest counterargument:
+the concrete digits may be what the author pictured; answered by the "e.g." marker making them
+non-binding next to the explicit prose. Confidence: Med-High — would change if the user prefers
+the example's exact shape. Policy version: 1. Root invocation ID:
+`curriculum-plan-part2-2026-10-10`. Reopen triggers: the user pins the ground split; a later
+audit reads the example as binding.
