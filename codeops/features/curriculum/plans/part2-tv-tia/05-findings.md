@@ -56,3 +56,12 @@ One row per review batch. Identifiers and area tokens only.
 | SR-007 | 6 | MINOR | ex-1/ex-3 headers (breakpoint recipes with `'$<label>'` placeholders — literal `$F010`/`$F037`/`$F062`) | fixed |
 | SR-008 | 6 | MINOR | document wording (notch predictions attributed to the `S2Tick` hit cycles; "classic three-line delay" → "little delay loop"; "screen pixels" → "captured-image pixels"; caption ≈18 px → ≈19 px; ex-3 inline tick wording) | fixed |
 | SR-009 | 6 | MINOR (info) | `!align 255, 0` page-alignment query — verified: `ColorRamp = $F100`, max read `$F15F`; constant cycle-14 S1Tick proves no `abs,X` +1 | accepted — no change |
+| SR-001 | 7 | MINOR | document §3 (\"without the base `BIT` … 36 and 49 would both become unreachable\" — conditional on NOP-only pads; deleting the `BIT` outright gives hit 10, and the odd cycle can be paid in the first gap instead) | fixed — restated (NOP-only pads leave boundary 1 permanently odd) |
+| SR-002 | 7 | MINOR | document §4 (`EOR AnimState,#$01` is not a 6502 form) | fixed — `LDA`/`EOR #$01`/`STA` |
+| SR-003 | 7 | MINOR | document TS block (the shift map moved the base row too; the ROM keeps the base at hit 13) | fixed — the map skips index 0 |
+| SR-004 | 7 | MINOR | ex-3 header (anchor \"write (hit+29+2)\" double-counted; the phase parentheticals swapped) | fixed — \"(hit+29)\"; \"(lowest phase) .. 70 (highest phase)\" |
+| SR-005 | 7 | MINOR | document + ex-3 (\"±6 cycles around home\" — the reachable sweep is six below, five above) | fixed — boundary 1: clocks 90..123 |
+| SR-006 | 7 | MINOR | document + source header (\"$1A yellow\" — the course named-color table names hue 1 \"gold\") | fixed; Lesson 17's drifted hue names (one line) land as a follow-up `fix(lesson17)` commit |
+| SR-007 | 7 | MINOR | document (\"a twelfth of the screen\" → about a thirteenth; the §2 snippet's \"wake at cycle 0\" label) | fixed |
+| SR-008 | 7 | MINOR | document (`VisibleStart` (36,46) explanation — the anchor's first parked cycle, not \"during the `WSYNC` write\") | fixed |
+| SR-009 | 7 | INFO (accepted) | next-link targets the still-stubbed Lesson 19 (lesson-11 precedent); the RD-02 roadmap flip lands with this phase's completion | accepted |

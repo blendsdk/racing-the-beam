@@ -12,7 +12,7 @@ Understand how the Atari 2600 generates video — scanline by scanline, cycle by
 | 15 | [The Timer — RIOT Counts for You](./15-the-timer) | ✅ Complete |
 | 16 | [Horizontal Zones — Splitting the Screen](./16-horizontal-zones) | ✅ Complete |
 | 17 | [Cycle Counting — The Heart of Beam Racing](./17-cycle-counting) | ✅ Complete |
-| 18 | [Mid-Scanline Changes — Racing the Beam](./18-mid-scanline-changes) | 🔒 Coming Soon |
+| 18 | [Mid-Scanline Changes — Racing the Beam](./18-mid-scanline-changes) | ✅ Complete |
 
 ## What You'll Learn
 
