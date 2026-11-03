@@ -11,7 +11,7 @@ Learn to draw backgrounds using the TIA's playfield registers — from basics to
 | 21 | [Asymmetric Playfield — Different Left and Right](./21-asymmetric-playfield) | ✅ Complete |
 | 22 | [Playfield Animation — Moving Walls](./22-playfield-animation) | ✅ Complete |
 | 23 | [Data-Driven Playfield — Levels from Tables](./23-data-driven-playfield) | ✅ Complete |
-| 24 | [The Multicolor Playfield](./24-multicolor-playfield) | 🔒 Coming Soon |
+| 24 | [The Multicolor Playfield](./24-multicolor-playfield) | ✅ Complete |
 
 ## What You'll Learn
 

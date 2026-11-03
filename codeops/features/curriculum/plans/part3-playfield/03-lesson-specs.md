@@ -286,7 +286,7 @@ from these designs, and any deviation is a specification change, not a freedom o
   property of its data (e.g., wall rows `$C8`, empty rows `$02`), producing a two-color maze —
   `exercise-03-solution.asm`.
 - **Screenshots:** `docs/public/images/lesson24/rainbow.png` and `…/regions.png`.
-- **Evidence pins:** frame checkpoints; `ColorWrite` — one hit per line at cycle 10–12, A = the
+- **Evidence pins:** frame checkpoints; `ColorWrite` — one hit per line at cycle 13 (14 on a page-crossing line; the write lands at 10–12), A = the
   table byte (12 consecutive lines share a hue); `StateFlip` every 120 frames; the capture bands.
 - **Integration:** prev → Lesson 23; next → Lesson 25 (`/part4-sprites/25-player-basics`, the
   forward-link pattern); part-index row 24 → ✅ Complete linking `./24-multicolor-playfield`;

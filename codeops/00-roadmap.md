@@ -1,7 +1,7 @@
 # Portfolio Roadmap: Racing the Beam
 
 > **Status**: Active
-> **Last Updated**: 2026-11-03
+> **Last Updated**: 2026-11-04
 > **Features**: 0 / 1 done
 > **CodeOps Artifact Schema**: 1
 
@@ -13,7 +13,7 @@
 
 | Feature | Roadmap | Stage Summary | Progress | Status | Last Updated |
 |---------|---------|---------------|----------|--------|--------------|
-| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · 2 plans done, 1 executing | 2/11 RDs | 🔄 | 2026-11-03 |
+| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · 3 plans done | 3/11 RDs | 🔄 | 2026-11-04 |
 
 ## Archived
 
