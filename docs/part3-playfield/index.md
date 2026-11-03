@@ -7,7 +7,7 @@ Learn to draw backgrounds using the TIA's playfield registers — from basics to
 | # | Lesson | Status |
 |---|--------|--------|
 | 19 | [Playfield Basics — PF0, PF1, PF2](./19-playfield-basics) | ✅ Complete |
-| 20 | [Playfield Colors and Priority](./20-playfield-colors) | 🔒 Coming Soon |
+| 20 | [Playfield Colors and Priority](./20-playfield-colors) | ✅ Complete |
 | 21 | [Asymmetric Playfield — Different Left and Right](./21-asymmetric-playfield) | 🔒 Coming Soon |
 | 22 | [Playfield Animation — Moving Walls](./22-playfield-animation) | 🔒 Coming Soon |
 | 23 | [Data-Driven Playfield — Levels from Tables](./23-data-driven-playfield) | 🔒 Coming Soon |

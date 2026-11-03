@@ -90,7 +90,8 @@ from these designs, and any deviation is a specification change, not a freedom o
   (P0/M0 > P1/M1 > PF/BL > BK by default; `CTRLPF` bit 2 `PFP` lifts PF/BL above the players);
   why `PFP`'s visible effect needs a player/ball and therefore waits for Part 4 (name-only, AR-14).
 - **ROM:** `20-playfield-colors.asm` — "the two-tone wall": a solid wall with a central gap
-  (`PF0=$F0`, `PF1=$FF`, `PF2=$FC`), `COLUPF=$C8` (green), `COLUBK=$02`, `CTRLPF=$01` (reflect,
+  (`PF0=$F0`, `PF1=$FF`, `PF2=$3F` — bits 6–7 clear, so chunks 18–19 are off and reflect mirrors
+  the gap across chunks 20–21), `COLUPF=$C8` (green), `COLUBK=$02`, `CTRLPF=$01` (reflect,
   normal color). Every **120 frames** it flips to score mode (`CTRLPF=$03`) with `COLUP0=$42` (red)
   and `COLUP1=$84` (blue). The visible kernel is the 192-line hold loop.
 - **Expected screen:** a wall with a 4-chunk central gap (96 px, x = 457–553), constant down the
@@ -104,8 +105,8 @@ from these designs, and any deviation is a specification change, not a freedom o
   `exercise-01-solution.asm`; 2. a three-color wall: keep score mode but clear `PF1` bits to open
   gaps, with `COLUBK=$1A` (gold), so red/blue blocks are separated by gold —
   `exercise-02-solution.asm`; 3. *(Stretch)* a four-quadrant frame: top half in score mode
-  (red|blue), bottom half in normal color (green), switched at line 96 by a per-line branch —
-  `exercise-03-solution.asm`.
+  (red|blue), bottom half in normal color (green), split after 96 visible lines (scanline 133) by
+  rewriting `CTRLPF` in that line's HBLANK with two 96-line loops — `exercise-03-solution.asm`.
 - **Screenshots:** `docs/public/images/lesson20/single-color.png` and `…/score-mode.png`.
 - **Evidence pins:** frame checkpoints; `CtrlWrite` on each flip (A = `$01` / `$03`, first flip
   frame 120); the capture transitions and colors above; a note that `PFP` (bit 2) is taught but not
