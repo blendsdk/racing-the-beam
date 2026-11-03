@@ -207,41 +207,43 @@ from these designs, and any deviation is a specification change, not a freedom o
 
 - **Goal:** drive the playfield from ROM tables, one row per scanline, and switch levels by
   switching table pointers.
-- **Concepts:** a row is three bytes (`PF0`, `PF1`, `PF2`); a 192-row table is 576 bytes; three
-  zero-page pointers offset by 0/1/2 read the three bytes of the same row with `LDA (ptr),Y` and
-  `Y = row × 3`; a one-line kernel prefetches the next row during the visible line; level switching
-  happens in VBLANK by changing the pointer base; compression (the stretch exercise) packs PF0's
-  four bits.
-- **ROM:** `23-data-driven-playfield.asm` — "the keep": two levels of 192 interleaved rows, each
-  `PF0, PF1, PF2`, drawn by a one-line kernel; `CTRLPF=$01` (reflect), `COLUPF=$C8`, `COLUBK=$02`.
-  Level 1 is a keep with a full border, two internal vertical walls, and a horizontal divider at
-  rows 96–99 with a central doorway. Level 2 is a labyrinth with the divider at rows 64–67, a
-  central pillar, and a side chamber. The level switches every **240 frames** (~4 s).
-- **Pinned per-line ledger** (body entered at cycle 5 on the first line, cycle 0 on later lines;
-  `Y = row × 3`, `X` = rows remaining):
+- **Concepts:** a row is three bytes (`PF0`, `PF1`, `PF2`); three parallel 192-byte tables per
+  level are 576 bytes; three zero-page pointers read the same row from each table with
+  `LDA (ptr),Y` and `Y = row`; a one-line kernel prefetches the next row during the visible line;
+  level switching happens in VBLANK by changing the three pointers; compression (the stretch
+  exercise) shows the 2-line trade-off: 96 rows for half the data and half the vertical detail.
+- **ROM:** `23-data-driven-playfield.asm` — "the keep": two levels of 192 rows, each level held in
+  three parallel tables (`PF0`, `PF1`, `PF2`), drawn by a one-line kernel; `CTRLPF=$01` (reflect),
+  `COLUPF=$C8`, `COLUBK=$02`. Level 1 is a keep with a full border, two internal vertical walls, and
+  a horizontal divider at rows 93–95 with a central doorway. Level 2 is a labyrinth with the
+  divider at rows 61–63, inner pillar rows, and a side chamber. The level switches every
+  **240 frames** (~4 s).
+- **Pinned per-line ledger** (body entered at cycle 5 on every line; `Y = row`, `X` = rows
+  remaining):
 
   | cycles | instruction | note |
   | --- | --- | --- |
-  | 0/5–19/22 | `LDA Tmp0` / `STA PF0` / `LDA Tmp1` / `STA PF1` / `LDA Tmp2` / `STA PF2` | 18 cycles; all three effects land before their slots (PF2's first chunk is at clock 116) |
+  | 5–22 | `LDA Tmp0` / `STA PF0` / `LDA Tmp1` / `STA PF1` / `LDA Tmp2` / `STA PF2` | 18 cycles; effects at clocks 33/51/69, before the slots (68/84/116) |
+  | next 2 | `INY` | Y = the next row |
   | next 24 | `LDA (Ptr0),Y` / `STA Tmp0` / `LDA (Ptr1),Y` / `STA Tmp1` / `LDA (Ptr2),Y` / `STA Tmp2` | prefetch the next row |
-  | next 6 | `INY` × 3 | Y += 3 |
-  | next 5 | `DEX` / `BNE` taken | 192 rows |
-  | next 3 | `STA WSYNC` | park; total 56 of 76 cycles |
+  | next 3 | `STA WSYNC` | park |
+  | next 5 | `DEX` / `BNE` taken | 192 rows; total 52-55 of 76 cycles (a page-crossing `(zp),Y` read adds 1; `WSYNC` absorbs it) |
 
-  The first line's stores start at cycle 5 (after the release) and end at 22; each register's
-  effect is still before its display slot, so line 37 shows row 0 with no artifact.
+  The stores start at cycle 5 (after the release) and end at 22; each register's effect is still
+  before its display slot, so line 37 shows row 0 with no artifact.
 - **Expected screen:** a green maze on a dark field, drawn at full 192-line resolution; level 1
-  shows a border, two vertical walls, and a doorway in the divider at rows 96–99; level 2 shows a
-  different divider height, a central pillar, and a side chamber. The two levels differ over a
+  shows a border, two vertical walls, and a doorway in the divider at rows 93–95; level 2 shows a
+  different divider height (rows 61–63), inner pillar rows, and a side chamber. The two levels differ over a
   large, pinned region (the ST captures are compared).
 - **Demo ROM:** none — the two mazes are the visible picture (AR-3).
 - **Exercises:** 1. add a third level table and a three-way selector — `exercise-01-solution.asm`;
   2. change the level geometry (move the divider and doorway) — `exercise-02-solution.asm`;
-  3. *(Stretch)* compress the `PF0` bytes two rows per byte (only bits 4–7 are used) and unpack
-  them at draw time, halving the PF0 storage — `exercise-03-solution.asm`.
+  3. *(Stretch)* halve the vertical resolution: a 2-line kernel that displays each row twice and
+  needs only 96 rows — the top half of the level at half the data cost —
+  `exercise-03-solution.asm`.
 - **Screenshots:** `docs/public/images/lesson23/level1.png` and `…/level2.png`.
 - **Evidence pins:** frame checkpoints; `LevelSwitch` — one hit every 240 frames, A = the level;
-  `RowStore` — one hit per line at a constant cycle, A = the color/PF byte; the two captures and
+  `RowStore` — one hit per line at a constant cycle, A = the PF2 byte; the two captures and
   their pixel difference; the ROM is exactly 4,096 bytes.
 - **Integration:** prev → Lesson 22; next → Lesson 24; part-index row 23 → ✅ Complete linking
   `./23-data-driven-playfield`; sidebar entry exists (`config.ts:76`). Estimated time: 75 minutes.

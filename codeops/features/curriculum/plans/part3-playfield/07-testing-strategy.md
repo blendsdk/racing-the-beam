@@ -78,10 +78,10 @@ after a store, learned in Lesson 18).
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-23.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-03 AC 1–2 / AR-4 |
-| ST-23.2 | Run the ROM; inspect level 1 | A full border, two internal vertical walls, and a horizontal divider at rows 96–99 with a central doorway; the maze is green `$C8` on dark `$02`; the pattern varies down the screen | Screenshot `level1.png` + pixel check | 03 §Lesson 23 |
-| ST-23.3 | Wait ~4 s for the level switch | The level switches at frame 240; level 2 shows the divider at rows 64–67, a central pillar, and a side chamber; the two captures differ over the pinned region | Screenshot `level2.png` + pixel difference | 03 §Lesson 23 |
-| ST-23.4 | Debugger: `LevelSwitch` and `RowStore` | `LevelSwitch` fires every 240 frames; `RowStore` fires once per line at a constant cycle; the per-line ledger totals 56 of 76 cycles; the ROM is 4,096 bytes | State log + static ledger (AR-6) | RD-03 AC 3 / 03 §Lesson 23 |
-| ST-23.5 | Assemble and run each solution | Ex 1 adds a third level; ex 2 moves the divider/doorway; ex 3 compresses PF0 two rows per byte and still draws the same maze | `verify.sh` + manual runs + captures | RD-03 AC 1 / AR-8 |
+| ST-23.2 | Run the ROM; inspect level 1 | A full border, two internal vertical walls, and a horizontal divider at rows 93–95 with a central doorway; the maze is green `$C8` on dark `$02`; the pattern varies down the screen | Screenshot `level1.png` + pixel check | 03 §Lesson 23 |
+| ST-23.3 | Wait ~4 s for the level switch | The level switches at frame 240; level 2 shows the divider at rows 61–63, inner pillar rows, and a side chamber; the two captures differ over the pinned region | Screenshot `level2.png` + pixel difference | 03 §Lesson 23 |
+| ST-23.4 | Debugger: `LevelSwitch` and `RowStore` | `LevelSwitch` fires every 240 frames; `RowStore` fires once per line at a constant cycle; the per-line ledger totals 52-55 of 76 cycles (page crossings absorbed by WSYNC); the ROM is 4,096 bytes | State log + static ledger (AR-6) | RD-03 AC 3 / 03 §Lesson 23 |
+| ST-23.5 | Assemble and run each solution | Ex 1 adds a third level; ex 2 moves the divider/doorway; ex 3 uses a 2-line kernel (96 rows, each shown twice) and draws the top half of the level | `verify.sh` + manual runs + captures | RD-03 AC 1 / AR-8 |
 | ST-23.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; both captures resolve; prev (22) and next (24) links resolve; part-index row 23 links the lesson | Build output + page check | RD-03 AC 1 / AR-10 |
 
 ### Lesson 24

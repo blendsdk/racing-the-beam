@@ -44,7 +44,7 @@
 | Commits and records | One atomic commit per lesson (`git-commit` push mode); ledger, progress header, roadmap per lesson | AR-12 |
 | Playfield write model | Registers re-read per half; writes land on the 4-clock pixel grid; L21 windows measured in Stella | AR-13 |
 | Priority scope | `COLUPF` + score mode observable; `PFP` effect named for Part 4 | AR-14 |
-| Data-driven kernel | 1-line, 192 interleaved rows per level, three offset zero-page pointers | AR-15 |
+| Data-driven kernel | 1-line, 192 rows, three parallel tables per level, three zero-page pointers | AR-15 |
 | Multicolor kernel | 192-byte per-line `COLUPF` table through a pointer; two tables | AR-16 |
 | Animation model | Frame-level symmetric gate; 9 states; 30-frame cadence | AR-17 |
 | First-line phase | 5-cycle release matches the steady-state wake | AR-18 |

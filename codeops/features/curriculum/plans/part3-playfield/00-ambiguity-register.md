@@ -20,7 +20,7 @@
 | 12 | Technical | Commit and record-keeping per lesson? | One atomic `feat(lessonNN)` commit + plan/ledger/roadmap updates / batch commits | **AI (auto-design):** one atomic commit per lesson via the `git-commit` skill in push mode with `Ref:`/`Task:` trailers; findings ledger, progress header, and roadmap transitions per Part 1/2 practice | ✅ Resolved |
 | 13 | Technical | What is the authoritative model for a mid-line `PF0/PF1/PF2` write? | Registers are re-read for the second half; a write lands on the next 4-clock playfield pixel / registers are latched only at line start / model only by experiment | **AI (auto-design):** the TIA re-reads the playfield registers for the second half; a store's effect begins at the next instruction's cycle and is quantized to the 4-clock playfield pixel. Session C must confirm the pinned L21 write windows in Stella before the lesson is done ([03](03-lesson-specs.md) §Lesson 21) | ✅ Resolved |
 | 14 | Scope | Lesson 20 must teach priority (RD-03 outcome), but `PFP`'s visible effect needs a player/ball, which belongs to Part 4 | Demonstrate `PFP` with a forward object / teach the bit and defer its visible effect / omit priority | **AI (auto-design):** demonstrate `COLUPF` and score mode (both observable now); teach the full priority table and the `PFP` bit with an explicit name-only note that its visible effect arrives with players/ball in Part 4. No forward-mechanism code (AR-9) | ✅ Resolved |
-| 15 | Technical | What kernel and data layout realizes the data-driven playfield? | 1-line kernel, 192 rows, interleaved rows / 2-line kernel, 96 rows, parallel tables / one table per object | **AI (auto-design):** 1-line kernel, 192 rows, one interleaved row table per level (`PF0,PF1,PF2` per row), read through three zero-page pointers offset by 0/1/2 and indexed by `Y = row × 3`; full vertical resolution, 576 bytes per level, and the load/store budget fits the line with the prefetch | ✅ Resolved |
+| 15 | Technical | What kernel and data layout realizes the data-driven playfield? | 1-line kernel, 192 rows, three parallel tables / 2-line kernel, 96 rows / one interleaved table | **AI (auto-design):** 1-line kernel, 192 rows, three parallel tables per level (`LevelNPF0/1/2`), read through three zero-page pointers indexed by `Y = row`; full vertical resolution, 576 bytes per level, and the 18-cycle store + 24-cycle prefetch + loop control fits the 76-cycle line | ✅ Resolved |
 | 16 | Technical | How is the multicolor playfield driven? | 192-byte per-line color table / computed band index per line / mid-line color writes | **AI (auto-design):** a 192-byte per-line `COLUPF` table read through a zero-page pointer; two tables (rainbow and region colors) switched once per frame in VBLANK | ✅ Resolved |
 | 17 | Technical | How does the animation lesson animate without per-line data? | Frame-level pattern states / per-line data animation / mid-line rewrites | **AI (auto-design):** a frame-level symmetric gate: 9 `PF2` states (closed → fully open), one step every 30 frames, direction reversal at both ends; the visible kernel holds the registers, so only VBLANK changes state | ✅ Resolved |
 | 18 | Technical | How are the first line and the per-line phase kept artifact-free? | Phase-matched release (5-cycle equivalent) / accept a first-line artifact / blank the first line | **AI (auto-design):** the release (`LDA #$00` + `STA VBLANK`, 5 cycles) matches the steady-state wake so the first visible line shares the kernel's phase; each kernel's ledger states its first-line entry | ✅ Resolved |
@@ -87,12 +87,12 @@ measured right-half write lands in the wrong half or the left half changes.
 and explains that `PFP`'s visible effect needs a player/ball (Part 4). No forward object code.
 Reopen trigger: the user requires an observable `PFP` demo inside Part 3.
 
-**AR-15.** Decision: Lesson 23 uses a 1-line kernel with 192 rows and one interleaved row table per
-level (`PF0, PF1, PF2` per row), read through three zero-page pointers offset by 0/1/2 with
-`Y = row × 3`. Evidence: `kernels.md` §The 1-line kernel pattern (192 bytes of data, maximum
-vertical detail); the pinned ledger (18 store cycles + 24 prefetch + 11 loop control + 3 WSYNC =
-56 of 76) leaves headroom, and 576 bytes per level fit the 4K ROM. Reopen trigger: the load/store
-sequence overruns the line, or the two-level data plus code exceeds 4,096 bytes.
+**AR-15.** Decision: Lesson 23 uses a 1-line kernel with 192 rows and three parallel tables per
+level (`Level1PF0/1/2`, `Level2PF0/1/2`), read through three zero-page pointers indexed by
+`Y = row`. Evidence: `kernels.md` §The 1-line kernel pattern (maximum vertical detail); the pinned
+ledger (18 store cycles + 2 INY + 24 prefetch + 3 WSYNC + 5 wake = 52 of 76; 52-55 when a
+`(zp),Y` read crosses a page) leaves headroom, and 3 × 192 × 2 = 1,152 data bytes fit the 4K ROM. Reopen trigger: the sequence
+overruns the line, or the data plus code exceeds 4,096 bytes.
 
 **AR-16.** Decision: Lesson 24 uses a 192-byte per-line `COLUPF` table read through a zero-page
 pointer; two tables (rainbow and region colors) switched in VBLANK. Evidence: Part 2's per-line
