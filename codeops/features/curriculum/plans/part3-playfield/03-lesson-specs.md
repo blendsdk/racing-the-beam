@@ -126,9 +126,10 @@ from these designs, and any deviation is a specification change, not a freedom o
   the left-half slot ends (PF0 at clock 84, PF1 at 116, PF2 at 148) and the right-half slot starts
   (PF0 at 148, PF1 at 164, PF2 at 196).
 - **ROM:** `21-asymmetric-playfield.asm` — "the split gate": repeat mode (`CTRLPF=$00`), a solid
-  left wall with a 2-chunk doorway at the centre (`LEFT0=$F0`, `LEFT1=$FF`, `LEFT2=$FC`) and a
-  gapped, striped right half (`RIGHT0=$00`, `RIGHT1=$AA`, `RIGHT2=$55`); `COLUPF=$C8`,
-  `COLUBK=$02`. Every line rewrites the three registers for the right half.
+  left wall with a 2-chunk doorway at the centre (`LEFT0=$F0`, `LEFT1=$FF`, `LEFT2=$3F` — bits
+  6–7 clear, so chunks 18–19 are off) and a gapped, striped right half (`RIGHT0=$00`,
+  `RIGHT1=$AA`, `RIGHT2=$55`); `COLUPF=$C8`, `COLUBK=$02`. Every line rewrites the three
+  registers for the right half.
 - **Pinned per-line ledger** (body entered at cycle 5 on every line — the release's 5 cycles equal
   the steady-state `DEX`+`BNE`):
 
@@ -147,12 +148,14 @@ from these designs, and any deviation is a specification change, not a freedom o
   | next 0–4 | `DEX` / `BNE` taken | wake 5 cycles; body re-entered at 5 |
 
 - **Expected screen:** the left 18 chunks solid green, a 6-chunk central gap (left 2 + right 4,
-  144 px, x = 457–601), then alternating 1-chunk stripes across the right half. Transitions at
-  x = **25 (on), 457 (off), 601 (on), 625 (off), 649 (on), 673 (off), 697 (on), 721 (off), 745
-  (on), 769 (off), 817 (on), 841 (off), 865 (on), 889 (off), 913 (on), 937 (off), 961 (on)**.
+  144 px, x = 457–600; transitions at 457 and 601), then alternating 1-chunk stripes across the right half. The picture is on
+  from x = 25; transitions at **457 (off), 601 (on), 625 (off), 649 (on), 673 (off), 697 (on),
+  721 (off), 745 (on), 769 (off), 793 (on), 817 (off), 841 (on), 865 (off), 889 (on), 913 (off),
+  937 (on), 961 (off)**.
 - **Demo ROM:** none — the asymmetric halves are the visible picture (AR-3).
-- **Exercises:** 1. move the gate: `LEFT2=$F0`, `RIGHT0=$F0` — the gap narrows to 4 chunks and
-  the right half starts solid — `exercise-01-solution.asm`; 2. mirror the right half: set
+- **Exercises:** 1. move the gate: `LEFT2=$0F` (bits 4–7 clear → chunks 16–19 off) and
+  `RIGHT0=$F0` (the right half's first four chunks on) — the gap becomes a 4-chunk doorway on the
+  left side of the centre and the right half starts solid — `exercise-01-solution.asm`; 2. mirror the right half: set
   `RIGHT0/1/2` equal to the left values, enable reflect (`CTRLPF=$01`), and skip the mid-line
   rewrite (the right half becomes the mirror) — `exercise-02-solution.asm`; 3. *(Stretch)* a
   two-band scene: top 96 lines use one left/right pair, bottom 96 another (two copies of the
