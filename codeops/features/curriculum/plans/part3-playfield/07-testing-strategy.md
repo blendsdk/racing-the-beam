@@ -34,9 +34,9 @@ after a store, learned in Lesson 18).
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-19.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-03 AC 1–2 / AR-4 |
-| ST-19.2 | Run the ROM; inspect the reflect state | Green `$C8` block pattern on dark `$02`, constant down all 192 lines; transitions at x = 169, 217, 265, 313, 409, 601, 697, 745, 793, 841; 8-chunk central gap | Screenshot `reflect.png` + pixel check | 03 §Lesson 19 |
-| ST-19.3 | Wait ~2 s for the state flip | `CTRLPF` bit 0 clears; the right half repeats the left; transitions at 169, 217, 265, 313, 409, 505, 649, 697, 745, 793, 889; the central gap disappears | Screenshot `repeat.png` + pixel difference | 03 §Lesson 19 |
-| ST-19.4 | Debugger: frame checkpoints and `CtrlWrite` | `StartFrame` 259, `VblankStart` 0, `VisibleStart` 37, `OverscanStart` 229 (262 lines); `CtrlWrite` fires at frames 120/240 with A = `$00`/`$01`; the hold line is constant | State log + static ledger (AR-6) | RD-03 AC 3 / 03 §Lesson 19 |
+| ST-19.2 | Run the ROM; inspect the reflect state | Green `$C8` block pattern on dark `$02`, constant down all 192 lines; transitions at x = 169, 217, 265, 409, 601, 745, 793, 841; an 8-chunk green central block (16–23) between two dark bands | Screenshot `reflect.png` + pixel check | 03 §Lesson 19 |
+| ST-19.3 | Wait ~2 s for the state flip | `CTRLPF` bit 0 clears; the right half repeats the left; transitions at 169, 217, 265, 409, 649, 697, 745, 889; the central green block widens to chunks 16–25 | Screenshot `repeat.png` + pixel difference | 03 §Lesson 19 |
+| ST-19.4 | Debugger: frame checkpoints and `CtrlWrite` | `StartFrame` 259, `VblankStart` 0, `VisibleStart` 37, `OverscanStart` 229 (262 lines); `CtrlWrite` hits once per frame — A = `$01` on frames 1–119 and `$00` on 120–239, first change at frame 120; the hold line is constant | State log + static ledger (AR-6) | RD-03 AC 3 / 03 §Lesson 19 |
 | ST-19.5 | Assemble and run each solution | Ex 1 swaps on/off regions; ex 2 draws one chunk bar (two bars visible); ex 3 cycles eight patterns every 60 frames | `verify.sh` + manual runs + captures | RD-03 AC 1 / AR-8 |
 | ST-19.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; both captures resolve; prev (18) and next (20) links resolve; part-index row 19 links the lesson | Build output + page check | RD-03 AC 1 / AR-10 |
 

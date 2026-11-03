@@ -52,24 +52,29 @@ from these designs, and any deviation is a specification change, not a freedom o
 - **ROM:** `19-playfield-basics.asm` — "the castle wall": `PF0 = $F0`, `PF1 = $CC`, `PF2 = $F0`;
   `COLUPF = $C8` (green), `COLUBK = $02` (dark neutral); `CTRLPF` starts at `$01` (reflect) and
   flips bit 0 every **120 frames** (~2 s). The visible kernel is a 192-iteration `STA WSYNC` hold.
+  Note the PF2 order: bit 0 is leftmost, so `$F0` displays as **00001111** (chunks 12–15 off,
+  16–19 on).
 - **Expected screen:** a green block pattern on a dark field, constant down all 192 lines.
   - **Reflect state** (`CTRLPF = $01`): the 40-chunk sequence is
-    `111111 00 11 00 1111 00000000 1111 00 11 00 111111` — symmetric, with an 8-chunk dark
-    central gap (192 px). On/off transitions at capture x = **169, 217, 265, 313, 409, 601, 697,
-    745, 793, 841**.
-  - **Repeat state** (`CTRLPF = $00`): the left 20 chunks repeat on the right; the central gap
-    disappears (chunks 20–25 are on). Transitions at **169, 217, 265, 313, 409, 505, 649, 697,
-    745, 793, 889**. The two states differ most at x = 409–649.
+    `111111 00 11 000000 11111111 000000 11 00 111111` — symmetric, with an 8-chunk green
+    central block (chunks 16–23) between two dark bands. On/off transitions at capture x =
+    **169, 217, 265, 409, 601, 745, 793, 841**.
+  - **Repeat state** (`CTRLPF = $00`): the left 20 chunks repeat on the right; the central green
+    block widens to chunks 16–25, and the right-hand dark band moves outward from 24–29 to 30–35
+    while the left half is unchanged. Transitions at **169, 217, 265, 409, 649, 697, 745, 889**.
+    The two states differ most at chunks 24–35 (x = 601–889).
 - **Demo ROM:** none — the two symmetry states are the visible picture (AR-3).
 - **Exercises:** 1. invert the pattern (`PF0=$00`, `PF1=$33`, `PF2=$0F`) — the on/off regions
-  swap and the central gap becomes a solid block — `exercise-01-solution.asm`; 2. draw a single
+  swap: the green centre block becomes dark and the dark bands become green —
+  `exercise-01-solution.asm`; 2. draw a single
   chunk bar (`PF1=$10`) and explain why reflect shows two bars and repeat also shows two —
   `exercise-02-solution.asm`; 3. *(Stretch)* cycle eight pattern triples from a table, one every
   60 frames, so the wall changes shape once a second — `exercise-03-solution.asm`.
 - **Screenshots:** `docs/public/images/lesson19/reflect.png` and `…/repeat.png` — the two states.
 - **Evidence pins (AR-6):** `StartFrame` (Stella 259), `VblankStart` (0), `VisibleStart` (37),
-  `OverscanStart` (229); `CtrlWrite` — one hit on each state flip, A = `$01` / `$00`, first flip at
-  frame 120; the hold kernel's first line and one steady line; the capture transitions above.
+  `OverscanStart` (229); `CtrlWrite` — one hit **per frame**, A = `$01` while reflect is showing
+  and `$00` while repeat is showing; the first change is at frame 120; the hold kernel's first
+  line and one steady line; the capture transitions above.
 - **Integration:** prev → Lesson 18; next → Lesson 20; part-index row 19 → ✅ Complete linking
   `./19-playfield-basics`; sidebar entry exists (`config.ts:72`). Estimated time: 60 minutes.
 - **ST cases** ([07-testing-strategy.md](07-testing-strategy.md) §Lesson 19): ST-19.1 assembly &
@@ -97,7 +102,7 @@ from these designs, and any deviation is a specification change, not a freedom o
 - **Demo ROM:** none — the color split is the visible picture (AR-3).
 - **Exercises:** 1. swap the score colors (`COLUP0=$84`, `COLUP1=$42`) — left blue, right red —
   `exercise-01-solution.asm`; 2. a three-color wall: keep score mode but clear `PF1` bits to open
-  gaps, with `COLUBK=$1A` (gold), so red/blue blocks are separated by gold — 
+  gaps, with `COLUBK=$1A` (gold), so red/blue blocks are separated by gold —
   `exercise-02-solution.asm`; 3. *(Stretch)* a four-quadrant frame: top half in score mode
   (red|blue), bottom half in normal color (green), switched at line 96 by a per-line branch —
   `exercise-03-solution.asm`.
