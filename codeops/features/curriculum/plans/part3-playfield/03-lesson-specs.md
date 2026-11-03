@@ -184,16 +184,16 @@ from these designs, and any deviation is a specification change, not a freedom o
   `$01`, `$00` — stepping once every **30 frames** (~0.5 s), reversing at states 0 and 8. The
   visible kernel is the 192-line hold loop.
 - **Expected screen:** a green portcullis whose central gate opens from 0 to 16 chunks (0–384 px)
-  and closes again. State k opens 2k chunks; the gap spans x = **505 − 24k … 505 + 24k** (state 0
-  has no gap; state 8 spans x = 313–697). Two captures: a partially open state and the fully open
+  and closes again. State k opens 2k chunks; the gap spans x = **505 − 24k … 505 + 24k − 1** (state 0
+  has no gap; state 8 spans x = 313–696, 384 px; transitions at 313 and 697). Two captures: a partially open state and the fully open
   state.
 - **Demo ROM:** none — the gate animation is the visible picture (AR-3).
 - **Exercises:** 1. change the cadence to 15 frames (twice as fast) or 60 (half speed) —
   `exercise-01-solution.asm`; 2. a one-sided gate: switch to repeat mode and animate only the
   right half with the L21 mid-line kernel, leaving the left wall closed —
-  `exercise-02-solution.asm`; 3. *(Stretch)* scroll the wall: rotate the 20-bit pattern one chunk
-  per frame with `ASL`/`ROL` across the three bytes, so the castle slides horizontally —
-  `exercise-03-solution.asm`.
+  `exercise-02-solution.asm`; 3. *(Stretch)* scroll the wall: precompute the 20 rotations of
+  a crenellated 20-bit pattern in a table, step one rotation every 10 frames in repeat mode, and
+  wrap at 20 so the slide is seamless — `exercise-03-solution.asm`.
 - **Screenshots:** `docs/public/images/lesson22/gate-opening.png` and `…/gate-open.png`, captured
   at waits chosen in Session A so the two states are unambiguous (pixel-classified by gap width).
 - **Evidence pins:** frame checkpoints; `GateStep` — one hit per 30 frames, A = the new state and

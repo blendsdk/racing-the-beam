@@ -68,9 +68,9 @@ after a store, learned in Lesson 18).
 | --- | --- | --- | --- | --- |
 | ST-22.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-03 AC 1–2 / AR-4 |
 | ST-22.2 | Run the ROM; capture a partially open gate | The gate width matches a table state k: gap = 48k px centred on x = 505; the wall is green `$C8` on dark `$02` | Screenshot `gate-opening.png` + gap measurement | 03 §Lesson 22 |
-| ST-22.3 | Wait for the fully open state | State 8 opens 16 chunks (384 px, x = 313–697); `GateStep` fires once per 30 frames and reverses at states 0 and 8 | Screenshot `gate-open.png` + state log | 03 §Lesson 22 |
+| ST-22.3 | Wait for the fully open state | State 8 opens 16 chunks (384 px, x = 313–696; transitions at 313 and 697); `GateStep` fires once per 30 frames and reverses at states 0 and 8 | Screenshot `gate-open.png` + state log | 03 §Lesson 22 |
 | ST-22.4 | Debugger: `GateStep` and `PF2` | Each step writes `PF2 = GateTable[state]`; the state sequence ascends 0→8 then descends; the frame is 262 lines | State log + static ledger (AR-6) | RD-03 AC 3 / 03 §Lesson 22 |
-| ST-22.5 | Assemble and run each solution | Ex 1 changes the cadence; ex 2 opens only the right half; ex 3 scrolls the wall by one chunk per frame | `verify.sh` + manual runs + captures | RD-03 AC 1 / AR-8 |
+| ST-22.5 | Assemble and run each solution | Ex 1 changes the cadence; ex 2 opens only the right half; ex 3 steps a 20-entry rotation table every 10 frames in repeat mode | `verify.sh` + manual runs + captures | RD-03 AC 1 / AR-8 |
 | ST-22.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the committed ROM; both captures resolve; prev (21) and next (23) links resolve; part-index row 22 links the lesson | Build output + page check | RD-03 AC 1 / AR-10 |
 
 ### Lesson 23
