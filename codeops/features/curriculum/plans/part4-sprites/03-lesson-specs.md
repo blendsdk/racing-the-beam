@@ -263,18 +263,19 @@ a freedom of implementation.
   displayed; the 48-pixel trick is named as a later technique, not implemented.
 - **ROM:** `32-vertical-delay.asm` — "the shadow": P0 and P1 both use the same 16-row striped
   shape (`$FF,$81,$81,$81,$FF,…`), top 88, P0 at X=48 (`$42` red), P1 at X=104 (`$84` blue);
-  `VDELP1=$01`. The body writes both players every line and a final clear line writes 0 to both;
-  P1 therefore appears one scanline lower (and its last row clears one line later).
+  `VDELP1=$01`. The body writes both players every line; the final clear writes `GRP0=0` (latching P1's last row) then
+  `GRP1=0`, and the bottom loop keeps writing `GRP0=0`. P1 appears one scanline
+  lower (and its last row clears one line later).
   `COLUBK=$02`.
-- **Expected screen:** two striped 8×16 blocks at rows ≈ 384–433, P0 red at capture x ≈ 313, P1
-  blue at ≈ 649, with P1's top row one scanline (≈3 capture px) below P0's. The measured top-row
+- **Expected screen:** two striped 8×16 blocks; P0 red at capture x = 313–360, y = 385–433; P1
+  blue at 649–696, y = 388–436, with P1's top row one scanline (≈3 capture px) below P0's. The measured top-row
   difference is the evidence.
 - **Demo ROM:** none — the one-line offset is the visible picture (AR-3).
 - **Exercises:** 1. clear `VDELP1` — the two players align; 2. set `VDELP0` instead — P0 drops
   one line; 3. *(Stretch)* a moving sprite with VDEL on: the sprite descends 4 lines every 30
   frames; the one-line offset stays constant, proving VDEL does not accumulate.
 - **Screenshots:** `docs/public/images/lesson32/vdel.png`.
-- **Evidence pins:** frame checkpoints; `BodyStart` at line 125; `G0Write`/`G1Write` cycles;
+- **Evidence pins:** frame checkpoints; `BodyStart` at line 125; the body's GRP0/GRP1 store cycles;
   `VdelWrite` — A = `$01`; the measured top rows of both players in the capture. VDEL's output
   delay is not directly visible in a register log, so the capture is the primary evidence (stated
   in the doc).

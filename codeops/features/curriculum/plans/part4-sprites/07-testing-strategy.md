@@ -111,9 +111,9 @@ after a store, learned in Lesson 18).
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-32.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build pass | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
-| ST-32.2 | Run the ROM; measure the two sprites | P0 red at X≈48, P1 blue at X≈104; both 16 rows starting at scanline 125; P1's top row is exactly one scanline below P0's (≈3 capture px); P1's clear is one line later | Screenshot `vdel.png` + pixel check | 03 §Lesson 32 |
+| ST-32.2 | Run the ROM; measure the two sprites | P0 red at X≈48, P1 blue at X≈104; P0's 16 rows start at scanline 125, P1's at 126; P1's top row is exactly one scanline below P0's (≈3 capture px); P1's clear is one line later | Screenshot `vdel.png` + pixel check | 03 §Lesson 32 |
 | ST-32.3 | Inspect VDEL state | `VDELP1=$01`; the body writes both graphics every line; a clear line writes 0 to both; the shape is the 16-row stripe | State log + capture | 03 §Lesson 32 |
-| ST-32.4 | Debugger: body and writes | `BodyStart` line 125; `G0Write`/`G1Write` constant cycles; `VdelWrite` A = `$01`; frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 32 |
+| ST-32.4 | Debugger: body and writes | `BodyStart` line 125; the body's GRP0/GRP1 stores at constant cycles; `VdelWrite` A = `$01`; frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 32 |
 | ST-32.5 | Assemble and run each solution | Ex 1 aligns the players (VDEL off); ex 2 drops P0; ex 3 descends 4 lines per 30 frames with a constant one-line offset | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-32.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; the capture resolves; prev 31, next 33; index row 32 links | Build output + page check | RD-04 AC 1 / AR-10 |
 

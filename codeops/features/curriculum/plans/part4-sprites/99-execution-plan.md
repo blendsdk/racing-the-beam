@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 16:20
-> **Progress**: 7/10 tasks (70%)
+> **Last Updated**: 2026-11-04 16:50
+> **Progress**: 8/10 tasks (80%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -323,7 +323,7 @@ object's measured X and width recorded.
 
 ## Phase 8: Lesson 32 — Vertical Delay
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 9baaaa0 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/32-vertical-delay/` (4 sources) · `docs/part4-sprites/32-vertical-delay.md` · `docs/part4-sprites/index.md` (row 32) · `docs/public/roms/part4-sprites/32-vertical-delay/` · `docs/public/images/lesson32/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — the one-line VDEL offset is subtle and must be measured, under independent hardware review
 
@@ -333,7 +333,11 @@ object's measured X and width recorded.
 **Objective**: Deliver lesson 32 end to end through the mandatory three sessions, with the
 one-line offset measured.
 
-- [ ] 8.1.1 Lesson 32 — Vertical Delay: Session A freezes ST-32.1–ST-32.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson32): Vertical Delay`
+- [x] 8.1.1 Lesson 32 — Vertical Delay: Session A freezes ST-32.1–ST-32.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson32): Vertical Delay` ✅ (completed: 2026-11-04 16:50)
+
+**Session A record** (freeze + red baseline, 2026-11-04 16:25): ST-32.1–ST-32.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 32. Design pins: the standard 262-line frame; two players with the same 16-row striped shape, top 88 (first body line 125), P0 at X=48 red, P1 at X=104 blue; `VDELP1=$01`; the body writes GRP0 then GRP1 each line; the clear writes `GRP0=0` (latching P1's last row) then `GRP1=0` and the bottom loop keeps writing `GRP0=0`; P1 is one scanline lower. The measured tops: red 385, blue 388 (one scanline at ~3.1 px/line); the offset does not accumulate. Evidence pins (AR-6): frame checkpoints; `PosApply0/1` A=51/107; `Resp0Write`/`Resp1Write`; `HmoveApply`; `VdelWrite` A=$01; `BodyStart` 125 (16 hits); the measured top rows. Solutions: ex 1 VDEL off (aligned); ex 2 VDELP0 (P0 lower); ex 3 a moving delayed sprite (top 40–120, 4 lines per 30 frames, bottom computed). Red baseline confirmed: no `lessons/part4-sprites/32-vertical-delay`, no `docs/public/images/lesson32`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 32 is Coming Soon, sidebar entry exists (`config.ts:91`), `verify.sh` green at `9baaaa0`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 16:50): Preflight per `vcs-lesson-production` — the VDEL latch and the cross-coupled trigger checked against `sprite-tricks.md` and the TIA hardware notes, the frame against Lessons 12–31, ACME forms; no demo (AR-3: the one-line offset is the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F05A` first hit (37, 7), `BodyStart` `$F061` first hit (125, 6) with 16 hits, `OverscanStart` `$F083` = (229, 4). Positions: `PosApply0/1` A = 51/107; `Resp0Write` line 1 c34; `Resp1Write` line 2 c54; `HmoveApply` line 2 c66 (the `WSYNC` stall; `STA HMOVE` line 3 c0); `VdelWrite` `$F04B` line 3 c34, A = `$01`. Capture from the committed ROM: P0 red at capture x = 313–360, y = 385–433; P1 blue at 649–696, y = 388–436 — both 16 rows, P1 exactly one scanline lower. Solutions: ex 1 — VDEL off, both blocks aligned; ex 2 — VDELP0 with the mirrored kernel (body GRP1→GRP0, clear GRP1=0→GRP0=0, bottom GRP1=0), measured blue 385 / red 388 (P0 one line lower); ex 3 — a moving delayed sprite, captures 372/375 and 397/400 (constant 3-px offset). Site (ST-32.6): index row 32 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, the capture, prev → 31, next → 33; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 5 major**, 2 minor. The majors: the trigger rule was stated as "either GRP0 or GRP1 copies all" (it is cross-coupled: GRP0 latches P1, GRP1 latches P0); the prose clear order (GRP1=0 then GRP0=0) cut P1's last row; exercise 2 (VDELP0) aligned instead of delaying P0; the spec/Session A clear order; and the frame arithmetic said 95 bottom (200 lines) instead of 87. All fixed: the cross-coupled rule is stated in the source/doc/spec; the clear is GRP0=0 (latch the last row) then GRP1=0; exercise 2 mirrors the kernel and is measured red 388 / blue 385; the frame is 88+16+1+87=192. Round 2: **0 critical, 1 major** (two residual "either" sentences) + 5 minor (the TS two-line delay, the smear wording, the ex1/ex2 banners, G0Write/G1Write pins, the spec row range); all fixed; no third review (same root cause, scoped). The stale patch was regenerated from the worktree before the commit. Lesson 32 is complete.
 
 **Session sub-steps (the task's checklist):**
 

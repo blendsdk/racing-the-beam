@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 7 complete — 0 critical, 0 major open
+> **Status**: Phase 8 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -91,3 +91,17 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-246 | 7 | 🟡 MINOR | Re-review: ex-3 captures at 1 s and 2 s show two bars and two medium bars, not one and two | fixed — "a capture in the first second shows one bar; a second later two close bars" |
 | SR-247 | 7 | 🟡 MINOR | Re-review: ex-1's "gaps of 8/24/56 pixels" were TIA pixels while the section uses capture pixels | fixed — tagged "(TIA pixels; 48/144/336 capture px)" |
 | SR-248 | 7 | ℹ️ INFO | The stretched-mode one-clock offset is observed in the committed ROM, not derived in the lesson | accepted — stated as observed, with the 307/343 arithmetic |
+| SR-249 | 8 | 🟠 MAJOR | Both: the trigger rule said "either GRP0 or GRP1 copies the delayed value"; it is cross-coupled — GRP0 latches P1, GRP1 latches P0 | fixed — the source, doc, and spec state the cross-coupled rule |
+| SR-250 | 8 | 🟠 MAJOR | Both: the prose clear order (GRP1=0 then GRP0=0) cut P1's last row; the shipped code is GRP0=0 then GRP1=0 | fixed — the prose, example, and spec match the code; the main capture shows both blocks 16 rows, 3 px apart |
+| SR-251 | 8 | 🟠 MAJOR | Both: exercise 2 (VDELP0) aligned instead of delaying P0; the trigger for P0 is the GRP1 write | fixed — the ex2 kernel mirrors the writes (body GRP1→GRP0, clear GRP1=0→GRP0=0, bottom GRP1=0); measured blue 385 / red 388 |
+| SR-252 | 8 | 🟠 MAJOR | Both: the frame arithmetic said 95 bottom, which sums to 200, not 192 | fixed — 88 top + 16 body + 1 clear + 87 bottom = 192 everywhere |
+| SR-253 | 8 | 🟡 MINOR | Both: the spec/Session A clear order was GRP1=0 then GRP0=0 | fixed — GRP0=0 then GRP1=0 |
+| SR-254 | 8 | 🟡 MINOR | Both: the ex1/ex2 banners said "P1 is one line lower" | fixed — ex1 "both players align", ex2 "P0 is one line lower" |
+| SR-255 | 8 | 🟡 MINOR | Both: the prerequisite line omitted Lesson 26 | fixed — Lesson 26 added |
+| SR-256 | 8 | 🟡 MINOR | Auditor: ST-32.2 said both blocks start at scanline 125 | fixed — P0 at 125, P1 at 126 |
+| SR-257 | 8 | 🟡 MINOR | Re-review: the TypeScript block modelled a two-line delay | fixed — `delayed = grp1; grp1 = next; return delayed` |
+| SR-258 | 8 | 🟡 MINOR | Re-review: "the last row smears" did not name row 14 or the missing GRP0 trigger | fixed — the qualified wording |
+| SR-259 | 8 | 🟡 MINOR | Re-review: Section 4's sum omitted the 88 top lines | fixed — full equation |
+| SR-260 | 8 | 🟡 MINOR | Re-review: the spec/ST named `G0Write`/`G1Write`, which do not exist | fixed — "the body's GRP0/GRP1 store cycles" |
+| SR-261 | 8 | 🟡 MINOR | Re-review: the spec's expected row range was one block only | fixed — P0 385–433, P1 388–436 |
+| SR-262 | 8 | ℹ️ INFO | The phase patch predated the clear-order and VDLP0 edits | accepted — the patch was regenerated from the worktree; the committed ROM/capture are the corrected build |

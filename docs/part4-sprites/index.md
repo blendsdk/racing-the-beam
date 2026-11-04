@@ -13,7 +13,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | 29 | [Missiles and Ball — Simple Projectiles](./29-missiles-and-ball) | ✅ Complete |
 | 30 | [Multi-Color Sprites — Changing Colors Per Line](./30-multicolor-sprites) | ✅ Complete |
 | 31 | [Copies and Sizes — NUSIZ Register](./31-copies-and-sizes) | ✅ Complete |
-| 32 | [Vertical Delay — VDELP0, VDELP1](./32-vertical-delay) | 🔒 Coming Soon |
+| 32 | [Vertical Delay — VDELP0, VDELP1](./32-vertical-delay) | ✅ Complete |
 | 33 | [Paddle & Keyboard Controllers](./33-paddle-keyboard-controllers) | 🔒 Coming Soon |
 | 34 | [Sprite Animation — Walking Cycles & Character States](./34-sprite-animation) | 🔒 Coming Soon |
 
