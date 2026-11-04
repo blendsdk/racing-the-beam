@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 8 complete — 0 critical, 0 major open
+> **Status**: Phase 9 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -105,3 +105,23 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-260 | 8 | 🟡 MINOR | Re-review: the spec/ST named `G0Write`/`G1Write`, which do not exist | fixed — "the body's GRP0/GRP1 store cycles" |
 | SR-261 | 8 | 🟡 MINOR | Re-review: the spec's expected row range was one block only | fixed — P0 385–433, P1 388–436 |
 | SR-262 | 8 | ℹ️ INFO | The phase patch predated the clear-order and VDLP0 edits | accepted — the patch was regenerated from the worktree; the committed ROM/capture are the corrected build |
+| SR-263 | 9 | 🟠 MAJOR | Reviewer: ex1's hint said the read "times out exactly like paddle 0" while the expected result reported X=28; the two results need different configurations | fixed — the hint/expected name the capture configuration (paddle 1 at minimum → count 4 → X=28) and the absent-paddle timeout (X=24) |
+| SR-264 | 9 | 🟠 MAJOR | Both: the lesson claimed a CX50 key pulls a raw `SWCHA` line low and the monitor's columns show key presses; a keypad needs driven rows | fixed — the monitor is documented as the raw port with `SWACNT=$00`; the keypad's driven 4×3 scan is explained (`SWACNT=$FF`, one row low, ~400 µs, `INPT0`/`INPT1`/`INPT4`, restore) and the ROM is stated not to run it |
+| SR-265 | 9 | 🟡 MINOR | Reviewer: the range said 0–128 / X 24–152; the loop stores at most 127 | fixed — 0–127 / 24–151 in all artifacts |
+| SR-266 | 9 | 🟡 MINOR | Reviewer: the `PF1` columns end at capture x=312, not 313 | fixed — 121–312 |
+| SR-267 | 9 | 🟡 MINOR | Reviewer: the charge was attributed to `VBLANK` bit 6; clearing bit 7 releases the ground and starts the charge | fixed — bit 7 starts the charge; bit 6 latches fire |
+| SR-268 | 9 | 🟡 MINOR | Reviewer: ex2 stored A=`$05` to `REFP0`/`REFP1` after `STA NUSIZ1` | fixed — `LDA #$00` before the `REFP` stores |
+| SR-269 | 9 | 🟡 MINOR | Reviewer: the fire section called active-low "the opposite convention" | fixed — "only bit 7 is a switch; test the bit, never nonzero" |
+| SR-270 | 9 | 🟡 MINOR | Reviewer: ex1's section comment still said "paddle 0" | fixed — "paddle 1" |
+| SR-271 | 9 | 🟠 MAJOR | Reviewer: the saturation disclosure said only "maximum resistance" is affected; a real CX30's 0–24 ms travel means most of the knob reads 0 | fixed — the doc states the low-resistance-end limit, ~12 ms mid-travel, the 20-line read, and the cross-frame alternative |
+| SR-272 | 9 | 🟡 MINOR | Reviewer: spec/ST named `MoveApply`; the label is `HmoveApply` | fixed |
+| SR-273 | 9 | 🟡 MINOR | Reviewer: the keypad scan recipe did not restore `SWACNT=$00` | fixed — step 6 |
+| SR-274 | 9 | 🟡 MINOR | Reviewer: the driving controller's pair is on the joystick-direction bits, not the keypad lines | fixed — `SWCHA` bits 4–5 for P0 |
+| SR-275 | 9 | 🟠 MAJOR | Auditor: prerequisites sent readers to Lesson 16 for the timer and Lesson 22 for priority; the correct lessons are 15/19/20, and `INPT4` is introduced here | fixed — prerequisites rewritten; the `INPT4` introduction is stated |
+| SR-276 | 9 | 🟠 MAJOR | Auditor: the paddle loop ledger used 13 cycles/iteration; `LDA INPT0` is zero page, so the loop is 12 cycles, 1,536 cycles ≈ 20 lines ≈ 1.3 ms | fixed — doc, spec, ex3 hint, AR-19 |
+| SR-277 | 9 | 🟡 MINOR | Auditor: the screenshot caption said the columns are dark "because no key is pressed", reinstating the misconception | fixed — "no switch is closed to ground; a CX50 key alone cannot light them without the driven scan" |
+| SR-278 | 9 | 🟡 MINOR | Auditor: the ex1 note blamed "floating" inputs; a count of 4 is a connected paddle at minimum, while an absent input times out | fixed — the capture configuration is named |
+| SR-279 | 9 | 🟡 MINOR | Auditor: the keypad scan recipe did not state the `VBLANK` state; bit 7 grounds the analog columns and bit 6 latches the right column | fixed — "scan with `VBLANK` bits 6–7 clear" |
+| SR-280 | 9 | 🟡 MINOR | Reviewer: the preflight report still had the old cycle arithmetic and 24–152 | fixed — 3+2+2+2+3 and 24–151 |
+| SR-281 | 9 | ℹ️ INFO | Reviewer/auditor: "matrix columns" was used for the raw-port columns while the page defines "matrix" as the keypad grid | fixed — "raw-port columns" throughout |
+| SR-282 | 9 | ℹ️ INFO | The pressed-fire branch was not in the at-rest logs | accepted — scratch witnesses confirm `FireWrite` A=`$42` (red block) and ex2 A=`$1A` (gold 871–966); the shipped ROM reads the real `INPT4` |

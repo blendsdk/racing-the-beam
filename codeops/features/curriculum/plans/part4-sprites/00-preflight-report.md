@@ -69,7 +69,7 @@ Part 4 index is a stub; Part 5's first stub is `35-sound-effects.md`.
 **Dimension:** Feasibility / Edge Cases
 **Location:** `03-lesson-specs.md` §Lesson 33; `00-ambiguity-register.md` AR-19; `07-testing-strategy.md` ST-33.3
 **Codebase Evidence:** `include/macro.asm` `+set_timer 44` (37 lines) and `+wait_timer`; the
-proposed loop `LDA INPT0` (4 cycles) + `BPL` (3) + `INY` (2) + `BNE` (3) = 12 cycles per iteration.
+proposed loop `LDA INPT0` (3 cycles, zero page) + `BMI` (2) + `INY` (2) + `CPY` (2) + `BNE` (3) = 12 cycles per iteration.
 **The Problem:** The spec and AR-19 allowed "255 iterations". 255 × 12 = 3,060 cycles = 40.3
 scanlines; with the 3.5-line discharge pad the paddle read alone exceeds the 37-line VBLANK, so the
 frame grows and the picture can roll. The timeout value was also undefined ("a defined value"), and
@@ -79,7 +79,7 @@ the `INY`/`BNE` loop would wrap at 256 rather than stop at the intended bound.
 
 | Option | Description | Pros | Cons |
 |--------|-------------|------|------|
-| A | 128-iteration bounded read (`CPY #128`); timeout stores 0; needle X = count + 24 (24–152); both players' coarse/fine positions set before one `HMOVE` | Fits VBLANK (~26 lines worst case); full needle range; testable timeout; teaches the HMOVE rule | Saturates a real paddle's upper range; the 0 timeout is indistinguishable from a real minimum (documented) |
+| A | 128-iteration bounded read (`CPY #128`); timeout stores 0; needle X = count + 24 (24–151; the last storable count is 127); both players' coarse/fine positions set before one `HMOVE` | Fits VBLANK (~26 lines worst case); full needle range; testable timeout; teaches the HMOVE rule | Saturates a real paddle's upper range; the 0 timeout is indistinguishable from a real minimum (documented) |
 | B | Keep 255 iterations and extend VBLANK | Full paddle range | Breaks the 262-line frame; every later lesson inherits a non-standard frame |
 | C | Read paddles during overscan | Fits VBLANK | Consumes overscan; the release timing and the monitor update change; harder to teach |
 
@@ -157,7 +157,7 @@ targets** and the two captures to differ by at least 24 px.
 **Location:** `00-ambiguity-register.md` AR-19
 **The Problem:** "A defined value" is not a value; the ST could not check it.
 **Decision:** Resolved — AR-19 states the 128-iteration timeout stores 0, and the needle's range is
-24–152.
+24–151.
 
 ### PF-007: Lesson 30/34 shapes are not pinned 🟡 MINOR
 

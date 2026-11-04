@@ -14,7 +14,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | 30 | [Multi-Color Sprites — Changing Colors Per Line](./30-multicolor-sprites) | ✅ Complete |
 | 31 | [Copies and Sizes — NUSIZ Register](./31-copies-and-sizes) | ✅ Complete |
 | 32 | [Vertical Delay — VDELP0, VDELP1](./32-vertical-delay) | ✅ Complete |
-| 33 | [Paddle & Keyboard Controllers](./33-paddle-keyboard-controllers) | 🔒 Coming Soon |
+| 33 | [Paddle & Keyboard Controllers](./33-paddle-keyboard-controllers) | ✅ Complete |
 | 34 | [Sprite Animation — Walking Cycles & Character States](./34-sprite-animation) | 🔒 Coming Soon |
 
 ## What You'll Learn
@@ -29,7 +29,7 @@ Part 4 turns the TIA's movable objects into characters, projectiles, and animati
 - **Lesson 30** changes `COLUP0` per line for a multi-colored character
 - **Lesson 31** uses `NUSIZ` for copies, double width, and quad width
 - **Lesson 32** delays a player's graphic one line with `VDELP1`
-- **Lesson 33** reads the paddles, the keyboard matrix, and the fire buttons
+- **Lesson 33** reads the paddles and the fire button, and explains the keypad scan
 - **Lesson 34** animates a walk cycle from a four-frame table
 
 By the end of Part 4 you can draw and position sprites, move them with the joystick, and animate

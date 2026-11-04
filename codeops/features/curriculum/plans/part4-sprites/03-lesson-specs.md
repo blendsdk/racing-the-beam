@@ -286,28 +286,34 @@ a freedom of implementation.
 
 ## Lesson 33: Paddle & Keyboard Controllers
 
-- **Goal:** read the paddle potentiometers, the keyboard matrix, and the fire buttons, and show the
-  readings on screen. The driving controller is a name-only aside: its quadrature pair arrives on
-  the same `SWCHA` bits as the joystick, but the lesson does not decode it in code.
-- **Concepts:** `INPT0–INPT3` are RC-timing inputs; `VBLANK` bit 7 discharges, bit 6 starts the
-  charge; a bounded counting loop turns the charge time into a byte; `SWCHA` is an 8-bit
-  active-low matrix (player 0 bits 4–7, player 1 bits 0–3); `INPT4`/`INPT5` bit 7 is 0 when the
-  fire button is pressed; a keyboard controller pulls one or more matrix bits low, so the monitor's
-  eight columns are the raw scan; the driving controller is a quadrature device on two of those
-  bits (name-only; a short theory note explains the Gray-code idea).
+- **Goal:** read the paddle potentiometers and the fire buttons, show the raw `SWCHA` port, and
+  explain the keypad scan that a keyboard controller needs. The driving controller is a name-only
+  aside: its quadrature pair arrives on the same `SWCHA` bits as the joystick, but the lesson does
+  not decode it in code.
+- **Concepts:** `INPT0–INPT3` are RC-timing inputs; `VBLANK` bit 7 discharges and clearing it
+  starts the charge (bit 6 latches the fire buttons); a bounded counting loop turns the charge time
+  into a byte; `SWCHA` is an 8-bit active-low port (player 0 bits 4–7, player 1 bits 0–3); with
+  `SWACNT=$00` a switch to ground reads 0, so the monitor's eight columns are the raw port; a CX50
+  keypad is a driven 4×3 matrix (`SWACNT=$FF`, one row low on bits 4–7, wait ~400 µs, read
+  `INPT0`/`INPT1`/`INPT4`); `INPT4`/`INPT5` bit 7 is 0 when the fire button is pressed; the driving
+  controller is a quadrature device on two of those bits (name-only; a short theory note explains
+  the Gray-code idea).
 - **ROM:** `33-paddle-keyboard-controllers.asm` — "the controller monitor": in VBLANK, discharge
   the paddles (`VBLANK=$82`, a `LDX #50` pad), start the charge (`VBLANK=$42`), then count `INPT0`
   until bit 7 rises or `CPY #128` bounds the loop; a timeout stores **0**, which the monitor
-  documents as "no paddle or minimum"; a connected paddle's count 0–128 maps to needle
-  X = `PaddleValue + 24` (24–152). Set `PF1` to the inverted `SWCHA` byte (eight vertical columns
-  in chunks 4–11, capture x = 121–313 with `CTRLPF=$01` reflecting them), `PF0=PF2=0`,
+  documents as "no paddle or beyond the single-frame bound"; a connected paddle's count 0–127 maps to needle
+  X = `PaddleValue + 24` (24–151). Set `PF1` to the inverted `SWCHA` byte (eight vertical columns
+  in chunks 4–11, capture x = 121–312 with `CTRLPF=$01` reflecting them), `PF0=PF2=0`,
   `COLUPF=$C8`. P0 is a 32-row bar (the needle) at top 80, `$42` red. P1 is an 8-row block at
   X=140, `$C8` green normally and `$42` red while `INPT4` bit 7 is 0. Both players are positioned
-  every frame by two coarse routines, then one `HMOVE` (AR-21). `COLUBK=$02`.
+  every frame by two coarse routines, then one `HMOVE` (AR-21). `COLUBK=$02`. The 128-count bound
+  covers only the low-resistance end of a real paddle's travel; mid-travel is ~12 ms, so a real
+  paddle reads 0 for most of its range. The monitor is a teaching harness; a full-range game counts
+  across frames.
 - **Expected screen:** a green 8-column matrix strip (dark at rest), a red 32-line needle near
   capture x ≈ 169 at rest, and a green 8×8 fire block at capture x ≈ 865; the needle moves with
-  paddle 0, the columns light when matrix bits are pulled low, and the block turns red when fire
-  is pressed. The at-rest capture is the committed screenshot; the doc explains what each change
+  paddle 0, the columns light when a raw port bit is closed (a joystick direction), and the block
+  turns red when fire is pressed. The at-rest capture is the committed screenshot; the doc explains what each change
   looks like.
 - **Demo ROM:** none — the monitor is the visible picture (AR-3).
 - **Exercises:** 1. read paddle 1 (`INPT1`) instead and move the needle with it; 2. make the fire
@@ -315,10 +321,10 @@ a freedom of implementation.
   paddle 0 positions P0 and paddle 1 positions P1 (two independent coarse routines and one
   `HMOVE`).
 - **Screenshots:** `docs/public/images/lesson33/monitor.png`.
-- **Evidence pins:** frame checkpoints; `PaddleRead` — A = the final count (0–128, 0 on timeout),
-  one hit per frame; `PaddleX` — A = the needle X (24–152); `KeyWrite` — A = the inverted `SWCHA`
-  byte; `FireWrite` — A = the `COLUP1` value; `MoveApply` — one `HMOVE` hit per frame; the capture
-  positions/colors. The doc's ledger covers the discharge/charge loop (~22 lines worst case) plus
+- **Evidence pins:** frame checkpoints; `PaddleRead` — A = the final count (0–127, 0 on timeout),
+  one hit per frame; `PaddleX` — A = the needle X (24–151); `KeyWrite` — A = the inverted `SWCHA`
+  byte; `FireWrite` — A = the `COLUP1` value; `HmoveApply` — one `HMOVE` hit per frame; the capture
+  positions/colors. The doc's ledger covers the 128-read loop (~20 lines worst case) plus the discharge pad (~3.3 lines) and
   the two positions (~3 lines), inside the 37-line VBLANK.
 - **Integration:** prev → Lesson 32; next → Lesson 34; part-index row 33 → ✅ Complete linking
   `./33-paddle-keyboard-controllers`; sidebar entry exists (`config.ts:92`). Estimated time:
