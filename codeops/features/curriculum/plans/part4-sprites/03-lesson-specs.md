@@ -174,20 +174,23 @@ a freedom of implementation.
   one-clock-shorter output delay than the players.
 - **ROM:** `29-missiles-and-ball.asm` — "the lineup": P0 (the invader, `$42` red) at X=24, rows
   96–103; M0 (1 px wide, 4 rows, rows 98–101) at X=64; M1 (4 px wide, 4 rows, rows 98–101) at
-  X=96, `$84` blue; the ball (8 px wide, 4 rows, rows 98–101) at X=128, `$C8` green.
+  X=96, `$84` blue; the ball (8 px wide, 4 rows, rows 98–101) at target 108, `$C8` green.
   `NUSIZ0=$00` (player normal, M0 1 px), `NUSIZ1=$20` (M1 4 px), `CTRLPF=$30` (ball 8 px, REF=0),
   `COLUBK=$02`. Four coarse routines set all four `HMxx` values, then a single `HMOVE` applies
-  them (AR-21).
+  them (AR-21). The missiles' output delay is one clock shorter than the players', so they measure
+  63 and 95 for targets 64 and 96. The ball's target-to-X mapping is its own: 68 → 79 and
+  108 → 128; the measured table is the rule (the measured X is authoritative).
 - **Expected screen:** a horizontal lineup at the same band: an 8-px red player at capture
-  x ≈ 169, a 1-px red missile at ≈ 409, a 4-px blue missile at ≈ 601, and an 8-px green ball at
-  ≈ 793, all at rows ≈ 409–421 (P0) and 415–427 (the small objects).
+  x = 169–216 (X=24), a 1-px red missile at 403–408 (X=63), a 4-px blue missile at 595–618
+  (X=95), and an 8-px green ball at 793–840 (X=128), all at rows 410–433 (P0) and 416–427 (the
+  small objects).
 - **Demo ROM:** none — the four objects are the visible picture (AR-3).
 - **Exercises:** 1. widen M0 to 8 px (`NUSIZ0=$30`); 2. shrink the ball to 1 px
-  (`CTRLPF=$00`) and move it to X=64; 3. *(Stretch)* a moving bullet: M0 travels from X=16 to
-  X=152 at 2 px per frame and wraps, re-positioned every frame.
+  (`CTRLPF=$00`) and move it to target 68 (measured X=79); 3. *(Stretch)* a moving bullet: M0 travels from X=16 to
+  X=150 (the wrap test stops at 152) at 2 px per frame and wraps, re-positioned every frame.
 - **Screenshots:** `docs/public/images/lesson29/lineup.png`.
 - **Evidence pins:** frame checkpoints; `PosApplyP0`/`PosApplyM0`/`PosApplyM1`/`PosApplyBL`;
-  `EnableWrite` — A = the enable/size bytes on the body lines; the measured widths in the capture
+  `EnableWrite` — A = `$02`, four hits on rows 2–5; the measured widths in the capture
   (1/4/8 px → 6/24/48 capture px); the `RESxx` store cycles. The doc's ledger records the
   missile/ball output-delay difference.
 - **Integration:** prev → Lesson 28; next → Lesson 30; part-index row 29 → ✅ Complete linking

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 15:05
-> **Progress**: 4/10 tasks (40%)
+> **Last Updated**: 2026-11-04 15:40
+> **Progress**: 5/10 tasks (50%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -209,7 +209,7 @@ divide-by-15 routine's measured landing recorded.
 
 ## Phase 5: Lesson 29 — Missiles and Ball
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 459474f (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/29-missiles-and-ball/` (4 sources) · `docs/part4-sprites/29-missiles-and-ball.md` · `docs/part4-sprites/index.md` (row 29) · `docs/public/roms/part4-sprites/29-missiles-and-ball/` · `docs/public/images/lesson29/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — four independently positioned objects with different output delays under independent hardware review
 
@@ -219,7 +219,11 @@ divide-by-15 routine's measured landing recorded.
 **Objective**: Deliver lesson 29 end to end through the mandatory three sessions, with each
 object's measured X and width recorded.
 
-- [ ] 5.1.1 Lesson 29 — Missiles and Ball: Session A freezes ST-29.1–ST-29.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson29): Missiles and Ball`
+- [x] 5.1.1 Lesson 29 — Missiles and Ball: Session A freezes ST-29.1–ST-29.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson29): Missiles and Ball` ✅ (completed: 2026-11-04 15:40)
+
+**Session A record** (freeze + red baseline, 2026-11-04 15:12): ST-29.1–ST-29.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 29. Design pins: the standard 262-line frame; P0 8-row invader at X=24, top 96 (first body line 133); M0 1 px at X=64, M1 4 px (`NUSIZ1=$20`) at X=96, ball 8 px (`CTRLPF=$30`) at target **108**; the small objects enabled on body rows 2–5 via `ENAM0`/`ENAM1`/`ENABL` bit 1; `COLUP0=$42` (P0+M0), `COLUP1=$84` (M1), `COLUPF=$C8` (ball), `COLUBK=$02`; four coarse routines set `HMP0/HMM0/HMM1/HMBL` and strobe `RESP0/RESM0/RESM1/RESBL`, then **one** `HMOVE` (AR-21). The missiles/ball output delay is one clock shorter than the players'; the measured X is authoritative: the missiles land 63/95 for 64/96, and the ball's target-to-X mapping is measured (68 → 79, 108 → 128). Evidence pins (AR-6): frame checkpoints; the four `PosApply*` values; the four `Resp*` strobes; `HmoveApply`; `EnableWrite` (A=$02, four hits on rows 2–5); the measured X/widths/colors in the capture. Solutions: ex 1 widen M0 to 8 px; ex 2 ball 1 px at target 68 (measured 79); ex 3 a moving M0 at 2 px/frame, wrapping. Red baseline confirmed: no `lessons/part4-sprites/29-missiles-and-ball`, no `docs/public/images/lesson29`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 29 is Coming Soon, sidebar entry exists (`config.ts:88`), `verify.sh` green at `459474f`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 15:40): Preflight per `vcs-lesson-production` — the enables, widths, colors, and four-object positioning checked against `include/vcs.asm` and the one-HMOVE rule (AR-21); the frame against Lessons 12–28; ACME forms; no demo (AR-3: the lineup is the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F072` first hit (37, 7), `BodyStart` `$F079` first hit (133, 6) with 8 hits, `OverscanStart` `$F0B3` = (229, 4). Enable: `EnableWrite` `$F088` four hits on scanlines 135–138, A = `$02`. Positions: `PosApplyP0/M0/M1/BL` A = 27/67/99/111 at line 0 c18 / line 1 c35 / line 2 c50 / line 3 c60; `RespP0` line 1 c24, `RespM0` line 2 c39, `RespM1` line 3 c49, `RespBL` line 4 c61 (the logged value; the simple 14+5n estimate is 54, so the ball path carries a 7-cycle offset); `HmoveApply` `$F03B` is the WSYNC stall at line 4 c73, and `STA HMOVE` executes at VBLANK line 5 c0. Capture from the committed ROM (sha1 `f16342c4212bcdff6449123dc693f66d9d7cd221`, re-captured for this record): P0 at capture x = 169–216 (TIA 24), M0 at 403–408 (63, 1 px), M1 at 595–618 (95, 4 px), ball at 793–840 (128, 8 px); P0 y = 410–433, small objects y = 416–427. Solutions: ex 1 — M0 8 px at 403–450; ex 2 — ball 1 px at 499–504 (X=79); ex 3 — moving M0, 2 px/frame, 16–150 with the wrap test at 152. Site (ST-29.6): index row 29 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, the capture, prev → 28, next → 30; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 1 major**, 5 minor. The major: the ball's target→X narrative used a false "coarse slot" cause; fixed by removing the cause and publishing the measured mapping (missiles 64→63, 96→95; ball 68→79, 108→128). The minors: the `HmoveApply` row reported the WSYNC stall as the strobe (now line 5 c0), the spec's exercise-3 range (16–150), the source's `Resp*` names, the think-aloud aside, and the NUSIZ copies hint. Round 2: the auditor re-raised the ball table and the HmoveApply row; the row is fixed, and the ball mapping was re-verified on the committed ROM (fresh capture and log, sha1 above) — the lesson states it as an observation and does not claim a hardware formula. The reviewers' remaining disagreement (their 14+5n model predicts 107, the ROM measures 128) is recorded as an accepted observation; the unexplained 7-cycle ball-path offset is documented in the checkpoint table rather than hidden. The TS block's ball target was aligned to 108. No third review under the quality policy. Lesson 29 is complete.
 
 **Session sub-steps (the task's checklist):**
 

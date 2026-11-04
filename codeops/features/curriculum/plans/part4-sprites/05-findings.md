@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 4 complete — 0 critical, 0 major open
+> **Status**: Phase 5 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -62,3 +62,14 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-211 | 4 | 🟡 MINOR | Re-review: the Part 4 index's Lesson 29 bullet still said "widths and colors" | fixed — "widths and the player/playfield colors they share" |
 | SR-212 | 4 | 🟡 MINOR | Re-review: "effect at the next line's cycle 3" read as line 4; the store is applied in cycle 2 of line 3, the next instruction starts at cycle 3 | fixed — the source says "store applied at cycle 2; next instruction at cycle 3"; the doc says "the strobe completes by cycle 3" |
 | SR-213 | 4 | ℹ️ INFO | `two-players.png` shows the transient Stella launch toast in the lower black border, outside the picture | accepted — it does not cover the picture, matching the Lesson 25 artifact |
+| SR-220 | 5 | 🟠 MAJOR | Both: the ball's target→X narrative used a false "coarse slot" cause and the table was internally inconsistent | fixed — the cause is removed; the measured mapping is published (missiles 64→63, 96→95; ball 68→79, 108→128) and the lesson states it as an observation |
+| SR-221 | 5 | 🟠 MAJOR | Auditor: the `HmoveApply` row reported the WYSYNC stall at line 4 c73 as the strobe | fixed — the row is VBLANK line 5 c0; the `$F03B` line-4/c73 hit is labelled the WYSYNC stall |
+| SR-222 | 5 | 🟡 MINOR | Reviewer: `RespBL` c61 is off the simple 14+5n estimate (54) | documented — the table reports the logged 61 and the 7-cycle offset; the measured evidence is from the committed ROM (sha1 recorded) |
+| SR-223 | 5 | 🟡 MINOR | Both: exercise-3 range said 16–152; the wrap test stops at 152, so the visible range is 16–150 | fixed — 16–150 in the spec/doc/ST |
+| SR-224 | 5 | 🟡 MINOR | Both: the source header named `Resp*Write`, which does not exist | fixed — `RespP0/RespM0/RespM1/RespBL` |
+| SR-225 | 5 | 🟡 MINOR | Auditor: a think-aloud aside ("shares player 0's shape? No —") shipped in the source | fixed — "Missile 0 is its own 1-pixel object; it shares COLUP0" |
+| SR-226 | 5 | 🟡 MINOR | Auditor: the exercise-1 hint forward-referenced NUSIZ copies (Lesson 31) | fixed — "Keep bits 0–2 at 0, as in Lesson 25" |
+| SR-227 | 5 | 🟡 MINOR | Auditor: "the players are eight pixels wide" ignored NUSIZ | fixed — "a player draws eight bits per line; eight pixels with NUSIZ=0" |
+| SR-228 | 5 | 🟡 MINOR | Reviewer: the TypeScript ball entry used 128 while the other entries used targets | fixed — `x: 108` with a measured-X comment |
+| SR-229 | 5 | 🟡 MINOR | Auditor: the exercise-1/3 sources still said "the ball's slot is later" | fixed — "the ball's mapping is its own" |
+| SR-230 | 5 | ℹ️ INFO | The ball's logged cycle (61) and landing (128) are seven cycles from the reviewers' 14+5n model (54/107); the committed ROM (sha1 f16342c4) reproduces 61/128 on a fresh capture | accepted — the measured values are the lesson's evidence; the 7-cycle offset is documented, not explained away |

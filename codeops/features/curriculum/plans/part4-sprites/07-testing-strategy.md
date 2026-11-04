@@ -81,7 +81,7 @@ after a store, learned in Lesson 18).
 | ST-29.2 | Run the ROM; inspect the lineup | P0 8×8 red at X≈24 (capture ≈169), M0 1 px red at X≈64 (≈409), M1 4 px blue at X≈96 (≈601), ball 8 px green at X≈128 (≈793); measured widths 6/24/48 capture px for 1/4/8 px; all within ±3 | Screenshot `lineup.png` + pixel check | 03 §Lesson 29 |
 | ST-29.3 | Inspect enable/size state | `ENAM0`/`ENAM1`/`ENABL` set only on the body lines; `NUSIZ0=$00`, `NUSIZ1=$20`, `CTRLPF=$30`; M0 red, M1 blue, ball green | Capture + state log | 03 §Lesson 29 |
 | ST-29.4 | Debugger: four positions and enables | `PosApply*` one hit per frame each; `EnableWrite` on the body lines; the missile/ball `RESxx` cycles are constant and the doc records the output-delay difference; frame 262 lines | State log + static ledger (AR-6, AR-13) | RD-04 AC 3 / 03 §Lesson 29 |
-| ST-29.5 | Assemble and run each solution | Ex 1 widens M0 to 8 px; ex 2 shrinks/moves the ball; ex 3 moves M0 from 16 to 152 and wraps | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
+| ST-29.5 | Assemble and run each solution | Ex 1 widens M0 to 8 px; ex 2 shrinks/moves the ball (measured X=79); ex 3 moves M0 from 16 to 150 and wraps at 152 | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-29.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; the capture resolves; prev 28, next 30; index row 29 links | Build output + page check | RD-04 AC 1 / AR-10 |
 
 ### Lesson 30
