@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 9 complete — 0 critical, 0 major open
+> **Status**: Phase 10 complete — 0 critical, 0 major open. Part 4 complete.
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -125,3 +125,19 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-280 | 9 | 🟡 MINOR | Reviewer: the preflight report still had the old cycle arithmetic and 24–152 | fixed — 3+2+2+2+3 and 24–151 |
 | SR-281 | 9 | ℹ️ INFO | Reviewer/auditor: "matrix columns" was used for the raw-port columns while the page defines "matrix" as the keypad grid | fixed — "raw-port columns" throughout |
 | SR-282 | 9 | ℹ️ INFO | The pressed-fire branch was not in the at-rest logs | accepted — scratch witnesses confirm `FireWrite` A=`$42` (red block) and ex2 A=`$1A` (gold 871–966); the shipped ROM reads the real `INPT4` |
+| SR-283 | 10 | 🟠 MAJOR | Reviewer: the second capture was labelled frame 2 but the measured legs `$24 $24 $66 $C3` are frame 3 | fixed — doc/spec/plan relabelled frame 3; the pose labels are mnemonic |
+| SR-284 | 10 | 🟠 MAJOR | Reviewer: ex3's `LDX Direction` was followed by `LDA #$00`, clearing N, so `BMI FaceLeft` never ran and REFP0 stayed 0 | fixed — `LDA #$00` before `LDX`; measured X=52 nose right, X=116 nose left |
+| SR-285 | 10 | 🟡 MINOR | Reviewer: the body was called 18–19 cycles; all four frames are 16-byte aligned, so it is 18 here | fixed — 18 cycles here (19 only on a page crossing) in doc/source/spec/ST/plan |
+| SR-286 | 10 | 🟡 MINOR | Reviewer: the palindrome list omitted `$C3` | fixed — added |
+| SR-287 | 10 | 🟡 MINOR | Reviewer: the pose labels claimed a left/right stance the palindromic leg bytes do not encode | fixed — mnemonic labels and a note |
+| SR-288 | 10 | 🟡 MINOR | Reviewer: ex1's comments still said 0–7 and every 8 frames | fixed — 0–15 and every 16 |
+| SR-289 | 10 | 🟡 MINOR | Reviewer: ex3 kept unused `SPRITE_X`/`FLIP_RATE`/`FlipCounter`/`FlipState` and their stores | fixed — removed |
+| SR-290 | 10 | 🟠 MAJOR (false positive) | Reviewer's byte count put `FrameTable` at `$F0CF`; the ACME symbol and the ROM dump put it at `$F0D0` (the count missed the first of four `ASL`s) | accepted as a false positive — no change; `$D0/$E0/$F0/$00` and the byte dump confirm `$F0D0` |
+| SR-291 | 10 | 🟠 MAJOR (false positive) | Reviewer's count put `Resp0Write`/`HmoveApply` at `$F0C8`/`$F0CC`; the symbol and ROM dump put them at `$F0C9`/`$F0CD` | accepted as a false positive — no change; the breakpoints fire at `$F0C9`/`$F0CD` |
+| SR-292 | 10 | 🟡 MINOR | Reviewer: the exercise sources still had the old left/right pose labels | fixed — the mnemonic labels in all three |
+| SR-293 | 10 | 🟡 MINOR | Reviewer: "On 7 it wraps" / "On 119 it wraps" contradicted the post-INC compare | fixed — "wraps when the increment reaches 8" / "wraps at 120" |
+| SR-294 | 10 | 🟡 MINOR | Reviewer: ex3's `MoveTick` comment said A = the new X, but the bounce paths leave A = the direction | fixed — the comment distinguishes the normal and bounce frames |
+| SR-295 | 10 | 🟡 MINOR | Auditor: the mouse pointer was visible in both captures | fixed — re-captured from one pointer-parked run; 0 white pixels at the old pointer position; walk-a frame 0 nose right, walk-b frame 3 nose left |
+| SR-296 | 10 | 🟡 MINOR | Auditor: ex3's hints did not say to remove the 120-frame flip | fixed — hint 3 says delete `FlipCounter`/`FlipState`; `Direction` is the only `REFP0` writer |
+| SR-297 | 10 | ℹ️ INFO | Auditor: the exercise capture times are wall-clock and include startup; timing from reset can land on other frames | fixed — the exercise expectations quote the measured frames/X, not seconds |
+| SR-298 | 10 | ℹ️ INFO | The first capture round landed on different frames because of wall-clock timing | accepted — a burst was captured and the pair matching frame 0 (nose right) and frame 3 (nose left) was selected; no pointer |

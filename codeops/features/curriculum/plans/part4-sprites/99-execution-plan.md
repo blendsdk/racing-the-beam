@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 17:35
-> **Progress**: 9/10 tasks (90%)
+> **Last Updated**: 2026-11-04 18:20
+> **Progress**: 10/10 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -399,16 +399,22 @@ one-line offset measured.
 
 ## Phase 10: Lesson 34 — Sprite Animation
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 7d5c4b0 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/34-sprite-animation/` (4 sources) · `docs/part4-sprites/34-sprite-animation.md` · `docs/part4-sprites/index.md` (row 34) · `docs/public/roms/part4-sprites/34-sprite-animation/` · `docs/public/images/lesson34/` (2 captures) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (Part 4 completion → RD-04 row Done)
-> **Reasoning**: high — the frame-pointer setup and the 18–19-cycle body close Part 4 and must be measured under independent hardware review
+> **Reasoning**: high — the frame-pointer setup and the 18-cycle body (19 on a page crossing) close Part 4 and must be measured under independent hardware review
 
 ### Step 10.1: Lesson 34 — Sprite Animation
 
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 34 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 34 · AR-2, AR-3, AR-4, AR-6, AR-20
 **Objective**: Deliver lesson 34 end to end through the mandatory three sessions and close Part 4.
 
-- [ ] 10.1.1 Lesson 34 — Sprite Animation: Session A freezes ST-34.1–ST-34.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson34): Sprite Animation`
+- [x] 10.1.1 Lesson 34 — Sprite Animation: Session A freezes ST-34.1–ST-34.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson34): Sprite Animation` ✅ (completed: 2026-11-04 18:20)
+
+**Session A record** (freeze + red baseline, 2026-11-04 17:40): ST-34.1–ST-34.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 34. Design pins: the standard 262-line frame; one player 0, 16 rows, top 80 (first body line 117), X=72, `COLUP0=$42`, `COLUBK=$02`; four walk frames in a 64-byte table, rows 0–11 shared and rows 12–15 the legs; the frame pointer `FrameTable + FrameIndex*16` computed in VBLANK; `AnimStep` every 8 frames (7.5 Hz); `REFP0` toggles every 120 frames; the body reads `(FramePtr),Y` (18 cycles here; 19 only if a frame crosses a page). The walker's head has a one-pixel nose (`$3E` row 2) so the mirror is visible; the legs are the only bytes that differ between frames. Evidence pins (AR-6): frame checkpoints; `AnimStep` A = the new index at frames 8/16/24/32; `FramePtrWrite` A = `$D0/$E0/$F0/$00`; `FlipWrite` A = 8/0 at frames 120/240; `BodyStart` 117 with 16 hits; `SpriteWrite` 16 hits; the two captures (frame 0 facing right at ~0.6 s, frame 3 mirrored at ~3.0 s). Solutions: ex 1 `ANIM_RATE=16`; ex 2 a fifth `FrameIdle` and a walk/idle state machine (120 walk + 60 idle); ex 3 `SpriteX`/`Direction` with a 16/144 bounce and `REFP0` from the direction. Red baseline confirmed: no `lessons/part4-sprites/34-sprite-animation`, no `docs/public/images/lesson34`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 34 is Coming Soon, sidebar entry exists (`config.ts:93`), `verify.sh` green at `7d5c4b0`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 18:20): Preflight per `vcs-lesson-production` — the frame table, the pointer arithmetic, the `(zp),Y` timing, the two counters, the `REFP0` mirror, and the body/frame geometry checked against `include/vcs.asm`, the Part 3 pointer lesson, and the TIA references; ACME forms; no demo (AR-3: the walk cycle is the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F018` = (259, 3), `VblankStart` `$F026` = (0, 5), `VisibleStart` `$F088` first hit (37, 7), `BodyStart` `$F08F` first hit (117, 6) with 16 hits, `OverscanStart` `$F0A7` = (229, 4). Animation: `AnimStep` `$F041` at frames **8/16/24/32** with A = 1/2/3/0; `FramePtrWrite` `$F060` A = `$D0/$E0/$F0/$00` at frames 1/8/16/24 (the frame bases `$F0D0/$F0E0/$F0F0/$F100`); `FlipWrite` `$F055` at frames 120/240/360 with A = 8/0/8; `SpriteWrite` `$F091` 16 hits. The frame table is at `$F0D0`; all four frames are 16-byte aligned, so the body is 18 cycles (19 only on a page-crossing read, which this layout avoids). Position: `Resp0Write` `$F0C9` line 2 c44; `HmoveApply` `$F0CD` line 2 c50 (the `WSYNC` stall; `STA HMOVE` executes on line 3 c0, and the `RTS` at line 3 c3). Captures from the committed ROM (`walk-a.png`, `walk-b.png`): both x = **457–504**, y = **359–408**; walk-a is frame 0 with the nose right (`00111110`, legs `$66$66$66$C3`); walk-b is frame 3 after the first flip with the nose left (`01111100`, legs `$24$24$66$C3`); the re-captures are pointer-free (0 white pixels at the old pointer position). Solutions: ex 1 — `ANIM_RATE=16`, measured frames 0 and 1; ex 2 — `FrameIdle` + a 120-walk/60-idle state machine, measured walk frame 2 then the idle pose (legs `$3C` x4, nose left); ex 3 — `SpriteX`/`Direction` with a 16/144 bounce and `REFP0` from the direction, measured X=52 (nose right) and X=116 (nose left). Site (ST-34.6): index row 34 ✅ Complete (all of rows 25–34 ✅); the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 33, next → 35; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **2 major, 5 minor** (walk-b labelled frame 2; ex3's direction branch cleared N; body 18–19; palindrome list; pose labels; ex1 comments; ex3 dead code); round 2 — **2 purported address majors** (the table at `$F0CF`, the strobes at `$F0C8/$F0CC`) plus 3 minor, all addressed; round 3 — the byte dump (`$F0C4: 0A 0A 0A 85 20 85 10 85 02 85 2A 60 18 3C 3E 18`) and the ACME symbols confirm `$F0D0/$F0C9/$F0CD`, so the address majors were false positives (the count missed the first `ASL`), and the three minors were fixed. The curriculum-auditor round 1 — **2 minor** (the mouse pointer in both captures; the ex3 hint not saying to remove the 120-frame flip); round 2 — confirmed both fixed, **0 findings**. Final state: **0 critical, 0 major open**. Lesson 34 is complete.
+
+**Part 4 completion** (2026-11-04 18:20): all ten lessons (25–34) shipped with **40 committed 4,096-byte ROMs**, ten documents, fourteen screenshots, and the Part 4 index fully ✅. `bash scripts/verify.sh` PASSED (128 ROMs, no drift, docs build). Both specialists report no critical/major open for any lesson. RD-04 → Done; the feature roadmap is **4/11 RDs**; the portfolio shows **4 plans done**. The next feature is RD-05 (Part 5 — Sound, lessons 35–37).
 
 **Session sub-steps (the task's checklist):**
 

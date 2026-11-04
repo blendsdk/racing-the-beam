@@ -15,7 +15,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | 31 | [Copies and Sizes — NUSIZ Register](./31-copies-and-sizes) | ✅ Complete |
 | 32 | [Vertical Delay — VDELP0, VDELP1](./32-vertical-delay) | ✅ Complete |
 | 33 | [Paddle & Keyboard Controllers](./33-paddle-keyboard-controllers) | ✅ Complete |
-| 34 | [Sprite Animation — Walking Cycles & Character States](./34-sprite-animation) | 🔒 Coming Soon |
+| 34 | [Sprite Animation — Walking Cycles & Character States](./34-sprite-animation) | ✅ Complete |
 
 ## What You'll Learn
 

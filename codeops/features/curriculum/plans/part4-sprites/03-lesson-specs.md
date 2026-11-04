@@ -342,12 +342,12 @@ a freedom of implementation.
   counter, not a timer.
 - **ROM:** `34-sprite-animation.asm` — "the walk": P0, 16 rows, top 80, X=72, `COLUP0=$42`,
   `COLUBK=$02`; four walk frames in a 64-byte table (the frames differ only in the leg rows 12–15;
-  the exact bytes are fixed in Session B and embedded in the doc); `FrameStep` every 8 frames;
+  the exact bytes are fixed in Session B and embedded in the doc); `AnimStep` every 8 frames;
   `REFP0` toggles every 120 frames to face the other way; the body reads the current frame through
   `FramePtr`.
-- **Expected screen:** a red 16-row figure at capture x ≈ 457, rows ≈ 359–409; the legs change
-  between captures at ~0.5 s and ~1.0 s (frame indices differ); the figure faces left or right
-  depending on the direction phase.
+- **Expected screen:** a red 16-row figure at capture x ≈ 457, rows ≈ 359–409; the legs change between the two captures
+  (~0.6 s frame 0 and ~3.0 s frame 3 after the first flip); the nose faces right in the first and
+  left in the second.
 - **Demo ROM:** none — the walk cycle is the visible picture (AR-3).
 - **Exercises:** 1. cadence 16 (half speed) or 4 (double speed); 2. an idle frame: every 120
   frames, hold a neutral pose for 60 frames (a two-state machine); 3. *(Stretch)* walk and move:
@@ -355,8 +355,8 @@ a freedom of implementation.
 - **Screenshots:** `docs/public/images/lesson34/walk-a.png`, `…/walk-b.png`.
 - **Evidence pins:** frame checkpoints; `AnimStep` — A = the new frame index, one hit every 8
   frames; `FramePtrWrite` — A = the low byte of the frame base; `BodyStart` at line 117; the
-  capture difference in the leg rows. The ledger covers the 18–19-cycle body (page-crossing
-  `(zp),Y` read).
+  capture difference in the leg rows. The ledger covers the 18-cycle body here (19 only on a
+  page-crossing `(zp),Y` read, which this layout avoids).
 - **Integration:** prev → Lesson 33; next → `/part5-sound/35-sound-effects` (the real Part 5 stub,
   titled "Sound Effects"); part-index row 34 → ✅ Complete linking `./34-sprite-animation`;
   sidebar entry exists (`config.ts:93`). Estimated time: 75 minutes.

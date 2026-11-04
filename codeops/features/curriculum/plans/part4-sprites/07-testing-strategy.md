@@ -135,7 +135,7 @@ after a store, learned in Lesson 18).
 | ST-34.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build pass | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
 | ST-34.2 | Run the ROM; capture two walk phases | One 8×16 red figure at X≈72 (capture ≈457), scanlines 117–132; the two captures differ in the leg rows (frame indices differ, leg pixels differ) | Screenshots `walk-a/b.png` + pixel diff | 03 §Lesson 34 |
 | ST-34.3 | Inspect cadence and direction | `AnimStep` one hit every 8 frames through 0..3; `REFP0` toggles every 120 frames; the frame base pointer is computed in VBLANK | State log + capture | 03 §Lesson 34 |
-| ST-34.4 | Debugger: frame pointer and body | `AnimStep` A = frame index; `FramePtrWrite` A = the frame base low byte; `BodyStart` line 117; the body ledger is 18–19 cycles (page-crossing `(zp),Y`); frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 34 |
+| ST-34.4 | Debugger: frame pointer and body | `AnimStep` A = frame index; `FramePtrWrite` A = the frame base low byte; `BodyStart` line 117; the body ledger is 18 cycles here (19 only on a page-crossing `(zp),Y`); frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 34 |
 | ST-34.5 | Assemble and run each solution | Ex 1 changes cadence; ex 2 holds an idle pose for 60 frames; ex 3 walks across the screen | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-34.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; both captures resolve; prev 33, next `/part5-sound/35-sound-effects`; index row 34 links | Build output + page check | RD-04 AC 1 / AR-10 |
 
