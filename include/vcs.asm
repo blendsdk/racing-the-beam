@@ -158,10 +158,8 @@ INPT5   = $0D   ; Read: player 1 fire button (bit 7: 0=pressed)
 
 ; --- I/O Ports ---
 SWCHA   = $0280  ; Port A: Joystick inputs (both players)
-                 ;   P0: bits 4-7 (R=bit4, L=bit5, D=bit6, U=bit7... wait, 
-                 ;       actually: bit4=P0 right, bit5=P0 left, 
-                 ;       bit6=P0 down, bit7=P0 up — 0=pressed)
-                 ;   P1: bits 0-3 (same pattern)
+                 ;   P0: bits 4-7 (bit4=up, bit5=down, bit6=left, bit7=right; 0=pressed)
+                 ;   P1: bits 0-3 (bit0=up, bit1=down, bit2=left, bit3=right; 0=pressed)
 SWACNT  = $0281  ; Port A DDR (Data Direction Register) — usually $00 (all input)
 SWCHB   = $0282  ; Port B: Console switches
                  ;   bit 0: RESET  (0=pressed)

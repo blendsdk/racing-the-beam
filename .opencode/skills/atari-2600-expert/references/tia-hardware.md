@@ -128,7 +128,7 @@ six-digit scoreboard trick.
 | Item | Address | Notes |
 | --- | --- | --- |
 | RAM | `$80–$FF` | The only 128 bytes of writable memory |
-| `SWCHA` | `$0280` | Joysticks. **0 = pressed.** P0: bit 4 right, 5 left, 6 down, 7 up; P1: bits 0–3 in the same order |
+| `SWCHA` | `$0280` | Joysticks. **0 = pressed.** P0: bit 4 up, 5 down, 6 left, 7 right; P1: bits 0–3 in the same order (bit 0 up … bit 3 right) |
 | `SWACNT` | `$0281` | Port A direction register — normally `$00` (all input) |
 | `SWCHB` | `$0282` | Console switches. `0 = pressed` for RESET (bit 0) and SELECT (bit 1); bit 3 = 1 color / 0 B&W; bits 6–7 = P0/P1 difficulty (0 = expert/A, 1 = novice/B) |
 | `SWBCNT` | `$0283` | Port B direction register — normally `$00` |

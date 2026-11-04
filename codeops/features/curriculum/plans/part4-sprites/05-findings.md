@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 2 complete — 0 critical, 0 major open
+> **Status**: Phase 3 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -42,3 +42,15 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-191 | 2 | 🟡 MINOR | Re-review: "a strobe just before clock 68" was ~4–5 px off; the left edge is clock 63 | fixed — "clock 63 … clock 68 lands near X=5" |
 | SR-192 | 2 | 🟡 MINOR | Re-review: "output delay" / "three clocks coarse" misnamed the constant −3 | fixed — "encoding offset" / "three clocks left of exact placement" |
 | SR-193 | 2 | 🟡 MINOR | Re-review: the `Resp0Write` comment "cycle 5k+14" left k undefined | fixed — "cycle 5 × SBC count + 14" |
+| SR-194 | 3 | 🔴 CRITICAL | Both: the SWCHA direction mapping was reversed — the lesson used P0 bit 4 right / 5 left / 6 down / 7 up; the hardware is bit 4 up / 5 down / 6 left / 7 right (0 = pressed) | fixed — `include/vcs.asm`, the expert reference, all four sources, the doc, the spec, and the plan record now use the correct bit order |
+| SR-195 | 3 | 🟠 MAJOR | Both: the doc claimed a sprite "does not remember" X and must be strobed every frame; `RESP0` latches the position and a static sprite can be positioned once | fixed — the doc says the TIA keeps the latch; a moving sprite re-strobes because `SpriteX` changes and `HMOVE` re-applies the fine offset |
+| SR-196 | 3 | 🔴 CRITICAL | Round 2: after the bit-order fix, the active-low masked values were still inverted (left = `$80`, right = `$40`); the code steered left as right | fixed — `$80`→`DirLeft` (`$FF`), `$40`→`DirRight` (`$01`); the doc tables, Step 1/2, and the plan record match; the witnesses left `$80`→`$FF`, right `$40`→`$01` |
+| SR-197 | 3 | 🟠 MAJOR | Round 2: exercise 3's vertical decode was inverted (up = `$20`, down = `$10`) | fixed — `$20`→up (−4), `$10`→down (+4); the header and hint match |
+| SR-198 | 3 | 🟡 MINOR | Both: `DirWrite` was documented as firing only on changes; it fires every frame a horizontal input is held | fixed — the source header, doc, spec, and ST-27.4 say every frame while held (0 hits in the no-input patrol) |
+| SR-199 | 3 | 🟡 MINOR | Both: `TopTick` was documented as firing only on a vertical change; it fires every frame exactly one of up/down is held, including at the clamp | fixed — the source header and the doc hint say "exactly one of up/down", A = the new or clamped top |
+| SR-200 | 3 | 🟡 MINOR | Both: "keeps moving" after a both-pressed stop was false — the `$C0` path keeps the stored 0 | fixed — the doc says the sprite stays still until a single direction is pressed |
+| SR-201 | 3 | 🟡 MINOR | Reviewer/auditor: the spec's exercise-3 bottom count was `192 − TOP − 8`, dropping the clear line | fixed — `192 − TOP − 8 − 1` (183 − TOP) in the spec, matching the source |
+| SR-202 | 3 | 🟡 MINOR | Auditor: the Lesson 27 `SetHorizPos` copy lacked the Lesson 26 comments | fixed — the routine carries the input comment and the cycle notes in the main and exercise 3 |
+| SR-203 | 3 | 🟡 MINOR | Auditor: exercise 1's `Direction` comment said +1/−1 while the exercise uses +2/−2 | fixed — "+2, -2 ($FE), or 0" |
+| SR-204 | 3 | ℹ️ INFO | `patrol-b.png` shows Stella's transient launch badge in the lower black border, outside the picture | accepted — the auditor confirmed it does not cover the picture and matches Lesson 25's artifact |
+| SR-205 | 3 | ℹ️ INFO | Synthetic key injection did not reach Stella; the input path was verified with scratch builds that force the input byte | accepted — AR-6 allows scratch witnesses for what-if states; the shipped ROM uses the real `SWCHA` read |

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 14:12
-> **Progress**: 2/10 tasks (20%)
+> **Last Updated**: 2026-11-04 14:45
+> **Progress**: 3/10 tasks (30%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -134,7 +134,7 @@ divide-by-15 routine's measured landing recorded.
 
 ## Phase 3: Lesson 27 — Sprite Movement
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 86f1fa5 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/27-sprite-movement/` (4 sources) · `docs/part4-sprites/27-sprite-movement.md` · `docs/part4-sprites/index.md` (row 27) · `docs/public/roms/part4-sprites/27-sprite-movement/` · `docs/public/images/lesson27/` (2 captures) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: medium — a bounded input + movement loop reusing the positioning routine; the capture timing is the main risk
 
@@ -143,7 +143,11 @@ divide-by-15 routine's measured landing recorded.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 27 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 27 · AR-2, AR-3, AR-4, AR-6, AR-15
 **Objective**: Deliver lesson 27 end to end through the mandatory three sessions.
 
-- [ ] 3.1.1 Lesson 27 — Sprite Movement: Session A freezes ST-27.1–ST-27.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson27): Sprite Movement`
+- [x] 3.1.1 Lesson 27 — Sprite Movement: Session A freezes ST-27.1–ST-27.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson27): Sprite Movement` ✅ (completed: 2026-11-04 14:45)
+
+**Session A record** (freeze + red baseline, 2026-11-04 14:15): ST-27.1–ST-27.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 27. Design pins: the standard 262-line frame; the Lesson 25 kernel (top 80, body 8, clear 1, bottom 103); `SpriteX` starts at 80, `Direction` at +1, bounds **16/144**; `SWCHA` bits 6 (left) and 7 (right) active-low (`$C0` keep, `$80` left, `$40` right, `$00` stop); `SWACNT=$00` in Reset; `SetHorizPos` every frame with `SpriteX + 3` (Lesson 26's measured bias); `COLUP0=$42`, `COLUBK=$02`. The auto-patrol is deliberate so the ROM moves with no controller. Evidence pins (AR-6): frame checkpoints; `MoveTick` (A = the new X, every frame); `PosApply` (A = X + 3); `DirWrite` (A = the input direction while a horizontal input is held; 0 hits in the no-input patrol); the two committed captures near the bounds; the manual joystick check (left/right/both). Solutions: ex 1 speed 2; ex 2 bounds 8/152; ex 3 vertical movement with `SpriteTop`/`BottomCount`, ±4 lines, clamp 40/140, bottom count 192 − TOP − 8 − 1. Red baseline confirmed: no `lessons/part4-sprites/27-sprite-movement`, no `docs/public/images/lesson27`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 27 is Coming Soon, sidebar entry exists (`config.ts:86`), `verify.sh` green at `86f1fa5`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 14:45): Preflight per `vcs-lesson-production` — the input mapping checked against the corrected `include/vcs.asm` and `tia-hardware.md` (P0 bit 4 up, 5 down, 6 left, 7 right; 0 = pressed), the movement/clamp arithmetic, the Lesson 26 routine, the frame against Lessons 12–26, ACME forms; no demo (AR-3: the patrol is the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F01B` = (259, 3), `VblankStart` `$F029` = (0, 5), `VisibleStart` `$F09C` first hit (37, 7), `BodyStart` `$F0A3` first hit (117, 6) with 8 hits, `OverscanStart` `$F0BC` = (229, 4). Movement: `MoveTick` `$F07B` one hit per frame, A = 81, 82, 83, …; `PosApply` `$F07E` A = X + 3; `DirWrite` `$F052` has **0 hits** with no controller (the auto-patrol skips it). Input witnesses (scratch builds that force the input byte; AR-6): left `#$80` → A = `$FF`; right `#$40` → A = `$01`; both `#$00` → A = 0; none `#$C0` → 0 hits. Captures from the committed ROM: `patrol-a.png` X = **26** (capture x = 181–228), `patrol-b.png` X = **142** (877–924), both y = 359–383. Solutions: ex 1 speed 2 (`$02`/`$FE`); ex 2 bounds 8/152; ex 3 vertical (`SWCHA & $30`: `$20` up, `$10` down; top ±4, clamp 40/140; bottom = 192 − top − 8 − 1). Site (ST-27.6): index row 27 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 26, next → 28; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **1 critical, 1 major**, 4 minor. The critical: the SWCHA direction bits were reversed (the lesson used P0 bit 4 right/5 left/6 down/7 up; the hardware is bit 4 up/5 down/6 left/7 right). The major: the doc claimed a sprite "does not remember" X and must be strobed every frame; `RESP0` latches the position and a static sprite can be positioned once — a moving sprite re-strobes because `SpriteX` changes and the fine offset must be re-applied by `HMOVE`. Round 1's fix corrected the bit order but not the active-low masked values (left is `$80`, right `$40`), so round 2 found the decode still inverted (**1 critical, 2 major**). The corrected code swaps `$80`→`DirLeft` and `$40`→`DirRight`, and the exercise-3 vertical decode is `$20`→up, `$10`→down. The scratch witnesses now confirm left→`$FF`, right→`$01`, both→0. Round 3 (scoped, allowed because round 2 left a critical): **0 critical, 0 major**, 2 prose minors (`DirWrite`/`TopTick` wording), fixed. The ground-truth fix also corrected `include/vcs.asm` and the `atari-2600-expert` reference. The transient Stella launch badge in `patrol-b.png` is outside the picture and is accepted (same artifact as Lesson 25). Lesson 27 is complete.
 
 **Session sub-steps (the task's checklist):**
 

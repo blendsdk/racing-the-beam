@@ -112,25 +112,29 @@ a freedom of implementation.
 ## Lesson 27: Sprite Movement — Reading the Joystick
 
 - **Goal:** move the sprite every frame and steer it with the joystick.
-- **Concepts:** `SWCHA` at `$0280`, active-low (0 = pressed); player 0 uses bits 4 (right),
-  5 (left), 6 (down), 7 (up); `SWACNT` left at `$00` (all input); a velocity/direction byte; bounds
-  and bounce; positioning must be redone every frame with `SetHorizPos`.
+- **Concepts:** `SWCHA` at `$0280`, active-low (0 = pressed); player 0 uses bits 4 (up), 5 (down),
+  6 (left), 7 (right); `SWACNT` left at `$00` (all input); a velocity/direction byte; bounds and
+  bounce; a moving sprite re-strobes every frame with `SetHorizPos` (a static sprite can be
+  positioned once).
 - **ROM:** `27-sprite-movement.asm` — "the patrol": the Lesson 25 invader, top 80, starts at X=80
   with direction +1. Each frame: if exactly one of left/right is pressed, set the direction; if
-  both are released, keep the current direction (auto-bounce); if both are pressed, stop. Move
+  both are released, keep the current direction (including 0 after a stop); if both are pressed,
+  stop. Move
   X by the direction, bounce at **16 and 144**, then call `SetHorizPos`. `COLUP0=$42`,
   `COLUBK=$02`. `SWACNT` is written `$00` in `Reset`.
-- **Expected screen:** the red invader patrolling horizontally at rows ≈ 359–384; with no
-  joystick input it moves right, bounces at X=144, and returns; captures at ~1 s and ~2 s show two
-  positions (measured; at 60 Hz the auto-patrol is near X=140 and X=88).
+- **Expected screen:** the red invader patrolling horizontally at rows ≈ 359–383; with no
+  joystick input it moves right, bounces at X=144, and returns; the committed captures are chosen
+  for a large separation (measured X=26 and X=142 in the shipped ROM; the exact frame depends on
+  the capture's startup).
 - **Demo ROM:** none — the patrol is the visible picture (AR-3); the joystick path is exercised
   manually in Stella.
 - **Exercises:** 1. speed 2 (X ±2 per frame); 2. bounds 8 and 152; 3. *(Stretch)* vertical
-  movement: `SWCHA` bits 6/7 move the sprite's `TOP` by ±4 lines, with the top loop count in a
-  variable and the bottom count computed as `192 − TOP − 8`.
+  movement: `SWCHA` bits 4/5 (up/down) move the sprite's `TOP` by ±4 lines, with the top loop
+  count in a variable and the bottom count computed as `192 − TOP − 8 − 1`.
 - **Screenshots:** `docs/public/images/lesson27/patrol-a.png`, `…/patrol-b.png`.
 - **Evidence pins:** frame checkpoints; `MoveTick` — A = the new X, one hit per frame;
-  `DirWrite` — A = `$01`/`$FF`/`$00` when the direction changes; `PosApply`; the measured X in
+  `DirWrite` — A = `$01`/`$FF`/`$00` while a horizontal direction is held (0 hits in the
+  no-input patrol); `PosApply`; the measured X in
   each capture. The doc's static ledger covers the VBLANK update.
 - **Integration:** prev → Lesson 26; next → Lesson 28; part-index row 27 → ✅ Complete linking
   `./27-sprite-movement`; sidebar entry exists (`config.ts:86`). Estimated time: 60 minutes.

@@ -57,8 +57,8 @@ after a store, learned in Lesson 18).
 | --- | --- | --- | --- | --- |
 | ST-27.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
 | ST-27.2 | Run the ROM with no joystick input; capture two times | The invader patrols horizontally; the two captures' measured X values match the logged `MoveTick` positions and differ by at least 24 px; the sprite stays at the same scanlines | Screenshots `patrol-a/b.png` + state log | 03 §Lesson 27 |
-| ST-27.3 | Hold left or right in Stella | The direction byte becomes `$FF`/`$01` and the sprite reverses; at X=144/16 it bounces; both pressed → direction 0 (no movement) | Manual run + `DirWrite` log | 03 §Lesson 27 |
-| ST-27.4 | Debugger: movement checkpoints | `MoveTick` one hit per frame, A = the new X; `DirWrite` only on changes; `PosApply` A = the X passed to `SetHorizPos`; frame 259/0/37/229 | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 27 |
+| ST-27.3 | Hold left or right in Stella (or force the input byte with a scratch witness) | Left (bit 6) → direction `$FF`; right (bit 7) → `$01`; at X=144/16 it bounces; both pressed → direction 0 (no movement); the no-input patrol keeps the last direction | Scratch witness + `DirWrite` log | 03 §Lesson 27 |
+| ST-27.4 | Debugger: movement checkpoints | `MoveTick` one hit per frame, A = the new X; `DirWrite` while a horizontal input is held (0 hits in the no-input patrol); `PosApply` A = X + 3; frame 259/0/37/229 | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 27 |
 | ST-27.5 | Assemble and run each solution | Ex 1 moves 2 px/frame; ex 2 bounds 8/152; ex 3 moves vertically with up/down and keeps the horizontal patrol | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-27.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; both captures resolve; prev 26, next 28; index row 27 links | Build output + page check | RD-04 AC 1 / AR-10 |
 
