@@ -47,6 +47,7 @@
 | Multi-color | Per-line `COLUP0` table over a 16-row shape | AR-16 |
 | Copies/sizes | Eight static `NUSIZ` bands | AR-17 |
 | Vertical delay | Two players, P1 one line lower via `VDELP1` | AR-18 |
+| Multiple objects | One `HMOVE` per frame after all HM registers are set | AR-21 |
 | Controllers | Monitor with real reads and a paddle timeout | AR-19 |
 | Animation | Four 16-row frames, stepped every 8 frames | AR-20 |
 

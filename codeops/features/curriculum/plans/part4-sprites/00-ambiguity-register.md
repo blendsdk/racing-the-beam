@@ -1,10 +1,10 @@
 # Ambiguity Register: Part 4 — Sprites (Lessons 25–34)
 
-> **Status**: ✅ GATE PASSED — all 20 items resolved
+> **Status**: ✅ GATE PASSED — all 21 items resolved
 > **Last Updated**: 2026-11-04
 > **Authority**: `--auto-design` active for this plan chain (policy version 1, root invocation ID
 > `curriculum-plan-part4-2026-11-04`). AR #1 and #4 are user decisions carried from RD-04 and the
-> course policy; AR #2, #3, #5–#20 are delegated technical decisions.
+> course policy; AR #2, #3, #5–#21 are delegated technical decisions.
 
 | # | Category | Ambiguity / Gap | Options Presented | Decision | Status |
 |---|----------|-----------------|-------------------|----------|--------|
@@ -26,8 +26,9 @@
 | 16 | Technical | How does Lesson 30 make one sprite multi-colored? | Per-line `COLUP0` table over a 16-row shape / overlay two players / missile accents | **AI (auto-design):** a 16-byte per-line `COLUP0` table over a 16-row shape: hat band, body band, leg band; no overlay and no forward object trick | ✅ Resolved |
 | 17 | Technical | How does Lesson 31 show all NUSIZ player modes? | Eight static bands, one per NUSIZ value / animate one sprite through the values / two players side by side | **AI (auto-design):** eight 24-line bands, each setting `NUSIZ0` to one value 0–7 and drawing the same pattern; one capture shows every copy/size mode, and a state log pins the band boundaries | ✅ Resolved |
 | 18 | Technical | How is vertical delay made visible in Lesson 32? | Two identical players, one with VDEL enabled, measured one line apart / animate a sprite with VDEL / 48-pixel trick implementation | **AI (auto-design):** two identical 16-row players at the same top line; P1 has `VDELP1` set; the capture and state log show P1 one scanline lower. The 48-pixel technique is explained as name-only context, not implemented | ✅ Resolved |
-| 19 | Technical | What does Lesson 33's ROM display, and how does it read the controllers? | Controller monitor: paddle needle, SWCHA columns, fire indicator / Pong-style paddle game / name-only controller reading | **AI (auto-design):** a controller monitor: paddle 0's charge time positions a player needle (clamped), the eight `SWCHA` bits drive eight playfield columns, and the `INPT4` fire state colors a player block. The paddle read uses the standard discharge/charge sequence with a timeout so a missing paddle cannot hang the ROM; no synthetic input | ✅ Resolved |
+| 19 | Technical | What does Lesson 33's ROM display, and how does it read the controllers? | Controller monitor: paddle needle, SWCHA columns, fire indicator / Pong-style paddle game / name-only controller reading | **AI (auto-design):** a controller monitor: paddle 0's charge time positions a player needle, the eight `SWCHA` bits drive eight playfield columns (chunks 4–11), and the `INPT4` fire state colors a player block. The paddle read is the standard discharge/charge sequence with a **bounded 128-iteration loop** (`CPY #128`); a timeout stores **0**, which the monitor documents as "no paddle or minimum". Needle X = count + 24 (24–152). No synthetic input | ✅ Resolved |
 | 20 | Technical | What animation model does Lesson 34 use? | Four 16-row walk frames stepped every 8 frames / a single shape moved horizontally / a state machine with idle and walk | **AI (auto-design):** four 16-row walk frames in a 64-byte table, stepped every 8 frames, with the frame base pointer computed in VBLANK; a direction flip every 120 frames shows the mirrored walk. Idle/walk state machines are explained as the next step, not implemented | ✅ Resolved |
+| 21 | Technical | How are multiple positioned objects kept from re-applying each other's fine motion? | One `HMOVE` per frame after all `HMxx` values are set / `HMCLR` after every `HMOVE` / one object per frame | **AI (auto-design):** multi-object lessons (28, 29, 33) position every object's coarse `RESxx` and set every `HMxx` value first, then strobe **one** `HMOVE`; the HM registers are overwritten each frame, so no stale value is re-applied. Single-object lessons (26, 27) use the classic routine with its own `HMOVE`. `HMCLR` is not needed because every used HM register is rewritten before the single strobe | ✅ Resolved |
 
 ### Resolution Notes
 
@@ -99,12 +100,21 @@ table (SWCHA bits 4–7 for player 0; 0 = pressed). Reopen trigger: the auto-bou
 joystick lesson's input path untestable or the capture states ambiguous.
 
 **AR-19.** Decision: the paddle read is the standard discharge/charge sequence with a bounded
-timeout (255 loop iterations) so a missing paddle yields a defined value and never hangs. Evidence:
+**128-iteration** loop (`CPY #128`), so the read fits the 37-line VBLANK (~22 lines worst case).
+A timeout stores **0**, which the monitor documents as "no paddle or minimum"; a connected paddle's
+count 0–128 maps to needle X = count + 24 (24–152). The fire block is positioned every frame with
+the needle, and both coarse positions are set before one `HMOVE` (AR-21). Evidence:
 `tia-hardware.md` read-register table (INPT0–3 via VBLANK bits 6–7) and `pitfalls.md` (timer/input
-traps). Reopen trigger: the monitor cannot distinguish "no paddle" from a real minimum reading in a
-way the lesson can explain.
+traps). Reopen trigger: the 128-count range is too coarse for a real paddle to be usable in the
+lesson, or the read + positions exceed the VBLANK ledger.
 
 **AR-20.** Decision: four walk frames, 16 rows each, stepped every 8 frames, with the frame base
 pointer computed in VBLANK. Evidence: `sprite-tricks.md` (per-line graphic writes) and Part 3's
 table-pointer lessons. Reopen trigger: the frame pointer setup does not fit VBLANK or the walk is
 not visually distinct.
+
+**AR-21.** Decision: multi-object lessons set every object's coarse `RESxx` and every `HMxx`
+value first, then strobe one `HMOVE`; single-object lessons use the classic routine. Evidence:
+`tia-hardware.md` (`HMOVE` applies all five HM registers; the registers persist) and
+`pitfalls.md` (HMOVE comb / motion register rewrites). Reopen trigger: the combined routine's line
+cost does not fit VBLANK, or a measured object moves on a frame when its HM value is zero.

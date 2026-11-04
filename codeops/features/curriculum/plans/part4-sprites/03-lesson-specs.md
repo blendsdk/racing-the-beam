@@ -30,6 +30,10 @@ a freedom of implementation.
   Lesson 26 on. The requested X is pinned here; the **measured** X is recorded in Session C and
   must be within ±3 pixels of the request. Lesson 25 uses a fixed coarse delay instead (the
   routine is Lesson 26's subject) and pins its measured X with a ±4 tolerance.
+- **Multiple objects (AR-21):** in Lessons 28, 29, and 33 every object's coarse `RESxx` and every
+  `HMxx` value are set first, then **one** `HMOVE` applies them; the HM registers are rewritten
+  every frame, so no stale fine motion is re-applied. Single-object lessons (26, 27) use the
+  classic routine with its own `HMOVE`.
 - **Colors follow Lesson 13's palette byte** (`%HHHHLLL0`, hue × 16 + level × 2) and the course's
   named-color table. Established names: `$02` dark neutral, `$1A` gold, `$42` red, `$84` blue,
   `$C8` green, `$0E` light gray.
@@ -60,7 +64,7 @@ a freedom of implementation.
   `SPRITE_TOP=80` → the first body line is scanline 117.
 - **Expected screen:** a red 8×8 invader, 48 capture pixels wide and about 25 capture pixels
   tall, at capture x ≈ 511 and rows ≈ 359–384 (the measured X and Y are recorded in Session C;
-  requested X ≈ 81, tolerance ±4). Constant for the whole frame. Background dark.
+  target X ≈ 81, tolerance ±4). Constant for the whole frame. Background dark.
 - **Demo ROM:** none — the first sprite is the visible picture (AR-3).
 - **Exercises:** 1. move the sprite down (`SPRITE_TOP=120` → first line ≈ 485 capture y);
   2. mirror it (`REFP0=$08`) — the shape flips, same span; 3. *(Stretch)* two creatures: after the
@@ -140,7 +144,8 @@ a freedom of implementation.
   the object; the two players share the line budget but not their graphics.
 - **ROM:** `28-two-players.asm` — "the meeting": P0 (the Lesson 25 invader, `$42` red) at X=48 and
   P1 (a second 8-row creature `$3C,$7E,$FF,$DB,$FF,$66,$3C,$18`, `$84` blue) at X=104, both with
-  top 88. `SetHorizPos0` and `SetHorizPos1` run in VBLANK. `NUSIZ0=NUSIZ1=0`, `COLUBK=$02`.
+  top 88. Two coarse routines (`SetCoarse0`/`SetCoarse1`) set `HMP0/HMP1` and strobe
+  `RESP0/RESP1`, then a single `HMOVE` applies both (AR-21). `NUSIZ0=NUSIZ1=0`, `COLUBK=$02`.
 - **Expected screen:** two 8×8 sprites on the same eight scanlines (125–132), red at capture
   x ≈ 313 and blue at ≈ 649, rows ≈ 384–409.
 - **Demo ROM:** none — the two players are the visible picture (AR-3).
@@ -166,7 +171,8 @@ a freedom of implementation.
   96–103; M0 (1 px wide, 4 rows, rows 98–101) at X=64; M1 (4 px wide, 4 rows, rows 98–101) at
   X=96, `$84` blue; the ball (8 px wide, 4 rows, rows 98–101) at X=128, `$C8` green.
   `NUSIZ0=$00` (player normal, M0 1 px), `NUSIZ1=$20` (M1 4 px), `CTRLPF=$30` (ball 8 px, REF=0),
-  `COLUBK=$02`. Four positioning routines run in VBLANK.
+  `COLUBK=$02`. Four coarse routines set all four `HMxx` values, then a single `HMOVE` applies
+  them (AR-21).
 - **Expected screen:** a horizontal lineup at the same band: an 8-px red player at capture
   x ≈ 169, a 1-px red missile at ≈ 409, a 4-px blue missile at ≈ 601, and an 8-px green ball at
   ≈ 793, all at rows ≈ 409–421 (P0) and 415–427 (the small objects).
@@ -191,8 +197,10 @@ a freedom of implementation.
   shape and the color are independent tables; a 16-row sprite with three bands (hat/body/legs);
   the per-line write is in HBLANK before the sprite's pixels.
 - **ROM:** `30-multicolor-sprites.asm` — "the avatar": P0 is a 16-row humanoid at top 80, X=72;
-  the shape table is 16 bytes; the color table is 4 × `$1A` (gold hat), 8 × `$84` (blue body),
-  4 × `$42` (red legs). Each body line writes `COLUP0` then `GRP0` then `WSYNC`. `COLUBK=$02`.
+  the shape table is 16 bytes (rows 0–3 form the hat silhouette, 4–11 the body, 12–15 the legs);
+  the color table is 4 × `$1A` (gold hat), 8 × `$84` (blue body), 4 × `$42` (red legs). Each body
+  line writes `COLUP0` then `GRP0` then `WSYNC`. `COLUBK=$02`. The exact shape bytes are fixed in
+  Session B and embedded verbatim in the doc; the captures verify the bands, not a specific face.
 - **Expected screen:** one 8×16 sprite at capture x ≈ 457, rows ≈ 359–409, with a gold top band,
   a blue middle band, and a red lower band; the bands are 4/8/4 scanlines.
 - **Demo ROM:** none — the color bands are the visible picture (AR-3).
@@ -267,22 +275,26 @@ a freedom of implementation.
 - **ST cases:** ST-32.1 assembly & drift · ST-32.2 one-line offset · ST-32.3 body and clear ·
   ST-32.4 debugger state · ST-32.5 solutions and screenshot · ST-32.6 site integration.
 
-## Lesson 33: Paddle, Keyboard & Driving Controllers
+## Lesson 33: Paddle & Keyboard Controllers
 
-- **Goal:** read the paddle potentiometers, the keyboard/driving-controller matrix, and the fire
-  buttons, and show the readings on screen.
+- **Goal:** read the paddle potentiometers, the keyboard matrix, and the fire buttons, and show the
+  readings on screen. The driving controller is a name-only aside: its quadrature pair arrives on
+  the same `SWCHA` bits as the joystick, but the lesson does not decode it in code.
 - **Concepts:** `INPT0–INPT3` are RC-timing inputs; `VBLANK` bit 7 discharges, bit 6 starts the
   charge; a bounded counting loop turns the charge time into a byte; `SWCHA` is an 8-bit
   active-low matrix (player 0 bits 4–7, player 1 bits 0–3); `INPT4`/`INPT5` bit 7 is 0 when the
-  fire button is pressed; the driving controller is a quadrature device read through the same
-  matrix bits (name-only; the lesson's monitor shows the raw bits).
+  fire button is pressed; a keyboard controller pulls one or more matrix bits low, so the monitor's
+  eight columns are the raw scan; the driving controller is a quadrature device on two of those
+  bits (name-only; a short theory note explains the Gray-code idea).
 - **ROM:** `33-paddle-keyboard-controllers.asm` — "the controller monitor": in VBLANK, discharge
-  the paddles (`VBLANK=$82`, a `LDX #50` pad), start the charge (`VBLANK=$42`), count `INPT0`
-  until bit 7 rises or 255 iterations pass, and store `PaddleValue`. Set `PF1` to the inverted
-  `SWCHA` byte (eight vertical columns for the eight matrix bits; `CTRLPF=$01` reflects them),
-  `PF0=PF2=0`, `COLUPF=$C8`. P0 is a 32-row bar (the needle) at top 80, X = `PaddleValue/2 + 24`
-  (24–151), `$42` red. P1 is an 8-row block at X=140, `$C8` green normally and `$42` red while
-  `INPT4` bit 7 is 0. `COLUBK=$02`.
+  the paddles (`VBLANK=$82`, a `LDX #50` pad), start the charge (`VBLANK=$42`), then count `INPT0`
+  until bit 7 rises or `CPY #128` bounds the loop; a timeout stores **0**, which the monitor
+  documents as "no paddle or minimum"; a connected paddle's count 0–128 maps to needle
+  X = `PaddleValue + 24` (24–152). Set `PF1` to the inverted `SWCHA` byte (eight vertical columns
+  in chunks 4–11, capture x = 121–313 with `CTRLPF=$01` reflecting them), `PF0=PF2=0`,
+  `COLUPF=$C8`. P0 is a 32-row bar (the needle) at top 80, `$42` red. P1 is an 8-row block at
+  X=140, `$C8` green normally and `$42` red while `INPT4` bit 7 is 0. Both players are positioned
+  every frame by two coarse routines, then one `HMOVE` (AR-21). `COLUBK=$02`.
 - **Expected screen:** a green 8-column matrix strip (dark at rest), a red 32-line needle near
   capture x ≈ 169 at rest, and a green 8×8 fire block at capture x ≈ 865; the needle moves with
   paddle 0, the columns light when matrix bits are pulled low, and the block turns red when fire
@@ -291,12 +303,14 @@ a freedom of implementation.
 - **Demo ROM:** none — the monitor is the visible picture (AR-3).
 - **Exercises:** 1. read paddle 1 (`INPT1`) instead and move the needle with it; 2. make the fire
   block double width (`NUSIZ1=$05`) and gold (`$1A`) when pressed; 3. *(Stretch)* two needles:
-  paddle 0 positions P0 and paddle 1 positions P1 (two independent `SetHorizPos` calls).
+  paddle 0 positions P0 and paddle 1 positions P1 (two independent coarse routines and one
+  `HMOVE`).
 - **Screenshots:** `docs/public/images/lesson33/monitor.png`.
-- **Evidence pins:** frame checkpoints; `PaddleRead` — A = the final count, one hit per frame
-  (0/255 on timeout); `PaddleX` — A = the needle X; `KeyWrite` — A = the inverted `SWCHA` byte;
-  `FireWrite` — A = the `COLUP1` value; the capture positions/colors. The doc's ledger covers the
-  discharge/charge loop and the maximum VBLANK usage.
+- **Evidence pins:** frame checkpoints; `PaddleRead` — A = the final count (0–128, 0 on timeout),
+  one hit per frame; `PaddleX` — A = the needle X (24–152); `KeyWrite` — A = the inverted `SWCHA`
+  byte; `FireWrite` — A = the `COLUP1` value; `MoveApply` — one `HMOVE` hit per frame; the capture
+  positions/colors. The doc's ledger covers the discharge/charge loop (~22 lines worst case) plus
+  the two positions (~3 lines), inside the 37-line VBLANK.
 - **Integration:** prev → Lesson 32; next → Lesson 34; part-index row 33 → ✅ Complete linking
   `./33-paddle-keyboard-controllers`; sidebar entry exists (`config.ts:92`). Estimated time:
   75 minutes.
@@ -312,8 +326,10 @@ a freedom of implementation.
   every 8 frames (7.5 Hz); `REFP0` mirrors the walk direction; animation timing is a frame
   counter, not a timer.
 - **ROM:** `34-sprite-animation.asm` — "the walk": P0, 16 rows, top 80, X=72, `COLUP0=$42`,
-  `COLUBK=$02`; four walk frames in a 64-byte table; `FrameStep` every 8 frames; `REFP0` toggles
-  every 120 frames to face the other way; the body reads the current frame through `FramePtr`.
+  `COLUBK=$02`; four walk frames in a 64-byte table (the frames differ only in the leg rows 12–15;
+  the exact bytes are fixed in Session B and embedded in the doc); `FrameStep` every 8 frames;
+  `REFP0` toggles every 120 frames to face the other way; the body reads the current frame through
+  `FramePtr`.
 - **Expected screen:** a red 16-row figure at capture x ≈ 457, rows ≈ 359–409; the legs change
   between captures at ~0.5 s and ~1.0 s (frame indices differ); the figure faces left or right
   depending on the direction phase.
@@ -326,9 +342,9 @@ a freedom of implementation.
   frames; `FramePtrWrite` — A = the low byte of the frame base; `BodyStart` at line 117; the
   capture difference in the leg rows. The ledger covers the 18–19-cycle body (page-crossing
   `(zp),Y` read).
-- **Integration:** prev → Lesson 33; next → `/part5-sound/35-sound-basics` (the forward link to
-  Part 5); part-index row 34 → ✅ Complete linking `./34-sprite-animation`; sidebar entry exists
-  (`config.ts:93`). Estimated time: 75 minutes.
+- **Integration:** prev → Lesson 33; next → `/part5-sound/35-sound-effects` (the real Part 5 stub,
+  titled "Sound Effects"); part-index row 34 → ✅ Complete linking `./34-sprite-animation`;
+  sidebar entry exists (`config.ts:93`). Estimated time: 75 minutes.
 - **ST cases:** ST-34.1 assembly & drift · ST-34.2 walk frames · ST-34.3 cadence and direction ·
   ST-34.4 debugger state and ledger · ST-34.5 solutions and screenshots · ST-34.6 site
   integration.

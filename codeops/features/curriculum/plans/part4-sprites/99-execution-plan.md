@@ -32,7 +32,7 @@ before that lesson is done (AR-13).
 | 6 | Lesson 30 — Multi-Color Sprites | 1 |
 | 7 | Lesson 31 — Copies and Sizes | 1 |
 | 8 | Lesson 32 — Vertical Delay | 1 |
-| 9 | Lesson 33 — Paddle, Keyboard & Driving Controllers | 1 |
+| 9 | Lesson 33 — Paddle & Keyboard Controllers | 1 |
 | 10 | Lesson 34 — Sprite Animation | 1 |
 
 **Total: 10 tasks across 10 phases.**
@@ -327,18 +327,18 @@ one-line offset measured.
 
 ---
 
-## Phase 9: Lesson 33 — Paddle, Keyboard & Driving Controllers
+## Phase 9: Lesson 33 — Paddle & Keyboard Controllers
 
 > **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
 > **Expected modifications**: `lessons/part4-sprites/33-paddle-keyboard-controllers/` (4 sources) · `docs/part4-sprites/33-paddle-keyboard-controllers.md` · `docs/part4-sprites/index.md` (row 33) · `docs/public/roms/part4-sprites/33-paddle-keyboard-controllers/` · `docs/public/images/lesson33/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — the RC-timing read and the bounded timeout are the part's highest-risk input code
 
-### Step 9.1: Lesson 33 — Paddle, Keyboard & Driving Controllers
+### Step 9.1: Lesson 33 — Paddle & Keyboard Controllers
 
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 33 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 33 · AR-2, AR-3, AR-4, AR-6, AR-19
 **Objective**: Deliver lesson 33 end to end through the mandatory three sessions.
 
-- [ ] 9.1.1 Lesson 33 — Paddle, Keyboard & Driving Controllers: Session A freezes ST-33.1–ST-33.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson33): Paddle & Keyboard Controllers`
+- [ ] 9.1.1 Lesson 33 — Paddle & Keyboard Controllers: Session A freezes ST-33.1–ST-33.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson33): Paddle & Keyboard Controllers`
 
 **Session sub-steps (the task's checklist):**
 
@@ -384,7 +384,7 @@ one-line offset measured.
    `lessons/part4-sprites/34-sprite-animation/34-sprite-animation.asm` + its three solutions;
    write `docs/part4-sprites/34-sprite-animation.md`; run `npm run roms`; capture `walk-a.png`
    and `walk-b.png`; embed `<RomPlayer>`; update part index row 34 and prev/next (**next links
-   forward to `/part5-sound/35-sound-basics`** — the Lesson 24 pattern) (RD-04 AC 1; AR-6, AR-8,
+   forward to `/part5-sound/35-sound-effects`** — the Lesson 24 pattern) (RD-04 AC 1; AR-6, AR-8,
    AR-20).
 3. **Session C — green phase, implementation checks & hardening:** `bash scripts/verify.sh` green;
    all ST-34.* confirmed; the frame cadence and the body ledger; both specialist reviews report

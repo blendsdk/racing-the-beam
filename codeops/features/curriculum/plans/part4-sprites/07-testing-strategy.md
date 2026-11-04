@@ -46,7 +46,7 @@ after a store, learned in Lesson 18).
 | --- | --- | --- | --- | --- |
 | ST-26.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build passes | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
 | ST-26.2 | Run the ROM; capture position A | The invader's measured X is within ±3 of 16 (capture x ≈ 121), at scanlines 117–124 | Screenshot `position-a.png` + pixel check | 03 §Lesson 26 |
-| ST-26.3 | Capture position B later in the tour | The measured X is within ±3 of 80 or 112 (capture x ≈ 505/697) matching the active index; `PosStep` advances every 60 frames through 16/48/80/112/144 | Screenshot `position-b.png` + state log | 03 §Lesson 26 |
+| ST-26.3 | Capture position B later in the tour | The measured X is within ±3 of one of the five targets (16/48/80/112/144; capture x ≈ 121/313/505/697/889), and the two captures differ by at least 24 px; `PosStep` advances every 60 frames through the table | Screenshot `position-b.png` + state log | 03 §Lesson 26 |
 | ST-26.4 | Debugger: `SetHorizPos` ledger | `PosStep` A = index every 60 frames; `PosApply` A = the target every frame; `Resp0Write` one hit per frame at a constant cycle; the divide-by-15 loop and HMOVE position are in the doc's ledger | State log + static ledger (AR-6, AR-13) | RD-04 AC 3 / 03 §Lesson 26 |
 | ST-26.5 | Assemble and run each solution | Ex 1 parks at X≈120; ex 2 at X≈152; ex 3 ping-pongs 32↔128 every 60 frames | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-26.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; both captures resolve; prev 25, next 27; index row 26 links | Build output + page check | RD-04 AC 1 / AR-10 |
@@ -122,10 +122,10 @@ after a store, learned in Lesson 18).
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-33.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build pass | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
-| ST-33.2 | Run the ROM; inspect the monitor at rest | Green 8-column matrix strip (reflected), dark columns with no keys; red 32-line needle at X≈24 (capture ≈169); green 8×8 fire block at X≈140 (≈865); dark background | Screenshot `monitor.png` + pixel check | 03 §Lesson 33 |
-| ST-33.3 | Paddle read without a controller | The read terminates within 255 iterations and stores a defined value; the needle position is `PaddleValue/2 + 24`; the ROM never hangs; the fire block stays green with no fire press | `PaddleRead`/`PaddleX` log + manual run | 03 §Lesson 33 |
-| ST-33.4 | Debugger: input state | `PaddleRead` one hit per frame, A = the final count; `PaddleX` A = the needle X; `KeyWrite` A = the inverted `SWCHA`; `FireWrite` A = `$C8`/`$42`; frame 262 lines; the VBLANK ledger records the worst-case read | State log + static ledger (AR-6, AR-19) | RD-04 AC 3 / 03 §Lesson 33 |
-| ST-33.5 | Assemble and run each solution | Ex 1 uses `INPT1`; ex 2 widens/golds the fire block; ex 3 has two independent needles | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
+| ST-33.2 | Run the ROM; inspect the monitor at rest | Green 8-column matrix strip in chunks 4–11 (reflected; dark with no keys); red 32-line needle at X≈24 (capture ≈169; the read times out to 0 at rest); green 8×8 fire block at X≈140 (≈865); dark background | Screenshot `monitor.png` + pixel check | 03 §Lesson 33 |
+| ST-33.3 | Paddle read without a controller | The read terminates at `CPY #128` and stores 0 on timeout (documented as "no paddle or minimum"); the needle X is `PaddleValue + 24` (24–152); the ROM never hangs; the fire block stays green with no fire press; a scratch witness forcing INPT0 low exercises the timeout branch | `PaddleRead`/`PaddleX` log + scratch witness | 03 §Lesson 33 |
+| ST-33.4 | Debugger: input state and one HMOVE | `PaddleRead` one hit per frame, A = the final count (0–128); `PaddleX` A = the needle X; `KeyWrite` A = the inverted `SWCHA`; `FireWrite` A = `$C8`/`$42`; `MoveApply` one `HMOVE` per frame after both positions (AR-21); frame 262 lines; the VBLANK ledger records the worst-case read plus positions | State log + static ledger (AR-6, AR-19, AR-21) | RD-04 AC 3 / 03 §Lesson 33 |
+| ST-33.5 | Assemble and run each solution | Ex 1 uses `INPT1`; ex 2 widens/golds the fire block; ex 3 has two independent needles with one `HMOVE` | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-33.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; the capture resolves; prev 32, next 34; index row 33 links | Build output + page check | RD-04 AC 1 / AR-10 |
 
 ### Lesson 34
@@ -137,7 +137,7 @@ after a store, learned in Lesson 18).
 | ST-34.3 | Inspect cadence and direction | `AnimStep` one hit every 8 frames through 0..3; `REFP0` toggles every 120 frames; the frame base pointer is computed in VBLANK | State log + capture | 03 §Lesson 34 |
 | ST-34.4 | Debugger: frame pointer and body | `AnimStep` A = frame index; `FramePtrWrite` A = the frame base low byte; `BodyStart` line 117; the body ledger is 18–19 cycles (page-crossing `(zp),Y`); frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 34 |
 | ST-34.5 | Assemble and run each solution | Ex 1 changes cadence; ex 2 holds an idle pose for 60 frames; ex 3 walks across the screen | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
-| ST-34.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; both captures resolve; prev 33, next `/part5-sound/35-sound-basics`; index row 34 links | Build output + page check | RD-04 AC 1 / AR-10 |
+| ST-34.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; both captures resolve; prev 33, next `/part5-sound/35-sound-effects`; index row 34 links | Build output + page check | RD-04 AC 1 / AR-10 |
 
 ## Red phase (Session A, every lesson)
 
