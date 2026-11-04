@@ -1,7 +1,7 @@
 # Part 5 — Sound (Lessons 35–37) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 5 by shipping lessons 35–37 as a reviewed lesson set
-> **Status**: Planning Complete
+> **Status**: Preflight Complete
 > **Created**: 2026-11-04
 > **Implements**: curriculum/RD-05
 > **Source**: ../../requirements/RD-05-part5-sound.md

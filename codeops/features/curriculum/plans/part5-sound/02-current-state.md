@@ -44,7 +44,7 @@
 | `docs/part5-sound/index.md` | Part index (minimal stub) | Rebuild to the Part 1 format; rows flip per lesson (AR-10) |
 | `include/sound.asm` | Lesson 37's sound library | Create (AR-7, AR-18) |
 | `docs/.vitepress/config.ts` (Part 5 block) · `README.md` | Sidebar · curriculum listing | Verify only — entries already covered |
-| `codeops/features/curriculum/00-roadmap.md`, `codeops/00-roadmap.md` | Tracking | Plan Created now; Plan Preflighted after the preflight; Done at completion (AR-12) |
+| `codeops/features/curriculum/00-roadmap.md`, `codeops/00-roadmap.md` | Tracking | Plan Preflighted; Done at completion (AR-12) |
 
 ### Code Analysis
 
