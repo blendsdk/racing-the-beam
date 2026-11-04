@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 13:40
-> **Progress**: 1/10 tasks (10%)
+> **Last Updated**: 2026-11-04 14:12
+> **Progress**: 2/10 tasks (20%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -95,7 +95,7 @@ before that lesson is done (AR-13).
 
 ## Phase 2: Lesson 26 — Horizontal Positioning
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: eff8bfa (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/26-horizontal-positioning/` (4 sources) · `docs/part4-sprites/26-horizontal-positioning.md` · `docs/part4-sprites/index.md` (row 26) · `docs/public/roms/part4-sprites/26-horizontal-positioning/` · `docs/public/images/lesson26/` (2 captures) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: high — the part's highest-risk claim: the divide-by-15 routine's landing under independent hardware review
 
@@ -105,7 +105,11 @@ before that lesson is done (AR-13).
 **Objective**: Deliver lesson 26 end to end through the mandatory three sessions, with the
 divide-by-15 routine's measured landing recorded.
 
-- [ ] 2.1.1 Lesson 26 — Horizontal Positioning: Session A freezes ST-26.1–ST-26.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson26): Horizontal Positioning`
+- [x] 2.1.1 Lesson 26 — Horizontal Positioning: Session A freezes ST-26.1–ST-26.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson26): Horizontal Positioning` ✅ (completed: 2026-11-04 14:12)
+
+**Session A record** (freeze + red baseline, 2026-11-04 13:41): ST-26.1–ST-26.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 26. Design pins: the standard 262-line frame; the Lesson 25 invader at top 80, body 8, clear 1, bottom 103; five targets **16, 48, 80, 112, 144** (capture x = 121, 313, 505, 697, 889), one per **60 frames**, wrapping; `SetHorizPos` (classic divide-by-15: `STA WSYNC`, `SEC`, `SBC #15`/`BCS`, `EOR #7`, `ASL`×4, `STA HMP0`, `STA RESP0`, `STA WSYNC`, `STA HMOVE`) called in VBLANK; `COLUP0=$42`, `COLUBK=$02`. The measured landing is authoritative: each target is accepted within ±3, and the routine's output-delay calibration is recorded in Session C. Evidence pins (AR-6): frame checkpoints; `PosStep` (A = the new index, once per 60 frames); `PosApply` (A = the table value, every frame); `Resp0Write` and `HmoveApply` (the two strobes); the measured X from each capture. Solutions: ex 1 single target 120; ex 2 target 152 (the quotient 10); ex 3 ping-pong 32/128 every 60 frames. Red baseline confirmed: no `lessons/part4-sprites/26-horizontal-positioning`, no `docs/public/images/lesson26`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 26 is Coming Soon, sidebar entry exists (`config.ts:85`), `verify.sh` green at `eff8bfa`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 14:12): Preflight per `vcs-lesson-production` — the divide-by-15 arithmetic and the output-delay calibration checked against Lesson 18's hit-cycle rule and `sprite-tricks.md`; the frame against Lessons 12–25; ACME forms; no demo (AR-3: the five positions are the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F060` first hit (37, 7), `BodyStart` `$F067` first hit (117, 6) with 8 hits per frame, `OverscanStart` `$F080` = (229, 4). Tour: `PosStep` `$F03B` at frames **60/120/180/240/300** with A = 1/2/3/4/0; `PosApply` `$F042` every frame with A = `$13/$33/$53/$73/$93` (19/51/83/115/147). The routine: `Resp0Write` `$F0A2` on VBLANK line 1 at cycles **24/34/44/54/64** (the cycle advances with the table); `HmoveApply` `$F0A6` on VBLANK line 2 cycle 0 (effect 3, in HBLANK — confirmed by the `RTS` at line 2 cycle 3). The measured landing is `target − 3` for every input, so the table stores target + 3 and the five positions are exact: capture x = **121–168 (X=16), 313–360 (48), 505–552 (80), 697–744 (112), 889–936 (144)**, all at y = 359–383. Committed captures are `position-a.png` (X=16) and `position-b.png` (X=112); scratch captures at the other three tour steps measured 48/80/144. Solutions: ex 1 — X=120 (capture 745–792); ex 2 — X=152 (937–984, the right edge); ex 3 — X=32 (217–264) and X=128 (793–840). Site (ST-26.6): index row 26 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 25, next → 27; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 4 major**, 8 minor. The majors: the remainder model was wrong (A exits as a negative byte, not 0–14); the checkpoint ledger said HMOVE was on line 1 cycle 30 and RESP0 always at 24 (it is line 2 cycle 0 / 24-34-44-54-64); Exercise 2's quotient explanation used 152 instead of the passed 155; and the capture-gap caption called 96 TIA pixels "three coarse steps" (it is 576 capture pixels / three tour steps / 90 coarse + 6 fine clocks). The minors: the TypeScript fine formula, the clock-68/X=5 example, the −3 causal account, the source comments saying "target X" instead of the biased value, exercise 1's `#123`, the HMOVE/HBLANK mask note, exercise 3's `PosStep` label, and the "measured" note for the five positions. Bounded re-review (round 2): **0 critical, 0 major**, 8 prose minors (the `PosApply` comment, the `u − 9` wording, "coarse strobe" vs "coarse position", the TS `steps` comment, the 90+6 caption arithmetic, the clock-63 example, the "output delay" vocabulary, and the undefined `5k+14`); all fixed and verify stayed green. No third review under the quality policy. Lesson 26 is complete.
 
 **Session sub-steps (the task's checklist):**
 

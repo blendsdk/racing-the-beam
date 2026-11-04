@@ -7,7 +7,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | # | Lesson | Status |
 |---|--------|--------|
 | 25 | [Player Sprite Basics — GRP0, Your First Character](./25-player-basics) | ✅ Complete |
-| 26 | [Horizontal Positioning — The Divide-by-15 Trick](./26-horizontal-positioning) | 🔒 Coming Soon |
+| 26 | [Horizontal Positioning — The Divide-by-15 Trick](./26-horizontal-positioning) | ✅ Complete |
 | 27 | [Sprite Movement — Reading the Joystick](./27-sprite-movement) | 🔒 Coming Soon |
 | 28 | [Two Players — GRP0 and GRP1](./28-two-players) | 🔒 Coming Soon |
 | 29 | [Missiles and Ball — Simple Projectiles](./29-missiles-and-ball) | 🔒 Coming Soon |

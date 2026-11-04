@@ -100,8 +100,9 @@ a freedom of implementation.
   the quotient 10 in the routine; 3. *(Stretch)* ping-pong between X=32 and X=128 every 60 frames.
 - **Screenshots:** `docs/public/images/lesson26/position-a.png`, `…/position-b.png`.
 - **Evidence pins:** frame checkpoints; `PosStep` — A = the new index, one hit per 60 frames;
-  `PosApply` — A = the target X, one hit per frame; `Resp0Write` — one hit per frame at a constant
-  cycle; the measured X from each capture. The routine's static ledger is in the doc.
+  `PosApply` — A = the table value (the target + 3 after the measured output-delay calibration), one hit per frame; `Resp0Write` — one hit per frame; the cycle advances with the table entry
+  (24/34/44/54/64); `HmoveApply` on the next VBLANK line at cycle 0 (effect 3); the measured X
+  from each capture. The routine's static ledger is in the doc.
 - **Integration:** prev → Lesson 25; next → Lesson 27; part-index row 26 → ✅ Complete linking
   `./26-horizontal-positioning`; sidebar entry exists (`config.ts:85`). Estimated time: 75 minutes.
 - **ST cases:** ST-26.1 assembly & drift · ST-26.2 first position · ST-26.3 second position and

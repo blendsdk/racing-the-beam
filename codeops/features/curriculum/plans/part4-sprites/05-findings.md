@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 1 complete — 0 critical, 0 major open
+> **Status**: Phase 2 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -23,3 +23,22 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-172 | 1 | 🟡 MINOR | Re-review: Exercise 2's header still said "the shape table is unchanged" while the solution changes the tail | fixed — "the mirror itself needs no table change; only the tail is made asymmetric" |
 | SR-173 | 1 | 🟡 MINOR | Re-review: the tail comment labelled `$0F` "left-heavy" and `$F0` "right-heavy", which is the mirrored display, not the raw byte | fixed — "raw: right-heavy; mirrors to left-heavy" / "raw: left-heavy; mirrors to right-heavy" |
 | SR-174 | 1 | ℹ️ INFO | Session B caught the missing clear line before the first review (the last `GRP0` byte smeared down the screen) | fixed — a clear line added to all four sources; capture re-taken; the doc's Section 4 teaches the bug |
+| SR-175 | 2 | 🟠 MAJOR | Both: the divide-by-15 explanation said A exits with an undershoot of 0–14; the loop runs one extra subtraction to detect the underflow, so A is a negative byte ($F1–$FF) and the fine value is `u − 9` (u = the overshoot) | fixed — the doc/source explain the extra subtraction, the negative exit, and the `6 − remainder` fine value; the TypeScript block matches |
+| SR-176 | 2 | 🟠 MAJOR | Both: the checkpoint ledger said `HmoveApply` was on VBLANK line 1 cycle 30 and `Resp0Write` always at cycle 24; HMOVE executes on line 2 cycle 0 (effect 3), and RESP0's cycle advances with the table (24/34/44/54/64) | fixed — the doc, spec, and ST now list the five RESP0 cycles and the line-2 HMOVE; the `RTS` breakpoint confirms line 2 cycle 3 |
+| SR-177 | 2 | 🟠 MAJOR | Reviewer: Exercise 2 said "152 = 10×15 + 2, ten subtractions"; the program passes 155, so the loop subtracts 11 times and A = $F6, HMP0 = $10 (+1 left), coarse 153 → 152 | fixed — the hint and the solution header show the 155/11/$F6/153 arithmetic |
+| SR-178 | 2 | 🟠 MAJOR | Reviewer: the position-B caption called 96 TIA pixels "three coarse steps" (96 TIA = 576 capture px = three tour steps; the coarse change is six 15-clock steps plus the six-clock fine change) | fixed — the caption states 96 TIA px / 576 capture px / three tour steps / 90 coarse + 6 fine clocks |
+| SR-179 | 2 | 🟡 MINOR | Both: a `RESP0` at clock 68 puts the sprite at X≈5, not the left edge; the left edge needs clock 63 | fixed — the doc says clock 63 for the left edge and clock 68 for X≈5 |
+| SR-180 | 2 | 🟡 MINOR | Auditor: the TypeScript `fine = (target ^ 7) - 7` returned values the hardware never produces | fixed — the TS block mirrors the asm (`while a >= 0`, `remainder = a + 15`, `fine = 6 - remainder`) |
+| SR-181 | 2 | 🟡 MINOR | Both: the source comments said `PosApply` A = the target X and the routine input was the target; the caller passes the biased value | fixed — the comments say "biased table value (target + 3)" and the routine input is 0–162 |
+| SR-182 | 2 | 🟡 MINOR | Auditor: exercise 1's header said "Load #120" while the code loads #123 | fixed — "#123 (120 + the 3-pixel bias)" |
+| SR-183 | 2 | 🟡 MINOR | Both: the spec lists the HMOVE/HBLANK left-edge mask but the doc never explained it | fixed — a theory tip: HMOVE in HBLANK blanks the leftmost 8 pixels; the VBLANK line makes it invisible |
+| SR-184 | 2 | 🟡 MINOR | Reviewer: exercise 3's `PosStep` label shared the `ApplyPos` address and fired every frame | fixed — the label is on the tick's `STA PosIndex` |
+| SR-185 | 2 | 🟡 MINOR | Auditor: the five-position table said "measured" but only two positions had committed captures | fixed — the table notes all five were measured in scratch captures; the two committed captures are X=16 and X=112 |
+| SR-186 | 2 | 🟡 MINOR | Re-review: the `PosApply` comment in the source still said "target X" | fixed — "biased table value (target + 3)" |
+| SR-187 | 2 | 🟡 MINOR | Re-review: "(`remainder − 9`)" was ambiguous because the remainder was defined as the negative byte | fixed — "`u − 9`, where `u = −A` is the overshoot" |
+| SR-188 | 2 | 🟡 MINOR | Re-review: "the coarse strobe sits at 15 × (quotient + 1) − 12" described the coarse position, not the strobe cycle | fixed — "the coarse position is …"; the strobe cycle is 5 × (SBC count) + 14 |
+| SR-189 | 2 | 🟡 MINOR | Re-review: the TypeScript comment `// steps = coarse` was wrong (steps = quotient + 1) | fixed — `// steps = quotient + 1` |
+| SR-190 | 2 | 🟡 MINOR | Re-review: the 96-pixel caption did not explain the six-clock fine change | fixed — "90 clocks coarse + 6 clocks fine" |
+| SR-191 | 2 | 🟡 MINOR | Re-review: "a strobe just before clock 68" was ~4–5 px off; the left edge is clock 63 | fixed — "clock 63 … clock 68 lands near X=5" |
+| SR-192 | 2 | 🟡 MINOR | Re-review: "output delay" / "three clocks coarse" misnamed the constant −3 | fixed — "encoding offset" / "three clocks left of exact placement" |
+| SR-193 | 2 | 🟡 MINOR | Re-review: the `Resp0Write` comment "cycle 5k+14" left k undefined | fixed — "cycle 5 × SBC count + 14" |
