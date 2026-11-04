@@ -11,8 +11,9 @@
 
 - NTSC only: `VSYNC` 3 + `VBLANK` 37 + picture 192 + overscan 30 = **262 lines**.
 - `+set_timer 44` and `+wait_timer` cover VBLANK; `+set_timer 36` and `+wait_timer` cover overscan.
-  The timer covers 2,753 cycles; the final `+wait_timer` WSYNC absorbs the remaining 59 cycles to
-  the 37-line (2,812-cycle) boundary. A VBLANK ledger budgets **2,812 cycles**, not 2,753.
+  The timer is armed about 15 cycles into the line and covers 2,753 cycles, so it expires at
+  2,768; the final `+wait_timer` WSYNC absorbs the remaining 44 cycles to the 37-line
+  (2,812-cycle) boundary. A VBLANK ledger budgets **2,812 cycles**, not 2,753.
 - The picture begins at scanline 37 (visible line 0 = capture y 107) and ends at scanline 228.
 - Capture mapping used by every pixel check: `capture x = 25 + 6 × TIA_X`, `capture y = 107 +
   3.15 × visible_line`. A sprite's first visible row is the scanline where its `GRP` write is
@@ -119,7 +120,7 @@ each step, so the state fits exactly 16 bytes.
   169 + 24×12 = 457; the capture used in the doc records the exact step and height.
 - **Demo ROM:** none — the sound lab is the visible picture (AR-3).
 - **Exercises:**
-  1. **Lower the beep.** Change the BEEP `AUDF` from `$13` to `$09` (523.33 Hz). Expected: the
+  1. **Raise the beep.** Change the BEEP `AUDF` from `$13` to `$09` (523.33 Hz). Expected: the
      pitch marker sits at capture x = 169 + 24×9 = 385; `FreqWrite` reports A=`$09` during BEEP.
   2. **Siren boop.** Replace the BOOP sweep with a two-pitch alternation: `AUDF` 6 for 4 frames,
      20 for 4 frames, repeating; volume stays 12 for 24 frames, then 0. Expected: the pitch marker

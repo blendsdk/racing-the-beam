@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 22:55
-> **Progress**: 0/3 tasks (0%)
+> **Last Updated**: 2026-11-04 23:17
+> **Progress**: 1/3 tasks (33%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -57,7 +57,7 @@ user's directive to execute RD-05 and the Part 1–4 practice (AR-12).
 
 ## Phase 1: Lesson 35 — Sound Effects
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 838ac3b (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part5-sound/35-sound-effects/` (4 sources) ·
 > `docs/part5-sound/35-sound-effects.md` · `docs/part5-sound/index.md` (rebuild + row 35) ·
 > `docs/public/roms/part5-sound/35-sound-effects/` · `docs/public/images/lesson35/` (2 captures) ·
@@ -73,9 +73,13 @@ user's directive to execute RD-05 and the Part 1–4 practice (AR-12).
 AR-13, AR-14, AR-22, AR-23
 **Objective**: Deliver Lesson 35 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 35 — Sound Effects: Session A freezes ST-35.1–ST-35.6 (red baseline), Session B
+- [x] 1.1.1 Lesson 35 — Sound Effects: Session A freezes ST-35.1–ST-35.6 (red baseline), Session B
   implements the full artifact set (including the AR-10 index rebuild), Session C verifies to green
-  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson35): Sound Effects`
+  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson35): Sound Effects` ✅ (completed: 2026-11-04 23:17)
+
+**Session A record** (freeze + red baseline, 2026-11-04 23:00): ST-35.1–ST-35.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 35. Design pins: the standard 262-line frame; the monitor — three 8-line playfield bands (BEEP/BOOP/BOOM), a 15-cell VU meter (6 lines per cell) on player 0 at X=24, and an 8-row pitch marker on player 1 at X=24+AUDF×4; the effect colors `$C8`/`$84`/`$42`; the exact recipes BEEP `$0C/$13` volume 15→12→8→0, BOOP `$04` AUDF 6→20 volume 12→8→0, BOOM `$08` with the 16-byte noise table and volume 15→0; the 32/32/48-frame auto-cycle; work-first kernel; one HMOVE after both positions. Evidence pins (AR-6): frame checkpoints; `EffectStep` A = the new ID; `CtlWrite`/`FreqWrite`/`VolWrite` A = the written value; `BodyStart` 37; `MeterStart` 65; `HmoveApply`/`HmoveDone`; the capture bars and marker. Red baseline confirmed: no `lessons/part5-sound` tree, no `docs/public/images/lesson35`, no committed Part 5 ROMs, the document is the `🔒 Coming Soon` stub, the Part 5 index is the minimal stub, sidebar entry exists (`config.ts:100`), `verify.sh` green at `838ac3b`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 23:17): Preflight per `vcs-lesson-production` — the audio divider chain, the three recipes, the 15-cell meter, the pitch mapping, the work-first kernel, and the one-HMOVE rule checked against `include/vcs.asm`, the sound reference, and the TIA references; ACME forms; no demo (AR-3: the sound lab is the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F016` = (259, 3), `VblankStart` `$F024` = (0, 5), `BodyStart` `$F0DC` = (37, 7), `MeterStart` `$F101` = (65, 4), `OverscanStart` `$F148` = (229, 4). Effects: `EffectStep` `$F046` at frames **33/65/113/145** with A = 1/2/0/1 (the first play frame is frame 1, so the step is one frame after the 32nd play frame); `CtlWrite` `$F04F` A = `$0C`/`$04`/`$08`; `FreqWrite` `$F097` A = `$13` during BEEP, 6,6,7,7,…20 during BOOP, and the 16-entry noise table during BOOM; `VolWrite` `$F09B` A = 15 (frames 1–10), 12 (11–15), 8 (16–20), 0 (21–32) for the BEEP, and the matching BOOP/BOOM envelopes. Positioning: `HmoveApply` `$F180` line 3 c55 (the WSYNC stall); `HmoveDone` `$F182` line 4 c3, so the store executes at line 4 c0 in HBLANK; P0 X=24 and P1 X=24+AUDF×4. Captures from the committed ROM: `beep.png` band 0 green, VU 15 green cells x=169–216 y=195–477, marker green x=625–672 (AUDF 19) y=492–515; `boom.png` band 2 red, VU 14 red cells x=169–216 y=214–477, marker red x=889–936 (AUDF 30, frame 5) y=492–515; no cursor. The active band's color write lands at line 53 c21 (store completes c24), just after the playfield's first pixel at c22; the one-line, 24-px left-edge notch is documented as that timing effect, not a tear. Solutions: ex 1 — `AUDF=$09`, marker x=385–432; ex 2 — siren 6/20, marker x=313–360/649–696; ex 3 — forced-left `SelectStore` A=2/1/0, fire witness band 0 green 15 cells, no-input `EffectStep` 33/65/113/145. Site (ST-35.6): the Part 5 index was rebuilt to the Part 1 format (row 35 ✅ Complete; rows 36–37 `🔒 Coming Soon`); the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 34, next → 36; sidebar `config.ts:100`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **2 major, 5 minor** (Lower/Raise; pitch labels; timer 44; HmoveApply wording; ST-35.2; dead constant; duplicate headers); round 2 — **1 major, 2 minor** (the first notch explanation claimed a per-line `COLUPF` latch; alt text; HmoveApply residual); round 3 — **0 major**, all confirmed, with the exact active-band store cycle measured (c24). The curriculum-auditor round 1 — **2 major, 2 minor** ("top band" wording; Lower/Raise; the notch; duplicate headers); round 2 — **1 major, 1 minor** (the latch claim; alt text); round 3 — **0 major**. Final state: **0 critical, 0 major open**. Lesson 35 is complete.
 
 **Session sub-steps:**
 
