@@ -147,17 +147,20 @@ each step, so the state fits exactly 16 bytes.
   the visual marker's vertical position is the scale degree, not the raw frequency; the `AUDF`
   field is only 5 bits, so the deepest notes need a coarser divisor.
 - **ROM:** `36-music.asm` — "the music box".
-  - An 8-rung ladder at visible lines 16, 36, 56, 76, 96, 116, 136, 156 (16 + 20·k); each rung is
-    a 1-line full-width playfield line, `COLUPF=$0A`; `CTRLPF=$01`, `PF0=$F0`, `PF1=$FF`,
-    `PF2=$FF` on the rung line, all zero elsewhere.
+  - An 8-rung ladder at visible lines 16, 36, 56, 76, 96, 116, 136, 156 (16 + 20·k), plus a
+    ninth baseline at 176; each rung is a 1-line playfield line, `COLUPF=$0A`; `CTRLPF=$01`,
+    `PF1=$FF`/`PF2=$FF` on the rung line and cleared on the next, `PF0=0` (768 capture px, 16-px
+    margins).
   - Lead marker: player 0, 8 rows, X=48, red `$42`; harmony marker: player 1, 8 rows, X=112, blue
     `$84`. Marker top = rung line − 4 (the 8 rows straddle the rung); a rest sets the top to
     `$F0`, which never matches a visible line, hiding the marker.
   - `COLUBK=$02`; the grid is dim gray; no other objects.
   - Audio:
-    - `AUDC0=$0C` (div 6) lead; `AUDC1=$0D` (div 6) harmony. Both channels use the same
-      C4–C5 table; the harmony plays C4/G4, below the melody's upper notes.
-    - `NoteFreq` for C4–C5: `19, 17, 15, 14, 12, 11, 10, 9`. The measured frequency and cents
+    - `AUDC0=$0C` (div 6) lead; `AUDC1=$0D` (div 6) harmony. Both registers are written once in
+      `Reset`, before the first note; `AUDC=0` would disable the channel and leave the `AUDF`/`AUDV`
+      writes silent. Both channels use the same C4–C5 table; the harmony plays C4/G4, below the
+      melody's upper notes.
+    - `NoteFreq` for C4–C5: `19, 17, 15, 14, 12, 11, 10, 9`. The calculated frequency and cents
       error for every entry:
 
       | Degree | `AUDF` | Hz | Error |
@@ -185,7 +188,7 @@ each step, so the state fits exactly 16 bytes.
       changes, not every frame. The lead and harmony sequences both loop at 192 frames.
 - **Expected screen:** two 8-row markers on the ladder. In the first capture the lead is on E
   (rung 2, capture y≈271–296) and the harmony on C (rung 0, capture y≈145–170); in the second the
-  lead is on G (rung 4, capture y≈397–422) and the harmony on G (same rows). The exact measured
+  lead is on G (rung 4, capture y≈397–424) and the harmony on G (y≈397–420). The exact measured
   pair is recorded in Session C.
 - **Demo ROM:** none — the note ladder is the visible picture (AR-3).
 - **Exercises:**
@@ -195,14 +198,16 @@ each step, so the state fits exactly 16 bytes.
   2. **Change the harmony.** Use `0,2,0,2` (C, E) instead of `0,4,0,4` (C, G). Expected:
      `HarmonyFreqWrite` A=19,15; the blue marker moves to rung 2.
   3. *(Stretch)* **Rest and repeat.** After the 16th lead step, hold silence for 60 frames, then
-     restart both sequences. Expected: both markers disappear for 60 frames (`LeadTop=$F0`,
-     `LeadVolWrite`/`HarmonyVolWrite` = 0), then reappear from step 0.
+     restart both sequences. Expected: both markers disappear for 60 frames (frames 180–239;
+     `LeadTop=$F0`, `PauseTopWrite` A=`$F0`, `PauseVolWrite` A=0), the phrase restarts at frame
+     240, and the next `LeadStep` is at 252 (A=1).
 - **Screenshots:** `docs/public/images/lesson36/notes-a.png`, `…/notes-b.png`.
-- **Evidence pins:** frame checkpoints; `LeadStep` — A = the new lead index, one hit every 12
-  frames; `HarmonyStep` — A = the new harmony index, one hit every 48 frames; `LeadFreqWrite` — A =
-  the lead `AUDF`; `LeadVolWrite` — A = the lead volume; `HarmonyFreqWrite`/`HarmonyVolWrite`;
-  `BodyStart` at 37 (the ladder body covers all 192 lines); `HmoveApply`/`HmoveDone` once per
-  frame; the capture marker rows.
+- **Evidence pins:** frame checkpoints; `AUDC0Write`/`AUDC1Write` — A=`$0C`/`$0D` on the first
+  frame; `LeadStep` — A = the new lead index, one hit every 12 frames; `HarmonyStep` — A = the new
+  harmony index, one hit every 48 frames; `LeadFreqWrite` — A = the lead `AUDF`; `LeadVolWrite` —
+  A = 8 on every lead note; `LeadRestFreq`/`LeadRestVol` — A=19/0 on the rest;
+  `HarmonyFreqWrite`/`HarmonyVolWrite`; `BodyStart` at 37 (the ladder body covers all 192 lines);
+  `HmoveApply`/`HmoveDone` once per frame; the capture marker rows.
 - **Integration:** prev → Lesson 35; next → Lesson 37; part-index row 36 → ✅ Complete linking
   `./36-music`; sidebar entry exists (`config.ts:101`). Estimated time: 75 minutes.
 - **ST cases:** ST-36.1 assembly & drift · ST-36.2 ladder layout · ST-36.3 note tables and tuning ·

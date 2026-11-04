@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 1 complete — 0 critical, 0 major open
+> **Status**: Phase 2 complete — 0 critical, 0 major open
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -34,3 +34,12 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-013 | 35 | 🟠 MAJOR | Both reviewers: the first notch explanation claimed the TIA latches `COLUPF` per line; the TIA applies color writes mid-line, and the real cause is the active band's extra `LDA EffectColor` pushing the store to CPU cycle 24, after the first playfield pixel at cycle 22. | fixed — the caption now gives the measured cycle (label at c21, store completes c24) with no latch claim. |
 | SR-014 | 35 | 🟡 MINOR | Reviewer: the BOOM alt text still said "a red top band". | fixed — "a red third band". |
 | SR-015 | 35 | 🟡 MINOR | Reviewer: the `HmoveApply` cell still paired line 3 c55 with the strobe. | fixed — the cell says line 3 c55 is the stall; the store is line 4 c0 via `HmoveDone`. |
+| SR-016 | 36 | 🔴 CRITICAL | Both reviewers: no source wrote `AUDC0`/`AUDC1`; `+clean_start` leaves them 0, which disables the channels, so all four ROMs were silent. | fixed — Reset writes `AUDC0=$0C`/`AUDC1=$0D` with `AUDC0Write`/`AUDC1Write` checkpoints; all four ROMs rebuilt; the doc/ST record the timbre evidence. |
+| SR-017 | 36 | 🟠 MAJOR | Both reviewers: ex3 set `HarmonyTop=0` at the pause, which draws the blue marker on visible lines 0–7 instead of hiding it. | fixed — `HarmonyTop=$F0` with a `PauseTopWrite` checkpoint. |
+| SR-018 | 36 | 🟠 MAJOR | Both reviewers: the pause was 48 frames (rest frame plus 47), not the specified 60. | fixed — `PauseTimer=60` at the rest; silence 180–239, restart 240, next `LeadStep` 252; the doc/ST say so. |
+| SR-019 | 36 | 🟡 MINOR | Reviewer: the marker-top formula said `RungTop[degree] − 4`; the table already includes the −4. | fixed — `RungTop[degree]` (the rung line minus 4). |
+| SR-020 | 36 | 🟡 MINOR | Reviewer: the grid path cycle figures were 20/13; the correct counts are higher. | fixed — the tip now states the rung path is 23 cycles and the worst line is ~71 of 76, without the disputed per-path figures. |
+| SR-021 | 36 | 🟡 MINOR | Reviewer: `LeadVolWrite` never reports 0 (the rest uses `LeadRestVol`), and ST-36.3 appended a 16th `LeadFreqWrite` value that is `LeadRestFreq`. | fixed — the doc/ST use `LeadRestFreq`/`LeadRestVol` for the rest and 15 `LeadFreqWrite` values. |
+| SR-022 | 36 | 🟡 MINOR | Reviewer: the note frequencies were called "measured"; they are calculated from the nominal audio clock. | fixed — "Hz (nominal clock)", "derived", and "computed against equal temperament"; the asm header says derived. |
+| SR-023 | 36 | 🟡 MINOR | Reviewer: the Stella run line said "click the screen to hear it"; Stella needs no click (Javatari does). | fixed — the parenthetical is removed; the RomPlayer paragraph keeps the click note. |
+| SR-024 | 36 | 🟡 MINOR | Reviewer: the ex3 hint said the markers "reappear on the first rung"; the lead restarts on E (rung 2). | fixed — the harmony returns on rung 0 and the lead on rung 2 (E). |

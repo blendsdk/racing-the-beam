@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 23:17
-> **Progress**: 1/3 tasks (33%)
+> **Last Updated**: 2026-11-05 00:05
+> **Progress**: 2/3 tasks (67%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -100,7 +100,7 @@ AR-13, AR-14, AR-22, AR-23
 
 ## Phase 2: Lesson 36 — Music
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 1dbeab5 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part5-sound/36-music/` (4 sources) ·
 > `docs/part5-sound/36-music.md` · `docs/part5-sound/index.md` (row 36) ·
 > `docs/public/roms/part5-sound/36-music/` · `docs/public/images/lesson36/` (2 captures) ·
@@ -116,9 +116,14 @@ AR-13, AR-14, AR-22, AR-23
 AR-15, AR-16, AR-17, AR-22, AR-23
 **Objective**: Deliver Lesson 36 end to end through the mandatory three sessions.
 
-- [ ] 2.1.1 Lesson 36 — Music: Session A freezes ST-36.1–ST-36.6 (red baseline), Session B
+- [x] 2.1.1 Lesson 36 — Music: Session A freezes ST-36.1–ST-36.6 (red baseline), Session B
   implements the full artifact set, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson36): Music`
+  `git-commit` skill in push mode — `feat(lesson36): Music` ✅ (completed: 2026-11-05 00:05)
+
+**Session A record** (freeze + red baseline, 2026-11-04 23:30): ST-36.1–ST-36.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 36. Design pins: the standard 262-line frame; both voices on div 6 (`AUDC0=$0C`, `AUDC1=$0D`); one derived C4–C5 table `19,17,15,14,12,11,10,9`; the lead sequence `2,2,3,4,4,3,2,1,0,0,1,2,2,1,1,$FF` at 12 frames per step; the harmony `0,4,0,4` at 48 frames; lead volume 8, harmony 6; the rest re-uses C4's `AUDF` 19 with volume 0 and hides the marker with top `$F0`; eight scale rungs at visible 16+20k plus a baseline; lead marker P0 X=48 red, harmony marker P1 X=112 blue, 8 rows, top = rung−4; work-first kernel; one HMOVE. Evidence pins (AR-6): frame checkpoints; `LeadStep`/`HarmonyStep` A = the new index; `LeadFreqWrite`/`LeadVolWrite`/`LeadRestFreq`/`LeadRestVol`; `HarmonyFreqWrite`/`HarmonyVolWrite`; `BodyStart` 37; `HmoveApply`/`HmoveDone`; the capture marker rows. Red baseline confirmed: no `lessons/part5-sound/36-music`, no `docs/public/images/lesson36`, no committed 36 ROMs, the document is the `🔒 Coming Soon` stub, index row 36 is Coming Soon, sidebar entry exists (`config.ts:101`), `verify.sh` green at `1dbeab5`. No implementation logic read (AR-2).
+
+
+**Session C record** (verify + evidence, 2026-11-05 00:05): Preflight per `vcs-lesson-production` — the divider formula, the 5-bit `AUDF` limit, the note table/cents, the two sequencers, the grid kernel, and the one-`HMOVE` rule checked against `include/vcs.asm`, the sound reference, and the TIA references; ACME forms; no demo (AR-3: the music box is the visible picture). `bash scripts/verify.sh` green (implementation, critical AUDC fix, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F02A` = (259, 3), `VblankStart` `$F038` = (0, 5), `BodyStart` `$F0A4` = (37, 7), `OverscanStart` `$F0EE` = (229, 6). Timbre: `AUDC0Write` `$F012` A=`$0C` and `AUDC1Write` `$F016` A=`$0D` on the first frame (the critical fix: without these writes `AUDC=0` disables both channels). Notes: `LeadStep` `$F053` at frames 12/24/36/… with A=1/2/3/…; `HarmonyStep` `$F06A` at 48/96/144/192 with A=1/2/3/0; `LeadFreqWrite` `$F110` A = 15,15,14,12,12,14,15,17,19,19,17,15,15,17,17; `LeadRestFreq` `$F11E` A=19 and `LeadRestVol` `$F122` A=0 at frame 180; `HarmonyFreqWrite` `$F132` A=19,12,19,12; `HarmonyVolWrite` `$F136` A=6. Positioning: `HmoveApply` `$F161` line 2 c60 (the WSYNC stall); `HmoveDone` `$F163` line 3 c3, so the store executes at line 3 c0 in HBLANK; P0 X=48, P1 X=112. Captures from the committed ROM: `notes-a.png` red lead x=313–360 y=271–297 (E, rung 2) and blue harmony x=697–744 y=145–168 (C, rung 0); `notes-b.png` red x=313–360 y=397–424 (G, rung 4) and blue x=697–744 y=397–420 (G, rung 4); the scale rungs are at y=157,220,284,347,410,473,536,599 plus the baseline at 663; no cursor. Solutions: ex 1 — `LeadStep` 6/12/18… and `HarmonyStep` 24/48/72…; ex 2 — `HarmonyFreqWrite` 19,15,19,15, the blue marker on rung 2; ex 3 — `PauseVolWrite` A=0 and `PauseTopWrite` A=`$F0` at frames 180/420/660, the rest at 180 (A=15), 60 silent frames (180–239), restart at 240, next `LeadStep` 252 (A=1). Site (ST-36.6): index row 36 ✅ Complete (row 35 ✅, row 37 `🔒 Coming Soon`); the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 35, next → 37; sidebar `config.ts:101`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 critical, 2 major, 4 minor** (no `AUDC` writes → silent ROMs; ex3 `HarmonyTop=0`; pause 48 vs 60; marker-top formula; cycle counts; volume checkpoints; "measured"; Stella click note); round 2 — **0 critical, 0 major**, 2 minor residuals (the `HarmonyStep` bullet address; the cycle wording), fixed. The curriculum-auditor round 1 — **1 critical, 2 major, 4 minor** (same silent-ROM core; the ex3 marker; the pause; volume checkpoints; the "first rung" wording; the Stella note); round 2 — **0 critical, 0 major**, 2 minor residuals (the `HarmonyStep` bullet; the cycle wording; the spec "measured" wording), fixed. The critical catch was the missing `AUDC` init; the fix adds the two writes and their checkpoints in all four sources. Final state: **0 critical, 0 major open**. Lesson 36 is complete.
 
 **Session sub-steps:**
 
