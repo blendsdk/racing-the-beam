@@ -100,9 +100,9 @@ after a store, learned in Lesson 18).
 | # | Input / Scenario | Expected Outcome | Evidence Method | Source |
 | --- | --- | --- | --- | --- |
 | ST-31.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build pass | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
-| ST-31.2 | Run the ROM; inspect the eight bands | Eight 24-line bands (≈76 capture px each) from scanline 37; each band shows the correct mode: one bar, two at 16/32/64 clocks, three, double width, quad width; first bar at capture x ≈ 265 | Screenshot `nusiz-bands.png` + pixel check | 03 §Lesson 31 |
-| ST-31.3 | Measure copy spacing and widths | Copy gaps are 16/32/64 color clocks (96/192/384 capture px); the pattern's two pixels are 12 px wide normally, 24 px double, 48 px quad; no missile appears | Capture pixel check | 03 §Lesson 31 |
-| ST-31.4 | Debugger: band writes | `BandWrite` 8 hits per frame at scanlines 37, 61, 85, 109, 133, 157, 181, 205, A = 0..7; `PatternWrite` 192 hits per frame; frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 31 |
+| ST-31.2 | Run the ROM; inspect the eight bands | Eight 24-line bands (≈76 capture px each) from scanline 37; each band shows the correct mode: one bar, two at 16/32/64 clocks, three, double width, quad width; first bar at capture x = 283 | Screenshot `nusiz-bands.png` + pixel check | 03 §Lesson 31 |
+| ST-31.3 | Measure copy spacing and widths | Copy spacings are 16/32/64 color clocks (96/192/384 capture px start to start; the empty gaps are 84/180/372); the pattern's two pixels are 12 px wide normally, 24 px double, 48 px quad; no missile appears | Capture pixel check | 03 §Lesson 31 |
+| ST-31.4 | Debugger: band writes | `BandWrite` 192 hits per frame (A = the table value); the A runs change at scanlines 37, 61, 85, 109, 133, 157, 181, 205; `PatternWrite` 192 hits per frame; frame 262 lines | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 31 |
 | ST-31.5 | Assemble and run each solution | Ex 1 uses `$FF` and shows contiguous copies with gaps; ex 2 splits P0/P1 modes; ex 3 animates the modes | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-31.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; the capture resolves; prev 30, next 32; index row 31 links | Build output + page check | RD-04 AC 1 / AR-10 |
 

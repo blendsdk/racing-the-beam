@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 16:00
-> **Progress**: 6/10 tasks (60%)
+> **Last Updated**: 2026-11-04 16:20
+> **Progress**: 7/10 tasks (70%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -285,7 +285,7 @@ object's measured X and width recorded.
 
 ## Phase 7: Lesson 31 — Copies and Sizes
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: 3fa2cbc (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/31-copies-and-sizes/` (4 sources) · `docs/part4-sprites/31-copies-and-sizes.md` · `docs/part4-sprites/index.md` (row 31) · `docs/public/roms/part4-sprites/31-copies-and-sizes/` · `docs/public/images/lesson31/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: medium — a static eight-band NUSIZ showcase; the copy geometry is measured against the capture
 
@@ -294,7 +294,11 @@ object's measured X and width recorded.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 31 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 31 · AR-2, AR-3, AR-4, AR-6, AR-17
 **Objective**: Deliver lesson 31 end to end through the mandatory three sessions.
 
-- [ ] 7.1.1 Lesson 31 — Copies and Sizes: Session A freezes ST-31.1–ST-31.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson31): Copies and Sizes`
+- [x] 7.1.1 Lesson 31 — Copies and Sizes: Session A freezes ST-31.1–ST-31.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson31): Copies and Sizes` ✅ (completed: 2026-11-04 16:20)
+
+**Session A record** (freeze + red baseline, 2026-11-04 16:05): ST-31.1–ST-31.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 31. Design pins: the standard 262-line frame; player 0 at X=40, pattern `$18`, eight 24-line bands; `NUSIZ0` = the band index 0–7 from a 192-byte table (24 copies of each); `COLUP0=$42`, `COLUBK=$02`, `REFP0=0`; the per-line kernel is 22 cycles (23 from X=132, where the table read crosses a page; WSYNC absorbs it); no top/bottom loops (the bands cover all 192 lines). The expected bars (to be measured in Session C): band 0 one 12-px bar at 283–294; band 1 at 283/379; band 2 at 283/475; band 3 at 283/379/475; band 4 at 283/667; band 5 a 24-px bar at 307–330; band 6 at 283/475/667; band 7 a 48-px bar at 343–390. Evidence pins (AR-6): frame checkpoints; `BandWrite` 192 hits with A = the table value and the A runs changing at lines 37/61/85/109/133/157/181/205; `PatternWrite` 192 hits with A=$18; the measured bands. Solutions: ex 1 `$FF`; ex 2 P0 mode 3 at X=32 / P1 mode 6 at X=88 (one HMOVE); ex 3 an animated 0–7 index every 60 frames. Red baseline confirmed: no `lessons/part4-sprites/31-copies-and-sizes`, no `docs/public/images/lesson31`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 31 is Coming Soon, sidebar entry exists (`config.ts:90`), `verify.sh` green at `3fa2cbc`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 16:20): Preflight per `vcs-lesson-production` — the eight NUSIZ modes and copy spacings checked against `tia-hardware.md`, the per-line table and band boundaries, the frame against Lessons 12–30, ACME forms; no demo (AR-3: the eight bands are the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F043` first hit (37, 7), `OverscanStart` `$F053` = (229, 6). Bands: `BandWrite` `$F046` 192 hits, A = 0 for lines 37–60, 1 for 61–84, 2 for 85–108, 3 for 109–132, 4 for 133–156, 5 for 157–180, 6 for 181–204, 7 for 205–228; `PatternWrite` `$F04A` 192 hits, A = `$18`. Capture from the committed ROM: band 0 one 12-px bar at 283–294; band 1 at 283/379; band 2 at 283/475; band 3 at 283/379/475; band 4 at 283/667; band 5 a 24-px bar at 307–330; band 6 at 283/475/667; band 7 a 48-px bar at 343–390. The normal-width bars start at 283 (the `$18` on-pixels are three pixels in); the stretched modes start one clock later (X=41), hence 307/343. Solutions: ex 1 — `$FF`; ex 2 — top red three close at 235/331/427, bottom blue three medium at 571/763/955; ex 3 — a full-height animated mode (one bar at ~0.5 s, two close bars at ~1.5 s). Site (ST-31.6): index row 31 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, the capture, prev → 30, next → 32; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 1 major**, 3 minor. The major: the width-mode derivation produced 301/337 while the committed capture measures 307/343; the stretched player's output starts one clock later (X=41), and the doc now states that measured offset. The minors: "gaps" vs "spacings", the spec's 6/12/24/48 width list, and the Session A record saying "measured" before the capture existed. Round 2: **0 critical, 0 major**, 3 prose minors (the table read crosses a page from X=132 so the body is 23 cycles there, the ex-3 capture timing at 1 s, and the ex-1 gap units); all fixed and verify stayed green. Lesson 31 is complete.
 
 **Session sub-steps (the task's checklist):**
 

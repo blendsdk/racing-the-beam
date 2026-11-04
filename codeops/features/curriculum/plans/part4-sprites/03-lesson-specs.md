@@ -239,15 +239,15 @@ a freedom of implementation.
   `COLUP0=$42`, `COLUBK=$02`.
 - **Expected screen:** eight horizontal bands, each 24 scanlines (≈76 capture px), showing the
   pattern with a different mode: one 2-px bar; two bars at 16/32/64 clocks; three bars; double
-  width (4 px); quad width (8 px). The first bar starts at capture x ≈ 265.
+  width (4 px); quad width (8 px). The first bar starts at capture x = 283 (the pattern's on-pixels are three pixels in).
 - **Demo ROM:** none — the eight bands are the visible picture (AR-3).
 - **Exercises:** 1. use `$FF` as the pattern and describe the copy gaps; 2. split the screen:
   top half P0 with `NUSIZ0=3`, bottom half P1 with `NUSIZ1=6` (two players at different X);
   3. *(Stretch)* animate one full-height sprite through all eight modes, one per 60 frames.
 - **Screenshots:** `docs/public/images/lesson31/nusiz-bands.png`.
-- **Evidence pins:** frame checkpoints; `BandWrite` — A = the band value, 8 hits per frame at
-  lines 37, 61, 85, 109, 133, 157, 181, 205; `PatternWrite` — 192 hits per frame; the measured
-  bar widths in the capture (6/12/24/48 px).
+- **Evidence pins:** frame checkpoints; `BandWrite` — A = the band value, 192 hits per frame; the A runs change at lines 37, 61, 85, 109,
+  133, 157, 181, 205; `PatternWrite` — 192 hits per frame; the measured
+  bar widths in the capture (12/24/48 px; one TIA pixel = 6 capture px).
 - **Integration:** prev → Lesson 30; next → Lesson 32; part-index row 31 → ✅ Complete linking
   `./31-copies-and-sizes`; sidebar entry exists (`config.ts:90`). Estimated time: 60 minutes.
 - **ST cases:** ST-31.1 assembly & drift · ST-31.2 eight bands · ST-31.3 copy/size geometry ·

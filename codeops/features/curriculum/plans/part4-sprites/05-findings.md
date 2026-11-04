@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 6 complete — 0 critical, 0 major open
+> **Status**: Phase 7 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -83,3 +83,11 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-238 | 6 | 🟡 MINOR | Re-review: the ex-2 cost list omitted `CLC` | fixed — `TXA`/`CLC`/`ADC`/`AND`/`TAY` |
 | SR-239 | 6 | 🟡 MINOR | Re-review: the band ranges left the two blend rows unclassified | fixed — the ranges tile (gold 359–371, blue 372–396, red 397–408) |
 | SR-240 | 6 | ℹ️ INFO | The reviews were static; the parent's `verify.sh` (112 ROMs) and Stella logs are the runtime evidence | accepted — the phase record carries the logs |
+| SR-241 | 7 | 🟠 MAJOR | Both: the width-mode derivation produced 301/337 while the committed capture measures 307/343; the stretched player's output starts one clock later (X=41) | fixed — the doc states the measured one-clock offset and derives 307/343 from it |
+| SR-242 | 7 | 🟡 MINOR | Both: "gaps" of 96/192/384 were copy spacings, not the visible gaps (84/180/372) | fixed — spacing vs empty gap in the doc and ST-31.3 |
+| SR-243 | 7 | 🟡 MINOR | Reviewer: the spec's width list said 6/12/24/48 px; no band has a 6-px bar | fixed — 12/24/48 px (one TIA pixel = 6 capture px) |
+| SR-244 | 7 | 🟡 MINOR | Auditor: the Session A record said "the measured bars" before the capture existed | fixed — "expected (to be measured in Session C)" |
+| SR-245 | 7 | 🟡 MINOR | Re-review: the table read crosses a page from X=132, so the body is 23 cycles there, not 22 | fixed — the source/doc/plan state 22 (23 from X=132; WSYNC absorbs it) |
+| SR-246 | 7 | 🟡 MINOR | Re-review: ex-3 captures at 1 s and 2 s show two bars and two medium bars, not one and two | fixed — "a capture in the first second shows one bar; a second later two close bars" |
+| SR-247 | 7 | 🟡 MINOR | Re-review: ex-1's "gaps of 8/24/56 pixels" were TIA pixels while the section uses capture pixels | fixed — tagged "(TIA pixels; 48/144/336 capture px)" |
+| SR-248 | 7 | ℹ️ INFO | The stretched-mode one-clock offset is observed in the committed ROM, not derived in the lesson | accepted — stated as observed, with the 307/343 arithmetic |
