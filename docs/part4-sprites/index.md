@@ -9,7 +9,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | 25 | [Player Sprite Basics — GRP0, Your First Character](./25-player-basics) | ✅ Complete |
 | 26 | [Horizontal Positioning — The Divide-by-15 Trick](./26-horizontal-positioning) | ✅ Complete |
 | 27 | [Sprite Movement — Reading the Joystick](./27-sprite-movement) | ✅ Complete |
-| 28 | [Two Players — GRP0 and GRP1](./28-two-players) | 🔒 Coming Soon |
+| 28 | [Two Players — GRP0 and GRP1](./28-two-players) | ✅ Complete |
 | 29 | [Missiles and Ball — Simple Projectiles](./29-missiles-and-ball) | 🔒 Coming Soon |
 | 30 | [Multi-Color Sprites — Changing Colors Per Line](./30-multicolor-sprites) | 🔒 Coming Soon |
 | 31 | [Copies and Sizes — NUSIZ Register](./31-copies-and-sizes) | 🔒 Coming Soon |
@@ -25,7 +25,7 @@ Part 4 turns the TIA's movable objects into characters, projectiles, and animati
 - **Lesson 26** positions a sprite exactly with `RESP0`, `HMP0`, and the divide-by-15 routine
 - **Lesson 27** moves the sprite every frame and steers it with the joystick
 - **Lesson 28** gives both players their own shape, color, and position
-- **Lesson 29** enables the two missiles and the ball, with their widths and colors
+- **Lesson 29** enables the two missiles and the ball, with their widths and the player/playfield colors they share
 - **Lesson 30** changes `COLUP0` per line for a multi-colored character
 - **Lesson 31** uses `NUSIZ` for copies, double width, and quad width
 - **Lesson 32** delays a player's graphic one line with `VDELP1`

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 3 complete — 0 critical, 0 major open
+> **Status**: Phase 4 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -54,3 +54,11 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-203 | 3 | 🟡 MINOR | Auditor: exercise 1's `Direction` comment said +1/−1 while the exercise uses +2/−2 | fixed — "+2, -2 ($FE), or 0" |
 | SR-204 | 3 | ℹ️ INFO | `patrol-b.png` shows Stella's transient launch badge in the lower black border, outside the picture | accepted — the auditor confirmed it does not cover the picture and matches Lesson 25's artifact |
 | SR-205 | 3 | ℹ️ INFO | Synthetic key injection did not reach Stella; the input path was verified with scratch builds that force the input byte | accepted — AR-6 allows scratch witnesses for what-if states; the shipped ROM uses the real `SWCHA` read |
+| SR-206 | 4 | 🟠 MAJOR | Both: the HMOVE checkpoint was labelled VBLANK line 2 cycle 66; that is the `STA WSYNC` stall point. `STA HMOVE` executes on line 3 cycle 0 and completes by cycle 3, in HBLANK | fixed — the doc and the table say line 3 cycle 0 (completes by 3); a new `AfterHmove` breakpoint measures line 3 cycle 3 |
+| SR-207 | 4 | 🟡 MINOR | Both: "the two stores take 12 cycles" — `STA GRP0`/`STA GRP1` are zero-page stores, 3 cycles each, 6 total; both load/store pairs 14 | fixed — 6 cycles for the stores, 14 for both pairs, under a fifth of the 76-cycle line |
+| SR-208 | 4 | 🟡 MINOR | Reviewer: a repeated HMOVE gives a fixed extra offset, not frame-to-frame drift | fixed — "the first sprite ends up a fixed extra offset from its target" |
+| SR-209 | 4 | 🟡 MINOR | Auditor: the plan ID "AR-21" leaked into the lesson source/doc; no other shipped lesson cites plan IDs | fixed — "the one-HMOVE rule" in the source and doc; the plan keeps the AR reference |
+| SR-210 | 4 | 🟡 MINOR | Auditor: the What's Next teaser said the missiles/ball have their own colors; they share `COLUP0`/`COLUP1`/`COLUPF` | fixed — "colored by the player or playfield register it shares" |
+| SR-211 | 4 | 🟡 MINOR | Re-review: the Part 4 index's Lesson 29 bullet still said "widths and colors" | fixed — "widths and the player/playfield colors they share" |
+| SR-212 | 4 | 🟡 MINOR | Re-review: "effect at the next line's cycle 3" read as line 4; the store is applied in cycle 2 of line 3, the next instruction starts at cycle 3 | fixed — the source says "store applied at cycle 2; next instruction at cycle 3"; the doc says "the strobe completes by cycle 3" |
+| SR-213 | 4 | ℹ️ INFO | `two-players.png` shows the transient Stella launch toast in the lower black border, outside the picture | accepted — it does not cover the picture, matching the Lesson 25 artifact |

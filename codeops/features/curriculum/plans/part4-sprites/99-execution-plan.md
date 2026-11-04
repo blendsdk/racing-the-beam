@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 14:45
-> **Progress**: 3/10 tasks (30%)
+> **Last Updated**: 2026-11-04 15:05
+> **Progress**: 4/10 tasks (40%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -172,7 +172,7 @@ divide-by-15 routine's measured landing recorded.
 
 ## Phase 4: Lesson 28 — Two Players
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: c86ffc7 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/28-two-players/` (4 sources) · `docs/part4-sprites/28-two-players.md` · `docs/part4-sprites/index.md` (row 28) · `docs/public/roms/part4-sprites/28-two-players/` · `docs/public/images/lesson28/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: medium — two independent players sharing a line budget; positioning correctness under review
 
@@ -181,7 +181,11 @@ divide-by-15 routine's measured landing recorded.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 28 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 28 · AR-2, AR-3, AR-4, AR-6, AR-13
 **Objective**: Deliver lesson 28 end to end through the mandatory three sessions.
 
-- [ ] 4.1.1 Lesson 28 — Two Players: Session A freezes ST-28.1–ST-28.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson28): Two Players`
+- [x] 4.1.1 Lesson 28 — Two Players: Session A freezes ST-28.1–ST-28.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson28): Two Players` ✅ (completed: 2026-11-04 15:05)
+
+**Session A record** (freeze + red baseline, 2026-11-04 14:50): ST-28.1–ST-28.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 28. Design pins: the standard 262-line frame; P0 shape `$18,$3C,$7E,$DB,$FF,$24,$5A,$A5` red `$42` at X=48, P1 shape `$3C,$7E,$FF,$DB,$FF,$66,$3C,$18` blue `$84` at X=104; both top 88 (first body line 125), 8 rows, one clear line, bottom 95 = 192; `COLUBK=$02`, `NUSIZ0=NUSIZ1=0`, `REFP0=REFP1=0`; two coarse routines (`SetCoarse0`/`SetCoarse1`) set `HMP0/HMP1` and strobe `RESP0/RESP1`, then **one** `HMOVE` applies both (AR-21); the targets carry the Lesson 26 +3 bias (51/107). Evidence pins (AR-6): frame checkpoints; `PosApply0/1` (A = the biased targets); `Resp0Write`/`Resp1Write` (the coarse strobes); `HmoveApply` (the single fine strobe); `BodyStart` at 125 with 8 hits; the measured X/colors in the capture. Solutions: ex 1 swap the colors; ex 2 X=16/140; ex 3 both at X=80 to show P0's priority over P1. Red baseline confirmed: no `lessons/part4-sprites/28-two-players`, no `docs/public/images/lesson28`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 28 is Coming Soon, sidebar entry exists (`config.ts:87`), `verify.sh` green at `c86ffc7`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 15:05): Preflight per `vcs-lesson-production` — the two player registers and the one-HMOVE rule checked against `include/vcs.asm` / AR-21, the frame against Lessons 12–27, ACME forms; no demo (AR-3: the two players are the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F056` first hit (37, 7), `BodyStart` `$F05D` first hit (125, 6) with 8 hits, `OverscanStart` `$F07D` = (229, 4). Positions: `PosApply0` `$F027` A = `$33` (51 = 48 + 3), line 0 cycle 18; `PosApply1` `$F02C` A = `$6B` (107 = 104 + 3), line 1 cycle 45; `Resp0Write` `$F09F` line 1 cycle 34; `Resp1Write` `$F0B1` line 2 cycle 54; `HmoveApply` `$F031` line 3 cycle 0, with `AfterHmove` at line 3 cycle 3 (the single HMOVE applies both fine offsets). Capture from the committed ROM: red P0 at capture x = **313–360** (TIA X=48), blue P1 at **649–696** (X=104), both y = **385–408** (scanlines 125–132). Solutions: ex 1 — blue 313–360, red 649–696; ex 2 — red 121–168 (X=16), blue 865–912 (X=140); ex 3 — both at 505–552 (X=80), P0 red wins the overlap and blue shows only where P1 is on and P0 off. Site (ST-28.6): index row 28 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, the capture, prev → 27, next → 29; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 1 major**, 4 minor. The major: the HMOVE checkpoint was labelled VBLANK line 2 cycle 66, which is the `STA WSYNC` stall point; the actual `STA HMOVE` executes on line 3 cycle 0 (the strobe completes by cycle 3, in HBLANK), confirmed by a new `AfterHmove` breakpoint at line 3 cycle 3. The minors: the two `STA` stores are 6 cycles, not 12; the repeated HMOVE gives a fixed extra offset, not "drift"; the plan ID AR-21 leaked into the lesson source/doc; and the What's Next teaser claimed per-object colors the missiles/ball do not have. Round 2: **0 critical, 0 major**, 3 prose minors (the "effect at the next line" wording, 14/76 is under a fifth not a quarter, and the Part 4 index's Lesson 29 color wording); all fixed and verify stayed green. The Stella launch toast in `two-players.png` is outside the picture and is accepted. Lesson 28 is complete.
 
 **Session sub-steps (the task's checklist):**
 
