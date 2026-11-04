@@ -90,7 +90,7 @@ after a store, learned in Lesson 18).
 | --- | --- | --- | --- | --- |
 | ST-30.1 | Assemble the lesson source and its three solutions; run `verify.sh` | Each assembles to exactly 4,096 bytes; no ROM drift; docs build pass | `verify.sh` output + file size | RD-04 AC 1–2 / AR-4 |
 | ST-30.2 | Run the ROM; inspect the sprite | One 8×16 sprite at X≈72 (capture ≈457), scanlines 117–132 (capture y ≈359–409); gold `$1A` rows 0–3, blue `$84` rows 4–11, red `$42` rows 12–15 | Screenshot `multicolor.png` + pixel check | 03 §Lesson 30 |
-| ST-30.3 | Inspect shape and row extent | The shape table has 16 distinct rows; the sprite spans exactly 16 scanlines with no first-line artifact | Capture + `SpriteWrite` log | 03 §Lesson 30 |
+| ST-30.3 | Inspect shape and row extent | The shape table has 16 rows, one per sprite line (some bytes repeat); the sprite spans exactly 16 scanlines with no first-line artifact | Capture + `SpriteWrite` log | 03 §Lesson 30 |
 | ST-30.4 | Debugger: per-line color | `ColorWrite` 16 hits per frame with A = the table byte and 4/8/4 runs; `BodyStart` line 117; body ledger totals 24 cycles | State log + static ledger (AR-6) | RD-04 AC 3 / 03 §Lesson 30 |
 | ST-30.5 | Assemble and run each solution | Ex 1 adds white shoes; ex 2 slides the color bands with the shape fixed; ex 3 draws the 16-px two-color figure | `verify.sh` + manual runs + captures | RD-04 AC 1 / AR-8 |
 | ST-30.6 | Build the docs; open the lesson page | The page renders; `<RomPlayer>` loads the ROM; the capture resolves; prev 29, next 31; index row 30 links | Build output + page check | RD-04 AC 1 / AR-10 |

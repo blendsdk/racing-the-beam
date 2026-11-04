@@ -212,7 +212,7 @@ a freedom of implementation.
 - **Expected screen:** one 8×16 sprite at capture x ≈ 457, rows ≈ 359–409, with a gold top band,
   a blue middle band, and a red lower band; the bands are 4/8/4 scanlines.
 - **Demo ROM:** none — the color bands are the visible picture (AR-3).
-- **Exercises:** 1. add white shoes (`$0E`, 2 rows) and shorten the body by 2 rows; 2. slide the
+- **Exercises:** 1. add white shoes (`$0E`, 2 rows) and split the rows 4/7/3/2; 2. slide the
   color bands by rotating the 16-byte color table one byte every 30 frames (the shape stays);
   3. *(Stretch)* a 16-px-wide two-color character: P0 and P1 side by side (P1 at X+8), each with
   its own 16-row half-shape and color.

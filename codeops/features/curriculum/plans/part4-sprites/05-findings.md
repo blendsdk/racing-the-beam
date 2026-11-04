@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 5 complete — 0 critical, 0 major open
+> **Status**: Phase 6 complete — 0 critical, 0 major open
 
 One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 MAJOR / 🟡 MINOR /
 ℹ️ INFO. Duplicate observations raised by both specialists share one row (both IDs noted).
@@ -73,3 +73,13 @@ One row per finding. Severity follows the quality profile: 🔴 CRITICAL / 🟠 
 | SR-228 | 5 | 🟡 MINOR | Reviewer: the TypeScript ball entry used 128 while the other entries used targets | fixed — `x: 108` with a measured-X comment |
 | SR-229 | 5 | 🟡 MINOR | Auditor: the exercise-1/3 sources still said "the ball's slot is later" | fixed — "the ball's mapping is its own" |
 | SR-230 | 5 | ℹ️ INFO | The ball's logged cycle (61) and landing (128) are seven cycles from the reviewers' 14+5n model (54/107); the committed ROM (sha1 f16342c4) reproduces 61/128 on a fresh capture | accepted — the measured values are the lesson's evidence; the 7-cycle offset is documented, not explained away |
+| SR-231 | 6 | 🟠 MAJOR | Both: the doc said the sprite's left edge was "clock 432" (a line is 228 color clocks; 432 = 72 × 6, the capture scale) | fixed — the left edge is color clock 140 (capture x = 457) |
+| SR-232 | 6 | 🟡 MINOR | Both: the store-start cycles were described as the write effects; `STA` writes on its third cycle | fixed — "starts at 10, write 12" / "starts at 17, write 19", with the later-row 11/13 and 18/20 qualification |
+| SR-233 | 6 | 🟡 MINOR | Reviewer: exercise 1's expected result said "the rest of the bands shift up"; the 4/7/3/2 table keeps the hat, shortens blue by one, and moves red up one | fixed — the expected rows are hat 0–3, blue 4–10, red 11–13, shoes 14–15 |
+| SR-234 | 6 | 🟡 MINOR | Auditor: exercise 3's header had a doubled backslash | fixed — one backslash |
+| SR-235 | 6 | 🟡 MINOR | Both: the spec said "shorten the body by 2 rows" while the solution is 4/7/3/2 | fixed — the spec says 4/7/3/2 |
+| SR-236 | 6 | 🟡 MINOR | Auditor: ST-30.3 said "16 distinct rows" while some shape bytes repeat | fixed — "16 rows, one per sprite line (some bytes repeat)" |
+| SR-237 | 6 | 🟡 MINOR | Re-review: the 10/12 and 17/19 cycles are the first row's; later rows are one cycle later | fixed — the doc qualifies the first row and gives 11/13 / 18/20 for later rows |
+| SR-238 | 6 | 🟡 MINOR | Re-review: the ex-2 cost list omitted `CLC` | fixed — `TXA`/`CLC`/`ADC`/`AND`/`TAY` |
+| SR-239 | 6 | 🟡 MINOR | Re-review: the band ranges left the two blend rows unclassified | fixed — the ranges tile (gold 359–371, blue 372–396, red 397–408) |
+| SR-240 | 6 | ℹ️ INFO | The reviews were static; the parent's `verify.sh` (112 ROMs) and Stella logs are the runtime evidence | accepted — the phase record carries the logs |

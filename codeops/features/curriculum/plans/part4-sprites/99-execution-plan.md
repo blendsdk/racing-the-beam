@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-04 15:40
-> **Progress**: 5/10 tasks (50%)
+> **Last Updated**: 2026-11-04 16:00
+> **Progress**: 6/10 tasks (60%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -247,7 +247,7 @@ object's measured X and width recorded.
 
 ## Phase 6: Lesson 30 — Multi-Color Sprites
 
-> **Phase baseline tree**: _(recorded by the exec-plan skill from a temporary-index snapshot of committed, staged, unstaged, and untracked phase-start state)_
+> **Phase baseline tree**: bd8e6a4 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part4-sprites/30-multicolor-sprites/` (4 sources) · `docs/part4-sprites/30-multicolor-sprites.md` · `docs/part4-sprites/index.md` (row 30) · `docs/public/roms/part4-sprites/30-multicolor-sprites/` · `docs/public/images/lesson30/` (1 capture) · `README.md` (verify only) · `99-execution-plan.md` + roadmaps (progress)
 > **Reasoning**: medium — a per-line color write over a fixed shape; the HBLANK budget is the risk
 
@@ -256,7 +256,11 @@ object's measured X and width recorded.
 **Reference**: [03-lesson-specs.md](03-lesson-specs.md) §Lesson 30 · [07-testing-strategy.md](07-testing-strategy.md) §Lesson 30 · AR-2, AR-3, AR-4, AR-6, AR-16
 **Objective**: Deliver lesson 30 end to end through the mandatory three sessions.
 
-- [ ] 6.1.1 Lesson 30 — Multi-Color Sprites: Session A freezes ST-30.1–ST-30.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson30): Multi-Color Sprites`
+- [x] 6.1.1 Lesson 30 — Multi-Color Sprites: Session A freezes ST-30.1–ST-30.6 (red baseline), Session B implements the full artifact set, Session C verifies to green and hardens; commit via the `git-commit` skill in push mode — `feat(lesson30): Multi-Color Sprites` ✅ (completed: 2026-11-04 16:00)
+
+**Session A record** (freeze + red baseline, 2026-11-04 15:45): ST-30.1–ST-30.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 30. Design pins: the standard 262-line frame; one player 0, 16 rows, top 80 (first body line 117), X=72 (target 75 with the +3 bias), shape 16 bytes (rows 0–3 hat, 4–11 body, 12–15 legs), color table 4 × `$1A` gold, 8 × `$84` blue, 4 × `$42` red; `COLUBK=$02`, `NUSIZ0=0`, `REFP0=0`; the body writes `COLUP0` then `GRP0` then `WSYNC` (24 cycles); one clear line and 95 bottom lines = 192. Evidence pins (AR-6): frame checkpoints; `BodyStart` 117 with 16 hits; `ColorWrite` 16 hits with A = the table byte and the 4/8/4 runs; `SpriteWrite` 16 hits with A = the shape byte; the measured bands in the capture. Solutions: ex 1 white shoes (4/7/3/2 rows); ex 2 sliding bands (a 0–15 offset, 30-frame tick); ex 3 two players at X=64/72, one HMOVE (AR-21). Red baseline confirmed: no `lessons/part4-sprites/30-multicolor-sprites`, no `docs/public/images/lesson30`, no committed ROMs, the document is the `🔒 Coming Soon` stub, index row 30 is Coming Soon, sidebar entry exists (`config.ts:89`), `verify.sh` green at `bd8e6a4`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-04 16:00): Preflight per `vcs-lesson-production` — the per-line color technique checked against Lesson 24's `COLUPF` model and Lesson 25's sprite geometry, the body ledger against the 76-cycle line, the frame against Lessons 12–29, ACME forms; no demo (AR-3: the color bands are the visible picture). `bash scripts/verify.sh` green (implementation, fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F00E` = (259, 3), `VblankStart` `$F01C` = (0, 5), `VisibleStart` `$F041` first hit (37, 7), `BodyStart` `$F048` first hit (117, 6) with 16 hits, `OverscanStart` `$F066` = (229, 4). Color: `ColorWrite` `$F04B` at line 117 cycle 10 (write lands at 12; later rows one cycle later), 16 hits, A = `$1A` rows 0–3, `$84` rows 4–11, `$42` rows 12–15; `SpriteWrite` `$F050` at cycle 17 (write 19), 16 hits. Capture from the committed ROM: the sprite at capture x = 457–504 (TIA X=72), y = 359–408 (16 rows); gold 359–371, blue 372–396, red 397–408. Solutions: ex 1 — 4/7/3/2 color bands; ex 2 — a 0–15 offset with a 30-frame tick (the color write moves to ~cycle 23, just past HBLANK, but the sprite's pixels start at color clock 140); ex 3 — P0/P1 at X=64/72, red 409–456 and blue 457–504, one HMOVE. Site (ST-30.6): index row 30 ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, the capture, prev → 29, next → 31; README unchanged. Reviews (AR-5): both specialists on the phase diff (static; the parent ran all builds/logs/captures) — round 1: **0 critical, 1 major**, 3 minor. The major: the doc said the sprite's left edge was "clock 432", an impossible value (a line is 228 clocks); it is color clock 140 (capture x = 457). The minors: the store-start vs write-cycle wording, the exercise-1 band expectation, and a doubled backslash. Round 2: **0 critical, 0 major**, 3 prose minors (row-0 vs later row cycles, the missing `CLC` in the ex-2 cost list, and the band ranges leaving the blend rows unclassified); all fixed and verify stayed green. Lesson 30 is complete.
 
 **Session sub-steps (the task's checklist):**
 

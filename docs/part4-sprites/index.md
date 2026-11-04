@@ -11,7 +11,7 @@ Master player sprites, missiles, the ball, positioning tricks, and animation.
 | 27 | [Sprite Movement — Reading the Joystick](./27-sprite-movement) | ✅ Complete |
 | 28 | [Two Players — GRP0 and GRP1](./28-two-players) | ✅ Complete |
 | 29 | [Missiles and Ball — Simple Projectiles](./29-missiles-and-ball) | ✅ Complete |
-| 30 | [Multi-Color Sprites — Changing Colors Per Line](./30-multicolor-sprites) | 🔒 Coming Soon |
+| 30 | [Multi-Color Sprites — Changing Colors Per Line](./30-multicolor-sprites) | ✅ Complete |
 | 31 | [Copies and Sizes — NUSIZ Register](./31-copies-and-sizes) | 🔒 Coming Soon |
 | 32 | [Vertical Delay — VDELP0, VDELP1](./32-vertical-delay) | 🔒 Coming Soon |
 | 33 | [Paddle & Keyboard Controllers](./33-paddle-keyboard-controllers) | 🔒 Coming Soon |
