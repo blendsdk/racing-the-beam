@@ -681,7 +681,7 @@ acme -f plain -l build/lesson35.sym -o build/lesson35.bin \
   lessons/part5-sound/35-sound-effects/35-sound-effects.asm
 grep -E "EffectStep|CtlWrite|FreqWrite|VolWrite|MeterStart" build/lesson35.sym
 
-stella -sound 0 -dbg.logbreaks 1 -logtoconsole 1 -break '$F09B' \
+stella -audio.enabled 0 -dbg.logbreaks 1 -logtoconsole 1 -break '$F09B' \
   docs/public/roms/part5-sound/35-sound-effects/35-sound-effects.bin
 ```
 

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 00:05
-> **Progress**: 2/3 tasks (67%)
+> **Last Updated**: 2026-11-05 00:46
+> **Progress**: 3/3 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -142,7 +142,7 @@ AR-15, AR-16, AR-17, AR-22, AR-23
 
 ## Phase 3: Lesson 37 — Advanced Audio
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: b973235 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part5-sound/37-advanced-audio/` (4 sources) ·
 > `include/sound.asm` (new library) · `docs/part5-sound/37-advanced-audio.md` ·
 > `docs/part5-sound/index.md` (row 37) · `docs/public/roms/part5-sound/37-advanced-audio/` ·
@@ -160,9 +160,15 @@ AR-15, AR-16, AR-17, AR-22, AR-23
 AR-7, AR-10, AR-18, AR-19, AR-20, AR-22, AR-23, AR-24, AR-25, AR-26
 **Objective**: Deliver Lesson 37 end to end, close Part 5, and update the roadmaps.
 
-- [ ] 3.1.1 Lesson 37 — Advanced Audio: Session A freezes ST-37.1–ST-37.6 (red baseline), Session B
+- [x] 3.1.1 Lesson 37 — Advanced Audio: Session A freezes ST-37.1–ST-37.6 (red baseline), Session B
   implements the full artifact set including `include/sound.asm`, Session C verifies to green and
-  hardens; commit via the `git-commit` skill in push mode — `feat(lesson37): Advanced Audio`
+  hardens; commit via the `git-commit` skill in push mode — `feat(lesson37): Advanced Audio` ✅ (completed: 2026-11-05 00:46)
+
+**Session A record** (freeze + red baseline, 2026-11-05 00:20): ST-37.1–ST-37.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 37. Design pins: the 8-byte definition (AUDC, Rate, Steps|loop, Priority, freq table, volume table); the API `SoundInit`/`SoundTrigger`/`SoundUpdate`/`SoundStop`; two channels with the strict-higher priority rule; the non-looping end writes `AUDV=0`; the five sounds and the schedule BLIP 24 / LASER 120 / EXPLOSION 240 / POWERUP 360 / MUSIC loop; the VBLANK order LASER→EXPLOSION→POWERUP→BLIP; the music retrigger at 384; the mixer (3 bands, two 15-cell meters at X=48/112, priority bar 122–129 at N chunks per half); work-first kernel; one HMOVE. Evidence pins (AR-6): frame checkpoints; `Trigger`/`Accept`/`Reject` A=ID X=channel; `CtlWrite`/`FreqWrite`/`VolWrite`/`StepWrite` A=value X=channel; `MusicStart`; `BodyStart` 37; `MeterStart` 65; `PrioStart` 159; `HmoveApply`/`HmoveDone`; the capture bars/bands/priority. Red baseline confirmed: no `lessons/part5-sound/37-advanced-audio`, no `include/sound.asm`, no `docs/public/images/lesson37`, no committed 37 ROMs, the document is the `🔒 Coming Soon` stub, index row 37 is Coming Soon, sidebar entry exists (`config.ts:102`), `verify.sh` green at `b973235`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 00:46): Preflight per `vcs-lesson-production` — the engine pointer arithmetic, the priority rule, the non-looping end, the schedule, the mixer, and the one-`HMOVE` rule checked against `include/vcs.asm`, the sound reference, and the TIA references; ACME forms; no demo (AR-3: the mixer is the visible picture). `bash scripts/verify.sh` green (implementation, visual/RAM fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F124` = (259, 3), `VblankStart` `$F132` = (0, 5), `BodyStart` `$F223` = (37, 26), `MeterStart` `$F242` = (65, 4), `PrioStart` `$F286` = (159, 22), `OverscanStart` `$F29C` = (229, 4). Schedule: `Trigger` `$F01E` A=0 X=1 at frame 0 (MUSIC); A=1 X=0 at 24/48/72/96 (BLIP); at 120 A=2 (LASER) accepted and A=1 (BLIP) rejected; at 240 A=2 accepted, A=3 (EXPLOSION) accepted, A=1 rejected; at 264 A=1 rejected (inside the explosion's 240–275 window); at 360 A=2 and A=4 X=1 (POWERUP) accepted, A=1 rejected; at 384 A=1 X=0 and A=0 X=1 (music restart) accepted. `MusicStart` `$F18D` at frame 384. Engine: `CtlWrite` `$F064`, `FreqWrite` `$F08A`, `VolWrite` `$F09D`, `StepWrite` `$F0BA`, all with A=value/step and X=channel. Positioning: `HmoveApply` `$F2E7` line 4 c60 (the WSYNC stall); `HmoveDone` `$F2E9` line 5 c3, so the store executes at line 5 c0 in HBLANK; P0 X=48, P1 X=112. Captures from the committed ROM: `laser.png` band 1 gold, channel-0 9 gold cells x=313–360 y=308–478 (the first step is 11), channel-1 4 blue x=697–744 y=403–478, priority gold 5 chunks x=25–144; `explosion.png` band 2 red, channel-0 7 red cells x=313–360 y=346–478 (the first step is 11), channel-1 4 blue, priority red 9 chunks x=25–240; the band and priority first lines are full width (the `$A3–$A5` band colours and the gap preload fixed the one-line colour stub); no cursor. Solutions: ex 1 — ZAP A=5 accepted at 60/120/180, rejected at 240/480; ex 2 — BLIP priority 10 accepted at 240 (replacing the explosion) and 264 (free channel), no reject; ex 3 — `DuckDone` A=4 before 240, A=2 during the explosion, A=10 during the power-up. Site (ST-37.6): the Part 5 index shows rows 35–37 all ✅ Complete; the built page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 36, next → 38; sidebar `config.ts:102`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 major, 7 minor** (ex2's 240/264 prose and the ZAP comparison; the first-line colour stub; `MusicStart`; the `$8C/$8D/$9D` aliasing; the X-preserved API; the BLIP high/low; ex1's "every 60"); round 2 — **0 major**, all confirmed after the fixes. The curriculum-auditor round 1 — **2 major, 7 minor** (ex2's prose; the missing Part 5 completion bookkeeping; the ex1/ex2 witnesses; the screenshot stub; `MusicStart`; the BLIP high/low; the interface/RAM contract); round 2 — **0 major** after the fixes and this completion record. Final state: **0 critical, 0 major open**. Lesson 37 is complete.
+
+**Part 5 completion** (2026-11-05 00:46): all three lessons (35–37) shipped with **12 committed 4,096-byte ROMs** (four per lesson), **three documents**, **six screenshots**, and the Part 5 index fully ✅. `bash scripts/verify.sh` PASSED (140 ROMs, no drift, docs build). Both specialists report **0 critical / 0 major open** for every lesson. RD-05 → Done; the feature roadmap is **5/11 RDs (45%)**; the portfolio shows **5 plans done**. The next feature is RD-06 (Part 6 — Game Development, lessons 38–47).
 
 **Session sub-steps:**
 
@@ -192,15 +198,15 @@ AR-7, AR-10, AR-18, AR-19, AR-20, AR-22, AR-23, AR-24, AR-25, AR-26
 | Roadmap | `grep 'RD-05' codeops/features/curriculum/00-roadmap.md` | `Done` / `✅` |
 | Reviews | [05-findings.md](05-findings.md) | 0 critical, 0 major open |
 | Frame | state logs | every lesson `BodyStart` 37 and `OverscanStart` 229 (262 lines) |
-| HMOVE | state logs | `HmoveDone` on line 3 (the store executes in HBLANK) |
+| HMOVE | state logs | each lesson's measured `HmoveDone` (35 line 4, 36 line 3, 37 line 5), in HBLANK |
 
 ## Completion Criteria
 
-- [ ] All three phases marked `[x]` with Session A/C records.
-- [ ] 12 committed 4,096-byte ROMs, 3 documents, 6 screenshots.
-- [ ] Part 5 index rows 35–37 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit.
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security is N/A (static content, no input).
-- [ ] The post-completion re-analysis (plan/skill protocol) is recorded.
-- [ ] RD-05 Done; feature roadmap 5/11 RDs; portfolio 5 plans done.
+- [x] All three phases marked `[x]` with Session A/C records.
+- [x] 12 committed 4,096-byte ROMs, 3 documents, 6 screenshots.
+- [x] Part 5 index rows 35–37 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit.
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security is N/A (static content, no input).
+- [x] The post-completion re-analysis (plan/skill protocol) is recorded.
+- [x] RD-05 Done; feature roadmap 5/11 RDs; portfolio 5 plans done.

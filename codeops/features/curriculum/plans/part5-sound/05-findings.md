@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 2 complete — 0 critical, 0 major open
+> **Status**: Phase 3 complete — 0 critical, 0 major open. Part 5 complete.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -43,3 +43,21 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-022 | 36 | 🟡 MINOR | Reviewer: the note frequencies were called "measured"; they are calculated from the nominal audio clock. | fixed — "Hz (nominal clock)", "derived", and "computed against equal temperament"; the asm header says derived. |
 | SR-023 | 36 | 🟡 MINOR | Reviewer: the Stella run line said "click the screen to hear it"; Stella needs no click (Javatari does). | fixed — the parenthetical is removed; the RomPlayer paragraph keeps the click note. |
 | SR-024 | 36 | 🟡 MINOR | Reviewer: the ex3 hint said the markers "reappear on the first rung"; the lead restarts on E (rung 2). | fixed — the harmony returns on rung 0 and the lead on rung 2 (E). |
+| SR-034 | 37 | 🟠 MAJOR | Both reviewers: Exercise 2 said the BLIP at frame 264 was "inside the explosion" and that it "loses to a ZAP"; with priority 10 the BLIP wins at 240 and also beats the ZAP (10 > 6). | fixed — the exercise uses 240 as the priority witness, says the 264 accept is a free-channel accept, and says the BLIP beats the ZAP. |
+| SR-035 | 37 | 🟡 MINOR | Both reviewers: the first visible line of each band and of the priority bar showed the previous colour (a 1-line stub) because `COLUPF` was written too late. | fixed — the three band colours are precomputed at `$A3–$A5` and the priority colour is preloaded during the gap; both captures re-taken and the band/priority rows are full width. |
+| SR-036 | 37 | 🟡 MINOR | Both reviewers: `MusicStart` was listed in the source header and ST-37.3 but no label existed. | fixed — `MusicStart` is on the retrigger path at frame 384 (`$F18D`). |
+| SR-037 | 37 | 🟡 MINOR | Reviewer: the priority/band shadows lived in the engine's `$8C/$8D/$9D`. | fixed — the monitor uses `$A0–$A5`, outside the engine's block; the library contract is stated. |
+| SR-038 | 37 | 🟡 MINOR | Reviewer: `SoundTrigger`'s API did not say X is preserved; `TriggerSound` depends on it. | fixed — the API and the lesson document say X is preserved. |
+| SR-039 | 37 | 🟡 MINOR | Reviewer: BLIP was called a "short high tone"; AUDF 20 is the lowest pitch in the lesson. | fixed — "a short low pulse". |
+| SR-040 | 37 | 🟡 MINOR | Reviewer: ex1 said `Accept` reports A=5 "every 60 frames"; the ZAP is rejected at 240/480 inside the explosion. | fixed — accepted while channel 0 is free; rejected at 240/480; the ZAP replaces the LASER at 120/360. |
+| SR-041 | 37 | 🟡 MINOR | Reviewer: "the 8-byte records are the only interface" overstated the contract. | fixed — the records are the data; the API and `Snd*` shadows are the rest. |
+| SR-042 | 37 | 🟡 MINOR | Reviewer: the library RAM block said "keep out" but then freed `$8E–$8F`; the exact rules were unclear. | fixed — `$8E–$8F` free, `$90–$9F` read-only to the caller, `$A0–$A5` monitor. |
+| SR-043 | 37 | ℹ️ INFO | Reviewer: the main's 6th `SfxColorTbl`/`BandMap` entry (ZAP) was unreachable. | fixed — the main has five entries; the ZAP entries are added in exercise 1. |
+| SR-044 | 37 | ℹ️ INFO | Reviewer: the music's last step is a rest, so the channel-1 meter drops to 0 for 12 frames each loop. | accepted and documented — it is the Lesson 36 tune's rest. |
+| SR-045 | 37 | ℹ️ INFO | Reviewer: Lesson 37 uses `-audio.enabled 0`; Lessons 35/36 use `-sound 0`. | fixed in the Part 5 completion commit — all three documents use `-audio.enabled 0`. |
+| SR-046 | 37 | 🟠 MAJOR | Reviewer round 2: the three exercise sources still used the old `$8C/$8D/$9D` monitor block and the inline band-colour select; the main had moved to `$A0–$A5` and the precomputed band colours. | fixed — all three solutions were regenerated from the current main (the ZAP, priority, and duck changes re-applied); ex2/ex3 now carry five `SfxColorTbl`/`BandMap` entries, ex1 six. |
+| SR-047 | 37 | 🟡 MINOR | Reviewer round 2: band 0's first visible line still had a 3-chunk stub because the `STA COLUPF` landed after the playfield's first pixel. | fixed — `LDA BandColor0 / STA COLUPF` before `STA VBLANK`; the re-taken captures have a clean first line. |
+| SR-048 | 37 | 🟡 MINOR | Reviewer round 2: the explosion capture is 10 cells, not 11; the doc said 11 and "first step". | fixed — the committed captures are LASER 9 cells and EXPLOSION 7 cells; the doc records the captured step and the first-step 11. |
+| SR-049 | 37 | 🟡 MINOR | Reviewer round 2: the plan's HMOVE row still said line 3, and the completion checkboxes were unchecked. | fixed — the row names each lesson's measured line (35/4, 36/3, 37/5); the plan and RD-05 AC checkboxes are ticked. |
+| SR-050 | 37 | ℹ️ INFO | Reviewer: the ledger jumped from SR-024 to SR-034. | accepted — the auditor's SR-025–SR-033 were merged into the atari reviewer's SR-034–SR-042 rows; no finding was dropped. |
+| SR-051 | 37 | ℹ️ INFO | Reviewer: the exercise sources carried the 6th color/band entries even when they did not add ZAP. | fixed by the regeneration — only exercise 1 has the ZAP entries. |

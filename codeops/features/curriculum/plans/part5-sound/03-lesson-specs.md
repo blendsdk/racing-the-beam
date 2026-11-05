@@ -233,9 +233,11 @@ each step, so the state fits exactly 16 bytes.
       flag, and leaves the shadow volume at 0. The last table entry is not relied on to mute.
     - `SoundStop` — X = channel; silence and free it.
   - State at `$90–$9F` (8 bytes/channel: definition pointer, timer, step, priority, active, freq
-    shadow, volume shadow); scratch at `$88–$8F`. One active sound per channel; a new sound with
-    priority strictly greater than the active one replaces it; equal or lower is rejected.
-    Preemption-with-resume is named as a later refinement, not implemented (AR-18).
+    shadow, volume shadow); scratch at `$88–$8F` (`$8E–$8F` free for the caller). `SoundTrigger`
+    preserves X (the channel) on return. One active sound per channel; a new sound with priority
+    strictly greater than the active one replaces it; equal or lower is rejected. The monitor uses
+    `$A0–$A5` for its priority/band bytes, outside the engine's block. Preemption-with-resume is
+    named as a later refinement, not implemented (AR-18).
 - **ROM:** `37-advanced-audio.asm` — "the mixer".
   - Sound table (IDs 0–4):
 
@@ -270,19 +272,22 @@ each step, so the state fits exactly 16 bytes.
 - **Expected screen:** at the EXPLOSION's first step, band 2 is red, the channel-0 bar is red at
   11 cells, the channel-1 bar is blue at 4 cells, and the priority bar is 9 chunks per half. At
   the LASER's first step, band 1 is gold, the channel-0 bar is gold at 11 cells, the channel-1 bar
-  is blue at 4 cells, and the priority bar is 5 chunks per half. The capture used in the doc
-  records the exact step and bar height.
+  is blue at 4 cells, and the priority bar is 5 chunks per half. The committed captures are a few
+  steps in: LASER 9 cells (y≈308–478), EXPLOSION 7 cells (y≈346–478); the doc records both the
+  first-step values and the captured step.
 - **Demo ROM:** none — the mixer is the visible picture (AR-3).
 - **Exercises:**
   1. **Add a zap.** Add ID 5 (`AUDC=$0C`, Rate 2, 5 steps, priority 6, freq `18,16,14,12,10`,
-     vol `10,9,8,7,6`) and trigger it every 60 frames on channel 0. Expected: `Accept` A=5; the
-     sound has 5 steps; the channel-0 bar follows 10→9→8→7→6 cells; the top band maps to LASER's
-     band; the priority bar is 6 chunks per half. ZAP priority 6 can preempt the LASER (5); the
-     exercise documents that.
-  2. **Priority inversion.** Change BLIP's priority from 2 to 10. Expected: a BLIP request during
-     EXPLOSION is now accepted (`Accept` A=1, not `Reject`); the channel-0 bar turns green and the
-     priority bar is 10 chunks per half while the explosion is replaced. The BLIP still loses to
-     ZAP if the exercise-1 change is present; run the exercise on the lesson ROM without ZAP.
+     vol `10,9,8,7,6`) and trigger it every 60 frames on channel 0. Expected: `Accept` A=5 on the
+     60-frame ticks while channel 0 is free; the sound has 5 steps; the channel-0 bar follows
+     10→9→8→7→6 cells; the top band maps to LASER's band; the priority bar is 6 chunks per half.
+     ZAP priority 6 preempts the LASER (5) at 120/360 and is rejected by the EXPLOSION (9) at
+     240/480.
+  2. **Priority inversion.** Change BLIP's priority from 2 to 10. Expected: at frame 240 the BLIP
+     replaces the EXPLOSION (`Accept` A=1; 10 > 9); the channel-0 bar turns green and the priority
+     bar is 10 chunks per half. At frame 264 the BLIP is accepted because the channel is free, not
+     from a priority win. The BLIP also beats ZAP (10 > 6); the inversion changes who owns channel
+     0. Run the exercise on the lesson ROM without ZAP.
   3. *(Stretch)* **Music ducking.** After `SoundUpdate`, if channel 0 is active with priority ≥ 9,
      write `AUDV1=2`; otherwise write `SndVol+1` (channel 1's current volume). Expected: the
      channel-1 bar drops to 2 cells while the explosion is active and returns to 4 after it ends.
@@ -290,8 +295,8 @@ each step, so the state fits exactly 16 bytes.
 - **Evidence pins:** frame checkpoints; `Trigger` — A = ID, X = channel, one hit per request;
   `Accept`/`Reject` — A = ID; `CtlWrite` — A = `AUDC`, X = channel; `FreqWrite` — A = `AUDF`, X =
   channel; `VolWrite` — A = `AUDV`, X = channel; `StepWrite` — A = the step index, X = channel;
-  `MusicStart`; `BodyStart` at 37; `HmoveApply`/`HmoveDone` once per frame; the capture bars,
-  priority bar, and bands.
+  `MusicStart` — one hit at frame 384; `BodyStart` at 37; `HmoveApply`/`HmoveDone` once per frame
+  (`HmoveApply` line 4 c60; `HmoveDone` line 5 c3); the capture bars, priority bar, and bands.
 - **Integration:** prev → Lesson 36; next → `/part6-game-dev/38-collision-detection` (the real
   Part 6 stub); part-index row 37 → ✅ Complete linking `./37-advanced-audio`; sidebar entry exists
   (`config.ts:102`). Estimated time: 90 minutes.

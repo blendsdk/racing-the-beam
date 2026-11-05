@@ -616,7 +616,7 @@ acme -f plain -l build/lesson36.sym -o build/lesson36.bin \
   lessons/part5-sound/36-music/36-music.asm
 grep -E "LeadStep|HarmonyStep|LeadFreqWrite|HarmonyFreqWrite" build/lesson36.sym
 
-stella -sound 0 -dbg.logbreaks 1 -logtoconsole 1 -break '$F110' \
+stella -audio.enabled 0 -dbg.logbreaks 1 -logtoconsole 1 -break '$F110' \
   docs/public/roms/part5-sound/36-music/36-music.bin
 ```
 

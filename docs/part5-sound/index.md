@@ -8,7 +8,7 @@ Create sound effects and music with the TIA's two audio channels.
 |---|--------|--------|
 | 35 | [Sound Effects — Beeps, Boops, and Explosions](./35-sound-effects) | ✅ Complete |
 | 36 | [Music — Melodies on the TIA](./36-music) | ✅ Complete |
-| 37 | [Advanced Audio — Sound Engine Design](./37-advanced-audio) | 🔒 Coming Soon |
+| 37 | [Advanced Audio — Sound Engine Design](./37-advanced-audio) | ✅ Complete |
 
 ## What You'll Learn
 
