@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 09:42
-> **Progress**: 0/10 tasks (0%)
+> **Last Updated**: 2026-11-05 11:40
+> **Progress**: 1/10 tasks (10%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -64,7 +64,7 @@ push mode is authorized by the user's directive to execute RD-06 and the Part 1�
 
 ## Phase 1: Lesson 38 — Collision Detection
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: c4263ab (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/38-collision-detection/` (4 sources) ·
 > `docs/part6-game-dev/38-collision-detection.md` · `docs/part6-game-dev/index.md` (rebuild + row
 > 38) · `docs/public/roms/part6-game-dev/38-collision-detection/` · `docs/public/images/lesson38/`
@@ -79,10 +79,16 @@ push mode is authorized by the user's directive to execute RD-06 and the Part 1�
 AR-13, AR-26, AR-27, AR-28, AR-32
 **Objective**: Deliver Lesson 38 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 38 — Collision Detection: Session A freezes ST-38.1–ST-38.6 (red baseline),
+- [x] 1.1.1 Lesson 38 — Collision Detection: Session A freezes ST-38.1–ST-38.6 (red baseline),
   Session B implements the full artifact set (including the AR-10 index rebuild), Session C
   verifies to green and hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson38): Collision Detection`
+  `feat(lesson38): Collision Detection` ✅ (completed: 2026-11-05 11:40)
+
+**Session A record** (freeze + red baseline, 2026-11-05 09:55): ST-38.1–ST-38.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 38. Design pins: the standard 262-line frame; four 6-line bands (P0–P1, P0–ball, P0–playfield, M0–P1); a 15-chunk hit bar per half; P0 moves in both axes (clamp 8–144, 40–156), P1 sweeps 40–136 at Y=40, the ball is fixed at X=80/Y=100, M0 fires from P0; read the latches in VBLANK, build `LatchMask`, edge-detect into `NewBits`, increment `Hits`, then `CXCLR`; the auto-demo moves P0 and fires M0 every 90 frames; work-first kernel; one HMOVE. Evidence pins (AR-6): frame checkpoints; `ReadCX` A = `CXP0FB`; `CollMask` A = the full mask; `CollStep` A = the 0→1 edge; `CXClear`; `Hits`; `BodyStart` 37; `HmoveApply`/`HmoveDone`; the capture bands and bar. Red baseline confirmed: no `lessons/part6-game-dev/38-collision-detection`, no `docs/public/images/lesson38`, no Part 6 ROMs, the document is the `🔒 Coming Soon` stub, the Part 6 index is the minimal stub, sidebar entry exists (`config.ts:109`), `verify.sh` green at `c4263ab`. No implementation logic read (AR-2).
+
+
+**Session C record** (verify + evidence, 2026-11-05 11:40): Preflight per `vcs-lesson-production` — the collision bit table, the one-frame latch latency, the edge detector, the 15-chunk bar, the PF2 bit order, and the one-HMOVE rule checked against `include/vcs.asm` and the TIA reference; ACME forms; no demo (AR-3: the collision lab is the visible picture). `bash scripts/verify.sh` green (implementation, review fixes, and re-captures); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F035` = (259, 3), `VblankStart` `$F043` = (0, 5), `BodyStart` `$F267` = (37, 5), `HmoveApply` `$F238` line 8 c56 (the WSYNC stall), `HmoveDone` `$F23A` line 9 c3 (the store executes at line 9 c0 in HBLANK), `OverscanStart` `$F394` = (229, 4). Logic: `ReadCX` `$F05A` A=$02 then $82; `CollMask` `$F07B` A=$20 (wall) and $10 (M0–P1 at frame 2936); `CollStep` `$F081` A=$00 held, $20 first wall, $10 M0–P1 at 2936; `CXClear` `$F0B4` line 1 c68; `Hits` `$F0A0` 1/2/3/4 at frames 2/343/439/713 and 12 at 2936. Captures from the committed ROM: `wall.png` band 2 green (x 25–984), 1 chunk per half (25–48/961–984), P0 X=8/Y≈126, P1 X=69/Y=40, ball X=80/Y=100, 16-px walls; `p1.png` band 0 red, 2 chunks per half (25–72/937–984), P0 X=80/Y=40, P1 X=81 (one visible pixel at X=88 under P0), ball X=80/Y=100; no cursor. The P0-at-156 check shows red only through visible 171 (no smear into the bar/bands); the Hits=15 check shows 15 contiguous chunks per half. Solutions: ex 1 — `CXP0FB` bit 6, the bar advances two chunks per ball contact; ex 2 — M1/`CXM1P` bit 7, M1–P0 at frame 588; ex 3 — no `CXCLR` at all, the mask only gains bits. Site (ST-38.6): the Part 6 index was rebuilt to the Part 1 format (row 38 ✅, rows 39–47 `🔒 Coming Soon`); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 37, next → 39; sidebar `config.ts:109`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 critical, 2 major, 4 minor** (the P0 smear; PF2 reversed; ex2 `ENAM1`; M0 offset; right wall; doc wording; `CollStep`); round 2 — **0 critical, 0 major**, all confirmed, one documented minor (the missile enable's one-line offset). The curriculum-auditor round 1 — **1 major, 2 major, 4 minor** (the P0 smear; ex2 M1; the Lesson 29 ball calibration; `CollStep`; prerequisites; ex1 double chunks; ex3 fourth pair); round 2 — **0 critical, 0 major**, all confirmed with 3 text residuals fixed. Final state: **0 critical, 0 major open**. Lesson 38 is complete.
+
 
 **Session sub-steps:**
 

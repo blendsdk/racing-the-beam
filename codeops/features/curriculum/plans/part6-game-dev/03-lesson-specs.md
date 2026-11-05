@@ -128,8 +128,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 
 - **Goal:** read the TIA's collision latches, classify them, and react once per contact.
 - **Prerequisites:** Lesson 12 (the frame), Lesson 17 (cycle counting), Lesson 18 (mid-line TIA
-  writes), Lesson 26 (`SetHorizPos` and one `HMOVE`), Lesson 27 (joystick movement), Lessons 29–31
-  (missiles, the ball, and `NUSIZ`), Lesson 35 (the audio registers).
+  writes), Lesson 26 (`SetHorizPos` and one `HMOVE`), Lesson 27 (joystick movement), Lesson 28
+  (the one-`HMOVE` rule), Lessons 29 and 31 (missiles, the ball, and `NUSIZ`), Lesson 33
+  (`INPT4` fire), Lesson 35 (the audio registers).
 - **Concepts:** `CXM0P`…`CXPPMM`; bit 7/6 pair meanings; latches stay set until `CXCLR`; reading in
   VBLANK observes the previous visible frame; a new-contact edge (0→1) triggers a hit; the hit bar.
 - **ROM:** `38-collision-detection.asm` — "the collision lab".
@@ -138,17 +139,19 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     blue `$84`). The active band uses its color; the others `$02`.
   - Play area: visible 24–171. `CTRLPF=$01` (reflect). A 16-px wall at each edge (`PF0=$F0`,
     `PF1=$00`, `PF2=$00`), gold `$1A`; P0 (16 rows, red `$42`) starts at X=8, Y=140 and moves in
-    **both** axes with the joystick (clamp X=8…136, Y=40…156); P1 (16 rows, blue `$84`) sits at
+    **both** axes with the joystick (clamp X=8…144, Y=40…156; 144 puts P0 8 px inside the right
+    wall); P1 (16 rows, blue `$84`) sits at
     X=40…136, Y=40 (auto-sweep; 136 keeps the 8-px sprite clear of the right wall); the ball
     (8 rows, gold `$1A`) is fixed at X=80, Y=100; M0
     (4 rows, red — it shares `COLUP0` with P0) fires upward from P0's X and resets at the top.
     The wall and the ball share `COLUPF`; they are told apart by position and size.
   - Bottom: a 15-chunk hit bar (visible 172–177) drawn by the playfield as N chunks from the left,
     mirrored by `CTRLPF=$01`, gold; the remaining lines are background.
-  - Collision read in VBLANK: build `CollMask` from the four bits, edge-detect against
+  - Collision read in VBLANK: build `LatchMask` from the four bits, edge-detect against
     `PrevMask`; a new bit increments `Hits` (clamped at 15) and starts the beep. Then `CXCLR`.
   - The ROM auto-demo: P0 moves around a rectangle (X 8…80, Y 40…156) by ±1 every 2 frames and
-    P1 sweeps 40…136; the joystick overrides P0. Fire launches M0.
+    P1 sweeps 40…136; the joystick overrides P0. The auto-demo also fires M0 every 90 frames
+    when there is no input, so the M0–P1 band demonstrates itself; fire launches M0 manually.
   - Colors: playfield/ball `$1A`, P0/M0 `$42`, P1 `$84`, background `$02`.
 - **Expected screen:** at a P0–wall contact, band 2 is green and the hit bar is at least 1 cell;
   at a P0–P1 contact, band 0 is red. The exact captured band/bar is recorded in Session C.
@@ -164,8 +167,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
      lit after the objects separate; the log shows no `CXClear` at all, proving why clearing
      matters.
 - **Screenshots:** `docs/public/images/lesson38/wall.png`, `…/p1.png`.
-- **Evidence pins:** `StartFrame`, `VblankStart`, `ReadCX` (A = `CXP0FB`), `CollStep` (A = the new
-  mask), `CXClear`, `Hits`, `BodyStart` 37, `HmoveApply`/`HmoveDone`, `OverscanStart` 229.
+- **Evidence pins:** `StartFrame`, `VblankStart`, `ReadCX` (A = `CXP0FB`), `CollMask` (A = the full
+  mask), `CollStep` (A = the 0→1 edge bits), `CXClear`, `Hits`, `BodyStart` 37,
+  `HmoveApply`/`HmoveDone`, `OverscanStart` 229.
 - **Integration:** prev → Lesson 37; next → Lesson 39; part-index row 38 → ✅ Complete linking
   `./38-collision-detection`; sidebar entry exists (`config.ts:109`). Estimated time: 75 minutes.
 
