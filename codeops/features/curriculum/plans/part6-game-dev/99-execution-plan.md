@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 18:26
-> **Progress**: 7/10 tasks (70%)
+> **Last Updated**: 2026-11-05 19:20
+> **Progress**: 8/10 tasks (80%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -338,7 +338,7 @@ AR-20, AR-26, AR-27, AR-28
 
 ## Phase 8: Lesson 45 — Memory Management
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: a90733c (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/45-memory-management/` (4 sources) ·
 > `docs/part6-game-dev/45-memory-management.md` · `docs/part6-game-dev/index.md` (row 45) ·
 > `docs/public/roms/part6-game-dev/45-memory-management/` · `docs/public/images/lesson45/` ·
@@ -353,9 +353,14 @@ AR-20, AR-26, AR-27, AR-28
 AR-21, AR-26, AR-27, AR-28, AR-34
 **Objective**: Deliver Lesson 45 end to end.
 
-- [ ] 8.1.1 Lesson 45 — Memory Management: Session A freezes ST-45.1–ST-45.6 (red baseline),
+- [x] 8.1.1 Lesson 45 — Memory Management: Session A freezes ST-45.1–ST-45.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson45): Memory Management`
+  the `git-commit` skill in push mode — `feat(lesson45): Memory Management` ✅ (completed: 2026-11-05 19:20)
+
+**Session A record** (freeze + red baseline, 2026-11-05 18:30): ST-45.1–ST-45.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 45. Design pins: the 16×8 map at visible 8–39 in chunks 2–17 (`PF0=$C0`, `PF1`, `PF2=$3F`), 4 lines/row, `CTRLPF=$01`, green used/dark free; the flags row 0–7 chunks 2–5; the 15-cell timer 40–129 at X=24 (`PF1=$20`, 6 lines/cell); the static 8×3 `RamMap`; the main keeps four flag bytes, the score reservation `$A0–$D7` is planned, `Scratch0/1` at `$8D–$8E`; ex1 packs, ex2 overlays with `!if`, ex3 adds the `RamEnd` assert; `PackedTimer` high nibble = 16-frame ticks. Evidence pins (AR-6): frame checkpoints; `MapDraw`; `PackTimer`; `FreeBytes`; `FlagsWrite`; `StateWrite`; `BodyStart`; `OverscanStart` (playfield-only; no HMOVE). Red baseline confirmed: no `lessons/part6-game-dev/45-memory-management`, no `docs/public/images/lesson45`, no Part 6 45 ROMs, the document is the `🔒 Coming Soon` stub, index row 45 is Coming Soon, sidebar `config.ts:116`, `verify.sh` green at `a90733c`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 19:20): Preflight per `vcs-lesson-production` — the map geometry, the PF0/PF1/PF2 chunk mapping, the mirror, the 8×3 table, the packing/overlay/assert, the timer nibble, and the 262-line frame checked against the source and the hardware reference; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and re-captures); all four sources 4,096 bytes; ex3 is byte-identical to the main (the assert is compile-time). Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/7; playfield-only, no HMOVE. Map: `MapDraw` `$F135` 45/15 A=$C0; rows 1–7 at 15/22/29; `PackTimer` `$F0BC` A=$01…$F0; `FreeBytes` `$F022` 30 main / 33 ex1 / 29 ex2; `FlagsWrite` `$F0ED` $02/$03; `StateWrite` `$F0B6`. Captures: `map.png` 98 used cells (30 free), 9 timer cells, gold flags; `map-packed.png` has the three-cell notch (row 0 `#####...########`) and 33 free; no cursor. Solutions: ex1 packs the four flags (33 free), ex2 overlays the title/play variables (29 free, assert), ex3 adds the `RamEnd` > $F7 failure (the `$F8` test stops ACME). Site (ST-45.6): index row 45 ✅ (rows 38–44 ✅, 46–47 Coming Soon); the page renders with `<RomPlayer>` under `map.png`, both captures, prev → 44, next → 46; sidebar `config.ts:116`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **1 major, 7 minor** (the cycle arithmetic; `$8D/$8E` ownership; ex1 hint; RomPlayer placement; per-cell cycles; X-arithmetic claim; Stella click; ex2 title beep; StateWrite wording; exercise addresses); the curriculum-auditor — **1 major, 5 minor** (the same major; the map ownership; the hint; the RomPlayer; the per-cell claim; the shift claim). The measured breakpoints corrected the reviewer's later-row 11/18/25 to 15/22/29. Final state: **0 critical, 0 major open**. Lesson 45 is complete.
+
 
 **Session sub-steps:**
 

@@ -13,7 +13,7 @@ Put it all together — collision detection, scoring, game states, AI, and debug
 | 42 | [Difficulty and Progression](./42-difficulty) | ✅ Complete |
 | 43 | [Random Numbers — Unpredictable Fun](./43-random-numbers) | ✅ Complete |
 | 44 | [AI & Enemy Behavior — Chase, Patrol, Flee](./44-ai-enemy-behavior) | ✅ Complete |
-| 45 | [Memory Management — 128 Bytes of Creativity](./45-memory-management) | 🔒 Coming Soon |
+| 45 | [Memory Management — 128 Bytes of Creativity](./45-memory-management) | ✅ Complete |
 | 46 | [Debugging — Finding and Fixing Bugs](./46-debugging) | 🔒 Coming Soon |
 | 47 | [Development Tools & Workflow](./47-dev-tools-workflow) | 🔒 Coming Soon |
 
