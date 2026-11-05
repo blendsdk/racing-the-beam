@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 16:50
-> **Progress**: 6/10 tasks (60%)
+> **Last Updated**: 2026-11-05 18:26
+> **Progress**: 7/10 tasks (70%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -300,7 +300,7 @@ AR-10, AR-19, AR-26, AR-27, AR-28
 
 ## Phase 7: Lesson 44 — AI & Enemy Behavior
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: a04efeb (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/44-ai-enemy-behavior/` (4 sources) ·
 > `docs/part6-game-dev/44-ai-enemy-behavior.md` · `docs/part6-game-dev/index.md` (row 44) ·
 > `docs/public/roms/part6-game-dev/44-ai-enemy-behavior/` · `docs/public/images/lesson44/` ·
@@ -315,9 +315,14 @@ AR-10, AR-19, AR-26, AR-27, AR-28
 AR-20, AR-26, AR-27, AR-28
 **Objective**: Deliver Lesson 44 end to end.
 
-- [ ] 7.1.1 Lesson 44 — AI & Enemy Behavior: Session A freezes ST-44.1–ST-44.6 (red baseline),
+- [x] 7.1.1 Lesson 44 — AI & Enemy Behavior: Session A freezes ST-44.1–ST-44.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson44): AI & Enemy Behavior`
+  the `git-commit` skill in push mode — `feat(lesson44): AI & Enemy Behavior` ✅ (completed: 2026-11-05 18:26)
+
+**Session A record** (freeze + red baseline, 2026-11-05 17:00): ST-44.1–ST-44.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 44. Design pins: P0/P1 both Y=100; patrol ±1 at 24–136 (calm at close range); chase when distance >24 at ±2; a chasing enemy flees at ≤24 or fire for 60 frames, no patrol while ≤32; fire panics any state; state row 0–7 (3 cells per half), distance bar 8–15 (N chunks per half), play 16–191; green/gold/red; `CXPPMM` bit 7, 60-frame invulnerability, far-side respawn, red field, fire restart; exercises waypoint/dead zone/flee speed. Evidence pins (AR-6): frame checkpoints; `EnemyStateWrite` A=state; `DistanceCalc`; `EnemyMove`; `EnemyXWrite`; `LifeStep`; `ReadCX`; `BodyStart`; `HmoveApply`/`HmoveDone`. Red baseline confirmed: no `lessons/part6-game-dev/44-ai-enemy-behavior`, no `docs/public/images/lesson44`, no Part 6 44 ROMs, the document is the `🔒 Coming Soon` stub, index row 44 is Coming Soon, sidebar `config.ts:115`, `verify.sh` green at `a04efeb`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 18:26): Preflight per `vcs-lesson-production` — the AI transitions (0→1 at >24, chasing 1→2 at ≤24/fire, 2→0 after 60 frames and >32), the calm-patrol rule, the movement/clamps, the collision/lives/invulnerability, and the 262-line frame checked against the state machine and the hardware reference; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and re-captures); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` `$F19F` 37/5, `HmoveApply` 8/56, `HmoveDone` 9/3, `OverscanStart` `$F1F5` 229/7. Logic: `EnemyStateWrite` `$F351` 128=1, 137=2, 197=0, 198=1, 242=2, 302=0; `DistanceCalc` `$F277` 25/23/112/23/112; `EnemyMove` `$F31A` −2/+2/−1/+2; `EnemyXWrite` `$F34E` 63/49/135/133/49; the life path `-holdjoy0 R -turbo 1` gives `LifeStep` `$F0CA` A=2 at frame 62, P0=126/P1=130, respawn 24, `DistanceCalc` 102; `ReadCX` `$F058` A=$87. Captures: `patrol.png` state green, 1 chunk, P0=88/P1=111 (gap 23); `chase.png` gold, 3 chunks, P0=24/P1=73 (gap 49); no cursor. Solutions: ex1 holds at 120/40 (`EnemyXWrite` 120@40–70, 40@150–180, `PatrolPause` $1E@41/151), ex2 returns to patrol at ≤16 (`EnemyMove` 0@22), ex3 `FleeSpeedWrite` 2/3 with 60 flee frames. Site (ST-44.6): index row 44 ✅ (rows 38–43 ✅, 45–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 43, next → 45; sidebar `config.ts:115`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **3 major, 7 minor** (the life-path command; auto-demo thresholds; ex1 bounds; overlap; band; wall; ex2 header; ex3 constants; distance after respawn; capture timing); the curriculum-auditor — **3 major, 7 minor** (the same three majors plus the plan expected screen and the measured logs). The life path was re-measured with `R -turbo 1` (frame 62, 126/130, respawn 24); all other findings fixed. Round 2 confirmed 11/11, no regressions. Final state: **0 critical, 0 major open**. Lesson 44 is complete.
+
 
 **Session sub-steps:**
 

@@ -392,19 +392,22 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     `Lives` 3, `Distance`.
   - P0 (16 rows) and P1 (16 rows) both at **Y=100**; both move horizontally; `CTRLPF=$01` draws
     the two edge walls with `PF0=$F0`.
-  - Patrol: move ±1 between X=24 and X=136; on a wall, reverse. Chase (when
-    `|PlayerX-EnemyX| > 24`): move toward the player at ±2. Flee (when the distance ≤ 24 or fire
-    is pressed): move away at ±2 for 60 frames; do not re-enter patrol while the distance is still
-    ≤ 32 (hysteresis).
+  - Patrol: move ±1 between X=24 and X=136; on a wall, reverse; a patrol is **calm** at close
+    range and does not flee. Chase (when `|PlayerX-EnemyX| > 24`): move toward the player at ±2.
+    A **chasing** enemy flees (distance ≤ 24 or fire): move away at ±2 for 60 frames; do not
+    re-enter patrol while the distance is still ≤ 32 (hysteresis). Fire panics any state. This
+    keeps all three states visible: patrol at 18–23 (18–22 target, the rightward phase rests at
+    23), chase when the player escapes past 24, flee
+    when the chase closes to 24 or the player fires.
   - Layout: the state row is visible 0–7 (three cells per half, one lit cell per state); the
     distance bar is visible 8–15 (N chunks per half = distance/16); the play area is 16–191.
     Colors: patrol green `$C8`, chase gold `$1A`, flee red `$42`.
   - A P0–P1 collision (`CXPPMM` bit 7) costs a life, respawns P1 at the opposite side, and grants
     60 frames of invulnerability; at 0 the field turns red, play freezes, fire restarts.
   - The player moves with the joystick; fire triggers flee.
-- **Expected screen:** the enemy is green and sweeps in patrol; when the player approaches it turns
-  gold and closes the distance; fire turns it red and it runs. The state row and the enemy color
-  match.
+- **Expected screen:** the enemy is green and sweeps in patrol; when the player escapes past 24
+  pixels it turns gold and closes; when the chase closes to 24 pixels (or the player fires) it
+  turns red and runs. The state row and the enemy color match.
 - **Exercises:**
   1. **Waypoint patrol.** Patrol between X=40 and X=120 with a 30-frame pause at each end.
      Expected: `EnemyTimer` counts down at the ends; `EnemyX` holds.
