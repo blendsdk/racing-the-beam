@@ -1,7 +1,7 @@
 # Part 6 — Game Development (Lessons 38–47) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 6 by shipping lessons 38–47 as a reviewed lesson set
-> **Status**: Preflight Complete
+> **Status**: Complete
 > **Created**: 2026-11-05
 > **Implements**: curriculum/RD-06
 > **Source**: ../../requirements/RD-06-part6-game-dev.md

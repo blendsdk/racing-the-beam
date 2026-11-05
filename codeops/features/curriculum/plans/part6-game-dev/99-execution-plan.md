@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 20:31
-> **Progress**: 9/10 tasks (90%)
+> **Last Updated**: 2026-11-05 21:23
+> **Progress**: 10/10 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -414,7 +414,7 @@ AR-22, AR-26, AR-27, AR-28, AR-35
 
 ## Phase 10: Lesson 47 — Development Tools & Workflow
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 33e23ab (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/47-dev-tools-workflow/` (4 sources, including
 > `demo-47.asm`) · `docs/part6-game-dev/47-dev-tools-workflow.md` ·
 > `docs/part6-game-dev/index.md` (row 47) · `docs/public/roms/part6-game-dev/47-dev-tools-workflow/`
@@ -430,10 +430,17 @@ AR-22, AR-26, AR-27, AR-28, AR-35
 AR-7, AR-10, AR-23, AR-26, AR-27, AR-28, AR-30, AR-36
 **Objective**: Deliver Lesson 47 end to end, close Part 6, and update the roadmaps.
 
-- [ ] 10.1.1 Lesson 47 — Development Tools & Workflow: Session A freezes ST-47.1–ST-47.6 (red
+- [x] 10.1.1 Lesson 47 — Development Tools & Workflow: Session A freezes ST-47.1–ST-47.6 (red
   baseline), Session B implements the full artifact set including `demo-47.asm`, Session C
   verifies to green and hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson47): Development Tools & Workflow`
+  `feat(lesson47): Development Tools & Workflow` ✅ (completed: 2026-11-05 21:23)
+
+**Session A record** (freeze + red baseline, 2026-11-05 20:45): ST-47.1–ST-47.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 47. Design pins: `demo-47.asm` — the build dashboard; five 16-line stages 0–79 (15 lit + 1 separator), gap 80–87, 15-cell bar 88–177 (6 lines/cell, `PF1=$20`, bottom-up), gap 178–183, 8-cell checksum 184–191, `CTRLPF=$01`, left half reference; 80+8+90+6+8 = 192; `Stage` every 30 frames, pause 60, restart; fire advances, SELECT resets; `StageBlock` macro, `!if DEBUG` border; `CheckData` 256 bytes, `CheckSum` 8-bit sum; the three exercises. Evidence pins (AR-6): `BuildFlag` A=DEBUG; `StageStep` A=stage; `CheckSum` A=sum; `BodyStart`; `OverscanStart`; the two builds differ. Red baseline confirmed: no `lessons/part6-game-dev/47-dev-tools-workflow`, no `docs/public/images/lesson47`, no Part 6 47 ROMs, the document is the `🔒 Coming Soon` stub, index row 47 is Coming Soon, sidebar `config.ts:118`, `verify.sh` green at `33e23ab`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 21:23): Preflight per `vcs-lesson-production` — the stage/bar/checksum geometry, the 30/60 clock, the `StageBlock` macro (a 15-iteration runtime loop, 28 bytes/block), the `!if DEBUG` builds, the checksum, and the 262-line frame checked against the symbol file and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `BodyStart` `$F0DE` 37/5, `OverscanStart` `$F1BE` 229/4; playfield-only, no HMOVE. Stage: `StageStep` `$F1E1` at frames 31/61/91/121/181 → A=02/03/04/05/01; `CheckSum` `$F1FA` frame 1/scanline 19/cycle 66 A=$EC; `BuildFlag` `$F015` A=0 release / 1 debug; the two builds differ at bytes 21 and 25. Python cross-checks: sum $EC, rotated $EA. Captures: `stage2.png` EDIT dim gold + ASSEMBLE green + 2 bar cells per half + checksum cells 0/1/2/4/5; `stage4.png` three dim gold + VERIFY green + 4 cells; no cursor. Exercises: ex1 six stages, `StageStep` 31/61/91/121/151/211 → 02/03/04/05/06/01; ex2 release blue border / debug red border, BuildFlag 0/1; ex3 rotated $EA. Site (ST-47.6): index row 47 ✅ (all rows 38–47 ✅); the page renders with `<RomPlayer>` on `demo-47.bin`, both captures, prev → 46, next → `/part7-kernel-mastery/48-introduction-to-kernels`; sidebar `config.ts:118`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **0 major, 5 minor** (the cycle claim; one-per-half; ex2 border; ex1 comments; the `!fill` rationale) plus a false-positive address claim (the StageBlock is a runtime loop; the `-l` symbols and the log confirm the doc); the curriculum-auditor — **0 major, 5 minor** (the same items). All real findings fixed; final **0 critical, 0 major open**. Lesson 47 is complete.
+
+**Part 6 completion** (2026-11-05 21:23): all ten lessons (38–47) shipped with **40 committed 4,096-byte ROMs** (four per lesson; Lesson 47's main is `demo-47.asm`), **ten documents**, **twenty screenshots**, and the Part 6 index fully ✅. `bash scripts/verify.sh` PASSED (180 ROMs, no drift, docs build). Both specialists report **0 critical / 0 major open** for every lesson. RD-06 → Done; the feature roadmap is **6/11 RDs (55%)**; the portfolio shows **6 plans done**. The next feature is RD-07 (Part 7 — Kernel Mastery, lessons 48–55).
+
 
 **Session sub-steps:**
 
@@ -447,8 +454,8 @@ AR-7, AR-10, AR-23, AR-26, AR-27, AR-28, AR-30, AR-36
    rows 38–47 ✅, update the feature roadmap (RD-06 Done, 6/11 RDs), the portfolio (6 plans done),
    and the plan completion note; final `verify.sh`; commit and push (AR-30).
 
-- [ ] 10.1.1a Part 6 completion gate: index rows 38–47 ✅, RD-06 Done, feature roadmap 6/11,
-  portfolio 6 plans, all completion criteria ticked, final `verify.sh` green
+- [x] 10.1.1a Part 6 completion gate: index rows 38–47 ✅, RD-06 Done, feature roadmap 6/11,
+  portfolio 6 plans, all completion criteria ticked, final `verify.sh` green ✅ (completed: 2026-11-05 21:23)
 
 ---
 
@@ -467,12 +474,12 @@ AR-7, AR-10, AR-23, AR-26, AR-27, AR-28, AR-30, AR-36
 
 ## Completion Criteria
 
-- [ ] All ten phases marked `[x]` with Session A/C records.
-- [ ] 40 committed 4,096-byte ROMs, 10 documents, 20 screenshots.
-- [ ] `include/score.asm`, `include/random.asm`, and `demo-47.asm` shipped.
-- [ ] Part 6 index rows 38–47 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit.
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security is N/A (static content, no input).
-- [ ] The post-completion re-analysis (plan/skill protocol) is recorded.
-- [ ] RD-06 Done; feature roadmap 6/11 RDs; portfolio 6 plans done.
+- [x] All ten phases marked `[x]` with Session A/C records.
+- [x] 40 committed 4,096-byte ROMs, 10 documents, 20 screenshots.
+- [x] `include/score.asm`, `include/random.asm`, and `demo-47.asm` shipped.
+- [x] Part 6 index rows 38–47 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit.
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security is N/A (static content, no input).
+- [x] The post-completion re-analysis (plan/skill protocol) is recorded.
+- [x] RD-06 Done; feature roadmap 6/11 RDs; portfolio 6 plans done.

@@ -1,0 +1,592 @@
+; =============================================================================
+; LESSON 47 EXERCISE 1: Add a TEST Stage — Racing the Beam
+; =============================================================================
+; Part 6: Game Development
+;
+; What this program does:
+;   The main lesson's build dashboard with a sixth stage inserted between
+;   ASSEMBLE and RUN.  The pipeline is now EDIT, ASSEMBLE, TEST, RUN, VERIFY,
+;   COMMIT.  Six 13-line stage blocks fit in the same 80-line stage zone, and
+;   the progress bar counts up to six cells.  Everything else — the checksum
+;   row, the debug border, the beep, the stage clock, fire and SELECT — is the
+;   main ROM's machinery.
+;
+;   The exercise's point is the StageBlock macro: adding a stage is one more
+;   +StageBlock call plus a larger STAGE_COUNT.  The macro expands the same
+;   stores with a different table index, so the kernel does not grow a
+;   hand-written block.
+;
+; The screen (192 visible lines, CTRLPF=$01 mirrors the playfield):
+;   visible 0-77    the six stage blocks, thirteen lines each.  Completed =
+;                   dim gold ($16), active = green ($C8), future = $02.
+;   visible 78-79   a two-line background gap.
+;   visible 80-169  the progress bar: fifteen cells of six lines at chunk 6
+;                   (X=24-27, PF1=$20), bottom-up.  The number of lit cells
+;                   equals the stage number (1-6); the mirror is X=132-135.
+;   visible 170-175 a six-line background gap.
+;   visible 176-183 the checksum row: eight cells at chunks 2-9, bit 7 first;
+;                   the mirror is X=120-151.
+;   visible 184-191 the tail background.
+;   The zones total 78 + 2 + 90 + 6 + 8 + 8 = 192 lines; OverscanStart is
+;   scanline 229.
+;
+; The stage cycle:
+;   Stage starts at 1 (EDIT) and advances every 30 frames.  Stage 6 (COMMIT)
+;   is held for 60 frames, then wraps to 1.  The full cycle is
+;   5 x 30 + 60 = 210 frames.  Fire advances by hand (6 -> 1); SELECT resets
+;   to stage 1.  Both actions beep.  StageStep reports 2, 3, 4, 5, 6, 1, ...
+;   so the log proves the added TEST stage takes its turn at stage 3.
+;
+; The checksum:
+;   CheckData is the same 256-byte table:
+;       CheckData[i] = ((i * 7 + 3) + ((i * i) >> 8)) & $FF
+;   The runtime sum is the low byte of the 8-bit total ($EC for this table).
+;   It is computed once at reset and drawn as eight bits, not a decimal.
+;
+; RAM note:
+;   Six stage colors need $9A-$9F, so this build has no separate Scratch
+;   byte.  SumByte ($83) is the checksum at reset and the input-edge byte
+;   afterwards; the checksum row's two PF bytes are already built.  BarLevel
+;   ($8A) is the reset-time bit shifter, then the bar height.
+;
+; The two builds:
+;   DEBUG=0 is the release build ($02 background); DEBUG=1 paints the
+;   background red ($42).  BuildValue stores DEBUG at reset, and the
+;   BuildFlag checkpoint reports it.  Both builds are 4,096 bytes.
+;
+; Checkpoints (Stella scanline numbers in parentheses):
+;   BuildFlag (A = DEBUG, once at reset), StageStep (A = the new stage, once
+;   per transition), CheckSum (A = $EC, once at reset), BodyStart (37),
+;   OverscanStart (229).  Stage is $80, StageTimer $81, BuildValue $82,
+;   SumByte $83.
+;
+; Build (release):
+;   acme -f plain -o build/exercise-01.bin \
+;        lessons/part6-game-dev/47-dev-tools-workflow/exercise-01-solution.asm
+; Build (debug):
+;   acme -f plain -D DEBUG=1 -o build/exercise-01-debug.bin \
+;        lessons/part6-game-dev/47-dev-tools-workflow/exercise-01-solution.asm
+; Run:
+;   stella build/exercise-01.bin
+; =============================================================================
+
+    !cpu 6502
+
+    !source "include/vcs.asm"
+    !source "include/macro.asm"
+
+; =============================================================================
+; PROGRAM CONSTANTS
+; =============================================================================
+VBLANK_TIMER   = 44      ; 37-line VBLANK
+OVERSCAN_TIMER = 36      ; 30-line overscan
+
+STAGE_COUNT    = 6       ; EDIT, ASSEMBLE, TEST, RUN, VERIFY, COMMIT
+STAGE_PERIOD   = 30      ; frames per stage (0.5 s at 60 Hz)
+STAGE_HOLD     = 60      ; frames held on the last stage before the restart
+STAGE_LINES    = 13      ; visible lines per stage block
+
+BAR_CELLS      = 15      ; the progress bar's fifteen cells
+BAR_LINES      = 6       ; six visible lines per cell
+BAR_CHUNK      = $20     ; PF1 bit 5 = chunk 6 = X=24-27
+
+CHECK_CELLS    = 8       ; the checksum row's eight cells
+CHECK_BYTES    = 256     ; CheckData is one page
+
+BEEP_FRAMES    = 2       ; a two-frame tick
+BEEP_PITCH     = $08     ; AUDF 8 on AUDC $0C: a short, bright beep
+
+C_GREEN        = $C8     ; the active stage
+C_GOLD         = $1A     ; the progress and checksum cells
+C_DIM_GOLD     = $16     ; a completed stage: a dimmer gold than $1A
+C_RED          = $42     ; the debug build's border
+C_BG           = $02     ; the release background and a future stage
+
+; =============================================================================
+; BUILD FLAGS — ACME's assembler-time symbols
+; =============================================================================
+; The source defines DEBUG=0 only when the command line did not.  That is the
+; difference between:
+;   acme -f plain -o release.bin demo-47.asm          -> DEBUG=0
+;   acme -f plain -D DEBUG=1 -o debug.bin demo-47.asm -> DEBUG=1
+; !if reads the symbol while ACME assembles; the branch is resolved before a
+; single ROM byte is written.
+!ifndef DEBUG {
+    DEBUG = 0
+}
+
+; =============================================================================
+; RAM ALLOCATION ($80-$9F; +clean_start zeroes every byte)
+; =============================================================================
+Stage        = $80   ; the active stage, 1..STAGE_COUNT
+StageTimer   = $81   ; frames left in the current stage
+BuildValue   = $82   ; DEBUG as a runtime byte (BuildFlag checkpoint)
+SumByte      = $83   ; the 8-bit checksum (CheckSum checkpoint)
+CheckPF0     = $84   ; the checksum row's PF0 byte
+CheckPF1     = $85   ; the checksum row's PF1 byte
+PrevFire     = $86   ; fire state last frame (1 = pressed)
+PrevSelect   = $87   ; SELECT state last frame (1 = pressed)
+BeepTimer    = $88   ; frames of beep remaining
+BeepPitch    = $89   ; AUDF for the beep
+BarLevel     = $8A   ; lit progress cells, 1..BAR_CELLS
+BarBuf       = $8B   ; fifteen cell bytes, $8B-$99 ($20 lit, $00 dark)
+StageColors  = $9A   ; six stage colors, $9A-$9F
+; This build has no separate Scratch byte: six colors need $9A-$9F.
+; SumByte ($83) is the checksum at reset and the input-edge byte after it;
+; BarLevel ($8A) is the reset-time bit shifter, then the bar height.
+;
+; $80-$9F is the full Lesson 45 lesson block.  The score and random libraries
+; are not used.  The stack lives at $F8-$FF; the call depth stays shallow.
+
+; =============================================================================
+; ROM START — cartridge space ($F000-$FFFF)
+; =============================================================================
+    * = $F000
+
+; =============================================================================
+; StageBlock — one stage block
+; =============================================================================
+; ACME gives every macro call its own local-label scope, so the anonymous
+; "backward" label below is resolved inside each expansion.  The parameter
+; .index is substituted into the StageColors expression; the color itself is
+; a runtime value because the active stage changes every 30 frames.
+!macro StageBlock .index {
+    LDA StageColors + .index
+    STA COLUPF
+    LDA #$FF
+    STA PF0
+    STA PF1
+    STA PF2
+    LDY #(STAGE_LINES - 1)
+-   STA WSYNC
+    DEY
+    BNE -
+    LDA #$00                ; the block's last line is a dark separator
+    STA PF0
+    STA PF1
+    STA PF2
+    STA WSYNC
+}
+
+
+; =============================================================================
+; RESET — the program's entry point
+; =============================================================================
+Reset:
+    +clean_start
+    LDA #$00
+    STA SWACNT              ; port A is an input port (the joysticks)
+
+; --- the build flag is a runtime copy of the assembler symbol --------------
+; BuildFlag is the checkpoint: a breakpoint there stops before the store, with
+; A already holding DEBUG.  The value also lets the debugger answer "which
+; build is this?" without reading the source or the border color.
+    LDA #DEBUG
+BuildFlag:                  ; checkpoint: A = DEBUG
+    STA BuildValue
+
+; --- the border: an assembly-time !if, not a runtime branch ----------------
+; The release build is the committed ROM: background $02, no border.  The
+; debug build paints every gap and unlit cell red.  Both builds are exactly
+; 4,096 bytes; only this byte (and the immediate on the previous instruction)
+; differs.
+    !if DEBUG {
+        LDA #C_RED
+    } else {
+        LDA #C_BG
+    }
+    STA COLUBK
+
+    LDA #$01
+    STA CTRLPF              ; mirror the playfield; the left half is the reference
+    LDA #BEEP_PITCH
+    STA BeepPitch
+
+    LDA #$01
+    STA Stage               ; start on EDIT
+    LDA #STAGE_PERIOD
+    STA StageTimer
+
+; --- the checksum is computed once, before the first frame ----------------
+; 256 adds are free at reset; doing them every frame would spend VBLANK time
+; for a number that never changes.
+    JSR ComputeCheckSum
+
+; =============================================================================
+; FRAME — 3 VSYNC + 37 VBLANK + 192 picture + 30 overscan = 262 lines
+; =============================================================================
+StartFrame:                 ; checkpoint: scanline 259, the first VSYNC line
+    +vsync
+
+VblankStart:                ; checkpoint: scanline 0, the first VBLANK line
+    LDA #$02
+    STA VBLANK
+    +set_timer VBLANK_TIMER
+
+; -----------------------------------------------------------------------------
+; 1. THE BEEP'S CLOCK
+; -----------------------------------------------------------------------------
+; BeepTimer counts down every frame and silences channel 0 at zero.  The
+; sound itself is not the lesson's subject; it is the same two-byte beep the
+; rest of Part 6 uses.
+    LDA BeepTimer
+    BEQ BeepClockDone
+    DEC BeepTimer
+    BNE BeepClockDone
+    LDA #$00
+    STA AUDV0
+BeepClockDone:
+
+; -----------------------------------------------------------------------------
+; 2. FIRE — advance one stage on the 0 -> 1 edge
+; -----------------------------------------------------------------------------
+; INPT4 bit 7 is 0 while fire is held.  EOR turns that into a 1, and the
+; EOR/AND pair keeps only a new press.  Fire is a manual StageStep: the same
+; AdvanceStage routine the clock calls, so the checkpoint reports both kinds
+; of transition.
+    LDA INPT4
+    AND #$80
+    EOR #$80                ; 1 = pressed
+    STA SumByte
+    EOR PrevFire
+    AND SumByte
+    BEQ NoFireEdge
+    JSR AdvanceStage
+    JSR BeepStart
+NoFireEdge:
+    LDA SumByte
+    STA PrevFire
+
+; -----------------------------------------------------------------------------
+; 3. SELECT — reset the dashboard to stage 1
+; -----------------------------------------------------------------------------
+; SWCHB bit 1 is 0 while SELECT is held.  The edge, not the level, restarts
+; the cycle.  SELECT is also the screenshot helper: a capture can start from
+; a known stage without waiting for the 210-frame cycle.
+    LDA SWCHB
+    AND #$02
+    EOR #$02                ; 1 = pressed
+    STA SumByte
+    EOR PrevSelect
+    AND SumByte
+    BEQ NoSelectEdge
+    LDA #$01
+    STA Stage
+    LDA #STAGE_PERIOD
+    STA StageTimer
+    JSR BeepStart
+NoSelectEdge:
+    LDA SumByte
+    STA PrevSelect
+
+; -----------------------------------------------------------------------------
+; 4. THE STAGE CLOCK — one stage every 30 frames, 60 on the last
+; -----------------------------------------------------------------------------
+; AdvanceStage increments Stage and reloads StageTimer.  At STAGE_COUNT (6)
+; the routine wraps to stage 1; the 60-frame hold is set when the clock
+; reaches STAGE_COUNT, so the COMMIT block stays green for one second before
+; the cycle starts again.
+    DEC StageTimer
+    BNE StageTickDone
+    JSR AdvanceStage
+StageTickDone:
+
+; -----------------------------------------------------------------------------
+; 5. THE STATUS BYTES — six stage colours and fifteen bar cells
+; -----------------------------------------------------------------------------
+; Both tables are rebuilt in VBLANK from the single Stage byte.  The kernel
+; then reads them without a comparison per line: the stage blocks take their
+; color from StageColors, and the bar takes its lit/dark byte from BarBuf.
+    LDX #$00
+StageColorLoop:
+    TXA
+    CLC
+    ADC #$01                ; the block's 1-based number
+    CMP Stage
+    BEQ StageColorActive
+    BCS StageColorFuture
+    LDA #C_DIM_GOLD         ; i + 1 < Stage: completed
+    JMP StageColorStore
+StageColorActive:
+    LDA #C_GREEN
+    JMP StageColorStore
+StageColorFuture:
+    LDA #C_BG               ; i + 1 > Stage: not started
+StageColorStore:
+    STA StageColors,X
+    INX
+    CPX #STAGE_COUNT
+    BNE StageColorLoop
+
+; --- the bar level is the stage number, clamped to the fifteen cells ------
+    LDA Stage
+    CMP #BAR_CELLS
+    BCC BarLevelOk
+    LDA #BAR_CELLS
+BarLevelOk:
+    STA BarLevel
+
+; --- build the fifteen cell bytes bottom-up ------------------------------
+; Cell 0 is the bottom cell and cell 14 is the top cell.  A cell below the
+; level is lit with BAR_CHUNK; a cell at or above it is dark.  The kernel
+; draws cell 14 first, so the bar grows from the bottom of the zone.
+    LDX #$00
+BarFill:
+    CPX BarLevel
+    BCS BarDark
+    LDA #BAR_CHUNK
+    JMP BarStore
+BarDark:
+    LDA #$00
+BarStore:
+    STA BarBuf,X
+    INX
+    CPX #BAR_CELLS
+    BNE BarFill
+
+; --- a clean first visible line ------------------------------------------
+; The stage macro writes every playfield byte, but clearing them here makes
+; the gap after the last stage start from a known state and keeps the first
+; line's stores before the playfield slots.
+    LDA #$00
+    STA PF0
+    STA PF1
+    STA PF2
+
+    +wait_timer
+    LDA #$00
+    STA VBLANK              ; picture on
+
+; =============================================================================
+; VISIBLE — 192 lines, work-first: write the line, then WSYNC
+; =============================================================================
+BodyStart:                  ; checkpoint: scanline 37, visible line 0
+
+; --- visible 0-77: the six stage blocks ----------------------------------
+; StageBlock is an ACME !macro: the six calls below expand to the same
+; stores with a different table index.  Each block holds its color for
+; STAGE_LINES - 1 = 12 lines and clears the playfield for the separator line.
+; The first block is line 37; after six blocks the CPU is at cycle 5 of
+; line 115, ready for the short gap.
+    +StageBlock 0
+    +StageBlock 1
+    +StageBlock 2
+    +StageBlock 3
+    +StageBlock 4
+    +StageBlock 5
+
+; --- visible 78-79: the short gap after the six blocks --------------------
+    LDA #$00
+    STA PF0
+    STA PF1
+    STA PF2
+    LDY #2
+GapRow:
+    STA WSYNC
+    DEY
+    BNE GapRow
+
+; --- visible 80-169: the progress bar ------------------------------------
+; Fifteen cells of six lines.  The cell bytes are precomputed in VBLANK, so
+; the per-cell cost is one load and three stores before the six WSYNCs.  The
+; PF1 store completes by cycle 18 (first cell) / 16 (later cells), before
+; the first playfield slot at about 22.7; PF0 and PF2 follow before their
+; own slots.
+    LDA #C_GOLD
+    STA COLUPF
+    LDX #(BAR_CELLS - 1)    ; cell 14, the top cell
+BarCell:
+    LDA BarBuf,X
+    STA PF1
+    LDA #$00
+    STA PF0
+    STA PF2
+    LDY #BAR_LINES
+BarLine:
+    STA WSYNC
+    DEY
+    BNE BarLine
+    DEX
+    BPL BarCell
+
+; --- visible 170-175: the second gap -------------------------------------
+    LDA #$00
+    STA PF0
+    STA PF1
+    STA PF2
+    LDY #6
+Gap2Row:
+    STA WSYNC
+    DEY
+    BNE Gap2Row
+
+; --- visible 176-183: the eight checksum cells ---------------------------
+; The two bytes were built at reset from SumByte.  Bit 7 is cell 0 at chunk 2
+; and bit 0 is cell 7 at chunk 9; PF0 carries cells 0-1 and PF1 carries cells
+; 2-7.  A set bit is a gold cell; a clear bit shows the background.
+    LDA #C_GOLD
+    STA COLUPF
+    LDA CheckPF0
+    STA PF0
+    LDA CheckPF1
+    STA PF1
+    LDA #$00
+    STA PF2
+    LDY #CHECK_CELLS
+ChecksumRow:
+    STA WSYNC
+    DEY
+    BNE ChecksumRow
+
+; --- visible 184-191: the tail background --------------------------------
+; The six-stage layout spends 78 + 2 + 90 + 6 + 8 = 184 lines above this
+; point; eight background lines keep the total at 192.
+    LDA #$00
+    STA PF0
+    STA PF1
+    STA PF2
+    LDY #8
+TailRow:
+    STA WSYNC
+    DEY
+    BNE TailRow
+
+; =============================================================================
+; FRAME END — 30 overscan lines, then the next frame
+; =============================================================================
+FrameEnd:
+OverscanStart:              ; checkpoint: scanline 229
+    LDA #$02
+    STA VBLANK
+    +set_timer OVERSCAN_TIMER
+    +wait_timer
+    JMP StartFrame
+
+; =============================================================================
+; AdvanceStage — move to the next stage and reload the stage clock
+; =============================================================================
+; A is the new stage when the routine returns.  StageStep is placed after the
+; store, so a breakpoint there reports the value the rest of the frame will
+; use.  Stage STAGE_COUNT (6) wraps to 1; when the clock reaches STAGE_COUNT
+; it sets the long hold.
+AdvanceStage:
+    LDA Stage
+    CMP #STAGE_COUNT
+    BCC AdvanceIncrement
+    LDA #$01                ; COMMIT -> EDIT
+    JMP AdvanceStore
+AdvanceIncrement:
+    CLC
+    ADC #$01
+AdvanceStore:
+    STA Stage
+StageStep:                  ; checkpoint: A = the new stage
+    CMP #STAGE_COUNT
+    BNE AdvanceNormalTimer
+    LDA #STAGE_HOLD
+    JMP AdvanceTimerStore
+AdvanceNormalTimer:
+    LDA #STAGE_PERIOD
+AdvanceTimerStore:
+    STA StageTimer
+    RTS
+
+; =============================================================================
+; ComputeCheckSum — the 8-bit sum of CheckData, once at reset
+; =============================================================================
+; A starts at 0 and takes 256 ADC steps; the carry is cleared before each
+; add, so the sum wraps at 256 exactly as an 8-bit checksum should.  After
+; the loop A holds the low byte.  CheckSum is the checkpoint: a breakpoint
+; there reports that byte before it is stored.
+; The second half maps the eight bits to the two playfield bytes:
+;   bit 7 -> cell 0 -> PF0 bit 6 (chunk 2)
+;   bit 6 -> cell 1 -> PF0 bit 7 (chunk 3)
+;   bit 5 -> cell 2 -> PF1 bit 7 (chunk 4)
+;   ...
+;   bit 0 -> cell 7 -> PF1 bit 2 (chunk 9)
+ComputeCheckSum:
+    LDA #$00
+    LDX #$00
+SumLoop:
+    CLC
+    ADC CheckData,X
+    INX
+    BNE SumLoop
+CheckSum:                   ; checkpoint: A = the 8-bit sum
+    STA SumByte
+
+; This build uses BarLevel as the reset-time bit shifter: StageColors needs
+; the byte that Scratch would have used.  BarLevel is overwritten by the
+; stage level in VBLANK before the first frame.
+    LDA SumByte
+    STA BarLevel
+    LDA #$00
+    STA CheckPF0
+    STA CheckPF1
+    LDX #$00
+BitLoop:
+    ASL BarLevel            ; the next bit falls into carry, MSB first
+    BCC NoCheckBit
+    LDA CheckPF0
+    ORA CheckMask0,X
+    STA CheckPF0
+    LDA CheckPF1
+    ORA CheckMask1,X
+    STA CheckPF1
+NoCheckBit:
+    INX
+    CPX #CHECK_CELLS
+    BNE BitLoop
+    RTS
+
+; =============================================================================
+; BEEP — two bytes: BeepTimer and BeepPitch
+; =============================================================================
+; AUDC 0C is the div-6 tone from Lesson 35; AUDV 0A is audible but not loud.
+; The VBLANK clock silences the channel two frames later.
+BeepStart:
+    LDA #BEEP_FRAMES
+    STA BeepTimer
+    LDA #$0C
+    STA AUDC0
+    LDA BeepPitch
+    STA AUDF0
+    LDA #$0A
+    STA AUDV0
+    RTS
+
+; =============================================================================
+; CHECKSUM BIT MASKS — one entry per cell, 0 where the cell is in the other
+; playfield register
+; =============================================================================
+CheckMask0:
+    !byte $40, $80, $00, $00, $00, $00, $00, $00
+CheckMask1:
+    !byte $00, $00, $80, $40, $20, $10, $08, $04
+
+; =============================================================================
+; CheckData — 256 bytes generated at assembly time
+; =============================================================================
+; !align 255, 0 puts the table on a page boundary.  The alignment is not
+; needed for a sum, but it makes the table easy to find in a debugger and it
+; demonstrates the directive.  !for emits the 256 bytes; the Python one-liner
+; in the lesson document produces the same table and the same checksum.
+    !align 255, 0
+CheckData:
+    !for i, 0, 255 {
+        !byte ((i * 7 + 3) + ((i * i) >> 8)) & $FF
+    }
+
+; --- an end-of-table marker: !fill writes a fixed byte instead of code ----
+; The sixteen $EA bytes mark the end of CheckData and demonstrate !fill.
+; They are never executed; the 4,096-byte image comes from the * = $FFFA
+; vector block and the padding before it.
+    !fill 16, $EA
+
+; =============================================================================
+; VECTORS
+; =============================================================================
+    * = $FFFA
+    !word Reset     ; NMI
+    !word Reset     ; RESET
+    !word Reset     ; IRQ

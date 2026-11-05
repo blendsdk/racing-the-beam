@@ -15,7 +15,7 @@ Put it all together — collision detection, scoring, game states, AI, and debug
 | 44 | [AI & Enemy Behavior — Chase, Patrol, Flee](./44-ai-enemy-behavior) | ✅ Complete |
 | 45 | [Memory Management — 128 Bytes of Creativity](./45-memory-management) | ✅ Complete |
 | 46 | [Debugging — Finding and Fixing Bugs](./46-debugging) | ✅ Complete |
-| 47 | [Development Tools & Workflow](./47-dev-tools-workflow) | 🔒 Coming Soon |
+| 47 | [Development Tools & Workflow](./47-dev-tools-workflow) | ✅ Complete |
 
 ## What You'll Learn
 

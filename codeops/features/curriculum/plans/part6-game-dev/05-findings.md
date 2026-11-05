@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Planning — no lesson reviews have run yet
+> **Status**: Phase 10 complete — 0 critical, 0 major open. Part 6 complete.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -107,4 +107,10 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-906 | 46 | 🟡 MINOR | Reviewer: the auto-demo phase is 410 frames (408 movement/hold + 2 boundary detection). | fixed. |
 | SR-907 | 46 | 🟡 MINOR | Auditor: the solution headers copied the main "three bugs" block, so they claimed both the bug and the fix; ex3 had an orphan label. | fixed — solution-specific headers; the orphan `P0ClearNow` and stale comment removed. |
 | SR-908 | 46 | 🟡 MINOR | Auditor: `$98-$9F are free (8 bytes)` is wrong; the allocation ends at $97 and the stack at $F8, so $98-$F7 (96 bytes) are free. | fixed in all four sources and Step 1. |
-| SR-909 | 46 | 🟡 MINOR | Auditor: the prerequisites listed Lesson 22 "kernel timing" (Lesson 22 is Playfield Animation) and omitted 26/29. | fixed — 17/18/26/28/29/38/41/45. |
+| SR-909 | 46 | 🟡 MINOR | Auditor: the prerequisites listed Lesson 22 "kernel timing" (Lesson 22 is Playfield Animation) and omitted 26/29. | fixed — 17/18/26/28/29/38/41/45. || SR-1001 | 47 | ℹ️ INFO | Reviewer: claimed the checkpoint addresses (`OverscanStart $F1BE`, `StageStep $F1E1`, `CheckSum $F1FA`, `CheckData $F300`) were wrong because five 99-byte StageBlock expansions would put the kernel near $F60A. | **false positive** — the StageBlock macro is a 15-iteration runtime loop (28 bytes/block), not 15 unrolled iterations; the `-l` symbol file and the State log confirm the doc's addresses and the 31/61/91/121/181 stage sequence. No change. |
+| SR-1002 | 47 | 🟡 MINOR | Reviewer: "PF1 store completes by cycle 12" is wrong; the write completes at ~18 (first cell) / ~16 (later cells). | fixed — all four sources and the doc say cycle 18/16, before the first playfield slot at ~22.7. |
+| SR-1003 | 47 | 🟡 MINOR | Reviewer: "one per half" — the bar has two lit cells at the bottom of each of its two mirrored columns. | fixed — "two lit cells ... each of its two mirrored columns, four gold cells in total". |
+| SR-1004 | 47 | 🟡 MINOR | Reviewer/auditor: exercise 2's release border was green and merged with the active stage; the "dark BuildFlag cell" was really green. | fixed — release border blue `$84`, debug red `$42`; the BuildFlag cell shows the field colour; the ex2 ROM was rebuilt. |
+| SR-1005 | 47 | 🟡 MINOR | Both reviewers: exercise 1's comments still said 180 frames / stage 5; the build is 210 frames / six stages. | fixed — 210-frame cycle and `STAGE_COUNT` (6). |
+| SR-1006 | 47 | 🟡 MINOR | Both reviewers: "Sixteen NOPs keep the table clear of the vectors" is false; the bytes are ~3 KB from the vectors. | fixed — an end-of-table marker that demonstrates `!fill`; the 4,096-byte image comes from the vector block and the padding before it. |
+| SR-1007 | 47 | 🟡 MINOR | Reviewer: exercise 1's wrap/hold comments used stage 5; the six-stage build wraps at 6. | fixed — `STAGE_COUNT` (6). |
