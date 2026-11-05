@@ -1195,4 +1195,4 @@ ADD 100 cell is lit; `Overflow` remains 0 and the red cell stays dark.
 The BCD counter is a reliable score, but the program still runs one operation after another with
 no notion of a game. [Lesson 41: Game States](/part6-game-dev/41-game-states) adds a title
 screen, a play state, and a game-over state, each with its own input and drawing code — and the
-BCD score becomes the play state's score.
+play state counts its hits with a 15-chunk bar, leaving the BCD score for a later scoreboard.

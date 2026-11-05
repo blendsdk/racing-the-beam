@@ -264,8 +264,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Concepts:** a state byte; per-state input handling; transitions on fire/hit/miss; a shared
   frame skeleton; resetting per-game variables on entry; a high-score byte (exercise).
 - **ROM:** `41-game-states.asm` — "the state machine".
-  - `GameState` 0=title, 1=play, 2=over. `StateTimer`, `Hits`, `Lives` (3), `PlayerX`, `BallY`,
-    `BallX`, `BeepTimer`.
+  - `GameState` 0=title, 1=play, 2=over. `StateTimer`, `Hits`, `PlayerX`, `BallY`, `BallX`,
+    `BeepTimer` (lives arrive in Lesson 42).
   - Title (visible 0–191): a centered playfield emblem (three stacked blocks) in gold, a blinking
     15-cell bar at the bottom (`Frame & $20`), background `$02`; fire → state 1.
   - Play: a 16-line status bar at the top (visible 0–15) shows the hit bar (N chunks per half);
@@ -275,8 +275,15 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - Over: a red background, the final hit bar at the top, a blinking "fire" bar at the bottom;
     fire → state 0.
   - The title and over screens use the playfield only; play uses P0 + ball. No 48-pixel score.
-- **Expected screen:** title shows the gold emblem and a blinking bar; over shows a red field and
-  the final hit bar. The play capture shows P0 and the falling ball.
+  - Auto-demo: the title's `StateTimer` starts at 180 frames and counts down while no joystick
+    direction is held; at zero it enters play. Fire enters play immediately. In play, the first
+    hit arms a 30-frame timer; when it expires P0 slides right, away from the ball's spawn, so the
+    next ball misses and the over screen appears without input. A manual left/right press takes
+    control; fire returns to the title from over.
+- **Expected screen:** title shows the gold emblem and a blinking bar (15 chunks per half, two
+  segments with a centre gap); over shows a red field, the final hit bar, and the blinking fire
+  bar. The two committed captures are the title and over layouts; the play layout is the live
+  ROM state.
 - **Exercises:**
   1. **Pause.** Add state 3 toggled by SELECT in play; the game freezes and the status bar blinks.
      Expected: `StateChange` A=3, then A=1; the ball's Y is unchanged during the pause.
@@ -284,9 +291,13 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
      Expected: `StateChange` A=1 at frame 300; `StateTimer` counts down.
   3. *(Stretch)* **High score.** Keep the best `Hits` in `HighScore` across games; show it on the
      over screen as a second bar. Expected: `HighScore` retains the max across two games.
-- **Screenshots:** `docs/public/images/lesson41/title.png`, `…/over.png`.
-- **Evidence pins:** `StateChange` (A = new state), `StateTimer`, `FireRead` (A = `INPT4`),
-  `HitStep` (A = hits), `BallY`, `BodyStart`, `HmoveDone`.
+- **Screenshots:** `docs/public/images/lesson41/title.png`, `…/over.png`. The images are Stella
+  debugger `saveSnap` TIA frames at frames 40 and 500 from the committed ROM, placed in the
+  window chrome of a Stella window capture of the same ROM; the doc discloses the method.
+- **Evidence pins:** `StateChange` (A = new state), `TimerRead` (A = `StateTimer`'s low byte),
+  `FireRead` (A = `INPT4`), `HitStep` (A = hits), `BallStep` (A = the new `BallY`), `BodyStart`,
+  `HmoveApply`/`HmoveDone`. `StateTimer` and `BallY` are RAM variables; `TimerRead` and `BallStep`
+  are their code checkpoints.
 - **Integration:** prev → Lesson 40; next → Lesson 42; index row 41 → ✅ Complete. Estimated
   time: 90 minutes.
 

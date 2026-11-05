@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 13:38
-> **Progress**: 3/10 tasks (30%)
+> **Last Updated**: 2026-11-05 14:46
+> **Progress**: 4/10 tasks (40%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -185,7 +185,7 @@ AR-16, AR-26, AR-27, AR-28, AR-33
 
 ## Phase 4: Lesson 41 — Game States
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: ae879a8 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/41-game-states/` (4 sources) ·
 > `docs/part6-game-dev/41-game-states.md` · `docs/part6-game-dev/index.md` (row 41) ·
 > `docs/public/roms/part6-game-dev/41-game-states/` · `docs/public/images/lesson41/` ·
@@ -200,9 +200,14 @@ AR-16, AR-26, AR-27, AR-28, AR-33
 AR-17, AR-26, AR-27, AR-28
 **Objective**: Deliver Lesson 41 end to end.
 
-- [ ] 4.1.1 Lesson 41 — Game States: Session A freezes ST-41.1–ST-41.6 (red baseline), Session B
+- [x] 4.1.1 Lesson 41 — Game States: Session A freezes ST-41.1–ST-41.6 (red baseline), Session B
   implements the full artifact set, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson41): Game States`
+  `git-commit` skill in push mode — `feat(lesson41): Game States` ✅ (completed: 2026-11-05 14:46)
+
+**Session A record** (freeze + red baseline, 2026-11-05 14:00): ST-41.1–ST-41.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 41. Design pins: states 0 title, 1 play, 2 over; `SetState` owns the entry work; title gold emblem + blinking 15-chunk bar; play 16-line status bar, P0 at Y=140, ball from Y=24; `CXP0FB` bit 6 edge → Hits++/beep/respawn; ball Y>180 → over; over red field + final bar + blinking fire bar; fire 0↔1/2↔0; the auto-demo 180 frames title / first hit arms 30 / P0 slides away / over at 446; the pause/attract/high-score exercises. Evidence pins (AR-6): frame checkpoints; `StateChange` A=new state; `TimerRead` (A=`StateTimer`); `FireRead` A=`INPT4`; `HitStep` A=hits; `BallStep` A=`BallY`; `BodyStart`; `HmoveApply`/`HmoveDone`. Red baseline confirmed: no `lessons/part6-game-dev/41-game-states`, no `docs/public/images/lesson41`, no Part 6 41 ROMs, the document is the `🔒 Coming Soon` stub, index row 41 is Coming Soon, sidebar entry exists (`config.ts:112`), `verify.sh` green at `ae879a8`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 14:46): Preflight per `vcs-lesson-production` — the state machine, the per-state entry work, the fire/SELECT edges, the joystick level, the P0–ball collision, the three layouts, and the 262-line frame checked against `include/vcs.asm` and the state-machine/input references; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and re-captures); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` `$F12A` = 37/5, `HmoveApply` 11/56, `HmoveDone` 12/3, `OverscanStart` `$F289` = 229/7. Logic: `StateChange` `$F358` A=0 reset → A=1 at frame 180 (auto-demo) → A=2 at 446; a forced-fire probe 0@460 → 1@640; `TimerRead` `$F2AB` A=$B4→$01; `HitStep` `$F307` A=1 at 290; `BallStep` `$F320` 25/133/25/181; `FireRead` A=$8C; `ReadCX` $02/$42. Captures: `title.png` gold emblem + blinking bar (15 chunks per half, two segments); `over.png` red field + solid 16-line final hit bar + fire bar, 120 TIA px (720 capture px); the doc discloses that the images are Stella `saveSnap` frames at 40/500 in real window chrome. Solutions: ex1 pause 3@220/1@250 with the contact preserved (HitStep 1@293); ex2 attract 1@300 and hit 410/over 566; ex3 HighScore 1@446. Site (ST-41.6): index row 41 ✅ (rows 38–40 ✅, 42–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 40, next → 42; sidebar `config.ts:112`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **2 major, 4 minor** (the saveSnap provenance; the over first line; the play-kernel timing; the 720-pixel wording; the edge claim; the snippet labels); the curriculum-auditor — **2 major, 5 minor** (the provenance; the edge claim; the snippet labels; the Lesson 40 promise; the stale `Lives`; the pause hit loss; the alt text). The provenance is accepted with an explicit method note; all other findings fixed. Final state: **0 critical, 0 major open** (one disclosed capture-method deviation). Lesson 41 is complete.
+
 
 **Session sub-steps:**
 
