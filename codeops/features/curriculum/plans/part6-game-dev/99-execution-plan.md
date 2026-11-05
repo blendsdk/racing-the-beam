@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 19:20
-> **Progress**: 8/10 tasks (80%)
+> **Last Updated**: 2026-11-05 20:31
+> **Progress**: 9/10 tasks (90%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -376,7 +376,7 @@ AR-21, AR-26, AR-27, AR-28, AR-34
 
 ## Phase 9: Lesson 46 — Debugging
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 1029281 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/46-debugging/` (4 sources) ·
 > `docs/part6-game-dev/46-debugging.md` · `docs/part6-game-dev/index.md` (row 46) ·
 > `docs/public/roms/part6-game-dev/46-debugging/` · `docs/public/images/lesson46/` ·
@@ -391,9 +391,14 @@ AR-21, AR-26, AR-27, AR-28, AR-34
 AR-22, AR-26, AR-27, AR-28, AR-35
 **Objective**: Deliver Lesson 46 end to end.
 
-- [ ] 9.1.1 Lesson 46 — Debugging: Session A freezes ST-46.1–ST-46.6 (red baseline), Session B
+- [x] 9.1.1 Lesson 46 — Debugging: Session A freezes ST-46.1–ST-46.6 (red baseline), Session B
   implements the full artifact set, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson46): Debugging`
+  `git-commit` skill in push mode — `feat(lesson46): Debugging` ✅ (completed: 2026-11-05 20:31)
+
+**Session A record** (freeze + red baseline, 2026-11-05 19:40): ST-46.1–ST-46.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 46. Design pins: `Mode` 0/1/2, `BugOn` 1=buggy/0=fixed, fire toggles, left/right selects; the status row 0–15 (three mode cells + one bug/fix cell); P0 16 rows Y=140, P1 16 rows Y=40, ball 8 rows X=80/Y=140; bug 0 sticky collision (no CXCLR), bug 1 a leading WSYNC/263-line frame (StartFrame 260, Overscan 230), bug 2 a one-line draw delay; the fixed paths 262/229 and aligned; the debugger walkthrough; exercises fix the three bugs. Evidence pins (AR-6): frame checkpoints; `Mode`; `BugToggle` A=BugOn; `ReadCX`; `CXClear`; `OverscanStart` 229/230; `PlayerYRead`; `P0RowBug`/`P0RowFixed`; `BodyStart`; `HmoveApply`/`HmoveDone`. Red baseline confirmed: no `lessons/part6-game-dev/46-debugging`, no `docs/public/images/lesson46`, no Part 6 46 ROMs, the document is the `🔒 Coming Soon` stub, index row 46 is Coming Soon, sidebar `config.ts:117`, `verify.sh` green at `1029281`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 20:31): Preflight per `vcs-lesson-production` — the three bug/fix paths, the 262/263-line arithmetic, the collision latches, the draw delay, and the debugger commands checked against `include/vcs.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and the doc's marker/Full Source fixes); all four sources 4,096 bytes. Frame: **262 lines fixed, 263 buggy** — `StartFrame` 259/3 (modes 0/2) and 260 (mode 1); `VblankStart` 0/5; `BodyStart` 37/5; `OverscanStart` 229 (modes 0/2) and 230 (mode 1); `HmoveApply` 7/56, `HmoveDone` 8/3. Logic: `Mode` 0/1/2; `BugToggle` A=0 at frame 9; `ReadCX` $02/$42/$C2; `CXClear` 0 hits in the main mode 0; `PlayerYRead` A=$8C (140); `P0BallCheck`; `P0RowFixed` 0 hits in main mode 2 and 177/6 in ex3; `P0RowBug` 178/5; `P0DelayRead` 1. Captures: `bug-sticky.png` mode cell gold, bug cell red, full-width red collision band; `fix-sticky.png` bug cell green, band background; P0 red X=88, P1 green, ball gold X=80/Y=140; no cursor. Solutions: ex1 unconditional CXCLR; ex2 work-first 229; ex3 aligned row 177. The doc states the 263-line frame is one line low at ~59.8 Hz, marks the physical-TV hold behaviour as not verified, and uses the debugger line count as the evidence. Site (ST-46.6): index row 46 ✅ (rows 38–45 ✅, 47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 45, next → 47; sidebar `config.ts:117`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **1 major, 5 minor** (the TV-roll claim; the ball bias; the frame column; the cycle numbers; the holdjoy0 letters; the phase count); the curriculum-auditor — **0 major, 4 minor** (the solution headers; the cycle numbers; the free-RAM comment; the TV-roll claim). All fixed; the ROM bytes are unchanged (comments/docs). Final state: **0 critical, 0 major open**. Lesson 46 is complete.
+
 
 **Session sub-steps:**
 

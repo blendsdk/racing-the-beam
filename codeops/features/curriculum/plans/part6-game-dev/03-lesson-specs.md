@@ -463,8 +463,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 ## Lesson 46: Debugging — Finding and Fixing Bugs
 
 - **Goal:** recognize and fix three classic 2600 bugs with the Stella debugger.
-- **Prerequisites:** Lesson 17 (cycle counting), Lesson 18 (mid-line writes), Lesson 22 (kernel
-  timing), Lesson 38 (collision latches), Lesson 41 (state flow), Lesson 45 (the RAM map).
+- **Prerequisites:** Lesson 17 (cycle counting), Lesson 18 (mid-line writes), Lesson 26
+  (divide-by-15 positioning), Lesson 28 (the one-`HMOVE` rule), Lesson 29 (the ball), Lesson 38
+  (collision latches), Lesson 41 (state flow), Lesson 45 (the RAM map).
 - **Concepts:** sticky collision latches; a 263-line frame from a WSYNC-first kernel; an off-by-one
   sprite Y; breakpoints, watches, the frame/scanline readout, `-dbg.logbreaks`.
 - **ROM:** `46-debugging.asm` — "the debug lab".
@@ -482,8 +483,10 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - The doc walks the debugger: `stella -dbg.logbreaks 1 -logtoconsole 1 -break '$addr'`, the
     frame/scanline/cycle columns, the TIA and RAM watches, and the `CXCLR`/frame checkpoints.
 - **Expected screen:** in bug 0 the red collision band stays lit after P0 leaves the wall; in the
-  fixed version it clears. In bug 1 the picture rolls/tears; the fixed version is stable. In bug 2
-  the sprite is one line off; the fixed version aligns.
+  fixed version it clears. In bug 1 the frame is 263 lines (`StartFrame` 260, `OverscanStart`
+  230), the picture is one line low and the frame rate is ~59.8 Hz; a normal TV may hold sync, and
+  whether a given set loses hold was not verified — the debugger's line count is the evidence.
+  The fixed version is 262/229. In bug 2 the sprite is one line off; the fixed version aligns.
 - **Exercises:**
   1. **Fix the sticky collision.** Add `STA CXCLR` after the read. Expected: the band clears;
      `CXClear` fires every frame.
