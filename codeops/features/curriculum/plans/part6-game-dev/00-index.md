@@ -51,7 +51,7 @@ AR-15, AR-19, AR-22).
 
 ## Document Index
 
-| #   | Document                                       | Description                                 | 
+| #   | Document                                       | Description                                 |
 | --- | ---------------------------------------------- | ------------------------------------------- |
 | AR  | [Ambiguity Register](00-ambiguity-register.md) | Zero-Ambiguity Gate decisions (audit trail) |
 | PF  | [Preflight Report](00-preflight-report.md) | Plan-level audit findings and resolutions |
