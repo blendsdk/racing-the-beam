@@ -7,7 +7,7 @@ Put it all together — collision detection, scoring, game states, AI, and debug
 | # | Lesson | Status |
 |---|--------|--------|
 | 38 | [Collision Detection — When Things Touch](./38-collision-detection) | ✅ Complete |
-| 39 | [The Scoreboard — 48-Pixel Sprite Trick](./39-scoreboard) | 🔒 Coming Soon |
+| 39 | [The Scoreboard — 48-Pixel Sprite Trick](./39-scoreboard) | ✅ Complete |
 | 40 | [BCD Arithmetic — Scores That Make Sense](./40-bcd-arithmetic) | 🔒 Coming Soon |
 | 41 | [Game States — Title, Play, Game Over](./41-game-states) | 🔒 Coming Soon |
 | 42 | [Difficulty and Progression](./42-difficulty) | 🔒 Coming Soon |

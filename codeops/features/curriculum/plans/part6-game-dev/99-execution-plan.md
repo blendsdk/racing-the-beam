@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 11:40
-> **Progress**: 1/10 tasks (10%)
+> **Last Updated**: 2026-11-05 12:44
+> **Progress**: 2/10 tasks (20%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -108,7 +108,7 @@ AR-13, AR-26, AR-27, AR-28, AR-32
 
 ## Phase 2: Lesson 39 — The Scoreboard
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 96faf13 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/39-scoreboard/` (4 sources) ·
 > `include/score.asm` (new library) · `docs/part6-game-dev/39-scoreboard.md` ·
 > `docs/part6-game-dev/index.md` (row 39) · `docs/public/roms/part6-game-dev/39-scoreboard/` ·
@@ -124,9 +124,14 @@ AR-13, AR-26, AR-27, AR-28, AR-32
 AR-10, AR-14, AR-15, AR-26, AR-27, AR-28, AR-31
 **Objective**: Deliver Lesson 39 end to end, including `include/score.asm`.
 
-- [ ] 2.1.1 Lesson 39 — The Scoreboard: Session A freezes ST-39.1–ST-39.6 (red baseline), Session
+- [x] 2.1.1 Lesson 39 — The Scoreboard: Session A freezes ST-39.1–ST-39.6 (red baseline), Session
   B implements the full artifact set including `include/score.asm`, Session C verifies to green
-  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson39): The Scoreboard`
+  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson39): The Scoreboard` ✅ (completed: 2026-11-05 12:44)
+
+**Session A record** (freeze + red baseline, 2026-11-05 11:50): ST-39.1–ST-39.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 39. Design pins: the 48-pixel Staugas kernel (P0/P1 three-copy close, P1 8 px right, VDEL cross-latch, 8 rows, bottom-up font); the 9-line score zone (line 0 setup/blank, rows 1–8, cleanup shares row 8) and the 183-line game zone (192 total); P0 X=56/P1 X=64; the score digits 000000 and `ScoreAddOne`; the target at visible 150–157, X=64–95; the 1-px ball at Y=150, X=24–136; `CXBLPF` bit 7 → `ScoreAddOne`, beep, respawn; the auto-sweep; `include/score.asm` with `ScoreDigits` $A0–$A5, scratch $A6–$A7, `ScoreBuf` $A8–$D7. Evidence pins (AR-6): frame checkpoints; `ScoreDigitWrite` (A=position, X=digit); `ScoreAdd` (A=the low digit); `BallHit` A=`CXBLPF`; `BodyStart` 37; `ScoreDraw`/`ScoreDrawRow`; `HmoveDone`; the capture score/target/ball. Red baseline confirmed: no `lessons/part6-game-dev/39-scoreboard`, no `include/score.asm`, no `docs/public/images/lesson39`, no Part 6 39 ROMs, the document is the `🔒 Coming Soon` stub, index row 39 is Coming Soon, sidebar entry exists (`config.ts:110`), `verify.sh` green at `96faf13`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 12:44): Preflight per `vcs-lesson-production` — the Staugas kernel's cross-latch timing, the 8-byte columns, the decimal carry, the target/ball collision, and the 9+183 zone split checked against the prototype, `include/vcs.asm`, and the hardware reference; ACME forms; the library is the promised artifact. `bash scripts/verify.sh` green (implementation, review fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F025` = (259, 3), `VblankStart` `$F033` = (0, 5), `BodyStart` `$F0EE` = (37, 5), `ScoreDraw` `$F20A` = (37, 11), `ScoreDrawRow` `$F215` = (37, 26) (the WSYNC stall; the store executes at 38/0), `HmoveApply` `$F1BE` line 4 c45, `HmoveDone` `$F1C0` line 5 c3, `OverscanStart` `$F11E` = (229, 4). Logic: `ScoreInit` `$F154` once; `ScoreDigitWrite` `$F1C1` A=00/01/02/05…; `ScoreAdd` `$F1F3` A=01/02/03/04 at frames 22/42/62/82 and A=00 then A=01 at frame 202 (000009→000010); `BallHit` `$F04E` A=$80 at 22/42/62/82. Captures from the committed ROM: `score-a.png` reads **000001** at x=367–642, y=110–130; `score-b.png` reads **000002**; the target is gold at x=409–600 (TIA 64–95), y=580–604; the ball is 1 px wide, 8 rows, at TIA 44/36, y=580–604; no cursor. Solutions: ex1 012345→012346; ex2 000000→000002; ex3 `    42`→`    43`. Site (ST-39.6): index row 39 ✅ (rows 38 ✅, 40–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 38, next → 40; sidebar `config.ts:110`; README unchanged; `include/score.asm` sourced by all four. Reviews (AR-5): the atari2600-reviewer round 1 — **1 major, 3 minor** (the VDEL model; color clocks/spacing; duplicate headers; ex2 wording); round 2 — **0 major**, all confirmed, one comment-only residual fixed. The curriculum-auditor round 1 — **1 major, 7 minor** (the VDEL model; spacing; line mapping; unrecorded burst; ex1 calls; debugger state; plan wording/bookkeeping); round 2 — **0 major**, one library-comment residual and one §2-opening regression fixed. Final state: **0 critical, 0 major open**. Lesson 39 is complete.
+
 
 **Session sub-steps:**
 

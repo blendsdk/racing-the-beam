@@ -89,13 +89,16 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 ### Shared Score Library (`include/score.asm`, Lesson 39)
 
 - `ScoreDigits` = `$A0–$A5` (six binary digits 0–9, left to right).
+- `ScoreRow`/`ScoreTmp` = `$A6–$A7` (library scratch; no state between calls).
 - `ScoreBuf` = `$A8–$D7` (48 bytes, six columns × eight rows, column-major, bottom-up).
 - API:
   - `ScoreInit` — zero `ScoreDigits` and `ScoreBuf`.
   - `ScoreSetup` — `NUSIZ0=NUSIZ1=3`, `VDELP0=VDELP1=1`, position P0 at 56 and P1 at 64
-    (`SetPos` with the +3 bias), then one `HMOVE`. Colors are the caller's.
-  - `ScoreSetDigit` — A = position 0–5 (0 = leftmost), X = digit 0–9; copies all **eight** bytes
-    of that column from `ScoreFont + digit×8` (bottom-up glyph).
+    (the Lesson 26 divide-by-15 positioning with the +3 bias), then one `HMOVE`. Colors are the
+    caller's.
+  - `ScoreSetDigit` — A = position 0–5 (0 = leftmost), X = digit 0–9; stores the digit in
+    `ScoreDigits` and copies all **eight** bytes of that column from `ScoreFont + digit×8`
+    (bottom-up glyph).
   - `ScoreAddOne` — increment the six-digit decimal number with carry; returns C=1 on overflow
     from 999999 to 000000.
   - `ScoreClear` — set all six digits to 0 and rebuild the buffer.
@@ -104,7 +107,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     (`GRP0/GRP1=0`, `VDELP0/VDELP1=0`) shares line 8. The caller calls it once per frame at the
     top of the visible area, then continues the game zone. The kernel reads `ScoreBuf+0,Y`,
     `+8,Y`, `+16,Y`, `+24,Y`, `+32,Y`, `+40,Y`; the sixth data store is at cycle 51 and the
-    seventh `STA GRP0` flush at cycle 54.
+    seventh `STA GRP0` flush at cycle 54. `ScoreDrawRow` marks each row's staged bytes for the
+    debugger; `ScoreDraw` marks the call.
 - Font: 10 glyphs × 8 bytes, 8×8, stored **bottom-up** (row 7 first) because the Staugas loop
   counts Y down from 7. The prototype rendered "123456" at x=367–642, y=109–131.
 - The score zone is **9 lines** (1 setup/blank + 8 score rows; the cleanup shares the last row's
@@ -183,16 +187,16 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   six-store kernel; a column-major score buffer; a decimal digit carry; the score zone.
 - **ROM:** `39-scoreboard.asm` — "the scoreboard".
   - Top: the 6-digit score (9 lines) via `include/score.asm`; starts at 000000.
-  - Play area: visible 9–171. A playfield target block at visible 150–157 (8 lines), X=64–96
+  - Play area: visible 9–191. A playfield target block at visible 150–157 (8 lines), X=64–95
     (32 px), gold `$1A`; a ball (8 rows, gold) at Y=150, X starts at 24 and is moved by the
     joystick (2 px/frame, clamp 24–136). When `CXBLPF` bit 7 sets, `ScoreAddOne`, beep, and
     respawn the ball at X=24. The collision is read in VBLANK, then `CXCLR`.
   - The ROM auto-sweeps the ball 24→136 and back when there is no input, so the score climbs
     during a capture; the joystick overrides.
   - Bottom: the remaining lines are background.
-- **Expected screen:** the score is a white 6-digit block at capture x≈367–642, y≈109–131; the
-  first capture reads **000001** and the second **000002**; the ball is a gold 8-row block at
-  capture y≈579–602, and the target is a gold 32-px block at the same rows.
+- **Expected screen:** the score is a white 6-digit block at capture x≈367–642, y≈110–130; the
+  first capture reads **000001** and the second **000002**; the ball is a gold 1-px-wide, 8-row
+  block at capture y≈580–604, and the target is a gold 32-px block at the same rows.
 - **Exercises:**
   1. **Set a score.** Call `ScoreSetDigit` six times to show 012345 at reset. Expected: the
      capture shows 012345; `ScoreDigitWrite` logs each position/value.
@@ -204,8 +208,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Screenshots:** `docs/public/images/lesson39/score-a.png` (first captured score),
   `…/score-b.png` (a later score, one hit higher).
 - **Evidence pins:** `ScoreInit`, `ScoreDigitWrite` (A = position, X = digit), `ScoreAdd` (A = the
-  low digit after the add), `BallHit`, `BodyStart` 37, `ScoreDraw` (the first row), `HmoveDone`,
-  `OverscanStart` 229.
+  low digit after the add), `BallHit`, `BodyStart` 37, `ScoreDraw` (the call) and `ScoreDrawRow`
+  (each row's bytes), `HmoveDone`, `OverscanStart` 229.
 - **Integration:** prev → Lesson 38; next → Lesson 40; index row 39 → ✅ Complete;
   `include/score.asm` created. Estimated time: 90 minutes.
 
