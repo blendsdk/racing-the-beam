@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 15:53
-> **Progress**: 5/10 tasks (50%)
+> **Last Updated**: 2026-11-05 16:50
+> **Progress**: 6/10 tasks (60%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -261,7 +261,7 @@ AR-18, AR-26, AR-27, AR-28
 
 ## Phase 6: Lesson 43 — Random Numbers
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: ab240a2 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/43-random-numbers/` (4 sources) ·
 > `include/random.asm` (new library) · `docs/part6-game-dev/43-random-numbers.md` ·
 > `docs/part6-game-dev/index.md` (row 43) · `docs/public/roms/part6-game-dev/43-random-numbers/` ·
@@ -277,9 +277,14 @@ AR-18, AR-26, AR-27, AR-28
 AR-10, AR-19, AR-26, AR-27, AR-28
 **Objective**: Deliver Lesson 43 end to end, including `include/random.asm`.
 
-- [ ] 6.1.1 Lesson 43 — Random Numbers: Session A freezes ST-43.1–ST-43.6 (red baseline), Session
+- [x] 6.1.1 Lesson 43 — Random Numbers: Session A freezes ST-43.1–ST-43.6 (red baseline), Session
   B implements the full artifact set including `include/random.asm`, Session C verifies to green
-  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson43): Random Numbers`
+  and hardens; commit via the `git-commit` skill in push mode — `feat(lesson43): Random Numbers` ✅ (completed: 2026-11-05 16:50)
+
+**Session A record** (freeze + red baseline, 2026-11-05 16:00): ST-43.1–ST-43.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 43. Design pins: the 8-bit Galois LFSR `ASL`/`EOR #$1D` (period 255; zero locks; seed $5A); `include/random.asm` with `RandomSeed` $A0, `RandomHistory` $A1–$A8, `RandomInit`, `Random`, `RandomMask`, `RandomPush`; the seed row visible 0–7, the 8×8 grid 8–39 (4-px cells), the 15-cell meter 40–129 at X=24 (`PF1=$20`), `CTRLPF=$01`; the 4-frame update, fire reseed, ±1 wrap; the 16-bit `$2D`, mask-and-ball, and SELECT-seed exercises. Evidence pins (AR-6): frame checkpoints; `RandomStep` A=new seed; `SeedWrite`; `RandomPush`; `RandomMask`; `BodyStart`; `OverscanStart` (the main is playfield-only; no HMOVE). Red baseline confirmed: no `lessons/part6-game-dev/43-random-numbers`, no `include/random.asm`, no `docs/public/images/lesson43`, no Part 6 43 ROMs, the document is the `🔒 Coming Soon` stub, index row 43 is Coming Soon, sidebar `config.ts:114`, `verify.sh` green at `ab240a2`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 16:50): Preflight per `vcs-lesson-production` — the `$1D` polynomial/period, the zero lock, the mask distribution, the history shift, the grid/meter geometry, and the playfield-only 262-line frame checked against the hardware reference and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F040` 259/3, `VblankStart` `$F04E` 0/5, `BodyStart` `$F0F5` 37/5, `OverscanStart` `$F13F` 229/7; no HMOVE (playfield-only). LFSR: `RandomStep` `$F0AD` at frames 4/8/12/16/20/24 = $B4/$75/$EA/$C9/$8F/$03; `SeedWrite` `$F159` = $B5/$FE/$98/$CB; `RandomPush` `$F016`; `RandomMask` `$F013` A=$01. Captures: `random-a.png` seed $6D, meter 6, grid `6D B8 5C 2E 17 85 CC 66`; `random-b.png` seed $32, meter 3, grid `32 19 82 41 AE 57 A5 DC`; no cursor. Solutions: ex1 16-bit `$2D` (period 65,535 modeled; 14 low bytes observed), ex2 seed `$B6`→X=120–127 and `$88`→X=24–31, ex3 SELECT $8D@174/$A0@302 (the `seed + FrameLo + FrameHi + carry` formula; the frame-181 $15 witness). Site (ST-43.6): index row 43 ✅ (rows 38–42 ✅, 44–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 42, next → 44; sidebar `config.ts:114`; README unchanged; `include/random.asm` sourced by all four. Reviews (AR-5): the atari2600-reviewer — **1 major, 5 minor** (ex3 SELECT values; timing; COLUPF; dead constants; joystick level; ex2 wording); the curriculum-auditor — **1 major, 7 minor** (ex3; zero guard; joystick; COLUPF; timing; dead constants; SELECT method; ex2 seed). The major was the doc's carry/FrameHi arithmetic; the code was correct and the doc now states $8D/$A0. Final state: **0 critical, 0 major open**. Lesson 43 is complete.
+
 
 **Session sub-steps:**
 

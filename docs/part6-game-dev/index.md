@@ -11,7 +11,7 @@ Put it all together — collision detection, scoring, game states, AI, and debug
 | 40 | [BCD Arithmetic — Scores That Make Sense](./40-bcd-arithmetic) | ✅ Complete |
 | 41 | [Game States — Title, Play, Game Over](./41-game-states) | ✅ Complete |
 | 42 | [Difficulty and Progression](./42-difficulty) | ✅ Complete |
-| 43 | [Random Numbers — Unpredictable Fun](./43-random-numbers) | 🔒 Coming Soon |
+| 43 | [Random Numbers — Unpredictable Fun](./43-random-numbers) | ✅ Complete |
 | 44 | [AI & Enemy Behavior — Chase, Patrol, Flee](./44-ai-enemy-behavior) | 🔒 Coming Soon |
 | 45 | [Memory Management — 128 Bytes of Creativity](./45-memory-management) | 🔒 Coming Soon |
 | 46 | [Debugging — Finding and Fixing Bugs](./46-debugging) | 🔒 Coming Soon |
