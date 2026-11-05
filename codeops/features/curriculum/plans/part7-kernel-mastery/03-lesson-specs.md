@@ -9,7 +9,9 @@
 
 ### Frame and Video
 
-- NTSC only: `VSYNC` 3 + `VBLANK` 37 + picture 192 + overscan 30 = **262 lines**.
+- NTSC only: `VSYNC` 3 + `VBLANK` 37 + picture 192 + overscan 30 = **262 lines**. The last
+  visible line is 228 and `OverscanStart` is scanline 229; the cycle at that label depends on
+  the kernel's tail, so the scanline is the oracle, not the cycle.
 - `+set_timer 44` and `+wait_timer` cover VBLANK; `+set_timer 36` and `+wait_timer` cover overscan.
 - The picture begins at scanline 37 (visible line 0 = capture y 107) and ends at scanline 228.
 - Capture mapping used by every pixel check: `capture x = 25 + 6 × TIA_X`, `capture y = 107 +
@@ -142,11 +144,12 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - `Mode` 2 = full 2-line: 96 rows, the 48-row diamond table repeated twice; the 48-byte strips
     are repeated twice.
   - Fire cycles the modes; the auto-demo cycles every 240 frames. SELECT resets to mode 0.
-  - The diamond tables: 96 rows × 3 bytes (1-line, 288 bytes) and 48 rows × 3 bytes (2-line, 144
-    bytes); the full modes repeat the same table twice (the full 1-line mode displays 192 rows,
-    the full 2-line mode displays 96 rows). The tables are generated as data; the shape is a
-    diamond with a 96-line height and a 96-px maximum width, centred. The split uses the full
-    96-row 1-line table for the top and the full 48-row 2-line table for the bottom.
+  - The diamond tables: three 96-byte planes (1-line, 288 bytes) and three 48-byte planes
+    (2-line, 144 bytes), indexed by the top-down row counter; the full modes repeat the same
+    planes twice (the full 1-line mode displays 192 rows, the full 2-line mode displays 96 rows).
+    The planes are generated as data; the shape is a diamond with a 96-line height and a 96-px
+    maximum width, centred. The split uses the full 96-row 1-line planes for the top and the full
+    48-row 2-line planes for the bottom.
   - The 1-line dash is one byte tall (1 line); the 2-line dash is one byte per two lines (2
     lines). The dashes move horizontally with the joystick (clamp 8–144); with no input the
     auto-demo sweeps them so both captures are reachable without a key press.
@@ -161,8 +164,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Exercises:**
   1. **Three zones.** Split the screen into 64-line 1-line, 64-line 2-line, and 64-line 1-line
      zones; expected: 64+64+64 = 192, `ZoneCount` = 3, the middle zone chunky.
-  2. **Square, not diamond.** Replace the diamond table with a solid rectangle; expected: the
-     1-line zone shows crisp edges, the 2-line zone still steps in two-line blocks.
+  2. **Rectangle, not diamond.** Replace the diamond table with a solid rectangle; expected:
+     the 1-line zone shows crisp edges, the 2-line zone still steps in two-line blocks.
   3. *(Stretch)* **Mode 3: a multi-zone layout.** Add an 8-line header, a 176-line 2-line play
      area, and an 8-line footer; expected: 8+176+8 = 192, `Mode` = 3, `HeaderEnd` = 8.
 - **Evidence pins:** `Mode` (A=0/1/2), `ZoneCount`, `LineCount` (96/192), `PairCount` (48/96),

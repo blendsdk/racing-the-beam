@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 22:47
-> **Progress**: 0/8 tasks (0%)
+> **Last Updated**: 2026-11-06 00:47
+> **Progress**: 1/8 tasks (12.5%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -63,7 +63,7 @@ push mode is authorized by the user's directive to execute RD-07 and the Part 1�
 
 ## Phase 1: Lesson 48 — Introduction to Kernels
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: f097ab4 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part7-kernel-mastery/48-introduction-to-kernels/` (4 sources,
 > including `demo-48.asm`) · `docs/part7-kernel-mastery/48-introduction-to-kernels.md` ·
 > `docs/part7-kernel-mastery/index.md` (rebuild + row 48) ·
@@ -80,10 +80,16 @@ push mode is authorized by the user's directive to execute RD-07 and the Part 1�
 AR-24, AR-32
 **Objective**: Deliver Lesson 48 end to end through the mandatory three sessions.
 
-- [ ] 1.1.1 Lesson 48 — Introduction to Kernels: Session A freezes ST-48.1–ST-48.6 (red baseline),
+- [x] 1.1.1 Lesson 48 — Introduction to Kernels: Session A freezes ST-48.1–ST-48.6 (red baseline),
   Session B implements the full artifact set (including the AR-10 index rebuild), Session C
   verifies to green and hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson48): Introduction to Kernels`
+  `feat(lesson48): Introduction to Kernels` ✅ (completed: 2026-11-06 00:47)
+
+**Session C record** (verify + evidence, 2026-11-06 00:47): Preflight per `vcs-lesson-production` — the 1-line/2-line kernels, the split/full mode arithmetic, the three-plane diamond data, the top-down row loops, the dashes, the one-HMOVE positioning, the mode/auto-demo/fire/SELECT logic, and the 262-line frame checked against `include/vcs.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F053` 259/3, `VblankStart` `$F061` 0/5, `BodyStart` `$F16B` 37/5, `OverscanStart` `$F22F` 229/9 (the cycle is the loop tail; the scanline is 229), `HmoveApply` `$F156` 4/53 (the `WSYNC` write; the CPU waits to the end of line 4), `HmoveDone` `$F15A` 5/3 (after the `HMOVE` store at 5/0). Logic: `ModeRead` `$F119` A=0/1/2 at frames 1/240/480; `ModeStep` `$F24F` A=1 at 240 and A=2 at 480; `SelectReset` `$F0B5` A=0 with `-holdselect`; `ZoneCountRead` `$F121` A=2; `LineCountRead` `$F126` A=$60/$C0/$00; `PairCountRead` `$F12B` A=$30/$00/$60; `LineRow` `$F178` Y=0..95; `PairRow` `$F1A7` Y=0..47; `LineRow2`/`PairRow2` fire on both passes. Joystick (the review's raw-bit/masked-value check): `-holdjoy0 L` reaches `DashLeft` with A=$80 (the raw left bit is $40; after `AND #$C0` the other bit is high), `-holdjoy0 R` reaches `DashRight` with A=$40; the code DECs/INCs, so left moves left and right moves right. A manual fire press was not exercised in the log; the auto-demo calls the same `AdvanceMode`, and SELECT is logged. Captures from the current committed ROM (`split.png`, `full-two-line.png`): the split has green top/gold bottom, diamond widths 8/48/96 TIA px at visible 0/24/47/71/95/120/144/168/190, a 1-line top dash and a 2-line bottom dash; the full 2-line view is all gold with four 2-line dashes; no cursor; the title bars read `Stella 7.0: "demo-48"`. The images were re-captured after the joystick/alignment fix by the same burst/pixel-selection method. Solutions: ex1 three zones 64+64+64 (`ZoneCount` 3, `LineRow` 0..63 at 37–100, `PairRow` 0..31 at 101–163, `LineRow3` 0..63 at 165–228), ex2 rectangle 16–79/112–175 (`Shape` 1), ex3 mode 3 8+176+8 (`HeaderEnd` 8, `PlayPair` 0..87 at 45–219; the footer PF0/PF1/PF2 are written before the player clears to remove the 4-px notch). Site (ST-48.6): the Part 7 index was rebuilt to the Part 1 format (row 48 ✅, rows 49–55 `🔒 Coming Soon`); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 47, next → 49; sidebar `config.ts:125`; README unchanged. Reviews (AR-5): round 1 — the atari2600-reviewer 7 minor (duplicate label, dispatch 8 vs 12, four-cross page bound, RAM 40 vs 15, ex2 comments, ex1/ex3 comments, LineRow2 wording, ex2 hint) and 3 open questions; the curriculum-auditor 2 major (dispatch 8 vs 12; ex2 hint) and 4 minor (duplicate label, RAM 40, ex1 mode header, `HmoveApply` label). Round 2 — 1 major (the joystick raw-bit/masked-value wording; the functional mapping is correct and the doc now states both) and the page-cross/`HmoveApply` residuals; round 3 — the joystick wording, page-cross prose, ex1/ex2/ex3 comments, and ex3 footer notch were fixed. Final state: **0 critical, 0 major open** (the joystick is functionally correct; the raw/masked wording is documented; the manual fire press is disclosed). Lesson 48 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-05 23:32): ST-48.1–ST-48.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 48. Design pins: mode 0 split 96+96 (top 1-line, bottom 2-line); mode 1 full 1-line 192 rows; mode 2 full 2-line 96 rows; the three 96-byte and three 48-byte diamond planes repeated in the full modes; a 1-line dash and a 2-line dash; fire cycles the modes, the auto-demo cycles every 240 frames, SELECT resets; the row loops are top-down `LDY #0; INY; CPY #N; BNE`; the 1-line/2-line kernels total 192 lines. Evidence pins (AR-6): `Mode` A=0/1/2; `ZoneCount`; `LineCount` 96/192; `PairCount` 48/96; `LineRow`/`PairRow` 0→N−1; `BodyStart` 37; `OverscanStart` 229; `StartFrame` 259. Red baseline confirmed: no `lessons/part7-kernel-mastery/48-introduction-to-kernels`, no `docs/public/images/lesson48`, no Part 7 ROMs, the document is the `🔒 Coming Soon` stub, the Part 7 index is the minimal stub, sidebar entry exists (`config.ts:125`), `verify.sh` green at `f097ab4`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 
