@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 12:44
-> **Progress**: 2/10 tasks (20%)
+> **Last Updated**: 2026-11-05 13:38
+> **Progress**: 3/10 tasks (30%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -147,7 +147,7 @@ AR-10, AR-14, AR-15, AR-26, AR-27, AR-28, AR-31
 
 ## Phase 3: Lesson 40 — BCD Arithmetic
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 87d7350 (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/40-bcd-arithmetic/` (4 sources) ·
 > `docs/part6-game-dev/40-bcd-arithmetic.md` · `docs/part6-game-dev/index.md` (row 40) ·
 > `docs/public/roms/part6-game-dev/40-bcd-arithmetic/` · `docs/public/images/lesson40/` ·
@@ -162,9 +162,14 @@ AR-10, AR-14, AR-15, AR-26, AR-27, AR-28, AR-31
 AR-16, AR-26, AR-27, AR-28, AR-33
 **Objective**: Deliver Lesson 40 end to end on the Lesson 39 score library.
 
-- [ ] 3.1.1 Lesson 40 — BCD Arithmetic: Session A freezes ST-40.1–ST-40.6 (red baseline), Session
+- [x] 3.1.1 Lesson 40 — BCD Arithmetic: Session A freezes ST-40.1–ST-40.6 (red baseline), Session
   B implements the full artifact set, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson40): BCD Arithmetic`
+  `git-commit` skill in push mode — `feat(lesson40): BCD Arithmetic` ✅ (completed: 2026-11-05 13:38)
+
+**Session A record** (freeze + red baseline, 2026-11-05 13:00): ST-40.1–ST-40.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 40. Design pins: the 3-byte BCD score (low/mid/high; low=digits 5/4); `BCDAdd` A=command selector 1/100 in the main (A=1 low+1, A=100 mid+1 carry high), ADD 10/SUB 1 as exercises; `SED`/`CLD` isolation; top-byte overflow wraps to 000000, borrow to 999999; the six-digit rebuild via `ScoreSetDigit`/`ScoreDraw`; the operation bar visible 9–16, carry 17–24, strip 25–32; the auto-demo ADD 1 → ADD 100; captures 000001/000101. Evidence pins (AR-6): frame checkpoints; `BCDAdd` A=selector; `BCDCarryMid`/`BCDCarry`; `BCDScoreLow/Mid/High`; `ScoreDigitWrite`; `Overflow`; `BodyStart` 37; `HmoveDone`. Red baseline confirmed: no `lessons/part6-game-dev/40-bcd-arithmetic`, no `docs/public/images/lesson40`, no Part 6 40 ROMs, the document is the `🔒 Coming Soon` stub, index row 40 is Coming Soon, sidebar entry exists (`config.ts:111`), `verify.sh` green at `87d7350`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 13:38): Preflight per `vcs-lesson-production` — the decimal-mode paths, the 3-byte carry/borrow, the command selector, the BCD-to-six-digits rebuild, the operation bar/carry/strip, and the 262-line frame checked against `include/vcs.asm`, the 6502 decimal rules, and the Lesson 39 score library; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and final runs); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `HmoveApply` 4/45 (the WSYNC stall; the `STA HMOVE` executes at 5/0), `HmoveDone` 5/3, `OverscanStart` 229/4. Logic: `BCDAdd` A=$01/$64 (selector 100)/$01; `BCDCarryMid` A=0 (A=1 on a preset 000099), `BCDCarry` A=0 (ex 3 A=1); `BCDScoreLow` 0→1→2, mid 0/1/1, high 0; `ScoreDigitWrite` six calls per operation; the overflow probe (000000−1=999999, then ADD 1) wraps to 000000; ex 1 000010, ex 2 999999 with the borrow, ex 3 009900+100=010000 with the middle carry. Captures from the committed ROM: `add1.png` reads 000001 at x=367–642, y=110–130, bar slot 0, strip bit 0, carry dark; `add100.png` reads 000101, bar slot 2, strip bit 0; no cursor. Site (ST-40.6): index row 40 ✅ (rows 38–39 ✅, 41–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 39, next → 41; sidebar `config.ts:111`; README unchanged; `include/score.asm` sourced by all four. Reviews (AR-5): the atari2600-reviewer round 1 — **0 critical, 0 major**, 5 minor (timing; SED comment; ex2 SUB1 comment; Borrow flag; BCDCarryMid wording); the curriculum-auditor round 1 — **0 critical, 0 major**, 5 minor (the excerpt; the strip claim; the SED comment; y extent; HMOVE table). All fixed; final state **0 critical, 0 major open**. Lesson 40 is complete.
+
 
 **Session sub-steps:**
 

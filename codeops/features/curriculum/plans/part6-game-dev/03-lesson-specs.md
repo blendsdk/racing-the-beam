@@ -225,14 +225,17 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - The main ROM implements `BCDAdd` A=1 and A=100 (the **command selector**, not a BCD addend:
     A=1 adds 1 to the **low** byte; A=100 adds 1 to the **middle** byte, carrying into the high
     byte) and isolates `SED`/`CLD`. ADD 10 (low += $10) and SUB 1 are the exercise subjects, so
-    the operation bar's ADD 10/SUB 1 cells stay dark in the main ROM. A top-byte carry sets
-    `Overflow` (visible 17–24, red) and wraps to 000000; a borrow wraps to 999999.
+    the operation bar's ADD 10/SUB 1 positions stay dark in the main ROM. A top-byte carry sets
+    `Overflow` (visible 17–24, red) and wraps to 000000; a borrow wraps to 999999. The main's
+    auto-demo cannot reach 999999; the overflow witness is exercise 2 (000000 − 1 = 999999, then
+    ADD 1) or a scratch probe, and the doc says so.
   - Display: rebuild six digits from the three bytes (low → digits 5/4, mid → 3/2, high → 1/0)
     and call `ScoreSetDigit`, then `ScoreDraw` (9 lines).
-  - Operation bar: four 8-line cells (ADD 1, ADD 10, ADD 100, SUB 1) at visible 9–16, the selected
-    one bright; the ADD 10/SUB 1 cells are dark in the main ROM. Joystick up/down selects; fire
-    executes. Auto-demo cycles **ADD 1 → ADD 100** every 60 frames and executes, so the first two
-    captures read 000001 and 000101.
+  - Operation bar: a single 16-px gold cell at one of four positions (ADD 1, ADD 10, ADD 100,
+    SUB 1) on visible 9–16. The main ROM implements ADD 1 and ADD 100; the ADD 10/SUB 1
+    positions are dark/hidden until the exercises. Joystick up/down selects; fire executes. The
+    auto-demo cycles **ADD 1 → ADD 100** every 60 frames and executes, so the first two captures
+    read 000001 and 000101.
   - Carry cell: visible 17–24, red. Bit/value strip: visible 25–32, eight cells showing the low
     BCD nibbles. The rest is background.
 - **Expected screen:** the score at x≈367–642, y≈109–131; after one ADD 1 it reads 000001; after
@@ -246,8 +249,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   3. *(Stretch)* **Add 100 with a middle carry.** 009900 + 100 = 010000; the middle byte 99 + 01
      carries out. Expected: `BCDCarry` A=1 on the middle add; the score shows 010000.
 - **Screenshots:** `docs/public/images/lesson40/add1.png`, `…/add100.png`.
-- **Evidence pins:** `BCDAdd` (A = command selector), `BCDCarry` (A = carry into the next byte),
-  `BCDScoreLow/Mid/High`, `ScoreDigitWrite`, `Overflow`, `BodyStart`, `HmoveDone`.
+- **Evidence pins:** `BCDAdd` (A = command selector), `BCDCarryMid` (A = the carry into the middle
+  byte; ADD 1/ADD 10), `BCDCarry` (A = the carry into the high byte), `BCDScoreLow/Mid/High`,
+  `ScoreDigitWrite`, `Overflow`, `BodyStart`, `HmoveDone`.
 - **Integration:** prev → Lesson 39; next → Lesson 41; index row 40 → ✅ Complete. Estimated
   time: 75 minutes.
 
