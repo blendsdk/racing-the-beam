@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-05 14:46
-> **Progress**: 4/10 tasks (40%)
+> **Last Updated**: 2026-11-05 15:53
+> **Progress**: 5/10 tasks (50%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -223,7 +223,7 @@ AR-17, AR-26, AR-27, AR-28
 
 ## Phase 5: Lesson 42 — Difficulty and Progression
 
-> **Phase baseline tree**: _(recorded at phase start)_
+> **Phase baseline tree**: 1ea007a (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part6-game-dev/42-difficulty/` (4 sources) ·
 > `docs/part6-game-dev/42-difficulty.md` · `docs/part6-game-dev/index.md` (row 42) ·
 > `docs/public/roms/part6-game-dev/42-difficulty/` · `docs/public/images/lesson42/` ·
@@ -238,9 +238,14 @@ AR-17, AR-26, AR-27, AR-28
 AR-18, AR-26, AR-27, AR-28
 **Objective**: Deliver Lesson 42 end to end.
 
-- [ ] 5.1.1 Lesson 42 — Difficulty and Progression: Session A freezes ST-42.1–ST-42.6 (red
+- [x] 5.1.1 Lesson 42 — Difficulty and Progression: Session A freezes ST-42.1–ST-42.6 (red
   baseline), Session B implements the full artifact set, Session C verifies to green and hardens;
-  commit via the `git-commit` skill in push mode — `feat(lesson42): Difficulty and Progression`
+  commit via the `git-commit` skill in push mode — `feat(lesson42): Difficulty and Progression` ✅ (completed: 2026-11-05 15:53)
+
+**Session A record** (freeze + red baseline, 2026-11-05 15:00): ST-42.1–ST-42.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 42. Design pins: `SWCHB` bits 6/7 = 0=B/novice, 1=A/expert (the ground-truth correction); bit 6 selects start level 1/5, bit 7 selects NUSIZ1 0/5; P0 and P1 both Y=140; level bar 0–7, life cells 8–15, switch indicator 16–23, play 24–191; `CTRLPF=$01`, `PF0=$F0`; SpeedTable 1–4 at levels 1/5/10/15; LevelTimer 300 (16-bit), cap 15; `CXPPMM` bit 7, 60-frame invulnerability, far-side respawn; red field at 0 lives; fire restarts at the switch-selected level; exercises invert/three copies/expert cap. Evidence pins (AR-6): frame checkpoints; `ReadSWCHB` A=`SWCHB`; `StartLevelSet`; `NUSIZWrite`; `LevelUp`; `SpeedWrite`; `LifeInit`/`LifeStep`; `ReadCX`; `BodyStart`; `HmoveApply`/`HmoveDone`. Red baseline confirmed: no `lessons/part6-game-dev/42-difficulty`, no `docs/public/images/lesson42`, no Part 6 42 ROMs, the document is the `🔒 Coming Soon` stub, index row 42 is Coming Soon, sidebar `config.ts:113`, `verify.sh` green at `1ea007a`. No implementation logic read (AR-2).
+
+**Session C record** (verify + evidence, 2026-11-05 15:53): Preflight per `vcs-lesson-production` — the `SWCHB` polarity (2k6specs/Stella: 0=B, 1=A), the speed table, the 16-bit timer, the `CXPPMM` collision, the invulnerability, the red field, and the 262-line frame checked against `include/vcs.asm` (corrected), the hardware reference, and the state-machine/input references; ACME forms. `bash scripts/verify.sh` green (implementation, review fixes, and re-captures); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` `$F1EB` = 37/5, `HmoveApply` `$F1AA` 6/36–41, `HmoveDone` `$F1AC` 7/3, `OverscanStart` `$F258` = 229/7. Switches: `ReadSWCHB` `$3F` (B/B), `$FF` (A/A), `$7F` (A/B), `$BF` (B/A); `StartLevelSet` 1/5; `NUSIZWrite` 0/5 (ex2 3); `SpeedWrite` 1/2/3/4 at levels 1/5/10/15. Lives: `LifeInit` 3, `LifeStep` 2@50, 1@212, 0@374; the red field is still (two captures 0.2 s apart are identical); `LevelUp` A=2@301; expert passive run dies at 175. Captures from the committed ROM: `level1.png` 1 level chunk, 3 life cells per half, dark switch cells, 8-px enemy; `level5.png` 5 chunks, white switch cells, 16-px enemy; no cursor. Solutions: ex1 inverted start (expert 1/novice 5), ex2 NUSIZ=3 with P1 cap 24–104, ex3 expert cap 10. Site (ST-42.6): index row 42 ✅ (rows 38–41 ✅, 43–47 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 41, next → 43; sidebar `config.ts:113`; README unchanged. Reviews (AR-5): the atari2600-reviewer — **1 major, 8 minor** (the stale `vcs.asm` claim; game-over blink; level-cap reward; NUSIZ comment; X=24 timing; $3F explanation; ex2 comment; VBLANK rationale; per-half counts); the curriculum-auditor — **1 major, 5 minor** (the stale claim; plan current-state/ST; TS timer; X=24 timing; LifeStep wording). All fixed; the ground-truth SWCHB polarity was corrected in `include/vcs.asm` and the hardware reference. Final state: **0 critical, 0 major open**. Lesson 42 is complete.
+
 
 **Session sub-steps:**
 

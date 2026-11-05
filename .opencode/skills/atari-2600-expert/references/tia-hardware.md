@@ -130,7 +130,7 @@ six-digit scoreboard trick.
 | RAM | `$80–$FF` | The only 128 bytes of writable memory |
 | `SWCHA` | `$0280` | Joysticks. **0 = pressed.** P0: bit 4 up, 5 down, 6 left, 7 right; P1: bits 0–3 in the same order (bit 0 up … bit 3 right) |
 | `SWACNT` | `$0281` | Port A direction register — normally `$00` (all input) |
-| `SWCHB` | `$0282` | Console switches. `0 = pressed` for RESET (bit 0) and SELECT (bit 1); bit 3 = 1 color / 0 B&W; bits 6–7 = P0/P1 difficulty (0 = expert/A, 1 = novice/B) |
+| `SWCHB` | `$0282` | Console switches. `0 = pressed` for RESET (bit 0) and SELECT (bit 1); bit 3 = 1 color / 0 B&W; bits 6–7 = P0/P1 difficulty (0 = B/novice, 1 = A/expert; the 2k6specs and Stella agree) |
 | `SWBCNT` | `$0283` | Port B direction register — normally `$00` |
 | `INTIM` | `$0284` | Current timer value; counts down to 0 |
 | `INSTAT` | `$0285` | Bit 7 = 1 once the timer has underflowed |

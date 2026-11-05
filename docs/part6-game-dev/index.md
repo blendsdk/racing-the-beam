@@ -10,7 +10,7 @@ Put it all together — collision detection, scoring, game states, AI, and debug
 | 39 | [The Scoreboard — 48-Pixel Sprite Trick](./39-scoreboard) | ✅ Complete |
 | 40 | [BCD Arithmetic — Scores That Make Sense](./40-bcd-arithmetic) | ✅ Complete |
 | 41 | [Game States — Title, Play, Game Over](./41-game-states) | ✅ Complete |
-| 42 | [Difficulty and Progression](./42-difficulty) | 🔒 Coming Soon |
+| 42 | [Difficulty and Progression](./42-difficulty) | ✅ Complete |
 | 43 | [Random Numbers — Unpredictable Fun](./43-random-numbers) | 🔒 Coming Soon |
 | 44 | [AI & Enemy Behavior — Chase, Patrol, Flee](./44-ai-enemy-behavior) | 🔒 Coming Soon |
 | 45 | [Memory Management — 128 Bytes of Creativity](./45-memory-management) | 🔒 Coming Soon |

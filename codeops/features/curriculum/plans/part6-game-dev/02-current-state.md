@@ -60,8 +60,8 @@ Part 6 lessons reuse the Part 3/4/5 program shape: `!cpu 6502` with `include/vcs
 (`+vsync`, `+set_timer`/`+wait_timer` with 44/36), a visible kernel, and the vectors at `$FFFA`.
 Collision registers are read-only latches that stay set until `CXCLR`; reading them in VBLANK
 observes the previous visible frame. `VDELP0/VDELP1` delay a graphic by one line, which is the
-basis of the six-digit score trick. `SWCHB` bits 6/7 are the two difficulty switches (0 = expert,
-1 = novice). `INPT4` bit 7 is active-low fire. The 8-bit Galois LFSR with taps `$1D` has a period
+basis of the six-digit score trick. `SWCHB` bits 6/7 are the two difficulty switches (0 = B/novice,
+1 = A/expert; the earlier comment was inverted and was corrected in this phase). `INPT4` bit 7 is active-low fire. The 8-bit Galois LFSR with taps `$1D` has a period
 of 255 and locks at zero.
 
 The visual monitors use only mechanisms already taught: playfield bands (19–24), player sprites

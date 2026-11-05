@@ -165,8 +165,8 @@ SWCHB   = $0282  ; Port B: Console switches
                  ;   bit 0: RESET  (0=pressed)
                  ;   bit 1: SELECT (0=pressed)
                  ;   bit 3: Color/BW (1=color, 0=B&W)
-                 ;   bit 6: P0 difficulty (0=expert/A, 1=novice/B)
-                 ;   bit 7: P1 difficulty (0=expert/A, 1=novice/B)
+                 ;   bit 6: P0 difficulty (0=novice/B, 1=expert/A)
+                 ;   bit 7: P1 difficulty (0=novice/B, 1=expert/A)
 SWBCNT  = $0283  ; Port B DDR — usually $00 (all input)
 
 ; --- Timer ---

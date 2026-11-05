@@ -307,13 +307,14 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Prerequisites:** Lesson 06 (flags), Lesson 11 (lookup tables), Lesson 27 (joystick input),
   Lesson 34 (frame counters), Lesson 38 (collision latches), Lesson 41 (game states and the
   restart flow).
-- **Concepts:** `SWCHB` bits 6/7 (difficulty, 0=expert/1=novice); a starting level from a switch;
+- **Concepts:** `SWCHB` bits 6/7 (difficulty, 0=B/novice, 1=A/expert); a starting level from a switch;
   a speed table indexed by level; a survival timer; a level cap; lives.
 - **ROM:** `42-difficulty.asm` — "the difficulty ladder".
   - `Level` 1–15, `LevelTimer` 300, `Lives` 3, `EnemyX`, `EnemyDir`, `PlayerX`, `Switches`.
-  - Read `SWCHB` in VBLANK: bit 6 (P0 difficulty) selects the starting level 1 (novice) or 5
-    (expert); bit 7 (P1 difficulty) selects `NUSIZ1=0` (novice) or `NUSIZ1=5` (expert, double
-    width). A 2-cell indicator at the top shows the two switch states.
+  - Read `SWCHB` in VBLANK: bit 6 (P0 difficulty) selects the starting level 1 (B/novice, bit=0)
+    or 5 (A/expert, bit=1); bit 7 (P1 difficulty) selects `NUSIZ1=0` (B/novice) or `NUSIZ1=5`
+    (A/expert, double width). The course's `include/vcs.asm` and hardware reference now state
+    this polarity (0=B, 1=A); the earlier comment was inverted. A 2-cell indicator at the top shows the two switch states.
   - Top: visible 0–7 is the level bar (N chunks per half, gold); visible 8–15 is the three red
     life cells per half (each 2 chunks, at X=8/16/24); visible 16–23 is the two-cell switch
     indicator per half (left and right difficulty). Play area: visible 24–191, `CTRLPF=$01`, `PF0=$F0` for the two
@@ -323,11 +324,12 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     (1…4 px/frame).
   - Every 300 survived frames: `Level++` (cap 15), beep, flash the level bar. A P0–P1 collision
     (`CXPPMM` bit 7): `Lives--`, respawn P1 at the opposite side, 60 frames of invulnerability,
-    beep; at 0 lives the field turns red, play freezes, fire restarts at level 1.
+    beep; at 0 lives the field turns red, play freezes, and fire restarts at the switch-selected
+    starting level (1 on B, 5 on A).
   - The left difficulty switch is also shown as a 1-cell block; the right as another.
 - **Expected screen:** at level 1 the level bar is 1 chunk and the enemy speed is 1; at level 5
-  the bar is 5 chunks and the enemy is faster. Expert (switch 0) starts at level 5 with a wider
-  enemy.
+  the bar is 5 chunks and the enemy is faster. Expert (switch A, bit 6/7=1) starts at level 5
+  with a wider enemy.
 - **Exercises:**
   1. **Invert the left switch.** Make expert start at level 1 and novice at 5 (the opposite of
      the main ROM). Expected: `ReadSWCHB` A bit 6, the level bar starts at 1 on expert.
