@@ -70,8 +70,8 @@ reports the first cycle of the instruction that follows it.
 | ID | What | Expected | Evidence |
 | --- | --- | --- | --- |
 | ST-59.1 | Assemble the main ROM | 4,096 bytes | `acme` |
-| ST-59.2 | Run the painter | A 192-line color gradient/plasma; two captures at different phases | Screenshots + pixel check |
-| ST-59.3 | Inspect the RAM routine | The bytes at `$80–$88` match the source; `PatchByte` changes each line; `CallCount` = 192; SP returns to its entry value | State log + debugger disassembly |
+| ST-59.2 | Run the painter | 8 status lines + 184 gradient lines = 192; two captures at phases 0 and 96; the phase-96 gradient matches `table[96..183] + table[0..95]` | Screenshots + pixel check |
+| ST-59.3 | Inspect the RAM routine | The bytes at `$80–$86` match `A9 xx 85 09 85 02 60`; `PatchByte` changes each line; `PatchByteTail` reads `$6E` at the first wrap; `CallCount` = 184; SP returns to its entry value | State log + debugger disassembly |
 | ST-59.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
 | ST-59.5 | Assemble/run the exercises | ex1 4,096 (patched delay); ex2 4,096 (patched pointer); ex3 4,096 (second routine) | `acme`, Stella logs |
 | ST-59.6 | Site integration | Row 59 ✅; prev 58, next 60; sidebar `config.ts:142` | Build + page check |

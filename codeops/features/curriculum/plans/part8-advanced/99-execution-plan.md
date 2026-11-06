@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 16:15
-> **Progress**: 3/10 tasks (30%)
+> **Last Updated**: 2026-11-06 17:56
+> **Progress**: 4/10 tasks (40%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -170,15 +170,15 @@ AR-25
 AR-23, AR-25
 **Objective**: Deliver Lesson 59 end to end.
 
-- [ ] 4.1.1 Lesson 59 — Self-Modifying Code: Session A freezes ST-59.1–ST-59.6 (red baseline),
+- [x] 4.1.1 Lesson 59 — Self-Modifying Code: Session A freezes ST-59.1–ST-59.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson59): Self-Modifying Code`
+  the `git-commit` skill in push mode — `feat(lesson59): Self-Modifying Code` ✅ (completed: 2026-11-06 17:56)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 16:17): ST-59.1–ST-59.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 59. Design pins: 4,096-byte "code painter"; a 7-byte routine copied to `$80` (`LDA #$00` at `$80-$81`, `STA COLUBK` at `$82-$83`, `STA WSYNC` at `$84-$85`, `RTS` at `$86`); the main patches the immediate operand at `$81` from a 184-byte color table and calls `JSR $80` once per visible line; the routine uses no stack, so the `JSR`/`RTS` pair uses `$FF/$FE` safely (SP starts at `$FF`); 8 status lines (the patch byte and call count) + 184 gradient lines = 192; one HMOVE if a marker is used. Exercises: (1) patch a delay count (`LDX #n`) in the RAM routine; (2) patch a pointer operand (`LDA table,X` / `LDA (ptr),Y`) to select another table; (3) copy a second routine to `$90`, patch its `STA COLUPF`/`STA GRP0` address, and draw a second object. Evidence pins: `PatchByte` (A = the new color), `CallCount` (A = 184 per frame), `RamRoutine` (`$80`), `Frame`, `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. Red baseline confirmed: no `lessons/part8-advanced/59-self-modifying-code`, no `docs/public/images/lesson59`, no Part 8 59 ROMs, the document is the `🔒 Coming Soon` stub, index row 59 Coming Soon, sidebar `config.ts:142`, `verify.sh --no-docs` green at `30826e5`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 16:55): Four sources (4,096 each), the 1,116-line document, four committed ROMs, and two captures. A 7-byte routine is copied to `$80` (`A9 xx 85 09 85 02 60`); the main patches `$81` from a 184-entry color table and calls `JSR $80` 184 times per frame. The table is stored twice and the phase window is split into two page-aligned halves: the first loop reads `ColorTable,Y` from `Y=Phase`, the second reads `ColorTable+256,Y` after the wrap. `HoldFrames` is a one-shot 60-frame hold; the status setup runs in VBLANK; the left-edge strip is the measured 37 px steady / 46 first / 64 last. Exercises: patched delay, patched pointer, second routine at `$90`. Captures: phase 0 and phase 96.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 17:56): `bash scripts/verify.sh` PASSED (228 ROMs, no drift, docs build); all four sources 4,096 and byte-identical; Full Source verbatim (1,116 doc lines). Frame: `StartFrame` `$F033` 259/3, `VblankStart` `$F041` 0/5, `BodyStart` `$F08B` 37/5, `OverscanStart` `$F0D1` 229/6; 262 lines. The routine bytes at `$80–$86` are `A9 xx 85 09 85 02 60`; `RamRoutine` `$0080` PC, SP=$FD; `PatchByte` `$F0AB` A=$02/$04/$14/$16…; `PatchByteTail` `$F0BB` A=$6E at the first wrap (phase 73); `CallCount` `$F0CC` A=$B8 (184). The color write is cycle 34 steady; the left-edge strip is 37 px; the first line is 46 px and the last 64 px. Exercises: ex1 DelayPatch 1–4 and `STA COLUBK` 45/48/53/58; ex2 PtrLow/High $00/$F1 and $00/$F2, `TableRead` `$0083` $02→$8E; ex3 ShapePatch $18/$3C/$7E, ShapeRoutine `$0090`, P0 at TIA 80. Captures: painter-a phase 0 (`PatchVal=$F2`, first line $02), painter-b phase 96 (`PatchVal=$8E`, first line $8E, the two-window gradient), titles `Stella 7.0: "59-self-modifying-code"`, no cursor. Site: index row 59 ✅; prev 58/next 60; sidebar `config.ts:142`; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (the 8-bit `Y` phase overflow above 72; the painter-b phase claim was false) + 2 major (the 60-frame hold repeated every 256 frames; the left-edge seam had three models) + 8 minor; curriculum-auditor — the same critical + the seam/plan/spec minors. All fixed: the two-window split, the one-shot hold, the single 37/46/64 seam model, the status race, the ex1 delay limit/heading, the ex2 TableRead/184-byte table, the ex3 X/first-byte/cycle numbers, and the 03/07 sync. Final state: 0 critical, 0 major open. Lesson 59 is complete.
 
 ---
 

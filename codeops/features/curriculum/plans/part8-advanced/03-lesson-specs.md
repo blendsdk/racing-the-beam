@@ -31,7 +31,7 @@
 - **HMOVE:** one per repositioning event; `HMBL`/`HMP0`/`HMP1` writes are followed by a single
   `STA HMOVE`; do not write `HMBL` within 24 cycles of an HMOVE.
 - **RAM map:** `$80–$9F` lesson variables; `$A0–$D7` free; `$D8–$F7` free; `$F8–$FF` stack.
-  Lesson 59's RAM routine uses `$80–$88`; its variables use `$89–$9F`. Lesson 61's row buffer is
+  Lesson 59's RAM routine uses `$80–$86`; its variables use `$87–$8C`. Lesson 61's row buffer is
   `$80–$82`, pointers `$83–$86`, counters `$87–$8F`. The Superchip RAM is not RIOT RAM; it lives
   at `$1000–$10FF` (write/read windows).
 - **Checkpoints:** `Label:` immediately before the instruction that follows the labelled event;
@@ -206,21 +206,25 @@
   code and a data-driven table; the safety rules (fixed length, known entry, no stack use inside
   the routine).
 - **ROM:** `59-self-modifying-code.asm` — **"the code painter"**, 4,096 bytes.
-  - A 9-byte routine is copied to `$80`:
-    `LDA #$00` (`$80`), `STA COLUBK` (`$82`), `STA WSYNC` (`$85`), `RTS` (`$88`). The main loop
-    patches the immediate operand at `$81` from a 192-byte color table, calls `JSR $80`, and
-    repeats. The screen is a 192-line color gradient/plasma; the status row shows the current
-    patch byte and a generation counter.
+  - A 7-byte routine is copied to `$80`:
+    `LDA #$00` (`$80-$81`), `STA COLUBK` (`$82-$83`), `STA WSYNC` (`$84-$85`), `RTS` (`$86`). The
+    main loop patches the immediate operand at `$81` from a 184-entry color table, calls
+    `JSR $80`, and repeats. The screen is 8 status lines + 184 gradient lines = 192; the status
+    row shows the current patch byte and the call count. The table is stored twice (368 bytes)
+    so the phase window can be split into two page-aligned halves.
   - A second RAM routine at `$90` can be added by exercise 3; the main demo uses the one routine.
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6.
-  - RAM: `$80–$88` the routine, `$89` `PatchByte`, `$8A` `CallCount`, `$8B` `Frame`, `$8C–$9F`
-    free; stack `$F8–$FF`. The color table is in ROM.
-  - Checkpoints: `PatchByte` (A = the new color), `CallCount` (A = the frame's call count),
+  - RAM: `$80–$86` the routine, `$87` `PatchVal`/`PatchByte`, `$88` `Calls`/`CallCount`, `$89`
+    `FrameNum`/`Frame`, `$8A` `Phase`, `$8B` `HoldFrames`, `$8C` `PhaseTimer`; `$8D–$9F` free;
+    stack `$F8–$FF`. The color table is in ROM.
+  - Checkpoints: `PatchByte` (A = the new color in the first window), `PatchByteTail` (A = the
+    color in the second window, e.g. `$6E` at the first wrap), `CallCount` (A = 184),
     `RamRoutine` (the `$80` label; the debugger disassembly shows the copied bytes), `Frame`.
-- **Evidence pins:** the copied bytes at `$80` match the source; a breakpoint at `PatchByte`
-  reports the changing color; the capture shows the per-line gradient; the state log shows the
-  `JSR $80`; the ROM is 4,096; the stack is not corrupted (SP returns to `$FD`/`$FF`).
+- **Evidence pins:** the copied bytes at `$80–$86` match the source (`A9 xx 85 09 85 02 60`);
+  `PatchByte`/`PatchByteTail` report the changing colors; `CallCount` = 184; the capture shows the
+  per-line gradient; the state log shows the `JSR $80`; the ROM is 4,096; the stack is not
+  corrupted (SP returns to `$FD`/`$FF`).
 - **Screenshots:** `painter-a.png` and `painter-b.png` (two gradient phases).
 - **Exercises:** (1) patch a delay count in the RAM routine (an `LDX #n` operand); (2) patch a
   pointer operand (`LDA table,X` or `LDA (ptr),Y`) to select another table; (3) copy a second

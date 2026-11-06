@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 3 complete after round 2 — 0 critical, 0 major open. Lessons 56–58 are committed.
+> **Status**: Phase 4 complete after round 2 — 0 critical, 0 major open. Lessons 56–59 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -81,3 +81,23 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-58-021 | 58 | 🟡 MINOR | The source comment said the ISB bit-5 loss was "chunk 6"; bit 5 is chunk 4. | fixed. |
 | SR-58-022 | 58 | 🟡 MINOR | The Step 2 walkthrough excerpt omitted the `CLC`s and the `DcpM`/`IsbM` labels. | fixed — the current `RunLab` head, marked abridged, with every checkpoint named. |
 | SR-58-023 | 58 | 🟡 MINOR | The pasted `DcpM` log line showed C=0 while DCP sets C=1 and the stored `$27` says C=1. | fixed — re-logged `DcpM $F36C` `nv-BdIzC 1f`, C=1; the checkpoint row says C=1. |
+| SR-59-001 | 59 | 🔴 CRITICAL | The phase window used an 8-bit `Y`; for `Phase > 72` the gradient tail read the table's opening entries instead of `table[Phase..183] + table[0..Phase-73]`. The painter-b phase-96 claim was false (the image was actually ~165–176). | fixed — the two-window split: `ColorTable,Y` from `Y=Phase`, then `ColorTable+256,Y` after the wrap; the table is page-aligned, the color write is cycle 34, `PatchByteTail` reads `$6E` at phase 73, and painter-b is re-captured at phase 96. |
+| SR-59-002 | 59 | 🟠 MAJOR | The 60-frame phase hold repeated every 256 frames because `FrameNum` is 8-bit; the gradient froze ~1 s every ~4.3 s. | fixed — a one-shot `HoldFrames` byte; the first phase step is frame 64. |
+| SR-59-003 | 59 | 🟠 MAJOR | The left-edge seam mixed 28/31/34-pixel models and called the 31 figure an average. | fixed — one measured model: 37 px steady, 46 first line, 64 last; one cycle = 3 px. |
+| SR-59-004 | 59 | 🟡 MINOR | The status row's PF1 store could race chunk 4 on visible line 0. | fixed — the status setup is in VBLANK; the top field is identical on rows 0–3. |
+| SR-59-005 | 59 | 🟡 MINOR | Exercise 1's delay limit said 5; the `WSYNC` write is 70 at d=5, 75 at d=6, overflow at d=7. | fixed. |
+| SR-59-006 | 59 | 🟡 MINOR | Exercise 1's heading said "0..6" for the 1,2,3,4 table. | fixed. |
+| SR-59-007 | 59 | 🟡 MINOR | Exercise 3's header said P0 X=40 (code 80), the last shape byte (code first), and unmeasured cycle numbers. | fixed — X=80, first byte `$18`, measured 39–41/54–56/57–59. |
+| SR-59-008 | 59 | 🟡 MINOR | Exercise 3's status field was described as the last shape byte; it is the first. | fixed. |
+| SR-59-009 | 59 | 🟡 MINOR | The doc named a `TableRead` checkpoint that did not exist. | fixed — the ex2 header has `TableRead $0083`. |
+| SR-59-010 | 59 | 🟡 MINOR | `TableB` had 188 bytes and four unused entries; the doc said 184. | fixed — both tables are exactly 184 bytes. |
+| SR-59-011 | 59 | 🟡 MINOR | The doc said "184 different colors"; the table has 28 distinct values. | fixed — "184 colour writes from a 184-entry table (28 distinct colours)". |
+| SR-59-012 | 59 | 🟡 MINOR | The 99 Session A said the `JSR`/`RTS` pair uses `$F8-$F9`; it uses `$FF/$FE`. | fixed. |
+| SR-59-013 | 59 | 🟡 MINOR | The 03/07 spec still said 9-byte/192/`CallCount 192`; the implementation is 7-byte/184/184. | fixed — the spec matches the artifact. |
+| SR-59-014 | 59 | 🟡 MINOR | The second-window's first tail line took `CPY` not taken + `BNE` not taken + `LDY #0` (6 cycles), so its color write was cycle 35/40 px, not 34/37. | fixed — the redundant `LDY #0` is dropped; the first tail line is cycle 33 / 34 px, hidden because table[71] = table[72] = `$6E`. |
+| SR-59-015 | 59 | 🟡 MINOR | The exercise siblings still wrote the status PF1 on visible line 0 (ex3 after `STA GRP0`). | fixed — the status/`STA GRP0` setup is in VBLANK in all three exercises. |
+| SR-59-016 | 59 | 🟡 MINOR | Exercise 1's `DelayTable`/`ColorTable` were unaligned; the page crossings added 3-px steps. | fixed — both tables are `!align 255, 0` at `$F100`/`$F200`; the delay table is 184 entries. |
+| SR-59-017 | 59 | 🟡 MINOR | Exercise 3's `STA COLUBK` write was labelled TIA X ~94–100; cycles 56–58 map to ~100–106. | fixed. |
+| SR-59-018 | 59 | 🟡 MINOR | The doc listed only `$87–$8A`; the variables reach `$8C` (`HoldFrames`, `PhaseTimer`). | fixed — `$80–$8C` in the map and the safety rule. |
+| SR-59-019 | 59 | 🟡 MINOR | PF-07 still said a 9-byte routine at `$80–$88` and variables `$89–$9F`. | fixed — 7-byte `$80–$86`, variables `$87–$8C`, stack `$F8–$FF`. |
+| SR-59-020 | 59 | — | The auditor's "checkpoint addresses are $30 low" claim was checked against the ACME symbol table: `StartFrame $F033`, `PatchByteTail $F0BB`, `CallCount $F0CC`, `OverscanStart $F0D1`, `ColorTable $F100`; no change was made. | verified — the symbol table is the ground truth; the audit's byte count was off. |
