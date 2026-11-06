@@ -460,22 +460,26 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **ROM:** `54-visual-effects-cookbook.asm` — "the effects reel".
   - `Effect` 0 = starfield: three 256-byte star planes (768 bytes) scrolled one line every two
     frames (`StarScroll`); a 16-byte ship strip on P0 at the bottom; the ball and the two missiles
-    add three bright stars at fixed positions; the whole starfield's colour alternates between
-    white `$0E` and gold `$1A` every 32 frames (`Twinkle`). The stub's "starfield with missiles"
+    add three bright stars at fixed positions; the playfield/ball and missile 1 alternate between
+    white `$0E` and gold `$1A` every 32 frames (`Twinkle`), while missile 0 shares `COLUP0` with
+    the ship and stays white. The stub's "starfield with missiles"
     is satisfied by the two missile stars and the ball star.
-  - `Effect` 1 = rainbow: a 192-byte color ramp (`Rainbow`) written to `COLUBK` one line per
+  - `Effect` 1 = rainbow: a 192-entry colour ramp (`Rainbow`, 256 bytes including the repeat)
+  written to `COLUBK` one line per
     line; a playfield sun block (a centred 32-px block at rows 40–88) and a black horizon at the
     bottom; `RainbowShift` every 4 frames.
-  - `Effect` 2 = pseudo-3D road: 192 rows of per-line `PF0/PF1/PF2` (576 bytes); the road is
-    centred and its width grows from 4 chunks at the horizon to 16 chunks at the bottom; the
-    width also breathes with a slow 64-row table (`WidthIndex`). A 16-byte car strip on P0 at the
+  - `Effect` 2 = pseudo-3D road: one page-aligned 192-byte `PF2` plane (PF0/PF1 stay zero); the
+    road is centred, its base width grows from 4 chunks at the horizon to 12 at the bottom, and
+    a 64-entry pulse table (`WidthIndex`) takes it to 16 at the peak. A 16-byte car strip on P0 at the
     bottom. The doc states that the 3-byte reflected playfield cannot move the road centre; the
     "3D" is the width/depth table.
   - `EffectTimer` 240 frames; at zero `Effect++` (0→1→2→0) and the timer reloads; fire advances;
     SELECT resets to effect 0.
-  - The cycle ledgers: starfield 40/line (3 PF pairs 21 + P0 7 + WSYNC 3 + INX 2 + INY 2 + CPY 2
-    + BNE 3); rainbow 18/line (LDA 5 + STA COLUBK 3 + WSYNC 3 + INY 2 + CPY 2 + BNE 3); road
-    40/line (the starfield shape). The starfield planes are page-aligned for the X wrap.
+  - The measured cycle ledgers: starfield 54 plain/star and 62 ship (the three 192-byte enable
+    tables replace the per-line clears/compares); rainbow 18/line, with the sun and horizon
+    boundary lines at 27/22/33; road 26/35/39 plain and 34/43/47 with the car for pulse 0/1/2.
+    The starfield and road planes are page-aligned; PF2 latches at 23/32/36 against the chunk-12
+    deadline 39, and the car at 43 against X=76's 48. The worst line is 62, leaving 14 cycles.
 - **Expected screen:** a scrolling starfield with a ship; a full-screen rainbow with a sun; a
   road rushing toward the horizon with a car. The captures show the starfield and the road; the
   doc describes the rainbow.

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 6 complete — 0 critical, 0 major open.
+> **Status**: Phase 7 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -109,3 +109,22 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-53-013 | 53 | 🟡 MINOR | The 03 ledger still used Y=2..0/`LDY #2`/two DEYs; the code is Y=0..2/`LDY #0`/two INYs. | fixed — 57/row = 28.5/line, PF0→PF2. |
 | SR-53-014 | 53 | 🟡 MINOR | Band 4 cleared GRP1 although nothing writes it, while the doc said redundant clears are skipped. | fixed — documented as a defensive clear (six cycles, boundary stays symmetric); doc rule 2 and ST-53.3 match. |
 | SR-53-015 | 53 | 🟡 MINOR | Ex3's PF-table comment said rows 1–23 alternate, but row 23 is blank. | fixed — rows 1–22 alternate; row 23 is blank so the ramp's late PF0 clear cannot show. |
+| SR-54-001 | 54 | 🟠 MAJOR | The starfield's ship `GRP0` store landed after P0's pixels (effect ~cycle 51 vs X=76's 48), so the ship rendered one line low: row 176 blank, 15 visible rows, and the "16-line ship" was false. | fixed — the starfield is split at row 176; the bottom loop stores GRP0 unconditionally (store 39), 16 hits Y=176–191, capture top 176.5. |
+| SR-54-002 | 54 | 🟡 MINOR | The starfield's PF stores came after the 11-cycle clears, so PF0/PF1/PF2 missed the left-half slots and the mirrored stars sat one line apart. | fixed — PF0/PF1/PF2 are stored first; the starfield ledger is 54 plain/star and 62 ship. |
+| SR-54-003 | 54 | 🟡 MINOR | The three ball/missile clears + compares made the rightmost star late; the per-line compare cost was the bulk of the 65/69/71 ledger. | fixed — three page-aligned 192-byte enable tables; enables 37/44/51; the stars remain X=111/127/143 rows 32/96/160. |
+| SR-54-004 | 54 | 🟡 MINOR | The road stored PF1/PF0 and the car before PF2, so PF2 missed chunk 12 at pulse 1/2. | fixed — PF2 first (latch 23/32/36 vs 39), car 43 vs 48; the dead PF1/PF0 stores removed; one 192-byte PF2 plane. |
+| SR-54-005 | 54 | 🟡 MINOR | The pulse was said to widen the inner edge; a right shift adds the outer chunk. | fixed — "outer edge" in the sources and doc. |
+| SR-54-006 | 54 | 🟡 MINOR | "PF1's field starts at pixel 44" and "PF1 chunk 11 on the widest rows" were wrong (PF1 is zero). | fixed — the PF1 claim removed; PF0/PF1 are zero and set once. |
+| SR-54-007 | 54 | 🟡 MINOR | The stars were documented as nominal X=112/128/144 but measure 111/127/143 (the reset is one clock shorter). | fixed — the doc records the measured values and the one-clock output delay. |
+| SR-54-008 | 54 | 🟡 MINOR | Ex1's "worst line 66" and "two cycles" contradicted the 57/65 ledger and the 3-cycle `AND`. | fixed — three cycles, 24 vs 21, measured 57/65; the store values kept as measured. |
+| SR-54-009 | 54 | 🟡 MINOR | Ex3's `AND #$7F` is 2 cycles; the worst line is 49, not 68. | fixed — the measured 36/45/49. |
+| SR-54-010 | 54 | 🟡 MINOR | Ex3's PF2 preload omitted the centre-gap mask, so row 0 could lose the gap. | fixed — the `AND #$7F` is applied in the preload and both stores. |
+| SR-54-011 | 54 | 🟡 MINOR | The horizon's late PF0 store gives ~7 px, not one. | fixed — "about seven pixels" in the doc/source; the source comment explains. |
+| SR-54-012 | 54 | 🟡 MINOR | The "why not the ball" argument said four chunks; 8 px vs 32 px is six chunks. | fixed — six chunks (two short of the 16-px half). |
+| SR-54-013 | 54 | 🟡 MINOR | The doc said the road is another 768 bytes and "43 cycles on a plain line"; the real PF2 plane is 192 and the margin is 58. | fixed. |
+| SR-54-014 | 54 | 🟡 MINOR | "The whole field twinkles" ignored missile 0's shared `COLUP0` (it stays white). | fixed — the doc states the shared register. |
+| SR-54-015 | 54 | 🟡 MINOR | What You Should See omitted effect 1 and did not disclose the rainbow is not captured; the Javatari unmute note was missing. | fixed — an effect-1 paragraph, the not-captured disclosure, and the click-to-unmute sentence. |
+| SR-54-016 | 54 | 🟡 MINOR | The exercise build headers pointed at the main source and the ex1/ex3 RAM maps were stale. | fixed — each builds its own `build/exercise-0N.bin`; maps `$98-$F7` / `$97-$F7`. |
+| SR-54-017 | 54 | 🟡 MINOR | "Each kernel starts with its first store on cycle 0" contradicted BodyStart 37/5. | fixed — the VBLANK-off store completes at cycle 5; the first data stores are 9/7. |
+| SR-54-018 | 54 | 🟡 MINOR | The `HmoveApply` table described the label as "the WSYNC before the HMOVE"; the label is on the HMOVE store. | fixed — "the HMOVE store"; the 9/3 (star) and 4/59 (road) values are the measured store cycles. |
+| SR-54-019 | 54 | 🟡 MINOR | The plan called the rainbow ramp 192 bytes and the pulse 64-row; the ramp is 192 entries/256 bytes and the pulse is 64 entries. | fixed in 03/99. |
