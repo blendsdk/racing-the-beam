@@ -7,7 +7,7 @@ Push beyond 4KB — bankswitching, illegal opcodes, DPC+, compression, and build
 | # | Lesson | Status |
 |---|--------|--------|
 | 56 | [Bankswitching — Beyond 4KB](./56-bankswitching) | ✅ Complete |
-| 57 | [Superchip — Extra RAM](./57-superchip) | 🔒 Coming Soon |
+| 57 | [Superchip — Extra RAM](./57-superchip) | ✅ Complete |
 | 58 | [Illegal Opcodes — Undocumented Power](./58-illegal-opcodes) | 🔒 Coming Soon |
 | 59 | [Self-Modifying Code — The Ultimate 6502 Trick](./59-self-modifying-code) | 🔒 Coming Soon |
 | 60 | [DPC and DPC+ — Enhanced Audio and Graphics](./60-dpc-plus) | 🔒 Coming Soon |

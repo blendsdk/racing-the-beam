@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 1 complete after round 2 — 0 critical, 0 major open. Lesson 56 is committed.
+> **Status**: Phase 2 complete after round 2 — 0 critical, 0 major open. Lessons 56 and 57 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -41,3 +41,20 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-56-022 | 56 | 🟡 MINOR | The cave's "192 to 144 pixels" used capture pixels in a TIA-pixel passage. | fixed — "192 to 144 capture pixels (32 to 24 TIA pixels)". |
 | SR-56-023 | 56 | 🟡 MINOR | Step 6 still described a one-sided staircase. | fixed — centre block that splits into two mirrored walls. |
 | SR-56-024 | 56 | 🟡 MINOR | Exercise 3's header said `$F085 StartFrame`; the symbol is `$F084`. | fixed. |
+| SR-57-001 | 57 | 🟠 MAJOR | Exercise 3's bank-1 re-entry ran `+clean_start` and the 128-byte zero loop before VSYNC, so the VSYNC was ~51 lines late and the frame ~313 lines every 128 frames. | fixed — the exercise is now a one-way switch: bank 1 writes and switches to bank 0; bank 0 asserts `+vsync` immediately, reads `$A5`, shows green, and stays. The switch frame is `B0StartFrame` 259/15, steady 259/3, 262 lines. |
+| SR-57-002 | 57 | 🟠 MAJOR | The Session B/C records and the SR-57 ledger rows were not written; the phase evidence was missing. | fixed — the 99 records now carry the build, mapper, frame, RAM, exercise, capture, and review evidence; this ledger has the SR-57 rows. |
+| SR-57-003 | 57 | 🟡 MINOR | Exercise 1's failure path zeroed the gauge, but the 8-frame update re-lit it; a broken read looked like a pass after ~17 s. | fixed — `FillFailFlag = $AD` is set on a mismatch and the update skips the gauge OR; a forced-mismatch build showed A=$01 and an empty gauge. |
+| SR-57-004 | 57 | 🟡 MINOR | The cycle ledger counted page-local taken `BNE`s as 4; the status/text/play rows are 29/32/17, PF0 is stored by 14 every row, and the text margin is 44. | fixed in the source/doc/ex1. |
+| SR-57-005 | 57 | 🟡 MINOR | Exercise 1's RAM header said `$80-$A7`; the allocation reaches `$AD` after the failure flag. | fixed — `$80-$AD`. |
+| SR-57-006 | 57 | 🟡 MINOR | Exercise 1's data header said the bank-1 tables start at `$F200`; they are at `$F400`. | fixed. |
+| SR-57-007 | 57 | 🟡 MINOR | Exercise 2's header promised a `GaugeAll` checkpoint with no label. | fixed — `GaugeAll` is `$F126`; the bytes are unchanged. |
+| SR-57-008 | 57 | 🟡 MINOR | The notebook-a caption said "the early part of the message"; the window holds the newest six characters at the tail of the first pass. | fixed — the captions now say tail/early-second-pass. |
+| SR-57-009 | 57 | 🟡 MINOR | The spec said a gauge cell lights on a nonzero byte; the implementation lights it when the group has been written. | fixed — the spec says "has been written". |
+| SR-57-010 | 57 | 🟡 MINOR | The reset-vector example said a fetch at `$F000` would execute readable RAM; `$F000–$F07F` is the write window. | fixed — a fetch there lands in the write window, not ROM/readable RAM. |
+| SR-57-011 | 57 | 🟡 MINOR | The `<RomPlayer>` lacked the muted-player note. | fixed — "Javatari starts muted; this ROM is silent..." |
+| SR-57-012 | 57 | 🟡 MINOR | `POS_BIAS` was dead and the `SetCoarseP0` comment promised a bias the call site did not use. | fixed — the bias is applied in the main and both exercise call sites; the main marker measures TIA 49–56 / 33–40 and the captures/columns are updated. |
+| SR-57-013 | 57 | 🟡 MINOR | The 99 Session A record said bank 0's `$F100` jumps to `$F100`; it jumps to `$F106`, and the 32-byte message is not the 128-byte buffer. | fixed. |
+| SR-57-014 | 57 | 🟡 MINOR | The doc's Section 6 snippet still omitted `POS_BIAS` while the prose below said the call adds it. | fixed — `ADC #(MARKER_X_BASE + POS_BIAS)`. |
+| SR-57-015 | 57 | 🟡 MINOR | Exercises 1 and 2 defined `POS_BIAS` but did not use it, so their markers were 3 TIA pixels left. | fixed — both call sites use the bias; the ROMs changed by one immediate byte each. |
+| SR-57-016 | 57 | 🟡 MINOR | Exercise 2's `GaugeAll` label sat before `LDA #$FF`, so the breakpoint reported the previous byte; `StripDone`'s comment implied A was the last strip byte. | fixed — `GaugeAll` moved after the `LDA` (`$F128`); `StripDone` documents A=$00, Y=128. |
+| SR-57-017 | 57 | 🟡 MINOR | The doc's Exercise 3 used the main's `StartFrame` names for bank 0; the exercise exposes `B0StartFrame` etc. | fixed — the `B0`-prefixed labels, with the switch frame 259/15 and steady 259/3. |

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 13:02
-> **Progress**: 1/10 tasks (10%)
+> **Last Updated**: 2026-11-06 14:26
+> **Progress**: 2/10 tasks (20%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -112,15 +112,15 @@ AR-25, AR-31, AR-33
 AR-25
 **Objective**: Deliver Lesson 57 end to end.
 
-- [ ] 2.1.1 Lesson 57 — Superchip: Session A freezes ST-57.1–ST-57.6 (red baseline), Session B
+- [x] 2.1.1 Lesson 57 — Superchip: Session A freezes ST-57.1–ST-57.6 (red baseline), Session B
   implements the full artifact set, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson57): Superchip`
+  `git-commit` skill in push mode — `feat(lesson57): Superchip` ✅ (completed: 2026-11-06 14:26)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 13:03): ST-57.1–ST-57.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 57. Design pins: 8,192-byte F8SC; bank 0 at real `$E000` with `!pseudopc $F000`, bank 1 at real `$F000`; start bank **1**; each bank begins with two 128-byte `$EA` fills (the duplicated Stella/Javatari signature) and code starts at `$F100`; the reset vector at `$FFFC` points to `$F100`; bank 0's `$F100` is a six-byte stub that selects bank 1 and jumps to `$F106` (the first byte after the stub). The Superchip RAM is the 128 bytes at `$1000–$107F` (write) / `$1080–$10FF` (read); it is not zeroed by the console and persists across bank switches. The demo is "the 128-byte notebook": 8 status lines (16-cell gauge + "SC") + 184 play lines (a 6-character message window and a moving marker); a 32-byte message table in ROM is written one byte at a time into the 128-byte RAM at `$1000+RamPtr`, read back through `$1080+RamPtr`, and the gauge lights each 8-byte group that has been written; `Writes`/`Reads` count the operations; one HMOVE. Exercises: fill all 128 bytes (all cells), a 128-byte sprite/playfield strip, and persistence across a bank switch. Evidence pins: `F8SC* (8K)`, the signature compare, `RamWrite` (A = the byte), `RamRead` (A = the same byte), `RamPtr`, `Writes`, `Reads`, `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. Red baseline confirmed: no `lessons/part8-advanced/57-superchip`, no `docs/public/images/lesson57`, no Part 8 57 ROMs, the document is the `🔒 Coming Soon` stub, index row 57 Coming Soon, sidebar `config.ts:140`, `verify.sh --no-docs` green at `a005bd0`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 13:36): Four sources (8,192 each), the 1,367-line document, four committed ROMs, and two captures. The layout is F8SC: bank 0 at real `$E000`/pseudopc `$F000`, bank 1 at real `$F000`; each bank starts with two 128-byte `$EA` fills (the signature); the six-byte `$F100` stub selects bank 1 and jumps to `$F106`; the vectors point to `$F100`. The Superchip RAM is the 128 bytes at `$1000–$107F` write / `$1080–$10FF` read. The demo is the 128-byte notebook: 8 status + 184 play, a 16-cell gauge, a two-line six-character window, a 32-byte message table in ROM written into the 128-byte RAM, and a gold marker; one HMOVE. Exercises: the full 128-byte fill with a permanent failure flag, the 128-byte graphics strip, and the one-way bank-1-to-bank-0 persistence proof. Captures: 4 and 10 gauge cells; the marker at TIA 49–56 / 33–40 after the `POS_BIAS` fix.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 14:26): `bash scripts/verify.sh` PASSED (220 ROMs, no drift, docs build); all four sources 8,192 and byte-identical to the committed ROMs; `F8SC* (8K)`; both 4K banks' first 128 bytes equal the next 128; the entry `AD F9 1F 4C 06 F1` and vectors `$F100` are identical in both banks; the no-signature control reports `F8* (8K)`. Frame: `StartFrame` `$F15F` 259/3 (4/22 on the power-on frame), `VblankStart` `$F16D` 0/5, `BodyStart` `$F1A2` 37/5, `OverscanStart` `$F1F5` 229/6; 262 lines. RAM: `RamWrite` `$F212` A=$20 X=0, A=$20 X=1, A=$53 X=5; `RamRead` `$F215` returns $20/$20/$53; `RamPtr` `$F252`, `MsgPtr` `$F25A`, `Writes` `$F25E`, `Reads` `$F262`. Exercise logs: ex1 `FillDone` A=$FF X=$80 and a forced-mismatch build `FillFailFlag` A=$01 with an empty gauge; ex2 `GaugeAll` `$F128`, `StripRead` $01/$02/$04/$08/$10, `StripDone` Y=$80; ex3 `B1Write` A=$A5, `B0Read` A=$A5, `B0Color` A=$C8, the switch frame `B0StartFrame` 259/15 and steady 259/3, `B0VblankStart` 0/5, `B0BodyStart` 37/5, `B0OverscanStart` 229/6. Captures: notebook-a 4 cells x=121–216, marker x=319–366; notebook-b 10 cells x=121–360, marker x=223–270; titles `Stella 7.0: "57-superchip"`, no cursor. Site: index row 57 ✅, rows 58–65 Coming Soon; prev 56/next 58; sidebar `config.ts:140`; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 major (exercise 3's bank-1 re-entry asserted VSYNC ~51 lines late, a 313-line frame every 128 frames) plus 7 minor (exercise 1's failure gauge self-healed, the page-local cycle ledger, the ex1 RAM map `$80-$A7`, the ex1 `$F200` table address, the ex2 `GaugeAll` label, the notebook-a caption, the reset-vector wording); curriculum-auditor — 1 major (the Session B/C evidence and the SR-57 ledger were not written) plus 7 minor (the missing muted note, the notebook-a caption, the dead `POS_BIAS`, the spec gauge rule, the 99 Session A stub `$F106`, the ex1 RAM map, the Javatari start-bank note). All fixed: exercise 3 is a one-way switch with VSYNC at the bank-0 entry (259/15 switch frame, 259/3 steady, 262 lines); exercise 1 has `FillFailFlag = $AD`; `POS_BIAS` is applied at the call site and the captures are re-taken; the cycle ledger is 29/32/17 with PF0 at 14 and a 44-cycle text margin; the headers/spec/captions/notes are corrected. Final state: 0 critical, 0 major open. Lesson 57 is complete.
 
 ---
 

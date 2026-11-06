@@ -118,17 +118,21 @@
   - Layout: bank 0 at real `$E000` with `!pseudopc $F000`; bank 1 at real `$F000`. Each bank
     starts with `!fill 128, $EA` twice (the signature); code starts at `$F100`. Start bank 1;
     bank 1's reset vector at `$FFFC` points to `$F100`.
-  - The demo: a 32-byte message ring buffer in the Superchip RAM. Every 8 frames the code writes
-    the next character to `$1000 + RamPtr`, reads it back from `$1080 + RamPtr`, and updates a
-    6-character display window. A 16-cell gauge shows which 8-byte groups of the 128 bytes have
-    been written (a cell is lit if any byte in its group is nonzero). A `Writes`/`Reads` counter
+  - The demo: a 32-byte message table in ROM is copied one byte at a time into the 128-byte
+    Superchip RAM at `$1000 + RamPtr`. Every 8 frames the code writes the next character, reads
+    it back from `$1080 + RamPtr`, and updates a
+    six-character window shown as two lines of three (4-chunk glyphs; a single 6×4-chunk line is
+    24 chunks wide). A 16-cell gauge shows which 8-byte groups of the 128 bytes have been written
+    (a cell is lit when any byte in its group has been written). A `Writes`/`Reads` counter
     and a "SC" label.
   - Picture: 8 status lines + 184 play lines. The status shows the gauge; the play shows the
     message and a moving P0 marker. One HMOVE.
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6.
-  - RAM: RIOT `$80` `RamPtr`, `$81` `MsgPtr`, `$82` `Frame`, `$83` `Writes`, `$84` `Reads`,
-    `$85` `Gauge`, `$86–$9F` free; Superchip `$1000–$107F` write / `$1080–$10FF` read.
+  - RAM: RIOT `$80` `WritePtr`/`RamPtr`, `$81` `MessagePtr`/`MsgPtr`, `$82` `FrameCount`,
+    `$83` `WriteCount`/`Writes`, `$84` `ReadCount`/`Reads`, `$85` `GaugeLo`, `$86` `GaugeHi`,
+    `$87–$8C` the six-glyph window, `$8D–$9A` `MsgPF0`, `$9B–$A8` `MsgPF1`, `$A9–$AC` scratch and
+    the font pointer, `$AD–$D7` free; Superchip `$1000–$107F` write / `$1080–$10FF` read.
   - Checkpoints: the frame labels; `RamWrite` (A = the byte, the address is `$1000+RamPtr`),
     `RamRead` (A = the byte read from `$1080+RamPtr`), `RamPtr`, `MsgPtr`, `Frame`.
 - **Evidence pins:** Stella reports `F8SC* (8K)`; a breakpoint at `RamWrite` shows the write, and
