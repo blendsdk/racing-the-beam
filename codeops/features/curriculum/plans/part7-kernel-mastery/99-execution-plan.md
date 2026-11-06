@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 02:05
-> **Progress**: 2/8 tasks (25%)
+> **Last Updated**: 2026-11-06 03:28
+> **Progress**: 3/8 tasks (37.5%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -166,9 +166,15 @@ AR-24, AR-33
 AR-24, AR-27, AR-34
 **Objective**: Deliver Lesson 50 end to end, reusing `include/score.asm`.
 
-- [ ] 3.1.1 Lesson 50 — Multi-Zone Kernel: Session A freezes ST-50.1–ST-50.6 (red baseline),
+- [x] 3.1.1 Lesson 50 — Multi-Zone Kernel: Session A freezes ST-50.1–ST-50.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson50): Multi-Zone Kernel`
+  the `git-commit` skill in push mode — `feat(lesson50): Multi-Zone Kernel` ✅ (completed: 2026-11-06 03:28)
+
+**Session C record** (verify + evidence, 2026-11-06 03:28): Preflight per `vcs-lesson-production` — the 9+8+174+1 zone budget, the score library's 9-line hand-over, the two HMOVEs and the 24-cycle motion-register rule, the 2-line play kernel, the collision/latch, the level clock, the joystick, and the 262-line frame checked against `include/vcs.asm`, `include/score.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` `$F159` 37/5, `ScoreDraw` `$F50D` 37/11, `StatusStart` `$F15C` 46/5, `PlayStart` `$F19B` 54/4, `GroundStart` `$F22A` 228/6, `OverscanStart` `$F239` 229/2; `ScoreHmove` 5/45 (the library's `WSYNC` stall), `ScoreHmoveDone` 6/3 (the store), `GameHmove` `$F192` 51/2. The `HMBL` clear was moved from immediately after `ScoreHmove` to status line 50 (after `SetGameP1`), more than 24 cycles after the score `HMOVE`, before `GameHmove`; the ball keeps X=80 and the second HMOVE applies only P0/P1. Logic: `LevelWrite` `$F084` A=1/2/3/4 at frames 121/241/361/481; `ScoreAdd` `$F4F6` A=1..5 at 106/211/316/421/526; `BallYRead` `$F087` A=24, 25, 26…; `JoyLeft` `$F0C8` 73→72→71, `JoyRight` `$F0D3` 73→74→75; the exercise hit periods: ex1 `ScoreAdd` 102/203/304/405/506 (101 frames), ex2 98/195/292/389/486 (97 frames). Captures from the committed ROM: `dashboard.png` score 000001, level 1 (one 24-px chunk per half); `level4.png` score 000004, level 4 (four chunks); P0 red TIA 76–83, P1 green 88–96, ball X=80, the ceiling/field/floor/ground `$0C`/`$1A`/`$C4`; the HMOVE notch is 8 black pixels at chunks 0–1 on status line 51; no cursor; the title bars read `Stella 7.0: "50-multi-zone-kernel"`. Solutions: ex1 9+12+170+1 (`PlayStart` 58), ex2 9+16+166+1 (`PlayStart` 62, the timer bar), ex3 the `ZoneTable` 9/8/174/1 with the 192/228 asserts; all 4,096 bytes. Site (ST-50.6): index row 50 ✅ (rows 48–49 ✅, 51–55 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 49, next → 51; sidebar `config.ts:127`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 major, 5 minor** (the `HMBL` clear only ~10 cycles after `ScoreHmove`; the line-52 comments; the `BallYRead` 25; the P1 strip rows; the ex3 field; the ex1/ex2 ball floor) and round 2 — **1 major** (the checkpoint addresses stale after the HMBL move) plus 3 minor (the Step 3 listing, the ex3 line 52, the band claim); the curriculum-auditor round 1 — 4 minor (the line-52 comments, the ex2 RAM, the ex3 field, the doc level 1) and round 2 — the stale addresses and the ex2 header. The HMBL clear, the `$F159`/`$F15C` addresses (re-logged 37/5/46/5), the Step 3 listing, the comments, the band claim, and the measured exercise periods are fixed. Final state: **0 critical, 0 major open**. Lesson 50 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-06 02:07): ST-50.1–ST-50.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 50. Design pins: 9 score + 8 status + 174 play (87 rows × 2) + 1 ground = 192; `ScoreDraw` starts at visible 0, `StatusStart` 46 (37+9), `PlayStart` 54 (37+17), `GroundStart` 228 (37+191), `OverscanStart` 229; the score library's P0/P1 at 56/64 and the game's P0/P1 reposition with a second HMOVE in the status HBLANK; `RESBL`/`HMBL` before `ScoreSetup`, `HMBL` cleared after `ScoreHmove`; `CXP0FB` bit 6, read in VBLANK then `CXCLR`; the 120-frame level; the ball top 24–158; the exercises 12/170, 16/166, and the ZoneTable. Evidence pins (AR-6): `ScoreDraw`, `StatusStart`, `PlayStart`, `GroundStart`, `ScoreHmove`, `GameHmove`, `ScoreAdd`, `LevelWrite`, `BallY`, `BodyStart` 37, `OverscanStart` 229. Red baseline confirmed: no `lessons/part7-kernel-mastery/50-multi-zone-kernel`, no `docs/public/images/lesson50`, no Part 7 50 ROMs, the document is the `🔒 Coming Soon` stub, index row 50 is Coming Soon, sidebar `config.ts:127`, `verify.sh` green at `d9933f4`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 

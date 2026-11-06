@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 2 complete — 0 critical, 0 major open.
+> **Status**: Phase 3 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -55,4 +55,16 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-49-018 | 49 | 🟡 MINOR | The 10 measured edge rows were attributed to "the PF1 step rows and the PF2 inner-edge rows" (15 named); the model's visible windows are row 8 and PF2 42/48/54. | fixed — the extra measured rows are at the capture's one-chunk threshold. |
 | SR-49-019 | 49 | 🟡 MINOR | The ex1 challenge/source header said the picture is "identical"; the store phase differs. | fixed — "visually identical" in both. |
 | SR-49-020 | 49 | 🟡 MINOR | The `COLUBK` deadline range was 26.7–49.0; the pass closes at e=20 (no sky), so the range is 26.7–48.0. | fixed. |
-
+| SR-50-001 | 50 | 🟠 MAJOR | The `HMBL` clear ran ~10 machine cycles after the score `HMOVE`, violating the TIA's 24-cycle no-motion-write rule; on real hardware the ball's fine move could be applied wrongly (Stella masks it). | fixed — the clear moved to status line 50, after `SetGameP1`, >24 cycles after `ScoreHmove` and before `GameHmove`; all four ROMs regenerated; the doc/source/snippets explain the rule. |
+| SR-50-002 | 50 | 🟡 MINOR | The exercise comments said the game HMOVE blanks "line 52"; the strobe is on line 51 and blanks its own line. | fixed — line 51 in ex1/ex2/ex3 and the main. |
+| SR-50-003 | 50 | 🟡 MINOR | The doc said the ceiling band's writes land before chunk 0's cycle 22.7; the ceiling's PF2 completes at ~23. | fixed — "before each register's first chunk"; PF2's first chunk is 12 (cycle 38.7); the measured band cycles are stated. |
+| SR-50-004 | 50 | 🟡 MINOR | The exercise hit-period explanation said the player's head is higher; on screen the head stays at 151–182; the play zone (and the ball) starts lower. | fixed — "the play zone starts four/eight lines lower while the head stays at 151–182"; the exercise periods are measured (101/97). |
+| SR-50-005 | 50 | 🟠 MAJOR | The HMBL move shifted `BodyStart`/`StatusStart` by 4 bytes; the doc's `$F15D`/`$F160` addresses no longer hit the labels. | fixed — the current symbols are `$F159`/`$F15C`; the table, both commands, and the bullet are updated; the re-logged checkpoints are 37/5 and 46/5. |
+| SR-50-006 | 50 | 🟡 MINOR | The Step 3 listing omitted the `HMBL` clear, contradicting Step 2/Section 3/the full source. | fixed — the listing shows the clear before the line-50 `WSYNC`. |
+| SR-50-007 | 50 | 🟡 MINOR | Exercise 3 still said "line 52". | fixed — line 51. |
+| SR-50-008 | 50 | 🟡 MINOR | Exercise 2's RAM allocation header said `($80-$88)` while the file uses `$89`/`$8A`. | fixed — `($80-$8A)`. |
+| SR-50-009 | 50 | 🟡 MINOR | Exercise 2's map said `$89-$9F` free while `TimerLevel=$89`/`TimerTmp=$8A`. | fixed — `$8B-$9F` free. |
+| SR-50-010 | 50 | 🟡 MINOR | The exercise hit periods 101/97 were derived; the base's 105 was logged. | fixed — the exercise `ScoreAdd` logs: ex1 102/203/304/405/506 (101), ex2 98/195/292/389/486 (97). |
+| SR-50-011 | 50 | 🟡 MINOR | Exercise 1/2's P1 strip comments said visible 29–60; the resized play zones put P1 at 33–64 / 37–68. | fixed. |
+| SR-50-012 | 50 | 🟡 MINOR | Exercise 3's field comment said visible 25–181; the field ends at 182. | fixed. |
+| SR-50-013 | 50 | 🟡 MINOR | The doc's level-1 expectation said "chunks 2"; level 1 lights exactly one chunk (chunk 2). | fixed — "chunk 2". |

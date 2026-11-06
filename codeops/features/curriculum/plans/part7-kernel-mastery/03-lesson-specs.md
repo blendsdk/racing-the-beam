@@ -249,8 +249,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - Visible 9–16: the status zone (8 lines): a mirrored pair of 15-chunk gold level bars (one per
     half); `Level` 0–15; every 120 frames `Level++` (cap 15); the bar fills.
   - Visible 17–190: the play zone (174 lines = 87 rows × 2). A 2-line kernel writes the floor and
-    ceiling playfield, P0 (16 rows) at the bottom, P1 (16 rows) at the top, and the ball (8 lines,
-    four 2-line rows).
+    ceiling playfield, P0 (16 kernel rows = 32 scanlines) at the bottom, P1 (16 kernel rows) at
+    the top, and the ball (8 lines, four 2-line rows).
     P0 moves left/right with the joystick; P1 sweeps; the ball falls from Y=24 to Y=158 (its top
     visible row; the 8-line ball is four 2-line rows and ends at 165, inside the 174-line zone).
     `CXP0FB` bit 6 (P0–ball) adds
@@ -259,10 +259,11 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - The zone arithmetic: 9 + 8 + 174 + 1 = 192.
   - The HMOVEs: the score's `ScoreSetup` HMOVE (`ScoreHmove`) in VBLANK applies P0/P1 at 56/64 and
     the ball's fine offset (`RESBL`/`HMBL`, set before `ScoreSetup`); after `ScoreDraw`, the status zone repositions
-    P0/P1 for the game (`NUSIZ=1`) and applies a second HMOVE (`GameHmove`) in the status HBLANK.
-    An HMOVE re-applies every motion register, so `HMBL` is cleared after `ScoreHmove` and before
-    `GameHmove`; the ball keeps the position `ScoreHmove` gave it and is not shifted twice. The
-    status bar starts at chunk 2, so the HMOVE's left-edge blanking is background.
+    P0/P1 for the game (`NUSIZ0=NUSIZ1=0`, one copy) and applies a second HMOVE (`GameHmove`) in
+    the status HBLANK. An HMOVE re-applies every motion register, so `HMBL` is cleared after
+    `ScoreHmove` and before `GameHmove`; the ball keeps the position `ScoreHmove` gave it and is
+    not shifted twice. The status bar starts at chunk 2, so the HMOVE's left-edge blanking is an
+    eight-pixel black notch at chunks 0–1; no bar chunk is lost.
   - The auto-demo moves P0 under the ball when there is no input, so the score climbs.
 - **Expected screen:** a six-digit score at the top, a gold level bar, a play area with a red
   player at the bottom, a green enemy at the top, and a gold ball; the score and the bar advance.
