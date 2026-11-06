@@ -1,7 +1,7 @@
 # Part 7 — Kernel Mastery (Lessons 48–55) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 7 by shipping lessons 48–55 as a reviewed lesson set
-> **Status**: Executing (1/8 lessons complete)
+> **Status**: Executing (2/8 lessons complete)
 > **Created**: 2026-11-05
 > **Implements**: curriculum/RD-07
 > **Source**: ../../requirements/RD-07-part7-kernel-mastery.md
@@ -87,7 +87,7 @@ bash scripts/verify.sh
 | Evidence | State logs + static ledgers + pixel checks; the ROM is runnable (AR-6) |
 | New machinery | `include/kernel_patterns.asm` (53); `demo-48.asm` (AR-7) |
 | Lesson 48 | Split 1-line/2-line kernel zoo + full modes (AR-13, AR-32) |
-| Lesson 49 | 2-line mountain pass, 62 cycles/2 lines (AR-14, AR-33) |
+| Lesson 49 | 2-line mountain pass, 63 effective cycles/2 lines (62 nominal) (AR-14, AR-33) |
 | Lesson 50 | Score + status + play + ground; score library reused; two HMOVEs (AR-15, AR-27, AR-34) |
 | Lesson 51 | Four-object flicker gallery; two 30 Hz halves; per-row skipdraw, no strips (AR-16, AR-29, AR-35) |
 | Lesson 52 | Three-plane vertical tunnel + 1-px HMOVE ship (AR-17, AR-30, AR-36) |

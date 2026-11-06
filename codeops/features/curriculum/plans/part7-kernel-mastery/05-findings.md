@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 1 complete — 0 critical, 0 major open.
+> **Status**: Phase 2 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -35,4 +35,24 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-48-014 | 48 | 🟡 MINOR | Exercise 3's first-row comment said every mode preloads the diamond tip; mode 3 preloads the header. | fixed — "except mode 3, whose first row is the header." |
 | SR-48-015 | 48 | 🟡 MINOR | The manual fire press was not exercised in the state log; the auto-demo calls the same `AdvanceMode`. | accepted and disclosed — the doc says "a manual fire press was not exercised in the state log"; SELECT is logged with `-holdselect`. |
 | SR-48-016 | 48 | 🟡 MINOR | The page-cross comment had "Even the the" and "leaving 30 line"; the 2-line note implied a possible cross although its tables are page-contained. | fixed — "Even the aligned tables add at most one page cross (45 + 1 = 46), leaving 30 cycles; the 2-line pair (48, page-contained) leaves 104." |
+| SR-49-001 | 49 | 🟠 MAJOR | The hardware reviewer: the first-scanline timing model mixed the first-row and steady-state stores and attributed the visible lag to `PF2` only; the `PF1` store sits exactly on its chunk-4 deadline (0 px margin) and the taking `BNE` adds a page-cross cycle. | resolved — the doc/source/plan now use the steady-state stores 15/22/29/36/43/50/57, the row-8 `PF1` notch, the `PF2` 43→pixel 61 lag, the `GRP0` X≈82, and the effective **63**-cycle body (62 nominal; 89/44.5 margin). |
+| SR-49-002 | 49 | 🟡 MINOR | The late `GRP0` cutoff said X≈56; cycle 49 applies from pixel 79 (steady 50 → 82). | fixed — X≈82. |
+| SR-49-003 | 49 | 🟡 MINOR | The mountain-edge pixel check's "Measured" cell repeated the formula; the measurement is 74/84 exact, 10 within one chunk. | fixed — the measured aggregate and the model's windows (row 8, PF2 42/48/54) are stated; the extra rows are at the one-chunk threshold. |
+| SR-49-004 | 49 | 🟡 MINOR | The bird's lit box was checked as rows 60–75; the lit bytes are 62–71 (the 16-line slot is 60–75). | fixed. |
+| SR-49-005 | 49 | 🟡 MINOR | Ex1's "same picture" overclaimed; the unrolled body shifts the store phase. | fixed — "visually identical"; the odd-row PF1/PF2/sky improvements and the even-row bird lag are disclosed. |
+| SR-49-006 | 49 | 🟡 MINOR | The captions said "at the left/right" while the captures are X≈13/142. | fixed — "near the left/right of its travel". |
+| SR-49-007 | 49 | 🟡 MINOR | The PF2 lag was attributed to "chunks 12–19"; only rows 42/48/54 have their new chunk before pixel 61 (row 60's chunk 15 loses one pixel). | fixed. |
+| SR-49-008 | 49 | 🟡 MINOR | Step 2 said "three later stores"; five stores (PF1, COLUPF, PF2, COLUBK, GRP1) land in the visible area. | fixed. |
+| SR-49-009 | 49 | 🟡 MINOR | The `OverscanStart` cycle explanation added a "jump to the frame end"; cycle 6 is the loop tail (INY + CPY + the not-taken BNE). | fixed. |
+| SR-49-010 | 49 | 🟡 MINOR | Ex1's expected result omitted the even-row bird lag (GRP1 at ~59 → pixel 109; the bird starts at X=104). | fixed — the even-row bird's left 5 px can lag. |
+| SR-49-011 | 49 | 🟡 MINOR | The first-row preload was said to cost 35 cycles; the seven LDA/STA pairs cost 49 (about 54 with setup). | fixed. |
+| SR-49-012 | 49 | 🟡 MINOR | The page-cross example used page+96; a 96-byte table at page+96 occupies 96–191 and cannot cross at Y≤95. | fixed — page+192 (or page+161/Y≥95). |
+| SR-49-013 | 49 | 🟡 MINOR | ST-49.3 said `KernelRow` A=0→95; the checkpoint reports Y. | fixed — Y=0→95. |
+| SR-49-014 | 49 | 🟡 MINOR | The prerequisites listed Lesson 21 (asymmetric playfield), 29 (ball) and 32 (VDEL), none used by this lesson. | fixed — 12/14/17/18/19/20/25/26/28/31/48. |
+| SR-49-015 | 49 | 🟡 MINOR | The held-joystick logs release after ~22 frames; the clamp evidence is the auto-demo and the code. | fixed — the doc says the branch/DEC/INC is logged and the auto-demo demonstrates the 8/144 clamps. |
+| SR-49-016 | 49 | 🟡 MINOR | Ex3's `P0_MAX` comment said the third copy's last pixel is X+32+8 = 160; 160 is the first off-screen pixel (the visible field is 0–159). | fixed — X+32+7 = 159 (last visible). |
+| SR-49-017 | 49 | 🟠 MAJOR | The headline ledger said 62/90/45; the loop's taken `BNE` crosses a page, so the effective body is 63 and the margin is 89 (44.5/line); ex1's 119 becomes 120/184/46, and ex3 is 63. | fixed — the doc/source/plan state 62 nominal / 63 effective; ex1 120/184/46; ex2 62 (its `BNE` is page-local); ex3 63. |
+| SR-49-018 | 49 | 🟡 MINOR | The 10 measured edge rows were attributed to "the PF1 step rows and the PF2 inner-edge rows" (15 named); the model's visible windows are row 8 and PF2 42/48/54. | fixed — the extra measured rows are at the capture's one-chunk threshold. |
+| SR-49-019 | 49 | 🟡 MINOR | The ex1 challenge/source header said the picture is "identical"; the store phase differs. | fixed — "visually identical" in both. |
+| SR-49-020 | 49 | 🟡 MINOR | The `COLUBK` deadline range was 26.7–49.0; the pass closes at e=20 (no sky), so the range is 26.7–48.0. | fixed. |
 

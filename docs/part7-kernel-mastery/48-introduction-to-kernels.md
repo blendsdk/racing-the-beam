@@ -1384,4 +1384,4 @@ The screenshot proves the visual state; the state log proves the values and the 
 
 ## What's Next
 
-The zoo shows the shapes; the next lesson builds the one you will use most. [Lesson 49: The 2-Line Kernel — Standard Game Pattern](/part7-kernel-mastery/49-two-line-kernel) turns the 2-line loop into a full landscape: a 96-row mountain, a per-row colour ramp, a 16-line figure on P0, and a 16-line bird on P1, with a 62-cycle two-line ledger.
+The zoo shows the shapes; the next lesson builds the one you will use most. [Lesson 49: The 2-Line Kernel — Standard Game Pattern](/part7-kernel-mastery/49-two-line-kernel) turns the 2-line loop into a full landscape: a 96-row mountain, a per-row colour ramp, a 16-line figure on P0, and a 16-line bird on P1, with a 63-effective (62 nominal) two-line ledger.

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 00:47
-> **Progress**: 1/8 tasks (12.5%)
+> **Last Updated**: 2026-11-06 02:05
+> **Progress**: 2/8 tasks (25%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -115,7 +115,7 @@ AR-24, AR-32
 > (row 49) · `docs/public/roms/part7-kernel-mastery/49-two-line-kernel/` ·
 > `docs/public/images/lesson49/` · `README.md` (verify only) · `99-execution-plan.md` +
 > `05-findings.md` + roadmaps
-> **Reasoning**: high — the 62-cycle two-line kernel is the part's core pattern; the row table,
+> **Reasoning**: high — the 62/63 two-line kernel is the part's core pattern; the row table,
 > the color ramps, and the sprite strips must fit the 152-cycle pair
 
 ### Step 2.1: Lesson 49 — The 2-Line Kernel
@@ -125,14 +125,20 @@ AR-24, AR-32
 AR-24, AR-33
 **Objective**: Deliver Lesson 49 end to end.
 
-- [ ] 2.1.1 Lesson 49 — The 2-Line Kernel: Session A freezes ST-49.1–ST-49.6 (red baseline),
+- [x] 2.1.1 Lesson 49 — The 2-Line Kernel: Session A freezes ST-49.1–ST-49.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson49): The 2-Line Kernel`
+  the `git-commit` skill in push mode — `feat(lesson49): The 2-Line Kernel` ✅ (completed: 2026-11-06 02:05)
+
+**Session C record** (verify + evidence, 2026-11-06 02:05): Preflight per `vcs-lesson-production` — the 2-line row body, the steady-state store order and pixel deadlines, the 96-byte mountain/sky/strip tables, the top-down 96-row loop, the 16-line figure/bird, the one-HMOVE positioning, the joystick mapping, and the 262-line frame checked against `include/vcs.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6, `HmoveApply` 2/63 (the `WSYNC` write; the CPU waits to the end of line 2), `HmoveDone` 3/3 (after the `HMOVE` store at 3/0). Kernel: `KernelRow` Y=0..95 (37/07, 39/08, 41/08, last 227/08/Y=$5F); `RowWrite` 37/11, 39/12; `P0XRead` A=$49 (73), then 74, 75…; `P1XRead` A=$68 (104); `-holdjoy0 L` reaches the left branch and DECs 73→72→71 (the raw left bit is `$40`; after `AND #$C0` the masked value is `$80`); `-holdjoy0 R` reaches the right branch and INCs 73→74→75; the auto-demo holds 144 at frames 72/344 and 8 at 208/480 (272 frames). The 62-cycle nominal row body is **63 effective** because the loop's taken `BNE` crosses a page; the pair margin is 89 (44.5/line); the first row is one cycle earlier (14/21/28/35/42/49/56), the steady state is 15/22/29/36/43/50/57. The first-scanline windows: `PF0` 2 px, `PF1` 3 px (only row 8 visible), `COLUPF` ~40 px, `PF2` ~13 px (rows 42/48/54), `COLUBK` ~70 px at the top, `GRP1` 1 px; the captured mountain edge is 74/84 exact and 10 rows within one chunk (the model's windows plus the one-chunk threshold). Captures from the committed ROM: `landscape.png` figure X≈13, 16 lines; `figure-right.png` X≈142; the bird X=105–110.8; the two images differ only in the figure; no cursor; the title bars read `Stella 7.0: "49-two-line-kernel"`. Solutions: ex1 120 cycles/four lines (two 55 bodies + a 10-cycle tail; 184 margin/46 per line; `KernelRow` 0,2,…94), ex2 two pixels/frame (this layout's `BNE` is page-local, so its body is 62), ex3 NUSIZ0=3 with clamp 8–120 (last pixel 159). Site (ST-49.6): index row 49 ✅ (rows 48 ✅, 50–55 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 48, next → 50; sidebar `config.ts:126`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 major, 6 minor** (the store-order/timing model; X=56; the mountain-edge evidence; the bird box; the captions; the ex1 note) and round 2/3 — the effective 63 ledger, the PF1 row 8, the PF2 43/61, the X=82, the 74/84 measurement, the ex1/Ex3/P0_MAX comments, the prerequisite trim, and the joystick-clamp disclosure; the curriculum-auditor round 1 — **2 major** (the X=56/79 and the ex2 hint) plus 4 minor, round 2 — the 35→49/54, page+96→192, KernelRow Y, the bird box, the edge row, the ex2 hint, and round 3 — the effective 63 ledger and the ex1 wording. The final state is **0 critical, 0 major open** (the 63 effective is the operative ledger; the 10-row measurement is recorded as 74/84 exact with the model's windows; the joystick hold's ~22-frame release is disclosed, the auto-demo verifies the clamps). Lesson 49 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-06 00:50): ST-49.1–ST-49.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 49. Design pins: 96 rows × 2 lines = 192; three 96-byte mountain planes; 96-byte COLUPF/COLUBK ramps; 96-byte P0/P1 strips; the figure at strip row 75 (visible 150–165), the bird at row 30 (visible 60–75); the figure 1 px/frame, clamp 8–144, a 272-frame auto-demo; 62 nominal / 63 effective cycles per 2 lines (31.5/line, 89 per pair margin); top-down `LDY #0; INY; CPY #96; BNE`; one HMOVE; 262 lines. Evidence pins (AR-6): `StartFrame`, `VblankStart`, `BodyStart` 37, `OverscanStart` 229, `HmoveApply`/`HmoveDone`, `KernelRow` 0..95, `RowWrite`, `P0X`/`P1X`. Red baseline confirmed: no `lessons/part7-kernel-mastery/49-two-line-kernel`, no `docs/public/images/lesson49`, no Part 7 49 ROMs, the document is the `🔒 Coming Soon` stub, index row 49 is Coming Soon, sidebar `config.ts:126`, `verify.sh` green at `76d9846`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 
 1. **Session A — freeze the specification:** re-affirm ST-49.1–ST-49.6, the 96 rows × 2 lines,
-   the 62-cycle ledger, the mountain/sky tables, the figure/bird strips, and the joystick clamp;
+   the 62/63 ledger, the mountain/sky tables, the figure/bird strips, and the joystick clamp;
    record the red baseline.
 2. **Session B — implement:** preflight; author the main source and three solutions; write the
    document; assemble, run, and capture; flip index row 49; `npm run roms`; `verify.sh`.

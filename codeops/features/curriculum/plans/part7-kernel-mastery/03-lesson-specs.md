@@ -182,18 +182,26 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Goal:** build a reusable 2-line kernel and understand why it is the standard game pattern.
 - **Prerequisites:** Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 17 (cycle counting),
   Lesson 18 (mid-scanline changes), Lesson 19 (the playfield), Lesson 20 (playfield colors),
-  Lesson 21 (asymmetric playfield), Lesson 25 (players), Lesson 26 (positioning), Lesson 28 (one
-  HMOVE), Lesson 29 (the ball), Lesson 31 (`NUSIZ`), Lesson 32 (VDEL), Lesson 48 (the taxonomy).
+  Lesson 25 (players), Lesson 26 (positioning), Lesson 28 (one HMOVE), Lesson 31 (`NUSIZ`),
+  Lesson 48 (the taxonomy).
 - **Concepts:** one data byte per two scanlines; 96 rows for 192 lines; the 152-cycle two-line
   budget; interleaving the next row's loads with the current row's stores; the page-cross and
   taken-branch costs; color ramps per row.
 - **ROM:** `49-two-line-kernel.asm` — "the mountain pass".
-  - 96 rows × 2 lines = 192. For each row `Y`: write `PF0/PF1/PF2` from the 96×3 mountain table,
-    `COLUPF` from the 96-byte mountain-color table, `COLUBK` from the 96-byte sky table, `GRP0`
-    from the 96-byte P0 strip, `GRP1` from the 96-byte P1 strip, then two `WSYNC`s.
+  - 96 rows × 2 lines = 192. For each row `Y` the store order follows the pixel deadlines:
+    `GRP0` (the figure), `PF0`, `PF1`, `COLUPF`, `PF2`, `COLUBK`, `GRP1` (the fixed bird at X=104),
+    then two `WSYNC`s. The sprite goes first because a late `GRP0` would show the previous row's
+    figure byte on the first scanline for any figure left of X≈82 (the store applies from pixel
+    82). The steady-state stores are `PF0` 22 (2 px margin), `PF1` 29 (3 px; only the first `PF1`
+    step, row 8, shows a notch), `COLUPF` 36 (~40 px), `PF2` 43 (~13 px), `COLUBK` 50 (~70 px at
+    the top) and `GRP1` 57 (1 px). The late `PF1`/`PF2`/`COLUBK` stores can leave the previous
+    value on the first scanline's left edge, which the doc measures (74/84 rows exact, 10 within
+    one chunk) and discloses; the model's visible windows are row 8 and the `PF2` rows 42/48/54.
+    The second scanline is always correct.
   - P0 is a 16-line figure (8 bytes × 2) at strip row 75 (visible 150–165); P1 is a 16-line bird
-    at strip row 30 (visible 60–75). The strip is indexed by the top-down row counter (`Y`), so
-    `P0Strip+75` is the figure's first byte and `P0Strip+30` the bird's. The figure moves
+    at strip row 30 (visible 60–75) with a fixed left edge at X=104. The strip is indexed by the
+    top-down row counter (`Y`), so `P0Strip+75` is the figure's first byte and `P0Strip+30` the
+    bird's. The figure moves
     left/right with the joystick (clamp 8–144); with no input a 272-frame auto-demo sweeps it
     8→144→8 at one pixel per frame, so both captures are reachable without a key press. The bird
     is fixed.
@@ -201,22 +209,23 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     background. The mountain color ramps from dark green `$C6` at the bottom to gray `$0A` at the
     top; the sky ramps from dark blue `$84` at the top to orange `$1A` at the horizon.
   - The cycle ledger: 3 PF loads/stores (7 each = 21), `COLUPF` 7, `COLUBK` 7, `GRP0` 7, `GRP1`
-    7, two `WSYNC`s 6, `INY`/`CPY`/`BNE` 7 = **62 cycles per two lines** (31/line). The two-line
-    budget is 152, so the margin is 90 cycles per pair (45 per line). A page cross adds 1; the
-    tables are page-aligned where practical.
+    7, two `WSYNC`s 6, `INY`/`CPY`/`BNE` 7 = **62 cycles nominal**; the loop's taken `BNE` crosses
+    a page, so the **effective body is 63** (31.5/line). The two-line budget is 152, so the margin
+    is 89 cycles per pair (44.5/line). The tables are page-aligned, so the indexed loads do not
+    add a page cross.
 - **Expected screen:** a chunky mountain range with a smooth sky gradient, a 16-line figure at the
   bottom, and a 16-line bird in the sky; the figure moves with the joystick.
 - **Exercises:**
   1. **Unroll two rows.** Duplicate the row body inside the loop and use a 2-row iteration;
      expected: the same picture, four `WSYNC`s per iteration, `KernelRow` advances by 2, the
-     ledger is **117 cycles per four lines** (two row bodies at 55 each plus the shared 7-cycle
-     loop tail).
+     ledger is **119 cycles per four lines** (two row bodies at 55 each plus the shared 9-cycle
+     tail: two `INY`s, `CPY #96`, `BNE`).
   2. **Two-pixel figure.** Move the figure two pixels per frame instead of one, with the same
      clamp; expected: `P0X` changes by 2, the picture is stable, `HmoveDone` once per frame.
   3. *(Stretch)* **Three copies.** Set `NUSIZ0=3` so the figure appears three times at X, X+16,
      X+32, and clamp X to 8–120 so all three copies stay on screen; expected: three 16-line
      figures, the bird still on P1, the same 96-row kernel.
-- **Evidence pins:** `KernelRow` (A=0→95 with `LDY #0; INY; CPY #96; BNE`), `RowWrite` (the first row), `P0X`,
+- **Evidence pins:** `KernelRow` (Y=0→95 with `LDY #0; INY; CPY #96; BNE`), `RowWrite` (the first row), `P0X`,
   `P1X`, `HmoveApply`/`HmoveDone`, `BodyStart` 37, `OverscanStart` 229, `StartFrame` 259.
 - **Screenshots:** `docs/public/images/lesson49/landscape.png` (figure left),
   `…/figure-right.png` (figure right).

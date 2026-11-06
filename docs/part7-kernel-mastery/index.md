@@ -7,7 +7,7 @@ Design and build display kernels — the scanline-by-scanline routines that defi
 | # | Lesson | Status |
 |---|--------|--------|
 | 48 | [Introduction to Kernels — The Heart of Every 2600 Game](./48-introduction-to-kernels) | ✅ Complete |
-| 49 | [The 2-Line Kernel — Standard Game Pattern](./49-two-line-kernel) | 🔒 Coming Soon |
+| 49 | [The 2-Line Kernel — Standard Game Pattern](./49-two-line-kernel) | ✅ Complete |
 | 50 | [Multi-Zone Kernel — Scoreboard + Playfield + Sprites](./50-multi-zone-kernel) | 🔒 Coming Soon |
 | 51 | [Flicker Sprites — More Than 2 Objects](./51-flicker-sprites) | 🔒 Coming Soon |
 | 52 | [Fine Scrolling — Smooth Movement](./52-fine-scrolling) | 🔒 Coming Soon |
