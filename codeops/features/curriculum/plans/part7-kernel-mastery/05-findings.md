@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 7 complete — 0 critical, 0 major open.
+> **Status**: Part 7 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -128,3 +128,17 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-54-017 | 54 | 🟡 MINOR | "Each kernel starts with its first store on cycle 0" contradicted BodyStart 37/5. | fixed — the VBLANK-off store completes at cycle 5; the first data stores are 9/7. |
 | SR-54-018 | 54 | 🟡 MINOR | The `HmoveApply` table described the label as "the WSYNC before the HMOVE"; the label is on the HMOVE store. | fixed — "the HMOVE store"; the 9/3 (star) and 4/59 (road) values are the measured store cycles. |
 | SR-54-019 | 54 | 🟡 MINOR | The plan called the rainbow ramp 192 bytes and the pulse 64-row; the ramp is 192 entries/256 bytes and the pulse is 64 entries. | fixed in 03/99. |
+| SR-55-001 | 55 | 🟠 MAJOR | Exercise 3's `Gap1Fill` used X as the row/copy index without initializing it; it worked only because `ScoreDraw`'s last cleanup left X=0, so a different glyph/order could change the frame length. | fixed — `LDX #0` once before `Gap1Fill:`; re-logged second `ScoreDraw` 133/31, `Star2Start` 142/5, 192 lines. |
+| SR-55-002 | 55 | 🟡 MINOR | The cell geometry said "the last cell's left edge is 643"; the six cells start at 361/409/457/505/553/601, the block spans 361–648, and 643–648 is the last pixel column. | fixed in the doc and 03. |
+| SR-55-003 | 55 | 🟡 MINOR | The lit glyph y range was 110–130 in the source header and 109–130 in the doc; the measured capture is 109–130. | fixed — 109–130 in all sources/doc. |
+| SR-55-004 | 55 | 🟡 MINOR | "The text is nine lines tall" conflated the 9-line zone with the 7 lit glyph rows. | fixed — nine-line zone, seven lit rows. |
+| SR-55-005 | 55 | 🟡 MINOR | The pre-shift rationale cited the 76-cycle kernel line, but the fill runs in VBLANK. | fixed — the 37-line VBLANK budget; the fill is ~12 scanlines (880 cycles). |
+| SR-55-006 | 55 | 🟡 MINOR | `MessageLen` was used for the constant `MESSAGE_LEN` in the doc/spec/ex1 header. | fixed — `MESSAGE_LEN`. |
+| SR-55-007 | 55 | 🟡 MINOR | The three exercise build headers pointed at the main lesson source/ROM. | fixed — each builds its own `build/exercise-0N.bin`. |
+| SR-55-008 | 55 | 🟡 MINOR | Ex1's `ScrollOffsetRead`/`ScrollOffset` said 0..88, `ByteIndex` 0..11, and the wrap comment 88→0; the 14-char build is 0..64, 0..8, 64→0. | fixed. |
+| SR-55-009 | 55 | 🟡 MINOR | Ex3's `TextCol2`/`TextRow2` were literals presented as copy witnesses; the gap total said 9+87+9+87 and "174 starfield"; the copy cycles said 46+16=62/56+16=72. | fixed — fixed-label wording; 9+84+3+9+87=192 (171 starfield + 3 setup); 45+10=55/52+10=62. |
+| SR-55-010 | 55 | 🟡 MINOR | The ball's "visible row 186/38" was presented as measured; it is derived from the y mapping. | fixed — marked derived. |
+| SR-55-011 | 55 | 🟡 MINOR | The fire-pause evidence did not name the debug build/guard bypass. | fixed — the doc says the committed ROM ignores a held button during the first eight frames; the pause was measured with the guard bypassed. |
+| SR-55-012 | 55 | 🟡 MINOR | The 03 spec still said the cell block's left edges were 361–643 and `MessageLen`. | fixed — the six edges and `MESSAGE_LEN`. |
+| SR-55-013 | 55 | 🟡 MINOR | The captures are phase 0 only; the table's other phases were not disclosed. | fixed — the doc says phases 0/1/3/7 were re-derived from the font and the pointer selects the others identically. |
+| SR-55-014 | 55 | 🟡 MINOR | The ex3 header still called the 174 lines "starfield" and summarised 9+87+9+87. | fixed — 171 starfield + 3 setup; 9+84+3+9+87. |

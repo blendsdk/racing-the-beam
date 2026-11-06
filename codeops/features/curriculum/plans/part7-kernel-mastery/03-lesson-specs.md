@@ -503,8 +503,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   pixel at a time.
 - **Prerequisites:** Lesson 11 (lookup tables), Lesson 12 (the frame), Lesson 14 (`WSYNC`),
   Lesson 17 (cycle counting), Lesson 18 (mid-scanline changes), Lesson 25 (players), Lesson 26
-  (positioning), Lesson 28 (one HMOVE), Lesson 31 (`NUSIZ`), Lesson 32 (VDEL), Lesson 39 (the
-  48-pixel kernel and `include/score.asm`), Lesson 48 (the taxonomy).
+  (positioning), Lesson 28 (one HMOVE), Lesson 29 (the ball), Lesson 31 (`NUSIZ`), Lesson 32
+  (VDEL), Lesson 39 (the 48-pixel kernel and `include/score.asm`), Lesson 48 (the taxonomy).
 - **Concepts:** an 8×8 glyph atlas; a bitstream window; pre-shifted phases for 1-px scrolling;
   the 48-pixel kernel's column-major `ScoreBuf`; the 6-character window; the message loop; the
   starfield background; the history of the Activision logo (a short, clearly historical note).
@@ -520,22 +520,24 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     contiguous 48-byte copy). That is 8 rows × 6 columns = 48 stores.
   - The font: 39 glyphs (A–Z, 0–9, space, dash, period), 8 bytes each, bottom-up; the glyph is
     5×7 in an 8×8 cell, bit 7 = the leftmost pixel. The bottom row is blank, so the lit block is
-    seven rows (y≈110–130).
+    seven rows (y=109–130).
   - The text starts at "RACING" (offset 0); at offset 40 the window is "G THE ".
   - The auto-demo scrolls; SELECT resets to offset 0; fire pauses/resumes.
   - The Activision note is a short historical sidebar (the logo was a scrolling graphic, not a
     full-screen text engine); it is marked as historical context, not a bit-exact reproduction.
 - **Expected screen:** a white six-character text banner at the top, scrolling smoothly left; a
-  starfield below with a shooting star. The two captures show the banner at two offsets. The
-  48-px cell block is capture x=361–643; the lit glyph pixels measure x≈367–642, y≈110–130.
+  starfield below with a gold 1-px shooting star. The two captures show the banner at two offsets.
+  The measured cell block is capture x=361–648; the six cells start at 361/409/457/505/553/601
+  (last pixel column 643–648); the lit glyphs measure x=361–630 at offset 0 and x=361–582 at
+  offset 40, y=109–130.
 - **Exercises:**
   1. **Change the message.** Replace it with "KERNEL MASTERY" (14 chars); expected: the banner
-     scrolls the new message, `MessageLen` = 14, and the wrap is `MessageLen*8 - 48` = 64 (not 88).
+     scrolls the new message, `MESSAGE_LEN` = 14, and the wrap is `MESSAGE_LEN*8 - 48` = 64 (not 88).
   2. **Double-speed scroll.** Increment the offset every frame; expected: `ScrollOffset` advances
      one per frame, the loop time halves.
   3. *(Stretch)* **Second line.** Add a second 9-line text band at visible 96–104 with a different
-     message; expected: two bands, each 9 lines, `TextRow2`, and the starfield shrinks to 174
-     lines (9 + 87 + 9 + 87 = 192). The second message is filled into `ScoreBuf` during the 87-line
+     message; expected: two bands, each 9 lines, `TextRow2`, and the starfield becomes 171
+     starfield lines + 3 setup lines (9 + 84 + 3 + 9 + 87 = 192). The second message is filled into `ScoreBuf` during the 87-line
      gap between the bands, so no second 48-byte buffer is needed. The second `ScoreSetup` runs at
      visible 93–95 (three `WSYNC` lines) and `ScoreDraw` starts at visible 96, because the first
      `ScoreDraw`'s cleanup clears VDEL; the second HMOVE is measured. The second band's 9 lines

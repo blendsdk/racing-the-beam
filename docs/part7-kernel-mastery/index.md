@@ -13,7 +13,7 @@ Design and build display kernels — the scanline-by-scanline routines that defi
 | 52 | [Fine Scrolling — Smooth Movement](./52-fine-scrolling) | ✅ Complete |
 | 53 | [Kernel Design Patterns — Building Your Toolkit](./53-kernel-patterns) | ✅ Complete |
 | 54 | [Visual Effects Cookbook — Starfields, Rainbows, Pseudo-3D](./54-visual-effects-cookbook) | ✅ Complete |
-| 55 | [Scrolling Text Marquee — The Activision Logo Effect](./55-scrolling-text-marquee) | 🔒 Coming Soon |
+| 55 | [Scrolling Text Marquee — The Activision Logo Effect](./55-scrolling-text-marquee) | ✅ Complete |
 
 ## What You'll Learn
 

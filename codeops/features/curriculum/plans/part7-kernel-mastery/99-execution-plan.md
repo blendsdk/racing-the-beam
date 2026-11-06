@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 09:35
-> **Progress**: 7/8 tasks (87.5%)
+> **Last Updated**: 2026-11-06 10:47
+> **Progress**: 8/8 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -375,9 +375,15 @@ AR-24, AR-38
 AR-24, AR-31, AR-39
 **Objective**: Deliver Lesson 55 end to end, close Part 7, and update the roadmaps.
 
-- [ ] 8.1.1 Lesson 55 — Scrolling Text Marquee: Session A freezes ST-55.1–ST-55.6 (red baseline),
+- [x] 8.1.1 Lesson 55 — Scrolling Text Marquee: Session A freezes ST-55.1–ST-55.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson55): Scrolling Text Marquee`
+  the `git-commit` skill in push mode — `feat(lesson55): Scrolling Text Marquee` ✅ (completed: 2026-11-06 10:47)
+
+**Session C record** (verify + evidence, 2026-11-06 10:47): Preflight per `vcs-lesson-production` — the 9-line text zone and 183-line starfield, the 39-glyph font and the eight-phase pre-shifted table, the 48-byte column-major fill, the 1-px scroll, the ball shooting star, the score library's HMOVE, and the 262-line frame checked against `include/vcs.asm`, `include/score.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `ScoreDraw` 37/11, `ScoreDrawRow` 37/26 then 38/72…44/72, `StarStart` 46/5, `OverscanStart` 229/9; `HmoveApply` 18/45, `HmoveDone` 19/3. Text: `ScrollOffsetRead` 0,1,1,2,2… and 88→0 at frames 176/177/178; `TextFill` first bytes $00,$88,$90,$A0,$F0,$88,$88,$F0; `TextColLast` at TextCol=5 $00,$70,$88,$88,$B8,$80,$88,$70; the 1,152-byte table is 8 phases × 8 rows × 18 bytes; the fill stores at `ScoreBuf+c*8+r`; the 39-glyph font is 312 bytes. Ball: `BallYRead` 0,1,2…; `BallRow` 46/38 Y=0, 47/38 Y=1; the starfield is three page-aligned 183-byte planes; 9+183=192. Captures from the committed ROM: `marquee-a.png` offset 0 "RACING", `marquee-b.png` offset 40 "G THE "; the cell block x=361–648 (cells 361/409/457/505/553/601, last pixel column 643–648), the lit glyphs x=361–630 (offset 0) / 361–582 (offset 40), y=109–130; the shooting star x=505–510 at visible ~186/~38; background `$02`, white `$0E`, gold `$1A`; no cursor; title bars `Stella 7.0: "55-scrolling-text-marquee"`. The captures are phase 0; phases 0/1/3/7 were re-derived from the font. Solutions: ex1 `MESSAGE_LEN` 14, wrap 64, ScrollOffset 0..64; ex2 one pixel/frame; ex3 9+84+3+9+87=192 (171 starfield + 3 setup), second `ScoreDraw` 133/31, `Star2Start` 142/5, the first-gap index initialized with `LDX #0`, the copy 48 bytes. Site (ST-55.6): index row 55 ✅ and all rows 48–55 ✅; the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 54, next → `/part8-advanced/56-bankswitching`; sidebar `config.ts:132`; README row 7 unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — **1 major** (exercise 3's `Gap1Fill` used X without initializing it; the frame length depended on ScoreDraw's accidental X) plus 9 minor (the cell edges, the lit y range, the nine-line wording, the VBLANK rationale, the exercise headers, the ex1 ranges, the ex3 copy cycles/labels, the ball-row derivation, the fire-pause method); round 2 — the `LDX #0` confirms 133/31 and 142/5, and the minors are fixed. The curriculum-auditor round 1 — 11 minor (the cell geometry, the y range, the nine-line wording, the VBLANK budget, `MESSAGE_LEN`, the build headers, the ex1 range, the ex3 labels/gap, the ball rows, the fire-pause method, the 03 cells); round 2 — the fixes are present, with the remaining comment/spec syncs fixed in this commit. Final state: **0 critical, 0 major open**. Lesson 55 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-06 10:26): ST-55.1–ST-55.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 55. Design pins: 9-line text zone via `include/score.asm` (`ScoreSetup`/`ScoreDraw`, 6 columns at TIA X=56–103) + 183-line starfield = 192; a 39-glyph 8×8 bottom-up font (A–Z, 0–9, space, dash, period); the message "RACING THE BEAM  " (17 chars); a pre-shifted table 8 phases × 8 rows × 18 bytes (1,152 bytes) read at `ScoreBuf + c*8 + r`; `ScrollOffset` 0–88, one pixel every two frames; the starfield is three 183-byte planes with a `BallY` compare (the shooting star), stars white `$0E`/gold `$1A`; `ScoreSetup` every frame in VBLANK; `ScoreDraw` at visible 0, the starfield at scanline 46; one HMOVE for the score's P0/P1. The doc says the 48-px cell block is capture x=361–648 (cells at 361/409/457/505/553/601) and the lit glyphs x=361–630 at offset 0, y=109–130. Exercises: "KERNEL MASTERY" (14 chars, wrap 64), double-speed, and the second 9-line band with 171 starfield lines + 3 setup lines (9+84+3+9+87=192) and a buffer refill in the gap. Evidence pins (AR-6): `ScrollOffset`, `TextRow` 0–7, `TextCol` 0–5, `TextFill`, `ScoreDraw`, `HmoveApply`/`HmoveDone`, `BodyStart` 37, `OverscanStart` 229, `StartFrame` 259. Red baseline confirmed: no `lessons/part7-kernel-mastery/55-scrolling-text-marquee`, no `docs/public/images/lesson55`, no Part 7 55 ROMs, the document is the `🔒 Coming Soon` stub, index row 55 is Coming Soon, sidebar `config.ts:132`, `verify.sh` green at `007c381`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 
@@ -393,9 +399,9 @@ AR-24, AR-31, AR-39
    7/11 RDs), the portfolio (7 plans done), and the plan completion note; final `verify.sh`; commit
    and push (AR-26).
 
-- [ ] 8.1.1a Part 7 completion gate (a gate, not a ninth lesson task): index rows 48–55 ✅, RD-07
+- [x] 8.1.1a Part 7 completion gate (a gate, not a ninth lesson task): index rows 48–55 ✅, RD-07
   Done, feature roadmap 7/11, portfolio 7 plans, all completion criteria ticked, final `verify.sh`
-  green
+  green ✅ (completed: 2026-11-06 10:47)
 
 ---
 
@@ -415,12 +421,12 @@ AR-24, AR-31, AR-39
 
 ## Completion Criteria
 
-- [ ] All eight phases marked `[x]` with Session A/C records.
-- [ ] 32 committed 4,096-byte ROMs, 8 documents, 16 screenshots.
-- [ ] `include/kernel_patterns.asm` and `demo-48.asm` shipped.
-- [ ] Part 7 index rows 48–55 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit.
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security is N/A (static content, no input).
-- [ ] The post-completion re-analysis (plan/skill protocol) is recorded.
-- [ ] RD-07 Done; feature roadmap 7/11 RDs; portfolio 7 plans done.
+- [x] All eight phases marked `[x]` with Session A/C records.
+- [x] 32 committed 4,096-byte ROMs, 8 documents, 16 screenshots.
+- [x] `include/kernel_patterns.asm` and `demo-48.asm` shipped.
+- [x] Part 7 index rows 48–55 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit.
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security is N/A (static content, no input).
+- [x] The post-completion re-analysis (plan/skill protocol) is recorded: all eight lessons shipped at the Part 1–6 bar; the measured ledgers (63/62, 41/40, 89, 54/62, 26–47) are recorded in each Session C; no new machinery beyond `demo-48.asm` and `include/kernel_patterns.asm`; the five hard rules hold for every lesson.
+- [x] RD-07 Done; feature roadmap 7/11 RDs; portfolio 7 plans done.

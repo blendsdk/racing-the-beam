@@ -52,7 +52,7 @@
 | `docs/part7-kernel-mastery/index.md` | Part index (minimal stub) | Rebuild to the Part 1 format; rows flip per lesson (AR-10) |
 | `include/kernel_patterns.asm` | Lesson 53 library | Create (AR-7, AR-28) |
 | `docs/.vitepress/config.ts` (Part 7 block) · `README.md` | Sidebar · curriculum listing | Verify only — entries already covered |
-| `codeops/features/curriculum/00-roadmap.md`, `codeops/00-roadmap.md` | Tracking | Executing; Done at completion (AR-12) |
+| `codeops/features/curriculum/00-roadmap.md`, `codeops/00-roadmap.md` | Tracking | Complete; RD-07 Done (AR-12) |
 
 ### Code Analysis
 

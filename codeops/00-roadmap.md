@@ -13,7 +13,7 @@
 
 | Feature | Roadmap | Stage Summary | Progress | Status | Last Updated |
 |---------|---------|---------------|----------|--------|--------------|
-| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · 6 plans done, 1 executing | 6/11 RDs | 🔄 | 2026-11-06 |
+| curriculum | [→](features/curriculum/00-roadmap.md) | 11 RDs · 7 plans done | 7/11 RDs | 🔄 | 2026-11-06 |
 
 ## Archived
 
