@@ -286,10 +286,10 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 
 - **Goal:** draw more objects than the TIA provides by alternating two 30 Hz frames, with the
   selected objects drawn by a per-row skipdraw test (no RAM strips).
-- **Prerequisites:** Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 17 (cycle counting),
-  Lesson 18 (mid-scanline changes), Lesson 25 (players), Lesson 26 (positioning), Lesson 27
-  (sprite movement), Lesson 28 (one HMOVE), Lesson 29 (the ball), Lesson 31 (`NUSIZ`), Lesson 34
-  (frame counters), Lesson 49 (the 2-line kernel).
+- **Prerequisites:** Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 15 (the RIOT timer),
+  Lesson 17 (cycle counting), Lesson 18 (mid-scanline changes), Lesson 19 (the playfield and
+  `CTRLPF`), Lesson 25 (players), Lesson 26 (positioning), Lesson 27 (sprite movement), Lesson 28
+  (one HMOVE), Lesson 31 (`NUSIZ`), Lesson 34 (frame counters), Lesson 49 (the 2-line kernel).
 - **Concepts:** 30 Hz flicker; two players × two frames = four objects; parity; the draw-list
   sort; the skipdraw test (`row - ObjRow`, compare, mask) inside a 2-line kernel; the eye's
   persistence; why a still image shows only one half. The lesson uses the 2-line budget (152
@@ -298,22 +298,26 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   - Visible 0–7: the status zone (8 lines): a parity cell and four object cells (2 chunks each,
     per half); the cells show which objects are drawn this frame.
   - Visible 8–191: the play zone (184 lines = 92 rows × 2) drawn by a 2-line kernel. Four objects
-    (X, Y, DirX, DirY, Color, Shape) move ±1 per frame and bounce at X 8–144, Y 0–88 (relative
-    to the play zone). Each object is 8 lines tall (4 bytes, two lines per byte). Parity 0 draws
+    (X, Y, DirX, DirY, Color, Shape) move ±1 per frame and bounce at X 8–144, Y 0–87 (relative
+    to the play zone). Each object is 8 scanline slots tall (4 bytes, two lines per byte); at the
+    left latch window the top slot is blank, a documented artifact. Y=87 keeps the worst last
+    line at play 182; Y=88 would put P1's last line on play 184 (the first overscan line).
+    Parity 0 draws
     objects 0/1; parity 1 draws 2/3. Y is top-down, so the **larger** Y is nearer the bottom; the
     nearer object of a parity pair is drawn on P0, the other on P1.
-  - The kernel loop is `LDY #0`; the first line draws object 0 (`TYA; SEC; SBC ObjRow0; CMP #4;
-    BCS No0; ... LDA ShapeTable,X; STA GRP0; STA WSYNC`); the second line draws object 1 the same
-    way (`STA GRP1; STA WSYNC`); then `INY; CPY #92; BNE`. The two lines each carry one skipdraw
-    (about 43 cycles including the WSYNC), well inside 76; the pair is about 93, inside 152. The
-    shape table is 4 shapes × 4 bytes = 16 bytes. The object's row is 0–88 (top-down); the
-    4-byte shape covers rows Y..Y+3 (8 lines).
-  - The cycle ledger: each line carries one in-sprite skipdraw (~40) plus its `WSYNC` (3), so
-the first and second lines are ~43 each; the pair is ~86 plus the 7-cycle loop tail = **~93
-cycles per two lines** (46.5/line), 59 cycles of margin per pair. The branchy skipdraw is the
-lesson's subject; splitting it across the two lines keeps each line inside 76.
-  - No 184-byte strips and no 368-byte RAM: the only state is the four objects' X/Y/dir/color/
-    shape bytes and the two selected slot bytes, all inside `$80–$9F`.
+  - The kernel loop is `LDY #0`; the first line draws the object in the P0 slot (`TYA; SEC; SBC
+    ObjRow0; CMP #4; BCS No0; ... LDA ShapeTable,X; STA GRP0; STA WSYNC`); the second line draws
+    the P1 slot the same way (`STA GRP1; STA WSYNC`); then `INY; CPY #92; BNE`. The shape table is
+    4 shapes × 4 bytes = 16 bytes. The object's row is 0–87 (top-down); the 4-byte shape covers
+    rows Y..Y+3 (8 scanline slots). Because each line writes only its own player, the byte stays
+    latched on the other line; that persistence is what makes four bytes an 8-line object.
+  - The cycle ledger: the measured line 1 is 48 cycles and line 2 is 41 (the shared loop tail
+    lands on the first line), **89 cycles per two lines** (44.5/line), 63 cycles of margin per
+    pair. The branchy skipdraw is the lesson's subject; splitting it across the two lines keeps
+    each line inside 76.
+  - No 184-byte strips and no 368-byte RAM: the persistent state is the four objects' X/Y/dir/color/
+    shape bytes and the two selected slot bytes, all inside `$80–$9E`; the kernel's row-offset
+    scratch `Tmp` uses `$A0` (free here — this lesson does not use the score library).
   - The VBLANK: select the parity pair; copy the two objects' row/shape/colour into the slot
     bytes; set P0/P1 X with two coarse resets and one HMOVE.
   - Colors: red `$42`, green `$C8`, blue `$84`, gold `$1A`; background `$02`.
@@ -330,9 +334,9 @@ lesson's subject; splitting it across the two lines keeps each line inside 76.
 - **Evidence pins:** `Parity` (A=0/1), `DrawSlot0`/`DrawSlot1` (A=object index), `ObjRow0`/
   `ObjRow1`, `ObjShape0`/`ObjShape1`, `SkipWrite` (A = the shape byte or 0), `HmoveApply`/
   `HmoveDone`, `BodyStart` 37, `OverscanStart` 229, `StartFrame` 259; the play loop uses
-  `LDY #0; INY; CPY #92; BNE` for 92 rows. The base uses `$80–$9F`: four objects × 6 bytes, two
-  slots × 2 bytes (row/shape; the colours go straight to `COLUP0/1`), parity, beep, frame = 32
-  bytes; exercise 2 puts the two extra objects in `$D8–$F7`.
+  `LDY #0; INY; CPY #92; BNE` for 92 rows. The base uses `$80–$9E`: four objects × 6 bytes, two
+  slots × 2 bytes (row/shape; the colours go straight to `COLUP0/1`), parity, beep = 31 bytes;
+  `$A0` is the kernel's row-offset scratch; exercise 2 puts the two extra objects in `$D8–$F7`.
 - **Screenshots:** `docs/public/images/lesson51/frame-a.png` (parity 0, objects 0/1),
   `…/frame-b.png` (parity 1, objects 2/3).
 - **Integration:** prev → Lesson 50; next → Lesson 52; index row 51 → ✅ Complete; sidebar

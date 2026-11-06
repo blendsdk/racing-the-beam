@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 3 complete — 0 critical, 0 major open.
+> **Status**: Phase 4 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -68,3 +68,19 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-50-011 | 50 | 🟡 MINOR | Exercise 1/2's P1 strip comments said visible 29–60; the resized play zones put P1 at 33–64 / 37–68. | fixed. |
 | SR-50-012 | 50 | 🟡 MINOR | Exercise 3's field comment said visible 25–181; the field ends at 182. | fixed. |
 | SR-50-013 | 50 | 🟡 MINOR | The doc's level-1 expectation said "chunks 2"; level 1 lights exactly one chunk (chunk 2). | fixed — "chunk 2". |
+| SR-51-001 | 51 | 🟡 MINOR | Both reviewers: the cycle parenthetical said 39 to the write/42 to the WSYNC and 18/21 on the short path; a zero-page `STA GRP0` is 3 cycles. | fixed — the source/doc now say 42→44→47 (line 1), 35→37→40 (line 2), short 14→16→19; the 48/41/89 ledger is unchanged. |
+| SR-51-002 | 51 | 🟡 MINOR | The `OBJ_MAX_Y=88` bound let P1's last line land on play 184 (the first overscan line) for some X. | fixed — `OBJ_MAX_Y=87` in all four sources; row 90's last line is play 182; doc/03 state the bound and why 88 clips P1. |
+| SR-51-003 | 51 | 🟡 MINOR | The doc never explained the latch persistence that turns four shape bytes into 8 lines; the ex3 hint said each enemy is "one scanline of every row". | fixed — a "why four bytes are eight lines" paragraph in the source and Section 3; ex3 hint 4 and the source header say both are 8-line objects (P1 one line lower). |
+| SR-51-004 | 51 | 🟡 MINOR | The green diamond was reported as TIA X=93; the diamond's ink starts two columns into the sprite. | fixed — the captures were re-taken and the doc reports first-ink positions only (red 71, green 83, blue 92, gold 84). |
+| SR-51-005 | 51 | 🟡 MINOR | `SHAPE_MASK` was dead in all four sources; `Frame` was zeroed/incremented but never read, and the 32-byte claim counted it. | fixed — both removed; the persistent state is 31 bytes `$80–$9E`, `$9F` free, `$A0` Tmp; doc/03/99 updated. |
+| SR-51-006 | 51 | 🟡 MINOR | 03 still said "object 0 on the first line, object 1 on the second" and "about 43/about 93"; ST-51.3 inherited the wording. | fixed — the P0-slot/P1-slot wording; the stale estimate is deleted; ST-51.3 matches the A=1/3 and A=0/2 logs. |
+| SR-51-007 | 51 | 🟡 MINOR | "Stella keeps one `-break` per run" is false (Lesson 48 passes four). | fixed — "Run each checkpoint separately for a readable log." |
+| SR-51-008 | 51 | 🟠 MAJOR | The re-taken capture captions/table put the lower (nearer) object on P1 and the higher object on P0, inverting the lesson's rule. | fixed — red/blue are P0 (nearer, line 1), green/gold are P1 (farther, line 2, one line lower); the measured rows confirm it. |
+| SR-51-009 | 51 | 🟡 MINOR | The latch warning said the object's "lit height is seven scanlines" without explaining P1's one-line offset, and "the skew disappears" described P0 only. | fixed — the warning now states P0 shifts one line (seven lit inside the window), P1 is always one line lower, and at X≤35 shifts again; the shape is shifted, not truncated. |
+| SR-51-010 | 51 | 🟡 MINOR | The `OBJ_MAX_Y` fix left "(88 + 3 = 91)" in the main and exercise-1 comments. | fixed — "(87 + 3 = 90, rows 0..91)". |
+| SR-51-011 | 51 | 🟡 MINOR | The doc's exercise-2 hint and 03 still said `$80–$9F` for the four-object arrays. | fixed — `$80–$9E`. |
+| SR-51-012 | 51 | 🟡 MINOR | `SkipWrite` was described as "cycle 42" for every row; the short path is 21, and the first play line is 31. | fixed — the bullet separates the short/long paths and notes the first-line exception (store completes at 54, still inside 76). |
+| SR-51-013 | 51 | 🟡 MINOR | The prerequisites listed the ball (29, unused) and omitted the timer (15) and playfield/`CTRLPF` (19). | fixed — 15 and 19 added, 29 removed, in the doc and 03. |
+| SR-51-014 | 51 | 🟡 MINOR | The exercise-2 hint said the status strip "grows to 14 chunks"; the cells span chunks 0–18. | fixed — "19 chunks (14 lit cell chunks across 0–18)". |
+| SR-51-015 | 51 | 🟡 MINOR | The capture analysis said the blue cross shows 6/13/6 rows while the table measured 24 rows. | fixed — the measured groups are 6/12/6 (24 rows). |
+| SR-51-016 | 51 | 🟡 MINOR | The exercise-3 source header said each enemy is "one scanline of every row". | fixed — both players are 8-line objects; P1 is one line lower. |

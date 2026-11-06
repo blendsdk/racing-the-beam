@@ -83,7 +83,7 @@ indexed stores.
 (c) a smaller object count.
 **Decision:** (a) — the two selected objects are drawn inside a 2-line kernel by the
 `row - ObjRow` / `CMP #4` / shape-table skipdraw; no strips. The 2-line budget (152 cycles) fits
-two branchy tests split across the two lines (~93 cycles/2 lines, each line ≤76).
+two branchy tests split across the two lines (the plan estimated ~93 cycles/2 lines; the measured ledger is 89, 48+41, each line ≤76).
 **Resolution:** 03 §Lesson 51, AR-16/AR-29/AR-35, ST-51.2/51.3 updated. **Resolved.**
 
 ### PF-002 — 🔴 CRITICAL — Lesson 52 read a row-major world with three consecutive offsets
@@ -432,7 +432,7 @@ for execution after this report and the fixes are committed and the roadmap row 
 1. **Kernel timing is temporal.** The state logs prove the scanline stores and the frame, not the
    player's perception; the committed ROM and `<RomPlayer>` are the runnable artifact. The lesson
    docs disclose this.
-2. **The 1-line/2-line budgets are tight.** Lesson 51's skipdraw is ~93 cycles per two lines and
+2. **The 1-line/2-line budgets are tight.** Lesson 51's measured skipdraw is 89 cycles per two lines and
    Lesson 52's loop is 40/line; each implementation must re-measure the actual cycles and record
    them before accepting a capture.
 3. **The 48-pixel text table is data-heavy.** The 8-phase × 8-row × 18-byte table is 1152 bytes;

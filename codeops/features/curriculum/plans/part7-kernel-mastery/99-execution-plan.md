@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 03:28
-> **Progress**: 3/8 tasks (37.5%)
+> **Last Updated**: 2026-11-06 04:54
+> **Progress**: 4/8 tasks (50%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -207,9 +207,15 @@ AR-24, AR-27, AR-34
 AR-24, AR-29, AR-35
 **Objective**: Deliver Lesson 51 end to end.
 
-- [ ] 4.1.1 Lesson 51 — Flicker Sprites: Session A freezes ST-51.1–ST-51.6 (red baseline),
+- [x] 4.1.1 Lesson 51 — Flicker Sprites: Session A freezes ST-51.1–ST-51.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson51): Flicker Sprites`
+  the `git-commit` skill in push mode — `feat(lesson51): Flicker Sprites` ✅ (completed: 2026-11-06 04:54)
+
+**Session C record** (verify + evidence, 2026-11-06 04:54): Preflight per `vcs-lesson-production` — the 8+184 zone split, the per-row skipdraw math (`row - ObjRow`, `CMP #4`, `shape*4+offset`), the two-object compare, the 92-row kernel, the latch persistence, the one-HMOVE positioning, the physics/beep, and the 262-line frame checked against `include/vcs.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F099` 259/3, `VblankStart` `$F0A7` 0/5, `BodyStart` `$F16F` 37/5, `PlayStart` `$F176` 45/4, `OverscanStart` `$F1C1` 229/6; `HmoveApply` `$F141` 7/38 or 7/48 (the `WSYNC` write), `HmoveDone` `$F145` 8/3 (the `HMOVE` store); 3+37+192+30 = 262. Logic: `Parity` `$F125` A=0/1 each frame; `DrawSlot0` `$F137` A=1/3 and `DrawSlot1` `$F13E` A=0/2 (parity 0 → object 1 nearer on P0, object 0 on P1; parity 1 → 3 on P0, 2 on P1); `KernelRow` `$F180` Y=0..91; `SkipWrite` `$F19A` / `SkipWrite1` `$F1B8` report the shape bytes or 0 (steady-state cycles 42/35; the first play line starts at 31 because `PlayStart`'s setup replaces the loop tail); the objects' live rows/shapes are `(63,1)/(17,0)` on frame 1 and `(86,3)/(38,2)` on frame 2. The kernel rows are 48 and 41 cycles, 89 of the 152-cycle pair; the shape table is 4×4 bytes; the persistent state is 31 bytes `$80–$9E` with `$A0` scratch. The latch: P0 shifts one line at X≤56 (seven lit lines inside the window, top blank), P1 is one line lower and shifts again at X≤35; `OBJ_MAX_Y=87` keeps the worst last line at play 182 (Y=88 would put P1's last line on the first overscan line). Captures from the committed ROM: `frame-a.png` parity 0 with red first ink TIA 71 (nearer, P0) and green 83 (farther, P1), status runs 25–48/97–144/169–216/+480; `frame-b.png` parity 1 with blue 92 (P0) and gold 84 (P1), status runs 49–72/241–288/313–360/+480; all four objects 24–25 capture rows; no cursor; title bars read `Stella 7.0: "51-flicker-sprites"`. Solutions: ex1 `SortFirst` A=0/2/0/2; ex2 `Parity` A=0/1/2 and `DrawSlot0` A=1/2/4; ex3 `AlwaysSlot` A=0 every frame and `DrawSlot1` A=1/2/3. Site (ST-51.6): index row 51 ✅ (rows 48–50 ✅, 52–55 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 50, next → 52; sidebar `config.ts:128`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — 7 minor (the cycle parenthetical, the Y=88 bottom clip, the latch-persistence gap, the green X, `SHAPE_MASK`/`Frame`, plan slot wording, `-break`) and 3 open questions; round 2 — **1 major** (the new capture captions/table inverted P0/P1) plus the latch-height wording and a stale 88+3 comment; round 3 — 2 minor prose residuals (the VBLANK blanking wording; the ex3 header). The curriculum-auditor round 1 — 7 minor (the cycle parenthetical, the stale 43/93, the frame-1 Y=64/16, the green X, dead `Frame`/`SHAPE_MASK`, `-break`, the slot wording); round 2 — **1 major** (the same P0/P1 inversion) plus stale `$80–$9F`, the latch wording, and the exercise-2 hint count; round 3 — the 7-scanline wording, the blue 6/12/6, and the hint's 19 chunks. All fixed: the captures re-taken outside the latch windows (all 24–25 rows), the P0/P1 labels corrected, the Y bound 87, the dead symbols removed (31 bytes), the plan/07/99 wording aligned, the addresses re-derived and the logs re-run. The final state is **0 critical, 0 major open**. Lesson 51 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-06 03:29): ST-51.1–ST-51.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 51. Design pins: 8 status + 184 play (92 rows × 2) = 192; four 8-line objects, parity 0 → objects 0/1 and parity 1 → 2/3; the 2-line kernel draws the P0-slot object on the first line and the P1-slot object on the second by the `row - ObjRow` / `CMP #4` / shape-table skipdraw (no RAM strips); the larger Y (top-down) is nearer and goes on P0; the status cells show the parity and the two drawn objects; the base RAM $80–$9E (four objects × 6, two slots × 2, parity, beep = 31; `$A0` is scratch; exercise 2 uses $D8–$F7 for the extra objects); the exercises reverse priority, six objects/three parities, and the always-on player. Evidence pins (AR-6): `Parity` A=0/1, `DrawSlot0`/`DrawSlot1`, `ObjRow0`/`ObjRow1`, `ObjShape0`/`ObjShape1`, `SkipWrite`, `HmoveApply`/`HmoveDone`, `BodyStart` 37, `OverscanStart` 229. Red baseline confirmed: no `lessons/part7-kernel-mastery/51-flicker-sprites`, no `docs/public/images/lesson51`, no Part 7 51 ROMs, the document is the `🔒 Coming Soon` stub, index row 51 is Coming Soon, sidebar `config.ts:128`, `verify.sh` green at `4928e8a`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 

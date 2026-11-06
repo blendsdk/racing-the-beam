@@ -52,7 +52,7 @@
 | Lesson 54 monitor | Starfield, rainbow, centred pseudo-3D road reel | AR-19, AR-38 |
 | Lesson 55 monitor | 48-pixel scrolling text marquee via `include/score.asm` | AR-20, AR-31, AR-39 |
 | Audio | Tiny direct beep in the state-changing lessons | AR-21 |
-| RAM map | `$80–$9F` lesson, `$A0–$D7` score in 50/55, `$80–$83` library + `$84–$9F` counters + `$A0–$D0` strip in 53, `$D8–$F7` free, `$F8–$FF` stack | AR-22 |
+| RAM map | `$80–$9F` lesson, `$A0` scratch in 51, `$A0–$D7` score in 50/55, `$80–$83` library + `$84–$9F` counters + `$A0–$D0` strip in 53, `$D8–$F7` free, `$F8–$FF` stack | AR-22 |
 | Screenshots | Two per lesson, committed-ROM provenance, burst selection | AR-23 |
 | Exercises | Three per lesson, all assembling and verified | AR-24 |
 | Frame | 262 lines; work-first except documented cycle-timed kernels; `LDY #0; INY; CPY #N; BNE` top-down row loops; one HMOVE per repositioning event | AR-25 |
