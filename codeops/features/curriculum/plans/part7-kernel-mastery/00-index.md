@@ -1,7 +1,7 @@
 # Part 7 — Kernel Mastery (Lessons 48–55) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 7 by shipping lessons 48–55 as a reviewed lesson set
-> **Status**: Executing (5/8 lessons complete)
+> **Status**: Executing (6/8 lessons complete)
 > **Created**: 2026-11-05
 > **Implements**: curriculum/RD-07
 > **Source**: ../../requirements/RD-07-part7-kernel-mastery.md
@@ -95,7 +95,7 @@ bash scripts/verify.sh
 | Lesson 54 | Starfield, rainbow, centred pseudo-3D road reel (AR-19, AR-38) |
 | Lesson 55 | 48-pixel scrolling text marquee via `include/score.asm` (not the pattern library) (AR-20, AR-31, AR-39) |
 | Audio | Tiny direct beep in the state-changing lessons (AR-21) |
-| RAM | `$80–$9F` lesson; `$A0` scratch in 51; `$A0–$D7` score in 50/55; `$80–$83` library + `$84–$9F` counters + `$A0–$CF` strip in 53; `$D8–$F7` free; `$F8–$FF` stack (AR-22) |
+| RAM | `$80–$9F` lesson; `$A0` scratch in 51; `$A0–$D7` score in 50/55; `$80–$82` library + `$83–$9F` counters + `$A0–$CF` strip in 53; `$D8–$F7` free; `$F8–$FF` stack (AR-22) |
 | Screenshots | Two per lesson, committed-ROM provenance, burst selection (AR-23) |
 | Frame | 262 lines; work-first except documented cycle-timed kernels; `LDY #0; INY; CPY #N; BNE` top-down row loops; one HMOVE per repositioning event (AR-25) |
 | Part index | Rebuilt in the Lesson 48 phase; rows flip per lesson (AR-10) |

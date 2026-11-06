@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 5 complete — 0 critical, 0 major open.
+> **Status**: Phase 6 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -94,3 +94,18 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-52-008 | 52 | 🟡 MINOR | Exercise 1's header copied the base lesson's 35/37 store cycle pair although its page-local BNE makes the store 34/36. | fixed — "the base lesson's measured log puts its store at 35/37; this layout's 9-cycle tail makes it 34/36". |
 | SR-52-009 | 52 | 🟡 MINOR | The doc's "fit in 40 of the 76 cycles" was nominal-only. | fixed — "40 nominal / 41 effective". |
 | SR-52-010 | 52 | 🟡 MINOR | The checkpoint-cycle convention (a label reports the first cycle of the following instruction) was unstated. | fixed — one sentence added to the debugger section. |
+| SR-53-001 | 53 | 🟠 MAJOR | Ex3's fill band (third in the order) stored `COLUBK` only inside `KernelFill`, so its first line's left edge kept the ramp's last colour. | fixed — the `BandFill` macro stores `COLUBK` before the JSR; the first fill line measures `$B8` at the left edge; the band stays 48 lines and `OverscanStart` 229. |
+| SR-53-002 | 53 | 🟠 MAJOR | The band-boundary paragraph said the fill returns in 10 cycles but parenthesized "seven tail + six RTS" = 13; the other routines' 7+6 = 13. | fixed — fill = four tail (DEX 2 + not-taken BNE 2) + 6 RTS = 10; others = seven + 6 = 13; the first-store window is ~10 (12 after the fill). |
+| SR-53-003 | 53 | 🟡 MINOR | `KernelFill`'s header said it clobbers A and X; `STA` preserves A. | fixed — "Clobbers X; preserves A and Y." |
+| SR-53-004 | 53 | 🟡 MINOR | The carry paragraph said `INC` "adds 4" and the safe bound was `$FD`; `INC` is 5 (net +4 with BCC 2) and `$FC`. | fixed. |
+| SR-53-005 | 53 | 🟡 MINOR | The band-2 preload note said twelve cycles; the setup is 15. | fixed — "fifteen". |
+| SR-53-006 | 53 | 🟡 MINOR | The fire/SELECT guard sentence dangled and implied SELECT had an eight-frame guard. | fixed — only fire has the guard; SELECT needs none (a held SELECT at power-on only resets to palette 0). |
+| SR-53-007 | 53 | 🟡 MINOR | The pixel-0 rule listed `COLUPF` both as a pixel-0 store and as having slack, and omitted the PF2 ~24/38.7 exception. | fixed — PF0/COLUBK are the pixel-0 stores; COLUPF/COLUP0 have the blank first row's slack; PF2's field starts at 38.7. |
+| SR-53-008 | 53 | 🟡 MINOR | Ex1's comments still said 48 bytes / index 47 / PF pointer 0..69 / band-4; its strip is 38 bytes, last index 37, PF 0..54, band-5. | fixed — 38 bytes used of the 48-byte block, index 37, 0..54, band-5, `$A0-$C5`, defensive GRP clears. |
+| SR-53-009 | 53 | 🟡 MINOR | `RampTable` did not exist; the labels are `RampFwd`/`RampRev`. | fixed in the sources and doc. |
+| SR-53-010 | 53 | 🟡 MINOR | Ex2's banner still said SELECT resets the palette; it toggles RampPhase 0/24. | fixed — banner, RAM range `$83-$95`. |
+| SR-53-011 | 53 | 🟡 MINOR | Ex3's header said PatternStart A=0..3; the order is 1,3,0,2. | fixed — four hits A=1,3,0,2; the Band3/4Setup names report the sprite/ramp slots. |
+| SR-53-012 | 53 | 🟡 MINOR | The library API omitted that `KernelPFRows` advances `KernelPtr` by 3 × rows and that `KernelRows` must be >= 1. | fixed — both stated; the return timing (10/13) documented. |
+| SR-53-013 | 53 | 🟡 MINOR | The 03 ledger still used Y=2..0/`LDY #2`/two DEYs; the code is Y=0..2/`LDY #0`/two INYs. | fixed — 57/row = 28.5/line, PF0→PF2. |
+| SR-53-014 | 53 | 🟡 MINOR | Band 4 cleared GRP1 although nothing writes it, while the doc said redundant clears are skipped. | fixed — documented as a defensive clear (six cycles, boundary stays symmetric); doc rule 2 and ST-53.3 match. |
+| SR-53-015 | 53 | 🟡 MINOR | Ex3's PF-table comment said rows 1–23 alternate, but row 23 is blank. | fixed — rows 1–22 alternate; row 23 is blank so the ramp's late PF0 clear cannot show. |

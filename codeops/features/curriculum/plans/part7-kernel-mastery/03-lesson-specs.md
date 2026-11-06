@@ -69,8 +69,8 @@ The state-changing lessons (48, 51, 53, 54, 55) carry a two-byte beep: `BeepTime
 
 | Range | Owner | Contents |
 | --- | --- | --- |
-| `$80–$83` | `include/kernel_patterns.asm` (Lesson 53 only) | `KernelPtr` (2), `KernelRows`, `KernelTmp` |
-| `$84–$9F` | Lesson 53 lesson | counters (pattern, ramp direction, etc.) |
+| `$80–$82` | `include/kernel_patterns.asm` (Lesson 53 only) | `KernelPtr` (2), `KernelRows` |
+| `$83–$9F` | Lesson 53 lesson | counters (pattern, ramp direction, etc.) |
 | `$A0–$CF` | Lesson 53 lesson | the 48-byte sprite strip |
 | `$80–$9F` | lesson (except 53) | counters, positions, state, scroll, parity, beep |
 | `$A0–$D7` | score library (Lessons 50 and 55 only) | `ScoreDigits` 6 + scratch 2 + `ScoreBuf` 48 |
@@ -111,11 +111,12 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 
 ### Shared Kernel-Pattern Library (`include/kernel_patterns.asm`, Lesson 53)
 
-- Owns `$80/$81` = `KernelPtr`, `$82` = `KernelRows`, `$83` = `KernelTmp`.
+- Owns `$80/$81` = `KernelPtr`, `$82` = `KernelRows`; `$83` is free.
 - `KernelFill` — A = color, X = lines; fills the screen with `STA COLUBK` and one `WSYNC` per line.
 - `KernelPFRows` — `KernelPtr` points at a table of 3 bytes per row; `KernelRows` = rows; draws
   two lines per row (a 2-line playfield block). The outer loop uses `KernelRows` and `DEC`/`BNE`;
-  the Y register is only 2..0 for the three PF bytes, and the pointer advances by 3 per row.
+  the Y register is only 0..2 (`LDY #0`, two `INY`s) for the three PF bytes, stored
+  PF0→PF1→PF2 in pixel-deadline order, and the pointer advances by 3 per row.
 - `KernelSpriteStrip` — `KernelPtr` points at a 1-byte-per-line strip; `KernelRows` = lines; draws
   it to `GRP0` with one `WSYNC` per line. The loop is `LDY #0; INY; CPY KernelRows; BNE`.
 - `KernelColorRamp` — `KernelPtr` points at one color per line; `KernelRows` = lines; writes
@@ -398,8 +399,8 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 - **Goal:** package the common kernel shapes as reusable routines and combine them into a
   four-band sampler.
 - **Prerequisites:** Lesson 11 (lookup tables), Lesson 12 (the frame), Lesson 14 (`WSYNC`),
-  Lesson 17 (cycle counting), Lesson 18 (mid-scanline changes), Lesson 19 (the playfield),
-  Lesson 25 (players), Lesson 26 (positioning), Lesson 28 (one HMOVE), Lesson 29 (the ball),
+  Lesson 15 (the RIOT timer), Lesson 17 (cycle counting), Lesson 18 (mid-scanline changes),
+  Lesson 19 (the playfield), Lesson 25 (players), Lesson 26 (positioning), Lesson 28 (one HMOVE),
   Lesson 48 (the taxonomy), Lesson 49 (the 2-line kernel).
 - **Concepts:** reusable kernel building blocks; a zero-page pointer API; the fill, PF-row,
   sprite-strip, and color-ramp patterns; a band table; the register contract (each band boundary
@@ -411,23 +412,23 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     2. `KernelPFRows`: a 24-row stripe/checkerboard (2 lines per row = 48 lines).
     3. `KernelSpriteStrip`: a 48-line dark band with a moving 8-line sprite on P0.
     4. `KernelColorRamp`: a 48-line red-to-blue gradient.
-  - The library `include/kernel_patterns.asm` provides the four routines and owns `$80–$83`; the
-    lesson uses `$84–$9F` for counters and `$A0–$CF` for the 48-byte sprite strip, leaving
+  - The library `include/kernel_patterns.asm` provides the four routines and owns `$80–$82`; the
+    lesson uses `$83–$9F` for counters and `$A0–$CF` for the 48-byte sprite strip, leaving
     `$D0–$F7` free.
-  - The band boundary clears `PF0/PF1/PF2`, `GRP0`, and `GRP1`; the routines write only their own
-    object and do not clear another band's state.
+  - The band boundary clears the registers the next routine does not write, but only the dirty ones; the
+    routines write only their own object and keep no hidden state.
   - Fire cycles the palette (fill color, PF color, sprite color, ramp direction); SELECT resets;
     the auto-demo cycles every 240 frames.
   - The sprite band's strip is 48 bytes; the sprite's 8 bytes are stamped at a moving row
     **clamped 1–40** so the 8-byte shape never writes past the 48-byte strip (row 0 is left
     blank); the strip is rebuilt each frame; P0's X is set in VBLANK with one HMOVE.
   - The cycle ledgers: `KernelFill` 11/line (`DEX` 2 + `BNE` 3 + `STA COLUBK` 3 + `STA WSYNC` 3,
-    with X=N..1); `KernelPFRows` ~28/line (Y=2..0 loads three `(Ptr),Y` bytes at 5 + 3 each =
-    24, `LDY #2`/two `DEY`s 6, the 16-bit pointer advance ~13, two `WSYNC`s 6, `DEC KernelRows`
-    5, `BNE` 3 per row ≈ 57/2 lines); `KernelSpriteStrip` 19/line (`LDA (Ptr),Y` 5 + `STA GRP0`
-    3 + `WSYNC` 3 + `INY` 2 + `CPY KernelRows` 3 + `BNE` 3); `KernelColorRamp` 19/line (the
-    same with `STA COLUBK`). The `KernelPFRows` outer loop decrements `KernelRows`; the Y
-    register only selects the three PF bytes.
+    with X=N..1); `KernelPFRows` 57/row = 28.5/line (Y=0..2 loads three `(Ptr),Y` bytes at 5 + 3
+    each = 24, `LDY #0`/two `INY`s 4, the 16-bit pointer advance 13, two `WSYNC`s 6, `DEC
+    KernelRows` 5, `BNE` 3 per row = 55 plus the `LDY #0` 2); `KernelSpriteStrip` 19/line
+    (`LDA (Ptr),Y` 5 + `STA GRP0` 3 + `WSYNC` 3 + `INY` 2 + `CPY KernelRows` 3 + `BNE` 3);
+    `KernelColorRamp` 19/line (the same with `STA COLUBK`). The `KernelPFRows` outer loop
+    decrements `KernelRows`; Y only selects the three PF bytes (PF0→PF1→PF2).
 - **Expected screen:** four distinct horizontal bands: a solid color, a striped playfield, a
   moving sprite on a dark band, and a smooth gradient; the palette changes with fire.
 - **Exercises:**
