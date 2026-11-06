@@ -93,7 +93,7 @@ reports the first cycle of the instruction that follows it.
 | --- | --- | --- | --- |
 | ST-61.1 | Assemble the main ROM | 4,096 bytes; the packed stream is < 576 bytes | `acme` + table size |
 | ST-61.2 | Run the logo | A detailed decompressed logo; SELECT shows the packed/raw counts; two captures | Screenshots + pixel check |
-| ST-61.3 | Inspect the decoder | `RowByte0/1/2` match the raw image; `DecodeCount` = 192; `Checksum` matches an independent decode; no overrun | State log + host decode |
+| ST-61.3 | Inspect the decoder | `RowByte0/1/2` match the raw image; `DecodeCount` = 576 (192 rows × 3); `Checksum` matches an independent decode; the `LAX (DecodePtr),Y` prefetch keeps the worst line at 76 cycles; no overrun | State log + host decode |
 | ST-61.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
 | ST-61.5 | Assemble/run the exercises | ex1 4,096 (sprite RLE); ex2 4,096 (second scheme); ex3 4,096 (2-bit packing) | `acme`, Stella logs |
 | ST-61.6 | Site integration | Row 61 ✅; prev 60, next 62; sidebar `config.ts:144` | Build + page check |

@@ -283,7 +283,9 @@
 - **Goal:** store a detailed picture in a fraction of its raw size and decompress it on the fly.
 - **Prerequisites:** Lesson 03 (memory map), Lesson 04 (registers), Lesson 09 (bitwise), Lesson 10
   (addressing), Lesson 11 (lookup tables), Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 17
-  (cycle counting), Lesson 19 (the playfield), Lesson 48 (the taxonomy).
+  (cycle counting), Lesson 19 (the playfield), Lesson 48 (the taxonomy), Lesson 58 (the stable
+  illegal set; this lesson introduces the `LAX (zp),Y` form used to keep the decoder inside 76
+  cycles).
 - **Concepts:** RLE; the token format; a 3-byte row buffer; on-the-fly decompression; the
   cycle/space trade-off; a checksum; bit packing; the difference between a run and a literal.
 - **ROM:** `61-compression.asm` — **"the compressed logo"**, 4,096 bytes.
@@ -297,8 +299,14 @@
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6.
   - RAM: `$80–$82` `RowBuf`; `$83–$84` `DecodePtr`; `$85` `RowsLeft`; `$86` `PackedLen`;
-    `$87` `RawLen`; `$88` `Checksum`; `$89` `Screen`; `$8A–$9F` free; stack `$F8–$FF`.
-  - Checkpoints: `DecodePtr`, `RowsLeft`, `RowByte0/1/2`, `DecodeCount`, `Checksum`, `Screen`.
+    `$87` `RawLen` (the low byte, `$40`; the full 576 is a constant and the status text); `$88`
+    `ChecksumVal`; `$89` `ScreenNum`; the run/literal state in `$8A–$93`; `$94–$9F` free;
+    stack `$F8–$FF`.
+  - The decoder uses `LAX (DecodePtr),Y` (`$B3`) for the control-byte prefetch; the documented
+    `LDA`/`TAX` pair costs two more cycles and would push the worst line to 78. The 76-cycle worst
+    line is exact and the frame stays 262.
+  - Checkpoints: `DecodePtrRead`, `RowsLeftRead`, `PackedLenRead`, `RawLenRead`, `ChecksumRead`,
+    `RowByte0/1/2`, `DecodeCount`, `Checksum`, `Screen`.
 - **Evidence pins:** the compressed stream is smaller than 576 bytes; the decoded 576 bytes match
   the raw image (a checksum); the capture shows the logo; the frame is 262 lines; the decoder
   never reads past the stream or writes past the row buffer.

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 5 complete — 0 critical, 0 major open. Lessons 56–60 are committed.
+> **Status**: Phase 6 complete after round 2 — 0 critical, 0 major open. Lessons 56–61 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -119,3 +119,30 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-60-016 | 60 | 🟡 MINOR | The doc implied the real chip's behaviour; all evidence is Stella 7.0, and a stock cart cannot run the 10K DPC image. | fixed — a hardware-scope warning and the donor/flash/emulator disclosure. |
 | SR-60-017 | 60 | 🟡 MINOR | The logo range was 84–97, not 80–97; the font is five bits wide, seven rows, each duplicated. | fixed. |
 | SR-60-018 | 60 | 🟡 MINOR | The Javatari DPC detection was inferred from a filename hint; the 10K size selects DPC by priority 101. | fixed. |
+| SR-61-001 | 61 | 🔴 CRITICAL | Exercise 1's RLE decoder state (`Y`, `TokLeft`, `Mode`, `CurBuf`) was initialized only once; after the first frame the stream was consumed and the strip read the `$EA` fill. | fixed — the state is reset in VBLANK and the first 8 bytes are pre-decoded; the 8-line status loop uses a zero-page counter so it no longer clobbers Y; a duplicated `+SPRITE_LINE` was removed. `StreamReady` Y=4 every frame; the two-frame strip matches 0/1,024. |
+| SR-61-002 | 61 | 🟠 MAJOR | Exercise 3's first image row wrote PF0/PF1/PF2 after the status bar (clocks 75/105/135), showing the status bar's `$F0/$FF/$FF`. | fixed — the image pointer is hoisted into VBLANK; the first row is column 9, 0/760 mismatches. |
+| SR-61-003 | 61 | 🟠 MAJOR | The worked example encoded six zeros as `84 00` (5 zeros); six need `$85`. | fixed — `85 00 / 81 3C`. |
+| SR-61-004 | 61 | 🟠 MAJOR | "What You Should See" said five bands above and two band groups below; the image has four above, five below, then nine. | fixed. |
+| SR-61-005 | 61 | 🟠 MAJOR | The TypeScript block was a top-level `##` heading, not the template's `::: details`. | fixed. |
+| SR-61-006 | 61 | 🟡 MINOR | The run paths were said to be under 60; the token-start path is 71–74. | fixed — continuation/token-start cycles stated. |
+| SR-61-007 | 61 | 🟡 MINOR | The one-row path was described as three cycles over; it is 80/78, and a one-row first token would desync. | fixed. |
+| SR-61-008 | 61 | 🟡 MINOR | `PackedLen`, `RawLen`, `ChecksumVal`, `FrameCount` were written but never read; `SCREEN_LINES`/ex1 `Tmp` were unused. | fixed — `FrameCount`/`SCREEN_LINES`/`Tmp` removed; the three lengths/checksums are live debugger reads (`PackedLenRead`/`RawLenRead`/`ChecksumRead`). |
+| SR-61-009 | 61 | 🟡 MINOR | Ex1's `NEXT_BYTE` comment said X was the line index; the run path clobbers X. | fixed. |
+| SR-61-010 | 61 | 🟡 MINOR | Ex3's `OverscanStart` is 229/4, not 229/6. | fixed. |
+| SR-61-011 | 61 | 🟡 MINOR | The "96-byte buffer collides with the stack" claim was wrong; `$80+96=$E0`. | fixed — the true constraint (576 cannot fit; 96 leaves no room for picture + variables + stack). |
+| SR-61-012 | 61 | 🟡 MINOR | The state table said the run value is carried in X in this kernel; it uses `$8A`. | fixed. |
+| SR-61-013 | 61 | 🟡 MINOR | The token end was described as `BMI` on the token-start path; it is the `BPL` fall-through. | fixed. |
+| SR-61-014 | 61 | 🟡 MINOR | The overscan comment said 35 ticks = 30 lines; 36 does. | fixed. |
+| SR-61-015 | 61 | 🟡 MINOR | The startup verification ran with VBLANK=0. | fixed — VBLANK=$02 before the passes. |
+| SR-61-016 | 61 | 🟡 MINOR | The `!if` guards pin the packed length only, not the checksum. | fixed — the startup pass/host decode is named as the checksum guard. |
+| SR-61-017 | 61 | 🟡 MINOR | The 03 said Lesson 58 covers `LAX (zp),Y`; it covers `LAX zp`. | fixed — softened; the (zp),Y timing is introduced here. |
+| SR-61-018 | 61 | 🟡 MINOR | The Python RLE skeleton indexed `raw[j+1]`/`raw[j+2]` without a guard. | fixed — `j + 2 < len(raw)`. |
+| SR-61-019 | 61 | 🟡 MINOR | "Every line appears twice" / "96 bytes at 2 bits" were imprecise. | fixed — mirrored right half; 95 bytes + 1 pad. |
+| SR-61-020 | 61 | 🟡 MINOR | The walkthrough used `Checksum`/`Screen` for variables and said `PreDecode` leaves `remaining−1`; it leaves `count−4 = remaining−1`. | fixed — `ChecksumVal`/`ScreenNum`; the X note. |
+| SR-61-021 | 61 | 🟡 MINOR | The both-screens frame claim was not backed by a second run. | fixed — both states logged; the four frame checkpoints are identical, `Screen` 00/01. |
+| SR-61-022 | 61 | 🟡 MINOR | The 03/99 RAM map and checkpoint names were stale (`$8A–$9F`, `DecodePtr`, `RowsLeft`). | fixed — `$8A–$93`, `$94–$9F` free, `DecodePtrRead`/`RowsLeftRead`/`PackedLenRead`/`RawLenRead`/`ChecksumRead`. |
+| SR-61-023 | 61 | 🟡 MINOR | The 03 prerequisite still said Lesson 58 covers `LAX (zp),Y`; it covers `LAX zp`. | fixed — "the stable illegal set; this lesson introduces the (zp),Y form". |
+| SR-61-024 | 61 | 🟡 MINOR | The doc said SELECT toggles `Screen`; the variable is `ScreenNum` (`Screen` is the checkpoint). | fixed. |
+| SR-61-025 | 61 | 🟡 MINOR | The doc said the decoder's only RAM is the 3-byte row buffer; its state also uses `$8A-$8B`. | fixed — "only picture buffer ... state at `$8A-$8B`". |
+| SR-61-026 | 61 | 🟡 MINOR | Exercise 1's header compared the 66-byte stream to 128 raw bytes (51.6%); the table is 136 bytes/17 frames (48.5%). | fixed — 136 bytes, 48.5%. |
+| SR-61-027 | 61 | — | The reviewer's "run token start is 70/73" claim was checked against the source: the `BMI RunStart` at `$F1DA` targets `$F20A`, a taken page-crossing branch, so 71/74 is correct. | verified — no change. |
