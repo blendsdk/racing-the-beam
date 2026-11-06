@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 6 complete after round 2 — 0 critical, 0 major open. Lessons 56–61 are committed.
+> **Status**: Phase 7 complete after round 2 — 0 critical, 0 major open. Lessons 56–62 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -146,3 +146,22 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-61-025 | 61 | 🟡 MINOR | The doc said the decoder's only RAM is the 3-byte row buffer; its state also uses `$8A-$8B`. | fixed — "only picture buffer ... state at `$8A-$8B`". |
 | SR-61-026 | 61 | 🟡 MINOR | Exercise 1's header compared the 66-byte stream to 128 raw bytes (51.6%); the table is 136 bytes/17 frames (48.5%). | fixed — 136 bytes, 48.5%. |
 | SR-61-027 | 61 | — | The reviewer's "run token start is 70/73" claim was checked against the source: the `BMI RunStart` at `$F1DA` targets `$F20A`, a taken page-crossing branch, so 71/74 is correct. | verified — no change. |
+| SR-62-001 | 62 | 🟠 MAJOR | The doc claimed the ball enable was written "long before the first visible pixel"; the store lands mid-line, so the ball is one scanline higher on the right half and the collision `BallY` is one line below the visible ball there. | fixed — the doc/source now describe the mid-line pipeline and the controlled freeze (`BallX=100`, `BallY=100` -> row 99); a `VDELBL` experiment was rejected because the ball's delay latch is clocked by `GRP1`, which the play kernel does not write every line. |
+| SR-62-002 | 62 | 🟠 MAJOR | The kernel ledger said the worst line was the brick gap at 64/66, "twelve cycles inside"; the measured worst is life-bar row 22 with the ball on at 69 (the write completes at 72, four cycles before the line ends). | fixed — the source header and doc now carry the measured ledger and the 69/4 worst case. |
+| SR-62-003 | 62 | 🟠 MAJOR | The round-1 `ColTable` mapped brick 2 to ten `$02` (pixels 28-37), so the gap was 2 px instead of 4; a ball at X36-37 scored a hit inside the drawn gap. | fixed in round 1 — the table is six `$02` + four `$FF` (X28-35, gap X36-39); the comment was corrected to pixels 4+12n..11+12n (chunks 1+3n..2+3n) in round 3. |
+| SR-62-004 | 62 | 🟠 MAJOR | Exercise 2's answer said `BallDX=2`/`BallDY=3` gave a clean 2x/3x speed; the `EOR #$FE`/`EOR #$FC` flips make them `$FC`/`$FF` after the first bounce, and the ceiling/paddle/Respawn hard-code ±2. | fixed — the answer lists all five hard-coded sites, the actual 2/4 and +3/-1 behaviour, and the true-negate patch. |
+| SR-62-005 | 62 | 🟡 MINOR | The doc called the `$02` background "dark blue"; the capture is dark grey. | fixed — "dark grey (`$02`)". |
+| SR-62-006 | 62 | 🟡 MINOR | The RAM prose said 24 bytes + a 16-byte area; the map is 32 bytes. | fixed — nine state bytes, 18 pointer/cache bytes, five scratch bytes. |
+| SR-62-007 | 62 | 🟡 MINOR | The `HitBrick` `TAY` looked dead, `TmpCol`'s "last-row flag" comment was wrong, and the `RespawnBall` clamp looked unreachable. | fixed — the `TAY` is documented as the debugger mirror, the `TmpCol` comment is the scratch clear, and the `RespawnBall` clamp is documented as defensive. |
+| SR-62-008 | 62 | 🟡 MINOR | A fast `BallDX` could leave `BallX=159`, whose centre 160 mirrors to `$FF` and reads past the 80-byte `ColTable`. | fixed — the wall clamp stores 158 (the last legal left edge) before the flip; the default game needed the same clamp. |
+| SR-62-009 | 62 | 🟡 MINOR | `StartGame` did not clear `Overlay`, so a restart after the map was on kept the map. | fixed — `STA Overlay` in `StartGame`. |
+| SR-62-010 | 62 | 🟡 MINOR | `OverscanStart` was documented only as 229/6; the over path is 229/7 and the map 229/9. | fixed — all three measured; the scanline is the invariant. |
+| SR-62-011 | 62 | 🟡 MINOR | The win/game-over screen was described but not captured or logged. | fixed — `game-over.png` from the committed ROM at 120 s; `ScoreWrite` A=24 at frame 4004. |
+| SR-62-012 | 62 | 🟡 MINOR | The TypeScript used `paddleX + 8 > ballX` (the ROM uses `>=`) and `ballY` for the brick row (the ROM uses the leading edge). | fixed — `>=` and `edgeY = ballDY > 0 ? ballY + 3 : ballY`; the wall clamp is mirrored. |
+| SR-62-013 | 62 | 🟡 MINOR | The 03 spec still called `$89-$9F` free and `overlay.png` the "debug overlay". | fixed — the real RAM map and "frame map" wording. |
+| SR-62-014 | 62 | 🟡 MINOR | The sidebar label truncated "Reverse Engineering a Classic Game" to "…a Classic". | fixed — the full title. |
+| SR-62-015 | 62 | 🟡 MINOR | The checkpoint addresses, state-log commands, and disassembly excerpt were stale after the wall clamp and `StartGame` changes. | fixed — re-logged at `$F22F/$F2D9/$F2EC/$F306/$F186/$F19E/$F374`; the excerpt and exercise addresses are current. |
+| SR-62-016 | 62 | 🟡 MINOR | The frame-map overlay's row bar and band colours are written mid-line, so the first pixels of a row can carry the previous row's value. | fixed — the doc states the projection caveat. |
+| SR-62-017 | 62 | 🟠 MAJOR | The new win capture exposed a full-height white P1 column: the over kernel cleared PF0/1/2 for the red field but not `GRP1`, so the life bar's last `$FF` stayed on from row 23. | fixed — `STA GRP1` added to the over kernel's zero block; `game-over.png` re-captured; the P1 column is gone. |
+| SR-62-018 | 62 | 🟠 MAJOR | The wall clamp and the `StartGame`/over-kernel changes left stale addresses in the symbol table and exercise answers (`BricksDone`, `RespawnBall`, `RebuildBricks`, `LDA $85`, the brick path ranges). | fixed — every address was re-read from the final `.sym` and the exercise ranges now use labels; the checkpoint table, commands, and excerpt are current. |
+| SR-62-019 | 62 | 🟡 MINOR | The true-negate patch was said to preserve any DX/DY "through every bounce"; the ceiling, paddle, and `RespawnBall` still force ±2. The clamp's unsigned side test also teleports a wrapped negative X to the right wall. | fixed — the answer scopes the negate to the wall/brick bounces, names the three fixed sites, and documents the fast-DX wrap caveat. |

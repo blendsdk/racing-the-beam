@@ -332,24 +332,39 @@
 - **ROM:** `demo-62.asm` — **"Wall Buster"**, 4,096 bytes. A small Breakout-style game: a paddle,
   a ball, a 6×4 brick wall, a score, a life counter, and a game-over/restart. The game is
   intentionally simple but complete; the source is fully commented so the doc can annotate it.
-  SELECT toggles a **debug overlay**: the background changes per zone (VBLANK/kernel/overscan) and
-  the current kernel row is drawn as a bar. The overlay is the visual evidence of the frame.
+  SELECT toggles a **frame-map overlay**: four background colours label VSYNC, VBLANK, the kernel,
+  and overscan, and a white row bar steps across the map as the kernel walks its 192 rows. VBLANK
+  and overscan are blanked and invisible on a TV, so the map is a teaching projection with the
+  true 3/37/30 blanked line counts and the 192 kernel lines compressed into 122; the state log,
+  not the picture, proves the real frame.
   - Frame: 262 lines; 3 + 37 + 192 + 30; `StartFrame` 259/3, `VblankStart` 0/5,
-    `BodyStart` 37/5, `OverscanStart` 229/6.
+    `BodyStart` 37/5; `OverscanStart` 229/6 play, 229/7 game over, 229/9 frame map.
   - RAM: `$80` `PaddleX`, `$81` `BallX`, `$82` `BallY`, `$83` `BallDX`, `$84` `BallDY`, `$85`
-    `Score`, `$86` `Lives`, `$87` `State`, `$88` `Overlay`, `$89–$9F` free; stack `$F8–$FF`.
-  - Checkpoints: the frame labels; `KernelRow` (Y = 0..191); `BallMove` (A = the new X/Y);
-    `HitBrick` (A = the brick index); `ScoreWrite` (A = the score); `Overlay`.
-- **Evidence pins:** the ROM runs; the debug overlay shows the four zones; the symbol file gives
-  the addresses the doc quotes; the disassembly excerpt matches the source; the state log shows
-  the ball and score changing; the capture shows the game and the overlay.
-- **Screenshots:** `game.png` (the game) and `overlay.png` (the debug overlay).
+    `Score`, `$86` `Lives`, `$87` `State`, `$88` `Overlay`; `$89-$8A` `ScorePtr`; `$8B-$8E`
+    `Brick0..3`; `$8F-$9A` `BrickPF0/1/2`; `$9B` `LineCount`; `$9C` `PrevSelect`; `$9D`
+    `PrevFire`; `$9E-$9F` `TmpRow`/`TmpCol`; stack `$F8–$FF`.
+  - The ball enable is written mid-line; the ball is one line higher on the right half than on
+    the left, and the collision uses `BallY`. The doc records this 4K timing compromise and the
+    controlled freeze (`BallX=100`, `BallY=100` -> row 99). The wall clamp at `$F0CA` keeps a fast
+    `BallDX` from leaving `BallX=159` and reading past the 80-byte `ColTable`.
+  - Checkpoints: the frame labels; `KernelRow` (Y = 0..190) and `KernelRowLast` (Y = 191);
+    `BallMove` (A = the new `BallX`); `HitBrick` (A = the brick index); `ScoreWrite` (A = the
+    score); `OverlayWrite` (A = the new `Overlay` byte); `MapRow` (Y = 0..191 in the overlay).
+- **Evidence pins:** the ROM runs; the frame-map overlay shows the four bands and the diagonal row
+  bar (with the doc's blanking/projection caveat); the symbol file gives the addresses the doc
+  quotes; the disassembly excerpt matches the source; the state log shows the ball and score
+  changing, the win at `ScoreWrite` A=24 (frame 4004), and `OverscanStart` 229/7 on the over
+  screen; the `ColTable` brick-2 gap is 4 pixels (six `$02` + four `$FF`); the captures show the
+  game, the overlay, and the win screen.
+- **Screenshots:** `game.png` (the game), `overlay.png` (the frame map), and `game-over.png` (the
+  win screen; the auto-demo clears all 24 bricks at frame 4004).
 - **Exercises (analysis, answered in the doc):** (1) find the reset vector, the frame entry, and
   the kernel row loop; (2) locate the ball X/Y variables and the collision test; change the ball
   speed and explain the effect; (3) annotate the score routine and the brick table.
 - **Integration:** prev 61; next 63; index row 62 ✅; sidebar `config.ts:145`.
 - **Risks:** no copyrighted ROM; the demo must be genuinely complete enough to reverse; the doc
-  must not pretend the game is a historical classic.
+  must not pretend the game is a historical classic; the mid-line `ENABL` write and the one-line
+  X-dependent ball must be disclosed, not hidden.
 
 ## Lesson 63: Modern Homebrew — Dev Carts and Community
 

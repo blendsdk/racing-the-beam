@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 20:52
-> **Progress**: 6/10 tasks (60%)
+> **Last Updated**: 2026-11-06 22:20
+> **Progress**: 7/10 tasks (70%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -256,16 +256,16 @@ AR-25
 AR-25
 **Objective**: Deliver Lesson 62 end to end.
 
-- [ ] 7.1.1 Lesson 62 — Reverse Engineering a Classic Game: Session A freezes ST-62.1–ST-62.6
+- [x] 7.1.1 Lesson 62 — Reverse Engineering a Classic Game: Session A freezes ST-62.1–ST-62.6
   (red baseline), Session B implements the demo and the document, Session C verifies to green and
   hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson62): Reverse Engineering a Classic Game`
+  `feat(lesson62): Reverse Engineering a Classic Game` ✅ (completed: 2026-11-06 22:20)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 20:55): ST-62.1–ST-62.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 62. Design pins: theory lesson with `demo-62.asm` — **"Wall Buster"**, a 4,096-byte Breakout-style game (paddle, ball, 6×4 brick wall, score, life counter, game over/restart); SELECT toggles a frame-map overlay: four background colours label VSYNC/VBLANK/kernel/overscan, with the true 3/37/30 blanked line counts and the 192 kernel lines compressed into 122, plus a white row bar (`Y >> 3`). Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. RAM: `$80` `PaddleX`, `$81` `BallX`, `$82` `BallY`, `$83` `BallDX`, `$84` `BallDY`, `$85` `Score`, `$86` `Lives`, `$87` `State`, `$88` `Overlay`, `$89-$8A` `ScorePtr`, `$8B-$8E` `Brick0..3`, `$8F-$9A` `BrickPF0/1/2`, `$9B` `LineCount`, `$9C` `PrevSelect`, `$9D` `PrevFire`, `$9E-$9F` `TmpRow`/`TmpCol`; stack `$F8–$FF`. Checkpoints: the frame labels; `KernelRow` (Y=0..190) and `KernelRowLast` (Y=191); `BallMove` (A = the new `BallX`); `HitBrick`; `ScoreWrite`; `OverlayWrite` (A = the new `Overlay` byte); `MapRow` (Y=0..191 in the overlay). The document carries the reverse-engineering method, the annotated map (vectors, frame, kernel, data, RAM, collision, score), the disassembly excerpts, and the three analysis exercises answered in the text; no exercise solution files. Red baseline confirmed: no `lessons/part8-advanced/62-reverse-engineering`, no `docs/public/images/lesson62`, no Part 8 62 ROMs, the document is the `🔒 Coming Soon` stub, index row 62 Coming Soon, sidebar `config.ts:145`, `verify.sh --no-docs` green at `46b956d`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 21:24): One `demo-62.asm` (4,096 bytes), the 1,788-line document, three committed captures (game, frame map, win), and one committed ROM. The game has a paddle, a two-pixel ball, a 6x4 brick wall, a 25-entry score table, a life bar, and a red game-over/win screen. The frame is 262 lines; the play kernel is 192 lines with a `DrawBallLine` checkpoint on rows 0-190 and a separate `DrawBallLine`/`KernelRowLast` for row 191. SELECT toggles the four-band frame map. The review fixes added the right-wall clamp (`$F0CA`), corrected the `ColTable` brick-2 gap to six `$02` + four `$FF`, cleared `Overlay` in `StartGame`, documented the mid-line `ENABL` pipeline, added the 120 s win capture, and cleared `GRP1` in the over kernel so the red field has no P1 column.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 22:20): `bash scripts/verify.sh` PASSED (237 ROMs, no drift, docs build); `demo-62.bin` is 4,096 bytes; Full Source verbatim (1,788 doc lines). Frame: `StartFrame` `$F019` 259/3, `VblankStart` `$F027` 0/5, `BodyStart` `$F22F` 37/5, `OverscanStart` `$F2D9` 229/6 play / 229/7 game over / 229/9 map; 262 lines. Game: `KernelRow` `$F2EC` Y=0..190; `KernelRowLast` `$F306` Y=191; `BallMove` `$F0B6` A=$4D..; `HitBrick` `$F186` A=$14/$11/$17; `ScoreWrite` `$F19E` A=01..24 (the win is frame 4004); `OverlayWrite` `$F04C` A=01 under `-holdselect`; `MapRow` `$F376` Y=0..191. The measured kernel ledger is 48 score, 67 life bar, 69 for life-bar row 22 with the ball on (the worst; the write completes at 72, four cycles before the line ends), 40 play/paddle, 65 brick. Captures: game (score 05), map (four bands + diagonal), win (red field, score 24, white bar); titles `Stella 7.0: "demo-62"`, no cursor. Site: index row 62 ✅; prev 61/next 63; sidebar `config.ts:145` now reads the full title; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 major (the kernel ledger) + 10 minor, then round 2: 1 major (the P1 column in the win capture) + 5 minor; curriculum-auditor — 3 major (the mid-line `ENABL` claim, the `ColTable` brick-2 gap, the Exercise 2 speed answer) + 6 minor, then round 2: 1 major (the stale addresses) + 1 minor. All fixed: the measured ledger; the brick-2 gap correction; the wall clamp; the `StartGame` `Overlay` clear; the over-kernel `GRP1` clear; the mid-line pipeline disclosure and the controlled freeze; the Exercise 2 five-site answer; the dark-grey/RAM-map/address/checkpoint corrections; the game-over capture; the final address pass; the TypeScript paddle/edge; the sidebar label. Final state: 0 critical, 0 major open. Lesson 62 is complete.
 
 ---
 

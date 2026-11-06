@@ -12,7 +12,7 @@ Push beyond 4KB — bankswitching, illegal opcodes, DPC+, compression, and build
 | 59 | [Self-Modifying Code — The Ultimate 6502 Trick](./59-self-modifying-code) | ✅ Complete |
 | 60 | [DPC and DPC+ — Enhanced Audio and Graphics](./60-dpc-plus) | ✅ Complete |
 | 61 | [Compression & Data Encoding — Fitting More in 4KB](./61-compression) | ✅ Complete |
-| 62 | [Reverse Engineering a Classic Game](./62-reverse-engineering) | 🔒 Coming Soon |
+| 62 | [Reverse Engineering a Classic Game](./62-reverse-engineering) | ✅ Complete |
 | 63 | [Modern Homebrew — Dev Carts and Community](./63-modern-homebrew) | 🔒 Coming Soon |
 | 64 | [Building Your Own Cartridge — From ROM to Physical Cart](./64-building-cartridges) | 🔒 Coming Soon |
 | 65 | [PAL/NTSC Universal ROM — One Cart, Every TV](./65-pal-ntsc-universal) | 🔒 Coming Soon |

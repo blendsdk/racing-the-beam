@@ -142,7 +142,7 @@ export default defineConfig({
             { text: '59 — Self-Modifying Code', link: '/part8-advanced/59-self-modifying-code' },
             { text: '60 — DPC and DPC+', link: '/part8-advanced/60-dpc-plus' },
             { text: '61 — Compression & Data Encoding', link: '/part8-advanced/61-compression' },
-            { text: '62 — Reverse Engineering a Classic', link: '/part8-advanced/62-reverse-engineering' },
+            { text: '62 — Reverse Engineering a Classic Game', link: '/part8-advanced/62-reverse-engineering' },
             { text: '63 — Modern Homebrew', link: '/part8-advanced/63-modern-homebrew' },
             { text: '64 — Building Your Own Cartridge', link: '/part8-advanced/64-building-cartridges' },
             { text: '65 — PAL/NTSC Universal ROM', link: '/part8-advanced/65-pal-ntsc-universal' },

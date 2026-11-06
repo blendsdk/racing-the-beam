@@ -103,9 +103,9 @@ reports the first cycle of the instruction that follows it.
 | ID | What | Expected | Evidence |
 | --- | --- | --- | --- |
 | ST-62.1 | Assemble the demo | 4,096 bytes | `acme` |
-| ST-62.2 | Run the game | The paddle, ball, brick wall, score, and game over/restart; SELECT shows the zone overlay; two captures | Screenshots + pixel check |
-| ST-62.3 | Inspect the game | `KernelRow` Y=0..191; `BallMove` changes; `HitBrick` reports a brick; `ScoreWrite` advances; the overlay colors the zones | State log |
-| ST-62.4 | Inspect the frame | 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
+| ST-62.2 | Run the game | The paddle, ball, brick wall, score, and game over/restart; SELECT shows the four-band frame map and the diagonal row bar; three captures (game, map, win at score 24) | Screenshots + pixel check |
+| ST-62.3 | Inspect the game | `KernelRow` Y=0..190 and `KernelRowLast` Y=191; `BallMove` reports the new `BallX`; `HitBrick` reports a brick; `ScoreWrite` advances to 24 at frame 4004; `OverlayWrite` toggles the map; the wall clamp and the brick-2 gap are correct; the mid-line ball is disclosed | State log |
+| ST-62.4 | Inspect the frame | 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5; `OverscanStart` 229/6 play, 229/7 over, 229/9 map | State log |
 | ST-62.5 | Annotate | The doc quotes the symbol table (vectors, kernel, data, RAM) and a disassembly excerpt that matches the source; the three analysis exercises are answered | Doc + symbol file |
 | ST-62.6 | Site integration | Row 62 ✅; prev 61, next 63; sidebar `config.ts:145` | Build + page check |
 
