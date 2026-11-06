@@ -158,8 +158,9 @@
   Lesson 25 (players).
 - **Concepts:** undocumented opcodes are real NMOS 6502 instructions; the stable set; LAX, SAX,
   DCP, ISB, SLO, RLA, SRE, RRA; the combined operation and the flags; the cycle saving; the
-  opcode bytes; ACME's lack of mnemonics (`!byte` macros); the 65C02 difference; the risk of
-  unstable opcodes and the "don't use them in portable code" rule.
+  opcode bytes; ACME's `!cpu 6502` mode rejects the mnemonics while `!cpu 6510` accepts them, so
+  the lesson keeps `!cpu 6502` and uses `!byte` macros for byte visibility; the 65C02 difference;
+  the risk of unstable opcodes and the "don't use them in portable code" rule.
 - **ROM:** `58-illegal-opcodes.asm` — **"the opcode laboratory"**, 4,096 bytes.
   - The screen is a 192-line static lab. Four horizontal rows (32 lines each) show the result of
     four operations as colored bars; the top 48 lines show a title/status and the byte/cycle
@@ -173,21 +174,23 @@
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6.
   - RAM: `$80` `ResultA`, `$81` `ResultX`, `$82` `ResultM`, `$83` `Flags`, `$84` `Checksum`,
-    `$85` `Screen`, `$86–$9F` free; stack `$F8–$FF`.
-  - Checkpoints: `OpcodeRead` (A = the result after each operation), `FlagsRead` (P), `Checksum`,
-    `Screen`, `Frame`.
+    `$85` `Screen`, `$86–$89` the four display result bytes, `$8A–$8D` the four flag bytes,
+    `$8E` the marker row, `$8F` the frame count, `$90–$9A` `LaxMem`–`Tmp`, `$9B–$9C` free,
+    `$9D–$9E` the checksum PF bytes, `$9F` free; stack `$F8–$FF`.
+  - Checkpoints: `LaxRead`/`SaxRead`/`DcpRead`/`IsbRead` (A = each result), `SaxM`/`DcpM`/`IsbM`
+    (A = the memory result), `FlagsRead` (P), `Checksum`, `Screen`, `Frame`.
 - **Evidence pins:** the ROM assembles with ACME 0.97; Stella executes LAX/SAX/DCP/ISB without an
   invalid-instruction trap; the captured result colors match the documented values; the checksum
-  is stable; the cycle table matches the reference; the doc states ACME has no mnemonics and shows
-  the bytes.
+  is stable; the cycle table matches the reference; the doc states the `6502`/`6510` distinction
+  and why the macros are used, and shows the bytes.
 - **Screenshots:** `lab-a.png` (the four result bars) and `lab-b.png` (the cycle table / second
   screen).
 - **Exercises:** (1) replace a `LDA`/`TAX` pair with `LAX` and show A=X and the saved cycle;
   (2) use `DCP` for a countdown and show the memory/flags; (3) use `SAX` to store a mask and
   `LAX` to load it, then display the result. All 4,096.
 - **Integration:** prev 57; next 59; index row 58 ✅; sidebar `config.ts:141`.
-- **Risks:** the source must not use ACME mnemonics (PF-06); the doc must warn about the 65C02 and
-  unstable opcodes.
+- **Risks:** the source keeps `!cpu 6502` and uses the `!byte` macros (PF-06); the doc must explain
+  the `!cpu 6510` alternative and warn about the 65C02 and unstable opcodes.
 
 ## Lesson 59: Self-Modifying Code — The Ultimate 6502 Trick
 

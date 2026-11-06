@@ -22,7 +22,7 @@
 | 11 | F8SC layout | How is Superchip RAM addressed and detected? | 4KSC / F8SC / E7 | **F8SC: write `$1000–$107F`, read `$1080–$10FF`; the first 256 bytes of each 4K bank are the RAM window, so code starts at `$F100`; each bank's first 128 bytes are duplicated at +128 (the Stella auto-detect signature).** Verified: `F8SC* (8K)`. | ✅ Resolved |
 | 12 | DPC layout | How is a DPC image laid out? | DPC+ / real DPC / theory only | **Real DPC, 10,240 bytes = 8K program (two 4K banks) + 2K display image at file offset 8K. Start bank 1; code entry `$F080` because `$F000–$F07F` is the DPC register window.** Verified: `DPC* (10K)`. | ✅ Resolved |
 | 13 | DPC+ | Is DPC+ built? | Build it / document it | **Documented, not built.** DPC+ needs the Harmony/Melody ARM coprocessor and a 29K/32K image; a plain cartridge cannot run it. Lesson 60 builds a real DPC demo and explains DPC+ with sources. | ✅ Resolved |
-| 14 | Illegal opcodes | How are they assembled? | ACME mnemonics / `!byte` macros | **ACME 0.97 has no undocumented-opcode mnemonics. Use named `!byte` macros and document the bytes, flags, and cycles.** The stable NMOS set is safe on the 6507; the doc warns about the 65C02 and unstable opcodes. | ✅ Resolved |
+| 14 | Illegal opcodes | How are they assembled? | ACME mnemonics / `!byte` macros | **ACME 0.97 has no `6502i`; `!cpu 6502` rejects the undocumented mnemonics while `!cpu 6510` accepts them (LAX/SAX/DCP/ISC). The lesson keeps `!cpu 6502` and uses named `!byte` macros so every byte stays visible; document the bytes, flags, and cycles.** The stable NMOS set is safe on the 6507; the doc warns about the 65C02 and unstable opcodes. | ✅ Resolved |
 | 15 | Self-modifying | Where does patched code run? | ROM / RIOT RAM | **RIOT RAM `$80–$88` for the routine, `$89–$9F` for variables, stack `$F8–$FF`.** ROM is read-only; a self-modifying routine must be copied to RAM. Verified with a gradient running from `$80`. | ✅ Resolved |
 | 16 | Compression | Which scheme? | RLE / LZ / dictionary | **A documented RLE token stream decoded row-by-row into a 3-byte zero-page buffer.** No general-purpose library. A checksum proves the decode. | ✅ Resolved |
 | 17 | Reverse engineering | Which ROM is reverse-engineered? | A copyrighted classic / a course-written classic-style ROM | **A course-written 4K "classic-style" game (`demo-62.asm`), so the lesson can annotate every byte without copyright risk.** The method transfers to any ROM. | ✅ Resolved |
@@ -67,10 +67,12 @@ in bank 0; a 16K F6 ROM assembles and reports `F6*`; LAX/SAX/DCP/ISB execute; a 
 cartridge cannot run it. Building a DPC+ image would require an ARM toolchain and a flash cart,
 which is out of scope and not verifiable in the repository's artifact set.
 
-**AR-14.** ACME 0.97 rejects `LAX`, `SAX`, `DCP`, and `ISB` under `!cpu 6502` and has no
-`6502i` target. The lesson uses `!byte $A7, $80` with a named macro and a comment, so the source
-is still readable and the bytes are teachable. This is the honest toolchain answer, not a
-workaround hidden from the reader.
+**AR-14.** ACME 0.97 has no `6502i` target; under `!cpu 6502` the undocumented mnemonics fail,
+but ACME's `!cpu 6510` type accepts them (`LAX`/`SAX`/`DCP`/`ISC`, verified: `A7 80 87 80 C7 80
+E7 80`). The lesson keeps the course-wide `!cpu 6502` shape and uses `!byte $A7, $80` with a
+named macro and a comment, so every opcode byte stays visible and teachable; the emitted bytes are
+identical to the `6510` form. This is a deliberate visibility choice, not a claim that ACME cannot
+assemble the instructions.
 
 **AR-18 / AR-19.** The reverse-engineering and cartridge lessons need a ROM that can be shipped
 and annotated. Using a copyrighted classic would be a licensing and verification problem; a

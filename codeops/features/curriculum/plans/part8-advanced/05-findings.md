@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 2 complete after round 2 — 0 critical, 0 major open. Lessons 56 and 57 are committed.
+> **Status**: Phase 3 complete after round 2 — 0 critical, 0 major open. Lessons 56–58 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -58,3 +58,26 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-57-015 | 57 | 🟡 MINOR | Exercises 1 and 2 defined `POS_BIAS` but did not use it, so their markers were 3 TIA pixels left. | fixed — both call sites use the bias; the ROMs changed by one immediate byte each. |
 | SR-57-016 | 57 | 🟡 MINOR | Exercise 2's `GaugeAll` label sat before `LDA #$FF`, so the breakpoint reported the previous byte; `StripDone`'s comment implied A was the last strip byte. | fixed — `GaugeAll` moved after the `LDA` (`$F128`); `StripDone` documents A=$00, Y=128. |
 | SR-57-017 | 57 | 🟡 MINOR | The doc's Exercise 3 used the main's `StartFrame` names for bank 0; the exercise exposes `B0StartFrame` etc. | fixed — the `B0`-prefixed labels, with the switch frame 259/15 and steady 259/3. |
+| SR-58-001 | 58 | 🔴 CRITICAL | The lesson claimed ACME 0.97 cannot assemble the undocumented mnemonics and that only other assemblers can. ACME's `!cpu 6510` accepts LAX/SAX/DCP/ISC (verified `A7 80 87 80 C7 80 E7 80`); only `!cpu 6502` rejects them. | fixed — the rationale is now: `6502` rejects, `6510` accepts, the course keeps `6502` + `!byte` macros for byte visibility. The doc/source/spec/AR-14/PF-06 are corrected. |
+| SR-58-002 | 58 | 🟠 MAJOR | The row setup wrote PF0/PF1 on the new row's first line after a 13-cycle tail, so rows 2–4's first line showed the previous row's flag bits. | fixed — `ResultLine` writes `RowF0/X`/`RowF1/X` before its `WSYNC`; the DCP/ISB first lines now show their own flags; lab-a is re-captured. |
+| SR-58-003 | 58 | 🟠 MAJOR | The strip byte line completed PF1 after chunks 4–6, so the ISB strip drew `$C7` (bit 5 lost) instead of `$E7`. | fixed — the four strips are unrolled; the byte rows read $A7/$87/$C7/$E7; lab-b is re-captured. |
+| SR-58-004 | 58 | 🟠 MAJOR | The unstable table listed SHA as `$9F`/`$93`/`$9E`; `$9E` is SHX. | fixed — SHA is `$9F`/`$93`; `$9E` remains only for SHX. |
+| SR-58-005 | 58 | 🟠 MAJOR | The Session B/C records and the SR-58 ledger were not written. | fixed — the 99 records and this ledger row set are filled. |
+| SR-58-006 | 58 | 🟡 MINOR | LAX/SAX do not define C, so the C column flashed when `ScreenTimer` wrapped. | fixed — `CLC` before both. |
+| SR-58-007 | 58 | 🟡 MINOR | The checksum's two PF2 bits were reversed relative to the "bit 7 first" prose. | fixed — the `Rev2` table maps bit 1 to chunk 12 and bit 0 to chunk 13. |
+| SR-58-008 | 58 | 🟡 MINOR | The footer's first line wrote PF0/PF1 after the chunks they affect, leaving a chunk-2/4 hole. | fixed — PF0/PF1 are written first; the rule spans x=25–985. |
+| SR-58-009 | 58 | 🟡 MINOR | Exercise checkpoint names (`DcpZero`/`DcpFlags`, `Frame`) did not match the labels. | fixed — `ReachedZero`, `DcpFlags`, `CountFlags`; `Frame` dropped from the exercise headers. |
+| SR-58-010 | 58 | 🟡 MINOR | The documented bars did not share a start column, so SAX's comparison was off by one chunk. | fixed — all right-aligned at chunk 19. |
+| SR-58-011 | 58 | 🟡 MINOR | The TypeScript `isb` omitted the V flag. | fixed — V is computed and documented. |
+| SR-58-012 | 58 | 🟡 MINOR | Lab-b's footer indicator was called "the right edge"; it is chunks 17–18. | fixed — "right of centre (chunks 17–18)". |
+| SR-58-013 | 58 | 🟡 MINOR | The `nv-BdIZC` explanation said B=0 while the debugger display has B=1 and the stored byte clears bit 4. | fixed — the display vs stored-byte distinction is explained. |
+| SR-58-014 | 58 | 🟡 MINOR | The SAX tip said the gap grows to 16; the 16-cycle documented sequence is a 13-cycle saving, and the 7-cycle form needs an immediate mask. | fixed. |
+| SR-58-015 | 58 | 🟡 MINOR | The 6507 was described as having fewer data pins; it has 8 data pins and fewer address/interrupt pins. | fixed. |
+| SR-58-016 | 58 | 🟡 MINOR | The NMOS decode was called "microcode"; it is a PLA/decode table. | fixed. |
+| SR-58-017 | 58 | 🟠 MAJOR | Two stale ACME copies remained: Lesson 57's What's Next said "ACME has no mnemonics", and the AR table row said "ACME has no undocumented-opcode mnemonics". | fixed — both now say `!cpu 6502` rejects, `!cpu 6510` accepts, and the course keeps 6502 + `!byte` macros. |
+| SR-58-018 | 58 | 🟡 MINOR | The cycle-table band separators started at cycle 11 after the loop tail, so `STA PF1` landed at the chunk-4 boundary; 7 of 8 separators could show a notch. | fixed — the index update moved before the blank lines; all eight separators are continuous x=73–505 / mirror, chunk 4 lit. |
+| SR-58-019 | 58 | 🟡 MINOR | The result-row cycle numbers were measured from `ResultLine`, not the scanline start; the doc presented them as line cycles and overestimated the unused cycles. | fixed — the doc/source say "measured from ResultLine", give the absolute 14/21 (normal) and 18/25 (first line), and the RowEnd ~66 cycles/10 unused. |
+| SR-58-020 | 58 | 🟡 MINOR | The panel is reflected, but the prose/pixel table listed only the left-half copies. | fixed — a reflection sentence and the mirrored ranges (checksum 10–11/28–29; indicators 1–2/37–38 and 17–18/21–22). |
+| SR-58-021 | 58 | 🟡 MINOR | The source comment said the ISB bit-5 loss was "chunk 6"; bit 5 is chunk 4. | fixed. |
+| SR-58-022 | 58 | 🟡 MINOR | The Step 2 walkthrough excerpt omitted the `CLC`s and the `DcpM`/`IsbM` labels. | fixed — the current `RunLab` head, marked abridged, with every checkpoint named. |
+| SR-58-023 | 58 | 🟡 MINOR | The pasted `DcpM` log line showed C=0 while DCP sets C=1 and the stored `$27` says C=1. | fixed — re-logged `DcpM $F36C` `nv-BdIzC 1f`, C=1; the checkpoint row says C=1. |

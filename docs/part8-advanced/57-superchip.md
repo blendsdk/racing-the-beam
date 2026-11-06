@@ -1364,4 +1364,4 @@ The screenshots prove the visual state; the state log proves the frame, the writ
 
 ## What's Next
 
-The Superchip adds RAM but keeps the instruction set ordinary. [Lesson 58: Illegal Opcodes — Undocumented Power](/part8-advanced/58-illegal-opcodes) opens the stable undocumented NMOS 6502 instructions — LAX, SAX, DCP, ISB, and their relatives — and shows how to use them safely (and how to write them in ACME, which has no mnemonics for them).
+The Superchip adds RAM but keeps the instruction set ordinary. [Lesson 58: Illegal Opcodes — Undocumented Power](/part8-advanced/58-illegal-opcodes) opens the stable undocumented NMOS 6502 instructions — LAX, SAX, DCP, ISB, and their relatives — and shows how to use them safely (ACME's `!cpu 6502` mode rejects the mnemonics; `!cpu 6510` accepts them, but the course keeps 6502 mode and named `!byte` macros so every byte stays visible).

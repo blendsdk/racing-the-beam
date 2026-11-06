@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 14:26
-> **Progress**: 2/10 tasks (20%)
+> **Last Updated**: 2026-11-06 16:15
+> **Progress**: 3/10 tasks (30%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -141,15 +141,15 @@ AR-25
 AR-25
 **Objective**: Deliver Lesson 58 end to end.
 
-- [ ] 3.1.1 Lesson 58 — Illegal Opcodes: Session A freezes ST-58.1–ST-58.6 (red baseline),
+- [x] 3.1.1 Lesson 58 — Illegal Opcodes: Session A freezes ST-58.1–ST-58.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson58): Illegal Opcodes`
+  the `git-commit` skill in push mode — `feat(lesson58): Illegal Opcodes` ✅ (completed: 2026-11-06 16:15)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 14:28): ST-58.1–ST-58.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 58. Design pins: 4,096-byte "opcode laboratory"; a 192-line static screen with four 32-line rows (the results of LAX/SAX/DCP/ISB) and a title/status band, a P0 marker selects a row, and SELECT toggles a second cycle-table screen; the four operations run once per frame in VBLANK on known inputs; ACME's `!cpu 6502` mode rejects the undocumented mnemonics; `!cpu 6510` accepts them, but the lesson keeps 6502 mode and uses named `!byte` macros so every byte stays visible (`LAX zp $A7`, `SAX zp $87`, `DCP zp $C7`, `ISB zp $E7`); the result bytes, flags, and a XOR checksum are stored in `$80–$85`; one HMOVE. Exercises: (1) replace a `LDA`/`TAX` pair with `LAX`; (2) use `DCP` for a countdown; (3) use `SAX`/`LAX` to store and reload a mask. Evidence pins: `LaxRead`/`SaxRead`/`DcpRead`/`IsbRead` (A = each result), `SaxM`/`DcpM`/`IsbM`, `FlagsRead` (P), `Checksum`, `Screen`, `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. Red baseline confirmed: no `lessons/part8-advanced/58-illegal-opcodes`, no `docs/public/images/lesson58`, no Part 8 58 ROMs, the document is the `🔒 Coming Soon` stub, index row 58 Coming Soon, sidebar `config.ts:141`, `verify.sh --no-docs` green at `a43bf36`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 14:55): Four sources (4,096 each), the 1,680-line document, four committed ROMs, and two captures. The lab runs LAX/SAX/DCP/ISB once per frame on fixed inputs through named `!byte` macros ($A7/$87/$C7/$E7), stores the results, flags, and an XOR checksum, and draws four result rows plus a title/status band; SELECT shows the eight-row cycle table. The row setup was moved into `ResultLine` so PF0/PF1 precede the row's first beam; the four strips were unrolled so the byte line shows $A7/$87/$C7/$E7; the footer rule starts at chunk 0; LAX/SAX clear the carry; the checksum's two PF2 bits are in hardware order; the documented bars are right-aligned. The ACME rationale is corrected: `!cpu 6502` rejects the mnemonics, `!cpu 6510` accepts them (LAX/SAX/DCP/ISC), and the course keeps 6502 mode + macros for byte visibility.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 16:15): `bash scripts/verify.sh` PASSED (224 ROMs, no drift, docs build); all four sources 4,096 and byte-identical; `StartFrame` `$F04A` 259/3, `VblankStart` `$F058` 0/5, `BodyStart` `$F0D1` 37/5, `OverscanStart` `$F319` 229/6; 262 lines. Operations: `LaxRead` `$F337` A=X=$12 (C=0); `SaxRead` `$F34C` A=$12 X=$34 (C=0); `SaxM` `$F35A` A=$10; `DcpRead` `$F35E` A=$1F Z1 C1; `DcpM` `$F36C` A=$1F; `IsbRead`/`FlagsRead` `$F371` A=$0F C1 Z0; `IsbM` `$F385` A=$11; `Checksum` `$F38D` A=$0C; `Screen` `$F0B7` A=0/1. The four strips read $A7/$87/$C7/$E7; the DCP/ISB row first lines show their own flag bits; the footer rule spans x=25–985 on both screens; the documented bars are right-aligned at chunk 19; the eight band separators are continuous (x=73–505 and the mirror); the row ledger is measured from `ResultLine`; the reflected panel is documented; the DcpM log is C=1. Exercises: ex1 PairA/PairX $42, Saved 2; ex2 DcpCount $1F/$1E, DcpFlags/ReachedZero A=0 Z1 C1 at frame 480; ex3 SaxStore A=$F0 X=$3C, SaxMem $30, LaxLoad A=X=$30. Captures: lab-a result bars (18/16/31/17 lines) and lab-b cycle table; titles `Stella 7.0: "58-illegal-opcodes"`, no cursor. Site: index row 58 ✅; prev 57/next 59; sidebar `config.ts:141`; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 major (the ACME claim) + 2 major (the row setup and the strip byte line) + 7 minor; curriculum-auditor — 1 critical (the ACME claim) + 2 major (SHA's `$9E`, the missing phase ledger) + 11 minor. All fixed: the ACME rationale and the 6510 evidence; the row/strip/footer timing and re-captures; the SHA table; the C carry, checksum bit order, exercise checkpoints, bar alignment, TypeScript V, and the prose/plan records. Final state: 0 critical, 0 major open. Lesson 58 is complete.
 
 ---
 
