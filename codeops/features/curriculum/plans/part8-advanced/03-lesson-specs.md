@@ -60,16 +60,17 @@
   bank-switched code alive.
 - **Prerequisites:** Lesson 03 (the 2600 anatomy and memory map), Lesson 04 (registers and
   memory), Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 19
-  (the playfield), Lesson 25 (players), Lesson 26 (positioning), Lesson 48 (the kernel taxonomy).
+  (the playfield), Lesson 25 (players), Lesson 26 (positioning), Lesson 33 (`INPT4` and the fire
+  button), Lesson 48 (the kernel taxonomy).
 - **Concepts:** the 4K cartridge window; F8 hotspots `$1FF8`/`$1FF9`; the start bank (F8 = bank
   1); the vector table in every bank; the duplicate switch-and-jump stub; code vs data banks; the
   cost of a switch (a read, then a fetch from the new bank); no interrupts on the 2600.
 - **ROM:** `56-bankswitching.asm` — **"the two worlds"**, 8,192 bytes, F8.
   - Layout: bank 0 at real `$E000` with `!pseudopc $F000`; bank 1 at real `$F000`. The flat file
     is bank 0 then bank 1. Start bank 1; bank 1's reset vector is used at power-on.
-  - Fixed trampoline in both banks: `$F060` = `Switch1` (`LDA $1FF9; JMP $F040`), `$F070` =
-    `Switch0` (`LDA $1FF8; JMP $F020`). Bank 1 main is `$F040`; bank 0 main is `$F020`. The
-    trampoline bytes are identical in both banks, so the JMP fetch after the hotspot read is safe.
+  - Fixed trampoline in both banks: `$F060` = `Switch1` (`LDA $1FF9; JMP $F080`), `$F070` =
+    `Switch0` (`LDA $1FF8; JMP $F080`). Both banks' main is `$F080`. The trampoline bytes are
+    identical in both banks, so the JMP fetch after the hotspot read is safe.
   - Each bank draws a full 192-line scene with a 1-line kernel and a bank-local 192-byte `PF2`
     table (PF0/PF1 zero, reflected playfield). Bank 1 = a green/blue "forest" with vertical
     pillars; bank 0 = a red/orange "cave" with a different pattern. A small player (P0) sits at a
@@ -78,13 +79,15 @@
     tracks the current bank. A two-cell indicator in the status row shows the active bank.
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6.
-  - RAM: `$80` `Bank` (0/1), `$81` `Frame` (16-bit? one byte is enough for 120), `$82` `BankTimer`,
-    `$83–$9F` free, `$A0–$D7` free, `$D8–$F7` free, `$F8–$FF` stack.
+  - RAM: `$80` `Bank` (0/1), `$81` `BankTimer`, `$82` `FrameCount`, `$83` `SwitchFlag`,
+    `$84` `PrevFire`, `$85` `NewFire`, `$86` `Startup`, `$87–$9F` free, `$A0–$D7` free,
+    `$D8–$F7` free, `$F8–$FF` stack.
   - Checkpoints: `StartFrame`, `VblankStart`, `BodyStart`, `OverscanStart`, `BankEntry` (A = 1 at
     power-on, 0 after a switch), `SwitchRead` (the hotspot read; log the PC/bank), `BankWrite`
     (A = 0/1), `Frame`.
-- **Evidence pins:** Stella reports `F8* (8K)`; a breakpoint at `Bank1Main` hits first; a
-  breakpoint at `Bank0Main` hits after the switch; the two captures show the forest and the cave;
+- **Evidence pins:** Stella reports `F8* (8K)`; a breakpoint at the bank's main (`$F080`; the
+  labels are `ForestMain`/`CaveMain`) hits first in bank 1; the other bank's main hits after the
+  switch; the two captures show the forest and the cave;
   the trampoline bytes at `$F060`/`$F070` are identical in both banks (compare the two 4K halves);
   `Bank`/`BankWrite` A=1 then 0; the frame is 262 lines.
 - **Screenshots:** `bank-1.png` (the forest, the indicator on bank 1) and `bank-0.png` (the cave,
@@ -92,8 +95,10 @@
   reach each state. The doc discloses the capture method.
 - **Exercises:** (1) swap the scenes (bank 1 = cave, bank 0 = forest; start bank still 1);
   (2) **16K F6**: four 4K banks at real `$C000/$D000/$E000/$F000`, start bank 0, four scenes, the
-  hotspots `$1FF6–$1FF9`; (3) a **data bank**: bank 0 holds a 192-byte table, bank 1 switches to
-  bank 0, copies the table to RIOT RAM, switches back, and draws it. All assemble and run.
+  hotspots `$1FF6–$1FF9` selected with `LDA $1FF6,X`; (3) a **data bank**: bank 0 holds a
+  192-byte `PF2` table and the kernel that draws it; bank 1 holds the frame skeleton and switches
+  to bank 0 to draw the data scene, then switches back. The table is read directly in bank 0;
+  there is no 192-byte RAM copy. All assemble and run.
 - **Integration:** prev 55; next 57; index row 56 ✅; sidebar `config.ts:139`.
 - **Risks:** a bank 0 entry never runs (PF-03); the trampoline must be duplicated (PF-14); the
   16K exercise's start bank is 0 (PF-15).
@@ -106,9 +111,9 @@
   Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 19 (the playfield), Lesson 25 (players),
   Lesson 26 (positioning), Lesson 48 (the taxonomy), Lesson 56 (banking).
 - **Concepts:** the F8SC mapper; write window `$1000–$107F`, read window `$1080–$10FF`; the first
-  256 bytes of each 4K bank are the RAM window, so code starts at `$F100`; the Stella/Javatari
-  auto-detect signature (the first 128 bytes duplicated at +128); the RAM is not zeroed by the
-  2600; the RAM persists across bank switches; the difference from RIOT RAM.
+  256 bytes of each 4K bank hold the duplicated 128-byte signature, so code starts at `$F100`;
+  the Stella/Javatari auto-detect signature (the first 128 bytes duplicated at +128); the RAM is
+  not zeroed by the 2600; the RAM persists across bank switches; the difference from RIOT RAM.
 - **ROM:** `57-superchip.asm` — **"the 128-byte notebook"**, 8,192 bytes, F8SC.
   - Layout: bank 0 at real `$E000` with `!pseudopc $F000`; bank 1 at real `$F000`. Each bank
     starts with `!fill 128, $EA` twice (the signature); code starts at `$F100`. Start bank 1;
@@ -137,8 +142,8 @@
   128 bytes as a sprite/playfield strip and draw it; (3) write a value in bank 1, switch to bank 0,
   read it back, and show that the RAM persists.
 - **Integration:** prev 56; next 58; index row 57 ✅; sidebar `config.ts:140`.
-- **Risks:** the signature and `$F100` start are mandatory (PF-04); the first 256 bytes cannot
-  hold code (PF-24).
+- **Risks:** the signature and `$F100` start are mandatory (PF-04); the first 256 bytes hold the
+  signature and cannot hold code; the RAM window is `$1000–$10FF` (PF-24).
 
 ## Lesson 58: Illegal Opcodes — Undocumented Power
 

@@ -40,7 +40,7 @@ reports the first cycle of the instruction that follows it.
 | ST-56.2 | Run the auto-demo | The forest scene (bank 1) at power-on; the cave scene (bank 0) after the switch; the bank indicator flips; two captures | Screenshots + pixel check |
 | ST-56.3 | Inspect the switch | `BankEntry` A=1 at power-on; `BankWrite` A=0 after the switch; `SwitchRead` logs the hotspot; the trampoline bytes at `$F060`/`$F070` are identical in both 4K halves | State log + `cmp` of the halves |
 | ST-56.4 | Inspect the frame | 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
-| ST-56.5 | Assemble/run the exercises | ex1 8,192 (swapped scenes); ex2 16,384 `F6* (16K)` with four scenes and start bank 0; ex3 8,192 (data bank copied to RAM) | `acme`, Stella logs |
+| ST-56.5 | Assemble/run the exercises | ex1 8,192 (swapped scenes); ex2 16,384 `F6* (16K)` with four scenes and start bank 0; ex3 8,192 (data bank read in place; no RAM copy) | `acme`, Stella logs |
 | ST-56.6 | Site integration | Index row 56 ✅; prev 55, next 57; sidebar `config.ts:139`; `<RomPlayer>` path; README unchanged | Build + page check |
 
 ## Lesson 57 — Superchip

@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 11:00
-> **Progress**: 0/10 tasks (0%)
+> **Last Updated**: 2026-11-06 13:02
+> **Progress**: 1/10 tasks (10%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -83,15 +83,15 @@ push mode is authorized by the user's directive to execute RD-08 and the Part 1�
 AR-25, AR-31, AR-33
 **Objective**: Deliver Lesson 56 end to end.
 
-- [ ] 1.1.1 Lesson 56 — Bankswitching: Session A freezes ST-56.1–ST-56.6 (red baseline),
+- [x] 1.1.1 Lesson 56 — Bankswitching: Session A freezes ST-56.1–ST-56.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson56): Bankswitching`
+  the `git-commit` skill in push mode — `feat(lesson56): Bankswitching` ✅ (completed: 2026-11-06 13:02)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 11:38): ST-56.1–ST-56.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 56. Design pins: 8,192-byte F8; bank 0 at real `$E000` with `!pseudopc $F000`, bank 1 at real `$F000`; start bank **1** (the reset vector at bank 1's `$FFFC` is used); reset at `$F000` jumps to the bank's main at `$F080`; fixed trampolines `$F060` (`LDA $1FF9; JMP $F080`) and `$F070` (`LDA $1FF8; JMP $F080`) are byte-identical in both banks; each bank draws a 192-line scene from its own 192-byte `PF2` table with a 1-line kernel, a P0 player, and one HMOVE; `Bank` (`$80`), `BankTimer` (`$81`), `FrameCount` (`$82`), `SwitchFlag` (`$83`), `PrevFire` (`$84`), `NewFire` (`$85`), `Startup` (`$86`); the auto-demo switches every 120 frames and fire switches immediately; the two-cell indicator shows the active bank. Exercises: swap the scenes; 16K F6 with four banks and `LDA $1FF6,X`; a data bank whose table/kernel live in bank 0. Evidence pins (AR-6): `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6, `BankEntry` A=1/0, `BankWrite`, `SwitchRead`. Red baseline confirmed: no `lessons/part8-advanced/56-bankswitching`, no `docs/public/images/lesson56`, no Part 8 ROMs, the document is the `🔒 Coming Soon` stub, the Part 8 index is the minimal stub (no rows yet), sidebar `config.ts:139`, `verify.sh --no-docs` green at `18cf887`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 12:08): Four sources (main 8,192; ex1 8,192; ex2 16,384 F6; ex3 8,192), the 1,193-line document, two captures, and four committed ROMs. The F8 layout is bank 0 at real `$E000`/pseudopc `$F000` and bank 1 at real `$F000`; bank 1 is the start bank; reset at `$F000` -> main at `$F080`; the `$F060`/`$F070` trampolines are byte-identical and target `$F080`; the vectors are `CaveReset`/`ForestReset`. The forest and cave are 192-line `PF2` scenes with a P0 marker and one HMOVE; the two-cell indicator follows `Bank`. The switch block runs in the blanked overscan; `StartFrame` is 259/39 outbound and 259/40 on the return; the frame stays 262 lines. Exercises: scene swap, 16K F6 four banks with `LDX NextBank; LDA $1FF6,X`, and the data bank drawn in place. Captures were selected from a 14-shot burst by background colour; the fire edge is code-reviewed because a held fire at power-on is ignored by the startup guard.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 13:02): `bash scripts/verify.sh` PASSED (216 ROMs, no drift, docs build); main 8,192, ex1 8,192, ex2 16,384, ex3 8,192; main `F8* (8K)`, ex2 `F6* (16K)`. Frame: `StartFrame` `$F084` 259/3 steady, 259/39 to bank 0, 259/40 back; `VblankStart` `$F092` 0/5; `BodyStart` `$F0F6` 37/5; `OverscanStart` `$F117` 229/6; `BankEntry` `$F083` A=1 at power-on, 0 at frame 120, 1 at 240; `BankWrite` `$F13D` A=0 then 1. The `$F060`/`$F070` trampolines (`AD F9 1F 4C 80 F0` / `AD F8 1F 4C 80 F0`) are byte-identical in the two 4K halves; the vectors are `$F000` in both. Exercise logs: ex1 `BankEntry` A=1 at power-on; ex2 `BankEntry0` A=0 at power-on and A=1/2/3 at 120/240/360, `StartFrame0` 259/3; ex3 `DataMain` 0/39 in bank 0, `DataRow` 37/07, 38/07. Captures: forest bg `$84`, PF `$C8`, marker `$0E`, indicator 313–360/649–696; cave bg `$28`, PF `$44`, marker `$1A`, indicator 409–456/553–600; titles `Stella 7.0: "56-bankswitching"`, no cursor. Site: Part 8 index rebuilt, row 56 ✅, rows 57–65 Coming Soon; prev 55/next 57; sidebar `config.ts:139`; README row 8 unchanged. Reviews (AR-5): atari2600-reviewer — 2 major (the switch-cost ledger said 12 cycles vs the measured 36/37; three capture/prose factual mismatches) and 4 minor (the six-byte stub count, the start-bank mechanism, the 47/38 margin, the duplicate Session B heading); curriculum-auditor — 4 major (the six-byte stub count, the stale 03 pins, the stale ST-56.5, the stale findings/roadmap) and 8 minor (margin, Javatari note, ex1 header, What's Next wording, Step 7 label, prose, duplicate heading, 259/40). All fixed: the full 13 + 23/24 + 3 ledger and 259/39–40, the measured three-trunk/arch captions and pixel table, the six-byte ranges (including the bank-0 header), 03/07/05/99/roadmap sync, the fire disclosure, the Lesson 33 prerequisite, and the exercise logs. A round-2 re-review found seven residuals (the takeaway, the Section 5 table, the bank-0 stub header, the indicator-row counts, the capture-pixel unit, Step 6's staircase, and the ex3 `$F085`); all are fixed. Final state: 0 critical, 0 major open. Lesson 56 is complete.
 
 ---
 

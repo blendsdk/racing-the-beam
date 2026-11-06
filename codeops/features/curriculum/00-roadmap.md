@@ -22,7 +22,7 @@
 | RD-05 | Part 5 — Sound | [RD-05](requirements/RD-05-part5-sound.md) | [part5-sound](plans/part5-sound/00-index.md) | Done | ✅ | 2026-11-05 | depends on RD-04 |
 | RD-06 | Part 6 — Game Development | [RD-06](requirements/RD-06-part6-game-dev.md) | [part6-game-dev](plans/part6-game-dev/00-index.md) | Done | ✅ | 2026-11-05 | depends on RD-05 |
 | RD-07 | Part 7 — Kernel Mastery | [RD-07](requirements/RD-07-part7-kernel-mastery.md) | [part7-kernel-mastery](plans/part7-kernel-mastery/00-index.md) | Done | ✅ | 2026-11-06 | depends on RD-06 |
-| RD-08 | Part 8 — Advanced Topics | [RD-08](requirements/RD-08-part8-advanced.md) | [part8-advanced](plans/part8-advanced/00-index.md) | Plan Preflighted | 🔬 | 2026-11-06 | depends on RD-07 |
+| RD-08 | Part 8 — Advanced Topics | [RD-08](requirements/RD-08-part8-advanced.md) | [part8-advanced](plans/part8-advanced/00-index.md) | Executing | 🔄 | 2026-11-06 | depends on RD-07 |
 | RD-09 | Part 9 — The DSL Path | [RD-09](requirements/RD-09-part9-dsl-path.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-08 |
 | RD-10 | Part 10 — Capstone Projects | [RD-10](requirements/RD-10-part10-capstones.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-09 |
 | RD-11 | Part 11 — Legendary Techniques | [RD-11](requirements/RD-11-part11-legendary.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-10 |

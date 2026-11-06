@@ -23,9 +23,10 @@ The course's advanced lessons (56, 57, 60) cover this; this file is the quick ma
 
 ## Rules that keep bankswitched code working
 
-1. **Know which bank is active at power-on** (F8: bank 0 is selected) and make sure that bank
-   contains a valid reset vector at `$FFFA–$FFFD`. A common pattern is to place identical
-   vector tables and bank-switch stubs in every bank.
+1. **Know which bank is active at power-on.** F8/F8SC and DPC start in **bank 1** (the upper
+   bank); F6/F4 start in **bank 0** in Stella's implementation. Make sure the start bank contains
+   the valid reset vector at `$FFFA–$FFFD`. A common pattern is to place identical vector tables
+   and bank-switch stubs in every bank.
 2. **Never execute across a bank boundary.** When code jumps, the target bank must already be
    selected, or the switch and the jump must be arranged so the switch takes effect before the
    fetch — the usual trick is duplicated switch-and-jump stubs at the same address in both
