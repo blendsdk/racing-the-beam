@@ -262,7 +262,7 @@
     `$1055`, high `$105D` (bit 4 = music mode); amplitude read `$1005`; DF6/7 shift by one address.
   - Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/6. The kernel is a 1-line loop; the DPC reads are 4 cycles.
-  - RAM: RIOT `$80` `Frame`, `$81` `StarPtr`, `$82` `Twinkle`, `$83` `Rng`, `$84–$9F` free;
+  - RAM: RIOT `$80` `FrameCount`, `$81` `StarPtr`, `$82` `Twinkle`, `$83` `Rng`, `$84–$9F` free;
     stack `$F8–$FF`. The DPC registers and display are not RAM.
   - Checkpoints: `Reset` `$F080`, `Main`, `Line`, `Fetch0/1/2` (A = the fetched byte), `RngRead`
     (A = the random byte), `Frame`.

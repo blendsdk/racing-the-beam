@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 17:56
-> **Progress**: 4/10 tasks (40%)
+> **Last Updated**: 2026-11-06 19:00
+> **Progress**: 5/10 tasks (50%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -199,15 +199,15 @@ AR-23, AR-25
 AR-23, AR-25, AR-29, AR-30
 **Objective**: Deliver Lesson 60 end to end.
 
-- [ ] 5.1.1 Lesson 60 — DPC and DPC+: Session A freezes ST-60.1–ST-60.6 (red baseline),
+- [x] 5.1.1 Lesson 60 — DPC and DPC+: Session A freezes ST-60.1–ST-60.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson60): DPC and DPC+`
+  the `git-commit` skill in push mode — `feat(lesson60): DPC and DPC+` ✅ (completed: 2026-11-06 19:00)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 17:59): ST-60.1–ST-60.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 60. Design pins: 10,240-byte DPC; bank 0 at real `$C000` with `!pseudopc $F000`, bank 1 at real `$D000` with `!pseudopc $F000`, the 2K display image at real `$E000–$E7FF`; start bank **1**; the first 128 bytes of each bank's address space are the DPC register window, so the entry is `$F080`; bank 0's `$F080` is a stub that selects bank 1 and jumps to its `$F080`; the vectors at `$FFFA` point to `$F080`. The three graphics fetchers DF0/DF1/DF2 read `$1008/$1009/$100A`; the register writes are DF0 top `$1040`, bottom `$1048`, counter low `$1050`, high `$1058`; DF1 `$1041/$1049/$1051/$1059`; DF2 `$1042/$104A/$1052/$105A`; the RNG reads `$1000` and resets at `$1070`; the music fetchers are DF5 `$1045/$104D/$1055/$105D` (bit 4 = music mode), amplitude `$1005`. The 2K display image holds three 192-byte planes at offsets 0, 683, and 1366; the counters start at 2047, 1364, and 681. Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. Exercises: new display image; RNG starfield; a music fetcher or a fourth graphics fetcher. DPC+ is documented (Harmony/Melody ARM, 29K/32K, extra RAM) and not built. Red baseline confirmed: no `lessons/part8-advanced/60-dpc-plus`, no `docs/public/images/lesson60`, no Part 8 60 ROMs, the document is the `🔒 Coming Soon` stub, index row 60 Coming Soon, sidebar `config.ts:143`, `verify.sh --no-docs` green at `c71ee5d`; the preflight DPC prototype is at `/tmp/opencode/dpc/dpc2.asm`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 18:40): Four sources (10,240 each), the 1,246-line document, four committed ROMs, and two captures. The image is bank 0 at `$C000`/pseudopc `$F000`, bank 1 at `$D000`/pseudopc `$F000`, and the 2K display at `$E000–$E7FF`; the start bank is 1, the entry `$F080`, and bank 0's `$F080` is the stub. The three fetchers read `$1008/$1009/$100A` and write PF0/PF1/PF2 each line; the display holds the three 192-byte planes at 0/683/1366 (counters 2047/1364/681). The PF2 twinkle selects one of four phase planes (counters 1847/1647/1167) from `Rng & 3`; the white P0 probe is one HMOVE. Exercise 3 implements the DF5 music fetcher. Captures: phase 0 and phase 1.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 19:00): `bash scripts/verify.sh` PASSED (232 ROMs, no drift, docs build); all four sources 10,240 and byte-identical; `DPC* (10K)`; Full Source verbatim (1,246 doc lines). Frame: `Reset` `$F080`, `StartFrame` `$F0B6` 259/3, `VblankStart` `$F0C4` 0/5, `BodyStart` `$F129` 37/5, `OverscanStart` `$F146` 229/6; 262 lines. Fetchers: `Fetch0` `$F12E` A=`$F0`, `Fetch1` `$F133` A=`$FF`, `Fetch2` `$F138` A=`$FF`/`$0C`/`$1C`; `RngRead` `$F0D0` A=`$03/$A4/$5B/$0D/$64`; `Frame` `$F115` A=1,2,3… The display image's three planes are at 0/683/1366; the counters 2047/1364/681; the phase planes 1847/1647/1167. Captures: `dpc-a` phase 0 and `dpc-b` phase 1, 0 mismatches of 30,656 samples against the expected 160×192 pictures; 4,080 differing pixels between phases; titles `Stella 7.0: "60-dpc-plus"`, no cursor. Exercises: ex1 new tunnel; ex2 RNG starfield (12,912–32,832 differing pixels/frame); ex3 `MusicRead` A=`04`/`00` in 25-line blocks. Site: index row 60 ✅; prev 59/next 61; sidebar `config.ts:143`; README unchanged. Reviews (AR-5): atari2600-reviewer — 4 minor (the side-wall bit claim, probe 36.0/2.0, the 392–399 gap, the HMOVE reason); curriculum-auditor — 4 major (the false `$3000` alias, the DPC+ register-map compatibility, the real-chip vs Stella RNG clock, the interleaving rationale) plus 8 minor. All fixed: the alias deleted; the DPC+ map corrected; the two clock models separated; the interleaving reason rewritten; the probe/partition/HMOVE/page/cycle/description/build-header/stars/TypeScript/hardware/logo/Javatari text corrected. The side-wall "bits 2–3" finding was a false positive: PF0 `$30` is bits 0–1 (the wall at x=0–7), matching the capture. Final state: 0 critical, 0 major open. Lesson 60 is complete.
 
 ---
 

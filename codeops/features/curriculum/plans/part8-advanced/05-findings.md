@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 4 complete after round 2 — 0 critical, 0 major open. Lessons 56–59 are committed.
+> **Status**: Phase 5 complete — 0 critical, 0 major open. Lessons 56–60 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -101,3 +101,21 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-59-018 | 59 | 🟡 MINOR | The doc listed only `$87–$8A`; the variables reach `$8C` (`HoldFrames`, `PhaseTimer`). | fixed — `$80–$8C` in the map and the safety rule. |
 | SR-59-019 | 59 | 🟡 MINOR | PF-07 still said a 9-byte routine at `$80–$88` and variables `$89–$9F`. | fixed — 7-byte `$80–$86`, variables `$87–$8C`, stack `$F8–$FF`. |
 | SR-59-020 | 59 | — | The auditor's "checkpoint addresses are $30 low" claim was checked against the ACME symbol table: `StartFrame $F033`, `PatchByteTail $F0BB`, `CallCount $F0CC`, `OverscanStart $F0D1`, `ColorTable $F100`; no change was made. | verified — the symbol table is the ground truth; the audit's byte count was off. |
+| SR-60-001 | 60 | 🟠 MAJOR | The doc/sources claimed the DPC register window aliases at `$3000-$307F`, `$5000-$507F`, …; the 6507 has only A0–A12. | fixed — only `$F000-$F07F` in the selected 4K bank is the window; there is no `$3000`/`$5000` alias. |
+| SR-60-002 | 60 | 🟠 MAJOR | The doc called the DPC+ register window "compatible with the original DPC"; DPC+ reads `$1000-$1027`, writes `$1028-$107F`, and uses different function codes. | fixed — only the range/eight-fetcher idea carry over; the DPC+ map is distinct. |
+| SR-60-003 | 60 | 🟠 MAJOR | The doc said the chip is clocked by every cartridge access; Stella's `CartDPC::peek` clocks only DPC-window/hotspot accesses, so the measured RNG sequence is Stella's. | fixed — the real-chip vs Stella models are separated in the RNG section and takeaway. |
+| SR-60-004 | 60 | 🟠 MAJOR | The doc said the obvious 3-fetch/3-store order does not fit with the probe; it fits in 38 cycles, and the interleaving is for PF0/PF1 margin. | fixed — the tip now gives the actual 38-cycle arithmetic and the 2.0-cycle probe margin. |
+| SR-60-005 | 60 | 🟡 MINOR | The side-wall bit claim was challenged as bits 2–3; the ROM's PF0 `$30` is bits 0–1 and the capture shows the wall at x=0–7. | verified — the review was a false positive; the doc now states the `$30`/bits 0–1 mapping. |
+| SR-60-006 | 60 | 🟡 MINOR | The probe first-pixel was 36.0, not 36.7; the margin 2.0, not 2.7. | fixed in the doc and all three source headers. |
+| SR-60-007 | 60 | 🟡 MINOR | The display-image partition omitted the 8-byte gap at 392–399. | fixed — the table now sums to 2,048. |
+| SR-60-008 | 60 | 🟡 MINOR | The HMOVE blanking reason conflated the strobe with the artifact; the next line is still in VBLANK. | fixed. |
+| SR-60-009 | 60 | 🟡 MINOR | The prose used 13/20/27/34 while the table used 14/21/28/35. | fixed — one 0-based basis and matching margins. |
+| SR-60-010 | 60 | 🟡 MINOR | `PhaseLo/Hi` are at `$F2F0/$F2F4`, not page-aligned; only `Probe` is `$F400`. | fixed. |
+| SR-60-011 | 60 | 🟡 MINOR | The description said the main reads the music registers; only Exercise 3 does. | fixed. |
+| SR-60-012 | 60 | 🟡 MINOR | Exercise 1/3 build headers pointed at the main source. | fixed. |
+| SR-60-013 | 60 | 🟡 MINOR | The 03 RAM map said `$80 Frame`; the implementation uses `FrameCount`. | fixed. |
+| SR-60-014 | 60 | 🟡 MINOR | "The PF2 stars change every frame" is not guaranteed; the phase is `Rng & 3`. | fixed — "when the RNG selects a different phase"; the 255-frame period is noted. |
+| SR-60-015 | 60 | 🟡 MINOR | The TypeScript random read did not decrement DF0. | fixed. |
+| SR-60-016 | 60 | 🟡 MINOR | The doc implied the real chip's behaviour; all evidence is Stella 7.0, and a stock cart cannot run the 10K DPC image. | fixed — a hardware-scope warning and the donor/flash/emulator disclosure. |
+| SR-60-017 | 60 | 🟡 MINOR | The logo range was 84–97, not 80–97; the font is five bits wide, seven rows, each duplicated. | fixed. |
+| SR-60-018 | 60 | 🟡 MINOR | The Javatari DPC detection was inferred from a filename hint; the 10K size selects DPC by priority 101. | fixed. |
