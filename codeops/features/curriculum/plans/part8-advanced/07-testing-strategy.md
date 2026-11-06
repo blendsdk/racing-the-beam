@@ -115,8 +115,8 @@ reports the first cycle of the instruction that follows it.
 | --- | --- | --- | --- |
 | ST-63.1 | Assemble the demo | 4,096 bytes | `acme` |
 | ST-63.2 | Run the attract mode | The logo, starfield, color cycle, scrolling message, and tune; fire shows credits; two captures | Screenshots + pixel check |
-| ST-63.3 | Inspect the mode | `Scene` 0→1 on fire; `Scroll` advances; `TunePtr`/`TuneTimer` drive `AUDV0`; the frame is stable | State log |
-| ST-63.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
+| ST-63.3 | Inspect the mode | `SceneRead` 0→1 on fire (frame 9) and on the auto-demo (frame 300); `ScrollRead` advances; `TunePtrRead` advances and drives `AUDF0`/`AUDC0=$0C`/`AUDV0`; the frame is stable | State log |
+| ST-63.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/6, `CreditsOverscan` 229/6 | State log |
 | ST-63.5 | Exercises | The doc answers the three production exercises (logo/message, second screen, high-score) with the demo's hooks | Doc |
 | ST-63.6 | Site integration | Row 63 ✅; prev 62, next 64; sidebar `config.ts:146` | Build + page check |
 

@@ -372,8 +372,9 @@
   demonstrates the production values the community expects.
 - **Prerequisites:** Lesson 03 (the anatomy), Lesson 04 (registers), Lesson 12 (the frame),
   Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 19 (the playfield), Lesson 25 (players),
-  Lesson 26 (positioning), Lesson 39 (the score kernel), Lesson 41 (game states), Lesson 48
-  (the taxonomy), Lesson 53 (kernel patterns), Lesson 55 (text).
+  Lesson 26 (positioning), Lesson 35 (sound), Lesson 39 (the score kernel), Lesson 41 (game
+  states), Lesson 48 (the taxonomy), Lesson 53 (kernel patterns), Lesson 54 (visual effects),
+  Lesson 55 (text).
 - **Concepts:** Harmony and UnoCart flash carts; the AtariAge community; homebrew contests and
   awards; publishing/distribution (ROM sales, physical carts, licensing); the modern toolchain
   (batari Basic, 8bitworkshop, Stella, ACME); an attract mode as a production-value showcase;
@@ -385,10 +386,16 @@
   - Frame: 262 lines; 3 + 37 + 192 + 30; `StartFrame` 259/3, `VblankStart` 0/5,
     `BodyStart` 37/5, `OverscanStart` 229/6.
   - RAM: `$80` `Scene`, `$81` `Frame`, `$82` `Scroll`, `$83` `TunePtr`, `$84` `TuneTimer`,
-    `$85–$9F` free; stack `$F8–$FF`.
-  - Checkpoints: `Scene` (A = 0/1), `Scroll` (A = the offset), `TunePtr`, `Frame`.
-- **Evidence pins:** the title and credits captures; the state log shows the scene change and the
-  scroll; the tune writes `AUDV0`/`AUDF0`; the frame is 262 lines; the ROM is 4,096.
+    `$85` `PrevFire`, `$86` `PrevSelect`, `$87` `Startup`, `$88` `NewFire`, `$89` `Scratch`,
+    `$8A-$8B` `AutoTimer`, `$8C` `ColorTimer`, `$8D` `ColorIndex`, `$8E` `ScrollTimer`, `$8F`
+    `Phase`, `$90` `ByteIndex`, `$91-$92` `TextPtr`; `$93-$9F` free; `$A0-$D7` the score
+    library; stack `$F8-$FF`.
+  - Checkpoints: `SceneRead` (A = 0/1), `ScrollRead` (A = the offset), `TunePtrRead` (A = the
+    note index), `FrameRead` (A = the frame count); the frame labels and `CreditsOverscan`.
+- **Evidence pins:** the title and credits captures; the state log shows the fire edge (A=1 at
+  frame 9) and the auto-demo (A=0 until frame 299, A=1 from frame 300), the scroll, and the tune
+  pointer; the tune writes `AUDF0`/`AUDC0=$0C`/`AUDV0`; the frame is 262 lines on both paths; the
+  ROM is 4,096. The SELECT return is code-reviewed (not state-logged in this capture run).
 - **Screenshots:** `title.png` and `credits.png`.
 - **Exercises (production, answered in the doc):** (1) change the logo and message; (2) add a
   second attract screen (a high-score or instructions screen); (3) add a high-score table and a

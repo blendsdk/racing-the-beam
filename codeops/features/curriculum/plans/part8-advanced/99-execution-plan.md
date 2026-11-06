@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 22:20
-> **Progress**: 7/10 tasks (70%)
+> **Last Updated**: 2026-11-06 23:35
+> **Progress**: 8/10 tasks (80%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -286,15 +286,15 @@ AR-25
 AR-25
 **Objective**: Deliver Lesson 63 end to end.
 
-- [ ] 8.1.1 Lesson 63 — Modern Homebrew: Session A freezes ST-63.1–ST-63.6 (red baseline),
+- [x] 8.1.1 Lesson 63 — Modern Homebrew: Session A freezes ST-63.1–ST-63.6 (red baseline),
   Session B implements the demo and the document, Session C verifies to green and hardens; commit
-  via the `git-commit` skill in push mode — `feat(lesson63): Modern Homebrew`
+  via the `git-commit` skill in push mode — `feat(lesson63): Modern Homebrew` ✅ (completed: 2026-11-06 23:35)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 22:41): ST-63.1–ST-63.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 63. Design pins: theory/production lesson with `demo-63.asm` — **"the attract mode"**, 4,096 bytes; title screen with a large playfield logo, a starfield, a colour-cycling border, a scrolling message, and a short TIA tune; fire shows a credits screen; SELECT returns to the title; two scenes. Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6. RAM: `$80` `Scene`, `$81` `Frame`, `$82` `Scroll`, `$83` `TunePtr`, `$84` `TuneTimer`, `$85-$92` the edge latches/timers/scroll pointers, `$93-$9F` free, `$A0-$D7` the score library; stack `$F8-$FF`. Checkpoints: `Scene` (A=0/1), `Scroll` (A=the offset), `TunePtr`, `Frame`. Captures: `title.png` and `credits.png`. The document carries the modern homebrew pipeline (Harmony/UnoCart, AtariAge, contests, publishing, the toolchain), the production-value analysis, and the three production exercises answered with the demo's hooks; no exercise solution files. Red baseline confirmed: no `lessons/part8-advanced/63-modern-homebrew`, no `docs/public/images/lesson63`, no Part 8 63 ROMs, the document is the `🔒 Coming Soon` stub, index row 63 Coming Soon, sidebar `config.ts:146`, `verify.sh --no-docs` green at `bcc62a1`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-06 23:08): One `demo-63.asm` (4,096 bytes), the 1,860-line document, two committed captures (title, credits), and one committed ROM. The title is a large RTB playfield logo over a 64-row starfield, with colour-cycling top/bottom bars, a six-character pre-shifted marquee, and a 32-note TIA tune; the credits are a blue field with gold stars and four white lines. Fire and a 300-frame auto-demo advance to the credits; SELECT returns to the title. The review fixes: the title capture is a burst-selected frame from the committed ROM after a SELECT return (the title is a moving state); the logo ledger is 49 (50 on a page-cross row) cycles; the dead constants and misleading row labels are removed; the E-diminished/B-flat note names and the prerequisites 35/54 are corrected; Exercise 3 no longer calls `ScoreSetup` twice; the build path is `build/demo-63.bin`.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-06 23:35): `bash scripts/verify.sh` PASSED (238 ROMs, no drift, docs build); `demo-63.bin` is 4,096 bytes; Full Source verbatim (1,257 source lines / 1,860 doc lines). Frame: `StartFrame` `$F1A3` 259/3, `VblankStart` `$F1B1` 0/5, `BodyStart` `$F2B1` 37/5, `OverscanStart` `$F33A` 229/6, `CreditsOverscan` `$F4F1` 229/6; 262 lines. Mode: `SceneRead` `$F2B3` A=0 (title) / A=1 (credits), fire edge at frame 9, auto-demo at frame 300; `ScrollRead` `$F258` A=0..80; `TunePtrRead` `$F55B` A=0..31; `FrameRead` `$F26D` A=0..255. Tune: `TuneStep` writes `AUDF0`, `AUDC0=$0C`, `AUDV0=$0A`; the 32-note table is the static ledger. Captures: title (orange phase, HOMEBR window, 17-line top bar, 8-line bottom bar, RTB logo, starfield) and credits (blue field, gold stars/bars, RACING/THE/BEAM/THANKS); titles `Stella 7.0: "demo-63"`, no cursor. The title image is a burst-selected committed-ROM frame; the credits image is the 7 s auto-demo. Site: index row 63 ✅; prev 62/next 64; sidebar `config.ts:146`; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 major (the title capture/clock provenance) + 4 minor; curriculum-auditor — 1 major (Exercise 3's double `ScoreSetup`) + 9 minor. All fixed: the title burst capture/provenance note; the 49-cycle (50 page-cross) logo ledger; the nine-line top-bar wording; the zero-row/credit-column labels; the dead constants; the Exercise 3 single `ScoreSetup`; the E-diminished/B♭4 names; the build path; the 35/54 prerequisites; the Exercise 3 score-routine wording; the Exercise 1 generator wording; the mirror-half and call-depth corrections; the title pixel-table x; the log/star caveats. Final state: 0 critical, 0 major open. Lesson 63 is complete.
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 7 complete after round 2 — 0 critical, 0 major open. Lessons 56–62 are committed.
+> **Status**: Phase 8 complete — 0 critical, 0 major open. Lessons 56–63 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -165,3 +165,17 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-62-017 | 62 | 🟠 MAJOR | The new win capture exposed a full-height white P1 column: the over kernel cleared PF0/1/2 for the red field but not `GRP1`, so the life bar's last `$FF` stayed on from row 23. | fixed — `STA GRP1` added to the over kernel's zero block; `game-over.png` re-captured; the P1 column is gone. |
 | SR-62-018 | 62 | 🟠 MAJOR | The wall clamp and the `StartGame`/over-kernel changes left stale addresses in the symbol table and exercise answers (`BricksDone`, `RespawnBall`, `RebuildBricks`, `LDA $85`, the brick path ranges). | fixed — every address was re-read from the final `.sym` and the exercise ranges now use labels; the checkpoint table, commands, and excerpt are current. |
 | SR-62-019 | 62 | 🟡 MINOR | The true-negate patch was said to preserve any DX/DY "through every bounce"; the ceiling, paddle, and `RespawnBall` still force ±2. The clamp's unsigned side test also teleports a wrapped negative X to the right wall. | fixed — the answer scopes the negate to the wall/brick bounces, names the three fixed sites, and documents the fast-DX wrap caveat. |
+| SR-63-001 | 63 | 🟠 MAJOR | The title capture's orange/HOMEBR state looked impossible on the no-input title path; the review asked for a capture from the committed ROM and a mechanism. | fixed — `title.png` is a burst-selected committed-ROM frame; the state is the SELECT-return path (SELECT rewinds Scroll/ScrollTimer but not ColorIndex, so orange/HOMEBR is reachable). The capture note and pixel table (x=367–636) are updated; the credits capture remains input-free. |
+| SR-63-002 | 63 | 🟡 MINOR | The logo cycle ledger was changed to 52; `ORA abs,Y` is 4 cycles (+1 on a page cross), so the base is 49. | fixed — the source header and doc say 49, 50 on a page-cross row; the border is 21 on the first line and 19 on the rest. |
+| SR-63-003 | 63 | 🟡 MINOR | "The top bar is one line taller" contradicted the 17-line table; it is nine lines taller. | fixed. |
+| SR-63-004 | 63 | 🟡 MINOR | The shifted table's labels were off by one: the zero row is font row 0, the seven data rows are rows 1-7, and an orphan row-7 label had no data; the credit column comments sat below their data. | fixed — the zero row is labelled font row 0, the data rows 1-7, the orphan labels are removed, and the credit comments sit above their data. |
+| SR-63-005 | 63 | 🟡 MINOR | `TEXT_COLS`, `BORDER_MASK0`, `BORDER_MASK2` were dead constants. | removed; the ROM bytes are unchanged. |
+| SR-63-006 | 63 | 🟠 MAJOR | Exercise 3's answer called `ScoreSetup` at the top of the scores kernel, but it is already called in the common VBLANK; a second call adds a second HMOVE and two visible WSYNCs. | fixed — the answer calls `ScoreDraw` only, with an explicit warning not to repeat `ScoreSetup`. |
+| SR-63-007 | 63 | 🟡 MINOR | Group 3 was labelled E-minor/B4; AUDF 10 is nearest B♭4, so the chord is E diminished. | fixed — "E diminished" and "B♭4" in the source header and doc. |
+| SR-63-008 | 63 | 🟡 MINOR | The source header built `build/lesson63.bin` while the doc used `build/demo-63.bin`. | fixed — both use `build/demo-63.bin`. |
+| SR-63-009 | 63 | 🟡 MINOR | The prerequisites omitted Lesson 35 (sound) and Lesson 54 (visual effects). | fixed in the doc and 03. |
+| SR-63-010 | 63 | 🟡 MINOR | Exercise 3's hint said the demo "does not call the score routines"; it calls `ScoreSetup`/`ScoreDraw`. | fixed — it names the digit routines it does not call. |
+| SR-63-011 | 63 | 🟡 MINOR | Exercise 1 pointed at a `MESSAGE` generator that does not ship. | fixed — the answer points at the source-header formula and says no generator is shipped. |
+| SR-63-012 | 63 | 🟡 MINOR | The 24-pixel gap's mirror halves were swapped in the pixel-check paragraph. | fixed — the left half's 17–19 plus the right half's 0–2. |
+| SR-63-013 | 63 | 🟡 MINOR | "The call depth is one level" was false; `ScoreSetup` nests `ScoreSetupP0/P1`. | fixed — the source states the two-level demo and the exercise's stack headroom. |
+| SR-63-014 | 63 | 🟡 MINOR | The title pixel table said x=373–642; the committed burst frame measures x=367–636. | fixed; the log-cycle and first-star-line caveats are also documented. |
