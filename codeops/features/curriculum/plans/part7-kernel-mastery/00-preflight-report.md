@@ -40,7 +40,7 @@ points at the Part 8 Lesson 56 stub.
 `INPT4`); `include/macro.asm`; `include/score.asm` (the 48-pixel kernel, `ScoreBuf` `$A8–$D7`,
 `ScoreDraw` 9 lines, `ScoreSetup` one HMOVE); the Part 6 lessons for the frame/positioning
 patterns; the `atari-2600-expert` kernel/timing/sprite-trick/legendary references; and two scratch
-prototypes: the three-plane 256-row tunnel (192 lines, 40 cycles/line, a 16-line ship, measured in
+prototypes: the three-plane 256-row tunnel (192 lines, 40/41 cycles/line, a 16-line ship, measured in
 Stella) and the 48-pixel text buffer (the glyph columns render and the pre-shifted phase table
 shifts the window by one pixel).
 
@@ -93,7 +93,7 @@ two branchy tests split across the two lines (the plan estimated ~93 cycles/2 li
 three consecutive bytes, not one row; the tunnel could not be the specified one.
 **Decision:** three independent 256-byte planes (`WorldPF0/1/2`) indexed by the same X.
 **Resolution:** 03 §Lesson 52 and the ST rows updated; the three-plane tunnel was assembled and
-measured in Stella (192 lines, 40 cycles/line, a 16-line ship). **Resolved.**
+measured in Stella (192 lines, 40/41 cycles/line, a 16-line ship). **Resolved.**
 
 ### PF-003 — 🟠 MAJOR — Lesson 52's 1-line "16-line ship" was 8 bytes
 
@@ -255,8 +255,8 @@ is standalone (the demo and its exercises use it).
 ### PF-022 — 🟠 MAJOR — Lesson 52's cycle count was 36, not 38
 
 **Location:** `03-lesson-specs.md` §Lesson 52; AR-30/AR-36.
-**Problem:** the listed operations sum to 40 cycles/line (forward loop, page-aligned planes).
-**Decision:** 40 cycles/line.
+**Problem:** the listed operations sum to 40 cycles/line nominal (forward loop, page-aligned planes).
+**Decision:** 40 nominal / 41 effective; the taken BNE crosses a page. Exercise 1 is page-local at 40.
 **Resolution:** 03 §Lesson 52, AR-30/AR-36, ST-52.3 updated. **Resolved.**
 
 ### PF-023 — 🟠 MAJOR — Lesson 49's unrolled ledger was 120, not 115
@@ -410,7 +410,7 @@ frontmatter convention is not met.
 | ST cases: 6 per lesson, 48 total | pass |
 | Specification-first ordering (Session A freeze → B implement → C verify) | pass |
 | Lesson 51 fits 128 bytes (skipdraw, no strips) | pass after PF-001 |
-| Lesson 52's three page-aligned planes and 40-cycle ledger | pass after PF-002/PF-022 |
+| Lesson 52's three page-aligned planes and 40/41 ledger | pass after PF-002/PF-022 |
 | Lesson 52/54's reflected playfield claims | pass after PF-004/PF-005 |
 | Lesson 50's two HMOVEs and the ball | pass after PF-006 |
 | Row loops draw N top-down rows (`LDY #0; INY; CPY #N; BNE`) | pass after PF-007 |

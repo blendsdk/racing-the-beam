@@ -346,12 +346,12 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
 
 - **Goal:** scroll a world smoothly and move a sprite one pixel at a time, and explain the
   hardware's playfield/sprite resolution split.
-- **Prerequisites:** Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 17 (cycle counting),
-  Lesson 18 (mid-scanline changes), Lesson 19 (the playfield), Lesson 26 (positioning), Lesson 27
-  (sprite movement), Lesson 28 (one HMOVE), Lesson 29 (the ball), Lesson 31 (`NUSIZ`), Lesson 34
-  (frame counters), Lesson 48 (the 1-line kernel).
+- **Prerequisites:** Lesson 12 (the frame), Lesson 14 (`WSYNC`), Lesson 15 (the RIOT timer),
+  Lesson 17 (cycle counting), Lesson 18 (mid-scanline changes), Lesson 19 (the playfield), Lesson
+  26 (positioning), Lesson 27 (sprite movement), Lesson 28 (one HMOVE), Lesson 31 (`NUSIZ`),
+  Lesson 34 (frame counters), Lesson 48 (the 1-line kernel).
 - **Concepts:** vertical scrolling one line at a time; three 256-byte playfield planes indexed by
-  `ScrollY`; the 1-line kernel's 40-cycle loop; the 4-px playfield vs the 1-px HMOVE sprite; the
+  `ScrollY`; the 1-line kernel's 40-nominal/41-effective loop; the 4-px playfield vs the 1-px HMOVE sprite; the
   tunnel's width breathing (the gap narrows and widens over the scroll); the 256-row loop.
 - **ROM:** `52-fine-scrolling.asm` — "the tunnel".
   - 192 lines, 1-line kernel. Three 256-byte planes (`WorldPF0`, `WorldPF1`, `WorldPF2`) draw a
@@ -360,7 +360,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
     lines, and the 32-row period divides 256, so row 255 and row 0 join cleanly.
   - The kernel: `LDX ScrollY; LDY #0; loop: LDA WorldPF0,X; STA PF0; LDA WorldPF1,X; STA PF1;
     LDA WorldPF2,X; STA PF2; LDA ShipStrip,Y; STA GRP0; STA WSYNC; INX; INY; CPY #192; BNE` =
-    **40 cycles/line** (3 PF load/store pairs 21, GRP0 7, WSYNC 3, INX 2, INY 2, CPY 2, BNE 3).
+    **40 cycles nominal / 41 effective** (3 PF load/store pairs 21, GRP0 7, WSYNC 3, INX 2,
+    INY 2, CPY 2, BNE 4: the taken branch crosses a page; exercise 1's shorter layout is
+    page-local at 40).
     Each 256-byte plane is page-aligned (`!align 255,0`), so the `X` wrap 255→0 stays inside the
     plane and there is no page cross. The three planes are indexed by the same X, so each row is
     three independent bytes, not a row-major triple.
@@ -385,8 +387,9 @@ commands), Exercises (three, each with Challenge/Hints/Expected Result/Solution)
   `ShipX`, `HmoveApply`/`HmoveDone`, `BodyStart` 37, `OverscanStart` 229, `StartFrame` 259; the
   kernel loop uses `LDY #0; INY; CPY #192; BNE` for 192 top-down rows (0..191), and a ScrollY
   255→0 wrap keeps the planes aligned.
-- **Screenshots:** `docs/public/images/lesson52/tunnel-a.png` (ScrollY 0),
-  `…/tunnel-b.png` (ScrollY 40; the ship at a different X).
+- **Screenshots:** `docs/public/images/lesson52/tunnel-a.png` (phase 0, the ship at X=48),
+  `…/tunnel-b.png` (phase 8 = ScrollY 40 mod 32; the ship at X=88). A still measures the 32-row
+  phase, not the exact 0–255 byte; the state log proves the byte increments and wraps.
 - **Integration:** prev → Lesson 51; next → Lesson 53; index row 52 → ✅ Complete; sidebar
   `config.ts:129`. Estimated time: 90 minutes.
 

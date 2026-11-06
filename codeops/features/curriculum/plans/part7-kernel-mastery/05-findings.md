@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 4 complete — 0 critical, 0 major open.
+> **Status**: Phase 5 complete — 0 critical, 0 major open.
 > **CodeOps Artifact Schema**: 1
 
 ## Severity Legend
@@ -84,3 +84,13 @@ it and is updated with the fix/acceptance decision. A lesson is done only when i
 | SR-51-014 | 51 | 🟡 MINOR | The exercise-2 hint said the status strip "grows to 14 chunks"; the cells span chunks 0–18. | fixed — "19 chunks (14 lit cell chunks across 0–18)". |
 | SR-51-015 | 51 | 🟡 MINOR | The capture analysis said the blue cross shows 6/13/6 rows while the table measured 24 rows. | fixed — the measured groups are 6/12/6 (24 rows). |
 | SR-51-016 | 51 | 🟡 MINOR | The exercise-3 source header said each enemy is "one scanline of every row". | fixed — both players are 8-line objects; P1 is one line lower. |
+| SR-52-001 | 52 | 🟠 MAJOR | The doc prerequisite line still listed Lesson 29 (the ball, unused) and omitted Lesson 15 (the RIOT timer), contradicting the same-diff 03 fix. | fixed — 15 in, 29 out, doc and 03 aligned. |
+| SR-52-002 | 52 | 🟠 MAJOR | The latch boundary was stated as X≤39 / 40 / ≥41 from bbox transitions, contradicting the pixel-43 anchor and the 8-pixel rule. | fixed after a measured X=34–48 sweep: the latch is ~43–44; X≤36 wholly old, X=37–43 straddles, X≥44 current. The bbox transitions at 40/41 are explained by the shape's narrow top/bottom rows (ink at columns 3–4); doc, headings, takeaway, and all four source headers updated. |
+| SR-52-003 | 52 | 🟡 MINOR | The three exercise headers built/ran `lesson52.bin` from the main source. | fixed — each builds `build/exercise-0N.bin` from its own solution. |
+| SR-52-004 | 52 | 🟡 MINOR | `C_BG=$02` was labelled "very dark blue"; `$02` is neutral dark grey. | fixed — "the gap and the borders: the background" in all four sources. |
+| SR-52-005 | 52 | 🟠 MAJOR | The 40-cycle ledger missed the taken `BNE`'s page cross: `BNE KernelRow` at $F100 targets $F0E6, so the tail is 10 and the body 41 effective. | fixed — main/ex2/ex3 are 40 nominal / 41 effective, margin 35, last row 39 (2 instead of 4); ex1 is page-local at 40; an off-boundary plane is 42; doc/03/07/99/AR/preflight updated. |
+| SR-52-006 | 52 | 🟡 MINOR | `HmoveDone` was described as the HMOVE store; 3/3 is the NOP and the store completes at 3/2. | fixed — the table, Step 4, and the four headers say the NOP; the inline "store has executed" comment remains. |
+| SR-52-007 | 52 | 🟡 MINOR | The HMOVE drift sentence said "left"; HMP0 is signed and is −2 at X=80, so it drifts right. | fixed — "the direction follows HMP0's signed value (right at the power-on X=80, where HMP0=$E0, i.e. −2)." |
+| SR-52-008 | 52 | 🟡 MINOR | Exercise 1's header copied the base lesson's 35/37 store cycle pair although its page-local BNE makes the store 34/36. | fixed — "the base lesson's measured log puts its store at 35/37; this layout's 9-cycle tail makes it 34/36". |
+| SR-52-009 | 52 | 🟡 MINOR | The doc's "fit in 40 of the 76 cycles" was nominal-only. | fixed — "40 nominal / 41 effective". |
+| SR-52-010 | 52 | 🟡 MINOR | The checkpoint-cycle convention (a label reports the first cycle of the following instruction) was unstated. | fixed — one sentence added to the debugger section. |

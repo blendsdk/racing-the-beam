@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 04:54
-> **Progress**: 4/8 tasks (50%)
+> **Last Updated**: 2026-11-06 06:10
+> **Progress**: 5/8 tasks (62.5%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -238,7 +238,7 @@ AR-24, AR-29, AR-35
 > (row 52) · `docs/public/roms/part7-kernel-mastery/52-fine-scrolling/` ·
 > `docs/public/images/lesson52/` · `README.md` (verify only) · `99-execution-plan.md` +
 > `05-findings.md` + roadmaps
-> **Reasoning**: high — the 1-line kernel's 40-cycle loop, the three page-aligned 256-byte
+> **Reasoning**: high — the 1-line kernel's 40-nominal/41-effective loop, the three page-aligned 256-byte
 > planes, and the 1-px HMOVE ship are measured claims; the 4-px playfield / 1-px sprite split
 > must be honest
 
@@ -249,14 +249,20 @@ AR-24, AR-29, AR-35
 AR-24, AR-30, AR-36
 **Objective**: Deliver Lesson 52 end to end.
 
-- [ ] 5.1.1 Lesson 52 — Fine Scrolling: Session A freezes ST-52.1–ST-52.6 (red baseline),
+- [x] 5.1.1 Lesson 52 — Fine Scrolling: Session A freezes ST-52.1–ST-52.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson52): Fine Scrolling`
+  the `git-commit` skill in push mode — `feat(lesson52): Fine Scrolling` ✅ (completed: 2026-11-06 06:10)
+
+**Session C record** (verify + evidence, 2026-11-06 06:10): Preflight per `vcs-lesson-production` — the three page-aligned 256-byte planes, the 32-row sine continuity, the 40-nominal/41-effective 1-line kernel, the 16-byte ship, the latch window, the one HMOVE, the joystick, and the 262-line frame checked against `include/vcs.asm`, the timing reference, and the state logs; ACME forms. `bash scripts/verify.sh` green (implementation and review fixes); all four sources 4,096 bytes. Frame: **262 lines** — `StartFrame` `$F043` 259/3, `VblankStart` `$F051` 0/5, `BodyStart` `$F0E2` 37/5, `OverscanStart` `$F102` 229/8; `HmoveApply` `$F0D2` 2/53 (the `WSYNC` write), `HmoveDone` `$F0D6` 3/3 (the `NOP` after the `HMOVE` store; the store completes at 3/2). Scroll: `ScrollStep` `$F05C` A=1; `ScrollYWrite` `$F061` A=1,2,3,4… and 255→0→1 at frames 255/256/257; `WorldRead` `$F0E9` A=$F0 at cycle 14; `ShipWrite` `$F0F8` at cycle 35 with the 16 ship bytes at visible 150–165. Kernel: 40 cycles nominal / **41 effective** (the taken `BNE KernelRow` at $F100 targets $F0E6 across a page), 35 cycles of margin; exercise 1's page-local BNE keeps its body at 40; an off-boundary plane would make the worst case 42. Ship: `ShipXRead` `$F0CC` A=81,82,83…; the sweep hits 136 at frame 56 and 24 at frame 168; `-holdjoy0 L` DECs 79→76, `R` INCs 81→84. Latch: the base store at 35/37 applies from pixel ~43–44; X≤36 is wholly old, X=37–43 straddles, X≥44 is current; the bbox turns clean at X=41 because the top/bottom rows' ink sits at columns 3–4; a test capture at X=36 measured 151.4–166.7, and the shipped captures at X=48/88 are clean. Captures from the committed ROM: `tunnel-a.png` phase 0 (gap sequence 8,8,8,10×11,8×5,6×11,8×2), ship first ink TIA 48; `tunnel-b.png` phase 8 = ScrollY 40 mod 32 (10×6,8×5,6×11,8×5,10×5), ship TIA 88; walls `$C8`, gap `$02`, ship `$0E`; no cursor; title bars read `Stella 7.0: "52-fine-scrolling"`. A still measures the 32-row phase, not the exact 0–255 byte; the state log proves the increment and the wrap. Solutions: ex1 `ScrollYWrite` counts down and wraps 0→$FF (page-local 40); ex2 `ScrollStep` A=2 and ScrollYWrite 2,4,6,8 (41); ex3 `ShipStep` 0/1 and ShipXRead 80,81,81,82,82 (41). Site (ST-52.6): index row 52 ✅ (rows 48–51 ✅, 53–55 Coming Soon); the page renders with `<RomPlayer>` on the committed ROM, both captures, prev → 51, next → 53; sidebar `config.ts:129`; README unchanged. Reviews (AR-5): the atari2600-reviewer round 1 — 4 minor (the latch boundary, the exercise headers, the `C_BG` comment, the doc prereq) and 3 open questions; round 2 — **1 major** (the 40-cycle ledger missed the taken BNE's page cross; fixed to 40 nominal/41 effective) plus the latch 8-pixel rule, the HmoveDone wording, and the drift direction; rounds 3/4 — no findings after the fixes. The curriculum-auditor round 1 — **1 major** (the doc prereq still listed the ball and omitted the timer) plus 2 minor (the exercise headers, the `C_BG` comment); round 2 — **1 major** (the latch boundary contradicted the pixel-43 anchor), fixed by the 8-pixel rule and the measured X=34–48 sweep; round 3 — **1 major** (the ex1 header copied the base's 35/37 cycle pair; ex1 is 34/36) plus the HmoveDone prose; round 4 — only the ex1 cycle pair, fixed. Final state: **0 critical, 0 major open**. Lesson 52 is complete.
+
+
+**Session A record** (freeze + red baseline, 2026-11-06 04:58): ST-52.1–ST-52.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 52. Design pins: 192 lines, 1-line kernel; three page-aligned 256-byte planes (`WorldPF0/1/2`) indexed by the same `ScrollY`; the gap is centred and its width follows a 32-row sine (6..10 chunks), so the 32-row period divides 256 and the wrap joins cleanly; `ScrollY` 0–255, one line per frame; the kernel is `LDX ScrollY; LDY #0; ...; LDA WorldPFx,X; STA PFx; LDA ShipStrip,Y; STA GRP0; STA WSYNC; INX; INY; CPY #192; BNE` = 40 cycles nominal / 41 effective (the taken BNE crosses a page); the ship is a 16-byte (16-line) strip at rows 150–165, `ShipX` 1 px/frame with the divide-by-15 + one HMOVE dance, clamp 24–136; the joystick swaps the auto-demo; the exercises reverse the scroll, double the step, and halve the ship step. Evidence pins (AR-6): `ScrollY`, `ScrollStep`, `WorldRead` (A = the first `WorldPF0` byte), `ShipX`, `HmoveApply`/`HmoveDone`, `BodyStart` 37, `OverscanStart` 229, `StartFrame` 259. Red baseline confirmed: no `lessons/part7-kernel-mastery/52-fine-scrolling`, no `docs/public/images/lesson52`, no Part 7 52 ROMs, the document is the `🔒 Coming Soon` stub, index row 52 is Coming Soon, sidebar `config.ts:129`, `verify.sh` green at `4643caf`. No implementation logic read (AR-2).
+
 
 **Session sub-steps:**
 
 1. **Session A — freeze the specification:** re-affirm ST-52.1–ST-52.6, the 256-row world, the
-   1-line 40-cycle ledger, the page-aligned planes, the 1-px ship step, and the playfield/sprite
+   1-line 40/41 ledger, the page-aligned planes, the 1-px ship step, and the playfield/sprite
    resolution split; record the red baseline.
 2. **Session B — implement:** preflight; author the main source and three solutions; write the
    document; assemble, run, and capture; flip index row 52; `npm run roms`; `verify.sh`.
