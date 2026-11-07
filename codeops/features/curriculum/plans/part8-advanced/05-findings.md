@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 9 complete after round 2 — 0 critical, 0 major open. Lessons 56–64 are committed.
+> **Status**: Phase 10 complete after round 2 — 0 critical, 0 major open. Lessons 56–65 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -199,3 +199,22 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-64-018 | 64 | 🟡 MINOR | "The VBLANK sets COLUBK to zero" was wrong; the stores are in `BodyStart`/`ColourBars`. | fixed. |
 | SR-64-019 | 64 | 🟡 MINOR | The meta said "a CART TEST label"; the screen has CART and TEST. | fixed — "CART and TEST labels". |
 | SR-64-020 | 64 | 🟠 MAJOR | The doc still claimed the RESET block was observable with the switch held across power-on; RESET holds the CPU in reset. | fixed — SELECT is observable with `-holdselect`; RESET restarts the console and its block cannot be observed while the program runs (released = 1). |
+| SR-65-001 | 65 | 🔴 CRITICAL | Exercise 3's `SwatchTable` was 64 bytes but the 16×8 grid read 128, so rows 8-15 read the timers/strings/glyphs. | fixed — the table is 128 bytes (`$00…$FE`), the grid reads 0..127, and the ROM is 4,096; the 16×8 table is verified in the source/ROM. |
+| SR-65-002 | 65 | 🟠 MAJOR | The PAL `BodyEnd` cleared `ENABL` and the next frame's top bands ran with the ball off until the label clear line, so the PAL moving bar was missing from the top 34 picture/66 title lines. | fixed — `OverscanStart` restores `ENABL=2` after `STA VBLANK`; the PAL capture shows the ball in the top band and the bars. |
+| SR-65-003 | 65 | 🟠 MAJOR | The band ledgers summed to 188/193, and the source comments used 100/132/66 and a 10-line text band; the actual text band is 11 lines and the final bands are 92/126/55. | fixed — title 8+48+11+16+11+92+1+5, picture 8+16+11+126+11+14+1+5, timing 8+40+11+24+11+24+11+55+1+7, all 192. |
+| SR-65-004 | 65 | 🟠 MAJOR | The doc claimed the shipped Harmony/Melody menus and DPC+ games auto-detect the region; the manual supplies NTSC/PAL50/PAL60 variants and DPC+ is compile-time. | fixed — a custom Harmony/Melody firmware could measure with the ARM clock; the shipped menu is region-specific and user-selected; DPC+ is compile-time. The 03 and headers align. |
+| SR-65-005 | 65 | 🟠 MAJOR | The 53/9 timer explanation said 54 would let the poll miss the zero; Lesson 15 teaches the zero holds a full tick. | fixed — the reason is the late `STA TIM64T` (cycle 15-20) and the line boundary; 53/9/76 retained. |
+| SR-65-006 | 65 | 🟡 MINOR | The source/exercise headers used `stella -pal`, not Stella 7's `-format PAL`. | fixed in all four. |
+| SR-65-007 | 65 | 🟡 MINOR | Exercise 3's first swatch was 4 px and the first scanline 15 px early; the hit-number comments were wrong. | fixed — the first line gets the same overhead; the hits are 18,25,32,…; the narrow first swatch is documented. |
+| SR-65-008 | 65 | 🟡 MINOR | The 03/99 RAM map said `$86-$9F free`; the source uses `$86-$AB`, leaving only `$AC-$AF`. | fixed in the plan. |
+| SR-65-009 | 65 | 🟡 MINOR | The TypeScript gated up/down on the title and its SELECT went picture→timing→title; the ROM is ungated and returns to the picture. | fixed — ungated edges; SELECT returns to the picture (or title if entered from it). |
+| SR-65-010 | 65 | 🟡 MINOR | `Row` and `Scratch2` were dead. | removed from all four sources/RAM maps. |
+| SR-65-011 | 65 | 🟡 MINOR | The Step 5 snippet showed a nonexistent `JMP PalBorder`/`PalBorder` and omitted `BuildFrame`. | fixed — the real fall-through with `BuildFrame`. |
+| SR-65-012 | 65 | 🟡 MINOR | "The timer starts at the top of line 237" ignored the store cycle. | fixed — the `STA TIM64T` completes at ~cycle 27. |
+| SR-65-013 | 65 | 🟡 MINOR | The PAL still cannot show the 8-line blanked overscan; the state log proves 312. | fixed — the still shows the 64-line black lower border; the log proves the split. |
+| SR-65-014 | 65 | 🟡 MINOR | The playfield repeat shows each label twice; the alt/What-You-See described one. | fixed — the repeat is documented. |
+| SR-65-015 | 65 | 🟡 MINOR | Code comments referenced "the plan's 72-line interval". | fixed — the durable PAL 64+8 wording. |
+| SR-65-016 | 65 | 🟡 MINOR | Exercise 3's hit-number comments were wrong. | fixed — 18,25,32,… |
+| SR-65-017 | 65 | 🟡 MINOR | Exercise 1's doc said "every other line is unchanged"; the file adds a header and sets `DEFAULT_TV`. | fixed — "the program body is unchanged". |
+| SR-65-018 | 65 | 🟡 MINOR | The doc claimed the TVMode hand-off was in the log, but only steady A=0/1 was shown. | fixed — the frame-0/1 lines are added. |
+| SR-65-019 | 65 | 🟡 MINOR | "RIOT 64-cycle ticks (1-255)" was TIM64T only, and "the TIA's line counter is the frame" was loose. | fixed — TIM64T and the program's WSYNC count. |

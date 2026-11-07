@@ -137,8 +137,8 @@ reports the first cycle of the instruction that follows it.
 | --- | --- | --- | --- |
 | ST-65.1 | Assemble the main ROM | 4,096 bytes | `acme` |
 | ST-65.2 | Run the selector | The title asks NTSC/PAL; the chosen mode shows the color bars and the label; two captures | Screenshots + pixel check |
-| ST-65.3 | Inspect the timing | `TVMode` A=0/1; `FrameLines` A=262/312; `BodyStart` 37/45; `OverscanStart` 229/301; `StartFrame` 259/309 | State log |
-| ST-65.4 | Run both modes | Stella `-pal` and the PAL selection produce 312 lines; the NTSC selection produces 262; the doc states auto-detect is impossible | State log + doc |
+| ST-65.3 | Inspect the timing | `TVMode` A=0/1; `FrameLines` low byte `$06`/`$38` and high byte `$01`; `BodyStart` 37/45; `OverscanStart` 229/301; `StartFrame` 259/309 | State log |
+| ST-65.4 | Run both modes | Stella `-format PAL` and the PAL selection produce 312 lines; the NTSC selection produces 262; the doc states stock auto-detect is impossible | State log + doc |
 | ST-65.5 | Assemble/run the exercises | ex1 4,096 (PAL default); ex2 4,096 (PAL-60); ex3 4,096 (color bars) | `acme`, Stella logs |
 | ST-65.6 | Site integration | Row 65 ✅; prev 64, next Part 9's 66; sidebar `config.ts:148`; README unchanged | Build + page check |
 

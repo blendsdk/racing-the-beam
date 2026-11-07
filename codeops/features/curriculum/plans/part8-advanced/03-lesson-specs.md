@@ -445,8 +445,9 @@
   (the playfield), Lesson 25 (players), Lesson 26 (positioning), Lesson 48 (the taxonomy).
 - **Concepts:** NTSC 262 lines/60 Hz vs PAL 312 lines/50 Hz; the 192-line picture with different
   VBLANK/overscan padding; the color palettes (128 vs 104); why software-only auto-detection is
-  impossible (same clock, ~1% crystal difference); the Harmony/Melody ARM timer exception; the
-  Color/BW-switch practice; a title-screen selector; PAL-60.
+  impossible (same clock, ~1% crystal difference); the custom Harmony/Melody firmware exception (the shipped menu is
+  region-specific and user-selected; DPC+ is compile-time); the Color/BW-switch practice; a
+  title-screen selector; PAL-60.
 - **ROM:** `65-pal-ntsc-universal.asm` — **"the world traveler"**, 4,096 bytes.
   - The title screen asks NTSC or PAL; up/down selects, fire starts. `TVMode` 0 = NTSC, 1 = PAL.
     The frame uses `FrameLines` = 262 or 312; `BodyStart` 37 or 45; `OverscanStart` 229 or 301;
@@ -454,13 +455,17 @@
   - The picture: a color-bar test, a moving bar, a "NTSC"/"PAL" label, and a frame counter.
     SELECT shows the timing page (line count, frame count, color count).
   - Frame: NTSC 3 + 37 + 192 + 30 = 262; PAL 3 + 45 + 192 + 72 = 312.
-  - RAM: `$80` `TVMode`, `$81` `FrameLines`, `$82` `Frame`, `$83` `BarX`, `$84` `Screen`,
-    `$85–$9F` free; stack `$F8–$FF`.
-  - Checkpoints: `TVMode` (A=0/1), `FrameLines` (A=262/312), `Frame`, `BodyStart` 37/45,
-    `OverscanStart` 229/301, `StartFrame` 259/309.
+  - RAM: `$80` `TVMode`, `$81-$82` `FrameLines` (16-bit little-endian: `$0106`/`$0138`), `$83`
+    `Frame`, `$84` `BarX`, `$85` `Screen`, `$86-$AB` the input/scroll/timing variables, `$AC-$AF`
+    free; stack `$F8–$FF`.
+  - Checkpoints: `TVMode` (A=0/1), `FrameLines` (A = the low byte, `$06`/`$38`; high byte
+    `$01`), `Frame`, `BodyStart` 37/45, `OverscanStart` 229/301, `StartFrame` 259/309; the
+    PAL post-picture split is a 64-line black lower border plus an 8-line blanked overscan
+    tail (`BodyEnd` 237/0, `OverscanStart` 301/6).
 - **Evidence pins:** the NTSC capture and the PAL capture (or the selector + one mode); the state
-  log shows 262/312 and 37/45 and 229/301; Stella runs the ROM with `-pal` and the PAL mode; the
-  doc states that a stock 2600 cannot auto-detect and that Harmony/Melody can.
+  log shows 262/312 and 37/45 and 229/301; Stella runs the ROM with `-format PAL` and the PAL mode;
+  the doc states that a stock 2600 cannot auto-detect and that a custom Harmony/Melody firmware
+  could (the shipped menu is region-specific).
 - **Screenshots:** `selector.png` and `pal.png` (or `ntsc.png`); the doc shows both modes.
 - **Exercises:** (1) default to PAL with a compile-time flag; (2) add PAL-60 (262 lines, PAL
   colors); (3) a color-bar test for both palettes. All 4,096.

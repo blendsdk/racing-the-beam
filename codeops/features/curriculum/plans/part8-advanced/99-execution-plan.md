@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 02:42
-> **Progress**: 9/10 tasks (90%)
+> **Last Updated**: 2026-11-07 04:45
+> **Progress**: 10/10 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -345,15 +345,15 @@ AR-25
 AR-23, AR-25, AR-32
 **Objective**: Deliver Lesson 65 end to end.
 
-- [ ] 10.1.1 Lesson 65 — PAL/NTSC Universal ROM: Session A freezes ST-65.1–ST-65.6 (red baseline),
+- [x] 10.1.1 Lesson 65 — PAL/NTSC Universal ROM: Session A freezes ST-65.1–ST-65.6 (red baseline),
   Session B implements the full artifact set, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson65): PAL/NTSC Universal ROM`
+  the `git-commit` skill in push mode — `feat(lesson65): PAL/NTSC Universal ROM` ✅ (completed: 2026-11-07 04:45)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 02:46): ST-65.1–ST-65.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 65. Design pins: 4,096-byte **"the world traveler"**, a buildable lab with a main source and three exercise solutions. The title asks NTSC or PAL; up/down selects, fire starts; `TVMode` 0 = NTSC, 1 = PAL; the frame is 262 lines (3 + 37 + 192 + 30) or 312 (3 + 45 + 192 + 72); `StartFrame` 259/309, `VblankStart` 0/5, `BodyStart` 37/45, `OverscanStart` 229/301; the visible kernel is 192 lines in both. The picture is a color-bar test, a moving bar, a "NTSC"/"PAL" label, and a frame counter; SELECT shows the timing page (line count, frame count, color count). RAM `$80` `TVMode`, `$81-$82` `FrameLines` (16-bit little-endian `$0106`/`$0138`), `$83` `Frame`, `$84` `BarX`, `$85` `Screen`, `$86-$AB` the input/scroll/timing variables, `$AC-$AF` free; stack `$F8–$FF`. Checkpoints: `TVMode` A=0/1; `FrameLines` (A = the low byte `$06`/`$38`; high byte `$01`); `Frame`; `BodyStart` 37/45; `OverscanStart` 229/301; `StartFrame` 259/309. The doc must state that a stock 2600 **cannot** auto-detect the TV system (same clock, ~1% crystal difference), explain the Harmony/Melody ARM timer exception and the Color/BW-switch practice, and never claim runtime auto-detection. Captures: `selector.png` and `pal.png`. Exercises: default PAL with a compile-time flag; PAL-60 (262 lines, PAL colors); a color-bar test for both palettes. All 4,096. Red baseline confirmed: no `lessons/part8-advanced/65-pal-ntsc-universal`, no `docs/public/images/lesson65`, no Part 8 65 ROMs, the document is the `🔒 Coming Soon` stub, index row 65 Coming Soon, sidebar `config.ts:148`, `verify.sh --no-docs` green at `a0d565c`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 03:40): Four sources (main + three exercises, 4,096 each), the 1,935-line document, two captures (selector/PAL), and four committed ROMs. The title selector sets `TVMode`; the frame is 262/312 with `StartFrame` 259/309, `BodyStart` 37/45, `BodyEnd` 229/0/237/0, `OverscanStart` 229/6/301/6; the PAL post-picture split is a 64-line black lower border plus an 8-line blanked tail. The picture is a colour-bar test, a moving 8-px ball, an NTSC/PAL label, and a frame counter; SELECT shows the timing page. The review fixes: exercise 3's `SwatchTable` is 128 bytes (16×8); the PAL `OverscanStart` restores `ENABL=2` so the ball is present in the top band; the band ledgers use the actual LDY values (title 8+48+11+16+11+92+1+5, picture 8+16+11+126+11+14+1+5, timing 8+40+11+24+11+24+11+55+1+7); the Harmony/Melody claim is now the custom-firmware/shipped-menu distinction; the 53/9 timer reason is the late start/line boundary; the `-format PAL` headers, the RAM `$86-$AB`/`$AC-$AF`, the TypeScript, the dead symbols, the Step 5 snippet, the PAL-still/repeat wording, and the plan references are corrected.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-07 04:45): `bash scripts/verify.sh` PASSED (243 ROMs, no drift, docs build); all four sources 4,096 and byte-identical to the committed ROMs; Full Source verbatim (1,268 source lines / 1,937 doc lines). NTSC: `StartFrame` `$F05C` 259/3, `VblankStart` `$F06A` 0/5, `BodyStart` `$F153` 37/5, `BodyEnd` `$F27A` 229/0, `OverscanStart` `$F2A2` 229/6, `TVModeRead` `$F078` A=0, `FrameLinesRead` `$F07B` A=$06, `FrameLinesHiRead` `$F07E` A=$01, `FrameRead` `$F12C` A=1,2,3. PAL: `StartFrame` 309/3, `Vblank` 0/5, `Body` 45/5, `BodyEnd` 237/0, `Overscan` 301/6, `TVMode` A=1, `FrameLines` $38/$01. Selector: `ModeWrite` A=0, `ModeWriteDown` A=1, `ScreenWriteFire` A=1, `ScreenWrite` SELECT A=2. Captures: selector (NTSC bars, NTSC/PAL bands, underline, ball) and PAL (PAL palette, PAL label, frame counter, 64-line black lower border, ball); titles `Stella 7.0: "65-pal-ntsc-universal"`, no cursor. Exercises: default PAL 312; PAL-60 262 with PAL colours and `LN262`/`CL104`; palette test 128-byte 16×8 grid, NTSC 229/15 and PAL 301/6. The doc states the stock auto-detect impossibility, the custom Harmony/Melody exception, and the Color/BW manual switch. Site: index row 65 ✅; prev 64/next 66; sidebar `config.ts:148`; README unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (exercise 3's 64-byte table read as 128) + 3 major (PAL ball enable, band ledgers, timer wording) + 9 minor; curriculum-auditor — 3 major (Harmony/Melody claim, band ledgers, timer reason) + 9 minor. All fixed: the 128-byte table, the PAL ball restore, the 192-line ledgers, the custom/shipped Harmony distinction, the 53/9 start-cycle reason, the `-format PAL` headers, the exercise-3 grid, the RAM map, the TypeScript, the dead symbols, the snippet, the still/repeat/plan wording. Final state: 0 critical, 0 major open. Lesson 65 is complete.
 
 ---
 

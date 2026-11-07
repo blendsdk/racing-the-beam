@@ -15,7 +15,7 @@ Push beyond 4KB — bankswitching, illegal opcodes, DPC+, compression, and build
 | 62 | [Reverse Engineering a Classic Game](./62-reverse-engineering) | ✅ Complete |
 | 63 | [Modern Homebrew — Dev Carts and Community](./63-modern-homebrew) | ✅ Complete |
 | 64 | [Building Your Own Cartridge — From ROM to Physical Cart](./64-building-cartridges) | ✅ Complete |
-| 65 | [PAL/NTSC Universal ROM — One Cart, Every TV](./65-pal-ntsc-universal) | 🔒 Coming Soon |
+| 65 | [PAL/NTSC Universal ROM — One Cart, Every TV](./65-pal-ntsc-universal) | ✅ Complete |
 
 ## What You'll Learn
 

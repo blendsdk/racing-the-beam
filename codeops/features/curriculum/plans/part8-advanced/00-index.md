@@ -1,7 +1,7 @@
 # Part 8 — Advanced Topics (Lessons 56–65) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 8 by shipping lessons 56–65 as a reviewed lesson set
-> **Status**: Executing (9/10 lessons complete)
+> **Status**: Executing (10/10 lessons complete)
 > **Created**: 2026-11-06
 > **Implements**: curriculum/RD-08
 > **Source**: ../../requirements/RD-08-part8-advanced.md
