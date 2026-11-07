@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 10 complete after round 2 — 0 critical, 0 major open. Lessons 56–65 are committed.
+> **Status**: Part 8 complete — 0 critical, 0 major open. Lessons 56–65 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 

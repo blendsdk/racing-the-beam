@@ -78,3 +78,16 @@ correct flat image without a post-build step. This was verified with the preflig
   not claim support for a mapper outside that set. Part 8 stays inside it (AR-29).
 - The Part 8 stubs' "Coming Soon" marker must flip exactly once per lesson; the index is the
   reader-facing progress surface.
+
+## Final State (2026-11-07)
+
+Part 8 is complete. The ten lessons ship **31 sources/ROMs** (F8 8K, F8SC 8K, F6 16K, DPC 10K,
+and 4K), **10 documents**, and **21 Stella screenshots** (Lesson 62 ships three). `npm run roms`
+builds **243** ROMs, and `bash scripts/verify.sh` passes with no drift and a successful VitePress
+build. The Part 8 index rows 56–65 are all ✅; the sidebar, prev/next links, and README row 8 are
+unchanged. RD-08 is Done, the feature roadmap is 8/11, and the portfolio records 8 plans done.
+
+The preflight's mapper and platform facts held: F8/F8SC/DPC start in bank 1 and F6 in bank 0; the
+F8SC signature and `$F100` code start are required; DPC is 10,240 bytes with entry `$F080`; a stock
+2600 cannot auto-detect PAL/NTSC. The per-lesson review gate caught the remaining implementation
+and documentation defects before each commit; the fixes are recorded in `05-findings.md`.

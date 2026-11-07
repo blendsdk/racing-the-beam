@@ -2,7 +2,7 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 04:45
+> **Last Updated**: 2026-11-07 04:58
 > **Progress**: 10/10 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
@@ -365,18 +365,58 @@ AR-23, AR-25, AR-32
 > `99-execution-plan.md` · `05-findings.md` · `00-index.md` · `02-current-state.md`
 > **Reasoning**: high — the gate counts the artifacts, confirms the reviews, and marks RD-08 Done
 
-- [ ] 10.1.1a Part 8 completion gate (a gate, not an eleventh lesson task): index rows 56–65 ✅,
+- [x] 10.1.1a Part 8 completion gate (a gate, not an eleventh lesson task): index rows 56–65 ✅,
   RD-08 Done, feature roadmap 8/11, portfolio 8 plans, all completion criteria ticked, final
-  `verify.sh` green
+  `verify.sh` green ✅ (completed: 2026-11-07 04:58)
+
+**Completion gate record** (2026-11-07 04:58): **PASSED.** Counts: `find lessons/part8-advanced -name '*.asm'` = **31**; `find docs/public/roms/part8-advanced -name '*.bin'` = **31**; `find docs/public/roms -name '*.bin'` = **243**; `docs/part8-advanced/[0-9]*.md` = **10**; `docs/public/images/lesson56..65/*.png` = **21** (Lesson 62 ships three). `bash scripts/verify.sh` PASSED: 243 lesson sources, no ROM drift, VitePress build OK. The Part 8 index rows 56–65 are all ✅. Both specialists report 0 critical/major open for every lesson (05-findings.md). RD-08 is Done; the feature roadmap is 8/11; the portfolio is 8 plans done. README row 8 is unchanged. The post-completion analysis is recorded below.
+
+## Post-Completion Analysis (2026-11-07)
+
+**What shipped.** Ten lessons, 31 sources/ROMs, 10 documents, 21 screenshots, and 243 committed
+ROMs. Part 8 moved from the 4K world to the shipped world: F8/F6 banking, the F8SC 128-byte RAM,
+the stable illegal opcodes, RAM-executed self-modifying code, a real 10K DPC (with DPC+ documented
+but not built), RLE compression, a reverse-engineering target game, an attract mode, a cartridge
+burn-in test, and the PAL/NTSC selector.
+
+**What the preflight prevented.** The mapper prototypes settled the facts that would have broken
+the lessons: F8/F8SC/DPC start in bank 1 and F6 in bank 0; F8SC needs the duplicated 128-byte
+signature and `$F100`; DPC is 10,240 bytes with entry `$F080` and a 2K display at offset 8K; the
+DPC bottom/counter-high registers are `$1048+index`/`$1058+index`, not `$1041`/`$104B`; ACME's
+`!cpu 6510` accepts the undocumented mnemonics; and a stock 2600 cannot detect PAL/NTSC. Those
+facts became the plan's AR/PF records and the lessons' evidence pins.
+
+**What the reviews caught.** The per-lesson review gate found real defects that a build-only gate
+would have missed: the Lesson 56 switch-cost ledger and the three-trunk/arch prose; the Lesson 57
+exercise-3 VSYNC re-entry; the Lesson 58 false "ACME cannot assemble the mnemonics" claim and the
+row/strip timing; the Lesson 59 8-bit phase overflow; the Lesson 60 `$3000` alias and the DPC+
+register-map compatibility claim; the Lesson 61 exercise-1 decoder state and exercise-3 first row;
+the Lesson 62 mid-line ball, the brick-2 table gap, the missing game-over capture, and the win
+screen's P1 column; the Lesson 63 title capture provenance and the shifted-table labels; the
+Lesson 64 bar alignment, the UDLR order, the RESET observability, and the test-screen labels; and
+the Lesson 65 exercise-3 table bounds, the PAL ball enable, the band ledgers, the Harmony/Melody
+claim, and the timer reason. All were fixed in the implementation or in the doc, never by
+weakening a frozen expectation.
+
+**What to carry forward.** (1) Capture moving states with a burst and measure the state, not a
+fixed sleep; a still must match the ROM's clocks. (2) Re-derive every address and table range from
+the final `.sym` and a host-side check; the code moves. (3) Document the hardware truth before the
+lesson's convenience: no stock PAL/NTSC detection, no DPC+ on a plain cart, no physical build in
+the repository. (4) The 4K budget is a design constraint: the starfield repeats, the logo is seven
+rows expanded with `!fill`, the marquee is pre-shifted, and the tune is two 32-byte tables.
+
+**Final state.** `verify.sh` green (243 ROMs, no drift, docs build); Part 8 index 56–65 ✅; RD-08
+Done; feature roadmap 8/11; portfolio 8 plans done; README row 8 unchanged. The next curriculum
+work is RD-09 (Part 9 — The DSL Path).
 
 ## Completion Criteria
 
-- [ ] All ten phases marked `[x]` with Session A/C records.
-- [ ] 31 committed ROMs (4K/8K/10K/16K), 10 documents, 20 screenshots.
-- [ ] Lessons 56–61 and 65 ship three exercise solutions each; 62–64 ship `demo-NN.asm`.
-- [ ] Part 8 index rows 56–65 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit.
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security is N/A (static content, no input).
-- [ ] The post-completion re-analysis (plan/skill protocol) is recorded.
-- [ ] RD-08 Done; feature roadmap 8/11 RDs; portfolio 8 plans done.
+- [x] All ten phases marked `[x]` with Session A/C records.
+- [x] 31 committed ROMs (4K/8K/10K/16K), 10 documents, 21 screenshots (Lesson 62 has three).
+- [x] Lessons 56–61 and 65 ship three exercise solutions each; 62–64 ship `demo-NN.asm`.
+- [x] Part 8 index rows 56–65 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit.
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security is N/A (static content, no input). The Lesson 64/65 dead symbols and the Lesson 63 unused constants were removed.
+- [x] The post-completion re-analysis (plan/skill protocol) is recorded below.
+- [x] RD-08 Done; feature roadmap 8/11 RDs; portfolio 8 plans done.

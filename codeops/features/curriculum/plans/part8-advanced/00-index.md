@@ -1,7 +1,7 @@
 # Part 8 — Advanced Topics (Lessons 56–65) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 8 by shipping lessons 56–65 as a reviewed lesson set
-> **Status**: Executing (10/10 lessons complete)
+> **Status**: Complete (10/10 lessons complete)
 > **Created**: 2026-11-06
 > **Implements**: curriculum/RD-08
 > **Source**: ../../requirements/RD-08-part8-advanced.md
@@ -100,7 +100,7 @@ bash scripts/verify.sh
 | Cartridge | Burn-in test ROM, prose for hardware (AR-19) |
 | PAL/NTSC | Selector + adaptive 262/312 lines; no false auto-detect (AR-20) |
 | Evidence | State logs + static ledgers + pixel checks (AR-23) |
-| Completion | 31 sources/ROMs, 10 docs, 20 screenshots; RD-08 Done; 8/11 RDs (AR-27) |
+| Completion | 31 sources/ROMs, 10 docs, 21 screenshots; RD-08 Done; 8/11 RDs (AR-27) |
 
 ## Risks and Mitigations
 

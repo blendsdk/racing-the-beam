@@ -1,8 +1,9 @@
 # RD-08: Part 8 — Advanced Topics (lessons 56–65)
 
 > **Document**: RD-08-part8-advanced.md
-> **Status**: Draft
+> **Status**: Done
 > **Created**: 2026-10-10
+> **Completed**: 2026-11-07
 > **Project**: Racing the Beam
 > **Depends On**: RD-07 (Part 7 — Kernel Mastery)
 > **CodeOps Artifact Schema**: 1

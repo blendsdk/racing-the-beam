@@ -59,7 +59,7 @@
 | Exercises | Three per buildable lesson; analysis tasks for theory | AR-24 |
 | Index/README | Part 8 index rebuilt; rows flip per lesson; README unchanged | AR-25 |
 | Commits | One atomic `feat(lessonNN)` per lesson; plan+preflight first; push mode | AR-26 |
-| Completion | 31 sources/ROMs, 10 docs, 20 screenshots; RD-08 Done; 8/11 RDs | AR-27 |
+| Completion | 31 sources/ROMs, 10 docs, 21 screenshots; RD-08 Done; 8/11 RDs | AR-27 |
 | Javatari | F8(+RAM)/DPC supported; bundle unmodified | AR-29 |
 
 ## Acceptance Criteria
