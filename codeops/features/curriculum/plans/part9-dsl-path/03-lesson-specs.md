@@ -253,27 +253,29 @@
   - The frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5,
     `OverscanStart` 229/19 (the 13-cycle dispatch tax; the scanline is 229).
 - **RAM:** the framework owns `$80–$82`; `$83` `Layout`, `$84` `Frame`, `$85` `PrevSelect`,
-  `$86` `NewSelect`, `$87` `Startup`, `$88` `SpriteY`, `$89–$9F` free; `$A0–$D7` the score
-  library; `$D8–$F7` free; `$F8–$FF` stack.
-- **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `OverscanStart`, `Layout` (A=0/1/2),
-  `LayoutWrite` (A=the new layout), `KernelEnd` (the label after the last zone), `Frame`. The
-  state log proves the layout switch and the 192-line budget.
+  `$86` `NewSelect`, `$87` `Startup`, `$88` `SpriteY`, `$89-$D5` `RampDataA` (the 77-byte STATUS
+  ramp; the score library is not sourced), `$D6` `Tmp`, `$D7` free; `$D8-$F7` free; `$F8-$FF`
+  stack. The source header is the exact map.
+- **Checkpoints:** `StartFrame` (`$F099`, 259/3), `VblankStart` (`$F0A7`, 0/5), `BodyStart`
+  (`$F140`, 37/5), `KernelEnd`/`OverscanStart` (`$F143`, 229/19), `LayoutRead` (A=0/1/2),
+  `LayoutWrite` (A=the new layout), `FrameRead` (A=the frame count). The state log proves the
+  layout switch and the 192-line budget.
 - **Evidence pins:** every layout passes `+kf_end`; `acme` 4,096; the three captures differ;
   `LayoutWrite` changes 0→1→2; `OverscanStart` 229/19; the frame is 262; the framework header
   documents the API and the boundary contract.
 - **Screenshots:** `layout-status.png`, `layout-starfield.png`, `layout-split.png` from the
   committed ROM; the doc discloses the SELECT path.
 - **Exercises:** each ships a 4,096-byte solution.
-  1. **Add a ball zone.** Add `+kf_ball .color, .dataLines, .table` (a one-byte-per-line ENABL
-     ball band) to the lesson-local macros and use it in a layout; ship
-     `exercise-01-solution.asm`. The doc shows the macro and the budget.
+  1. **Add a ball zone.** Define a lesson-local `BallBand` routine (one ENABL byte per line) and
+     call it through `+kf_custom 12, BallBand`; ship `exercise-01-solution.asm`. The doc shows the
+     routine, the `+kf_custom` call, and the five-zone budget (13+49+39+13+78 = 192).
   2. **Add a fourth layout and a selector.** Add a title/selector screen (or a fourth layout
      D→layout 0) and a `+kf_dispatch` variant; ship `exercise-02-solution.asm`. The doc shows the
      dispatch and the new ledger.
   3. **Make a zone configurable at runtime.** Add a scrolling starfield (a RAM strip updated each
      frame) or a colour-cycling ramp; ship `exercise-03-solution.asm`. The doc shows the update
      and the budget.
-- **Integration:** prev 67; next Part 10's 69; index row 68 ✅; sidebar `config.ts:155`.
+- **Integration:** prev 67; next Part 10's 69; index row 68 ✅; sidebar `config.ts:157`.
 - **Risks:** the boundary line (budget rule); the dispatch tax (229/19); the RAM collision
   (`$80–$82`); the 4K budget (three layouts + framework); the last-zone colour (black).
 

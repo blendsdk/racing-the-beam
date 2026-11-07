@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 17:32
-> **Progress**: 2/4 tasks (50%)
+> **Last Updated**: 2026-11-07 18:54
+> **Progress**: 3/4 tasks (75%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -156,24 +156,23 @@ generated levels.
 **Objective**: ship the zone framework, the three-layout demo, the three solutions, and the
 document that teaches the kernel architecture.
 
-- [ ] 3.1.1 Lesson 68 — Kernel Architecture: Session A freezes ST-68.1–ST-68.6 (red baseline),
+- [x] 3.1.1 Lesson 68 — Kernel Architecture: Session A freezes ST-68.1–ST-68.6 (red baseline),
   Session B implements the framework, the layouts, the solutions, and the document, Session C
   verifies to green and hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson68): Kernel Architecture`
+  `feat(lesson68): Designing Your Kernel Architecture` ✅ (completed: 2026-11-07 18:54)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 17:35): ST-68.1–ST-68.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 68. Design pins: the doc title is the curriculum/stub title **"Lesson 68: Designing Your Kernel Architecture — A Zone Framework"**; the new `include/kernel_framework.asm` exposes `+kf_begin`, `+kf_fill`, `+kf_pf`, `+kf_strip`, `+kf_ramp`, `+kf_custom`, `+kf_end`, and `+kf_dispatch`; each zone costs `.dataLines + 1` boundary lines and `+kf_end` must `!error` unless the sum is 192; the framework composes `include/kernel_patterns.asm` and owns only `$80-$82`. The main `68-kernel-architecture.asm` (4,096) has three layouts: STATUS (fill 15 + PF 24 rows + strip 48 + ramp 77 = 16+49+49+78 = 192), STARFIELD (ramp 31 + strip 95 + PF 16 rows + fill 30 = 32+96+33+31 = 192), and SPLIT (PF 24 + strip 31 + PF 24 + ramp 61 = 49+32+49+62 = 192); the last zone is black. Frame 262: `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/19 (the 13-cycle dispatch tax). RAM: framework `$80-$82`; `$83` `Layout`, `$84` `Frame`, `$85` `PrevSelect`, `$86` `NewSelect`, `$87` `Startup`, `$88` `SpriteY`, `$89-$D5` `RampDataA` (the 77-byte STATUS ramp; the score library is not sourced), `$D6` `Tmp`, `$D7` free; `$D8-$F7` free; `$F8-$FF` stack. Three 4,096-byte solutions: a ball zone, a fourth layout/selector, and a runtime-configurable zone. Captures: `layout-status.png`, `layout-starfield.png`, `layout-split.png`. Red baseline confirmed: no `lessons/part9-dsl-path/68-kernel-architecture`, no `docs/public/images/lesson68`, no Part 9 68 ROMs, no `include/kernel_framework.asm`, the document is the `🔒 Coming Soon` stub, index row 68 Coming Soon, sidebar `config.ts:157`, `verify.sh --no-docs` green at `abafdef`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 18:00): `include/kernel_framework.asm` (the zone macros, the 192-line `!error`, the branch dispatcher), `68-kernel-architecture.asm` (4,096) with STATUS/STARFIELD/SPLIT, three 4,096-byte solutions (the `+kf_custom` ball band, the GALLERY fourth layout, the scrolling star strip), the doc (1,519 lines), and three captures. The review fixes: `CTRLPF=$21` reflect and the re-captured V/symmetry, the boundary-line clears first, the `+kf_custom` exercise, the framework contract/cycle/dispatch wording, and the exercise comments.
 
-**Session C record**:
-
+**Session C record** (verify + evidence, 2026-11-07 18:54): `bash scripts/verify.sh` PASSED (252 sources, no drift, docs build); four ROMs 4,096 and byte-identical to fresh builds; Full Source verbatim (630 source / 1,519 doc lines); `+kf_end` positive and the 191/193 negative; frame `StartFrame` `$F099` 259/3, `VblankStart` `$F0A7` 0/5, `BodyStart` `$F140` 37/5, `KernelEnd`/`OverscanStart` `$F143` 229/19; `LayoutRead` A=0/1/2; `LayoutWrite` A=1/2/0 at 240/480/720; `FrameRead` A=2,3,4; the mirror checks 99.03%/97.77%/99.73%; the captures 1010×807, titles `Stella 7.0: "68-kernel-architecture"`, no cursor. Exercise evidence: ex1 `+kf_custom`/BallBand (4,096, 229/19), ex2 A=3 at 720 (4,096), ex3 StarShift every 2 frames (4,096). Site: index row 68 ✅; prev 67/next 69; sidebar `config.ts:157`; README row 9 unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (CTRLPF) + 3 major + 15 minor, then no critical/major; curriculum-auditor — 2 major (CTRLPF, `+kf_custom`) + 9 minor, then no critical/major. All fixed; final 0 critical, 0 major open. Lesson 68 is complete.
 **Deliverables**:
-- [ ] `include/kernel_framework.asm` (API, budget, boundary contract, dispatcher macro).
-- [ ] `68-kernel-architecture.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
-- [ ] `docs/part9-dsl-path/68-kernel-architecture.md` (framework API, three layouts, 3 images, 1
+- [x] `include/kernel_framework.asm` (API, budget, boundary contract, dispatcher macro).
+- [x] `68-kernel-architecture.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
+- [x] `docs/part9-dsl-path/68-kernel-architecture.md` (framework API, three layouts, 3 images, 1
   player, three exercises with solutions).
-- [ ] Index row 68 ✅; prev 67 / next 69; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] Index row 68 ✅; prev 67 / next 69; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 

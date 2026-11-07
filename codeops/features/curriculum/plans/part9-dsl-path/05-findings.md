@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Lesson 67 complete after round 3 — 0 critical, 0 major open. Lesson 68 pending.
+> **Status**: Part 9 lessons complete — 0 critical, 0 major open. Lessons 66–68 are committed; the completion gate remains.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
@@ -14,7 +14,7 @@
 | --- | --- | --- | --- | --- |
 | 66 | 0 | 4 | 27 | 0 |
 | 67 | 1 | 4 | 20 | 0 |
-| 68 | 0 | 0 | 0 | 0 |
+| 68 | 1 | 3 | 20 | 0 |
 
 ## Lesson 66 — Analyzing batari BASIC
 
@@ -48,4 +48,10 @@
 
 ## Lesson 68 — Kernel Architecture
 
-_No phase findings yet._
+**Round 1** (atari2600-reviewer: 1 critical + 3 major + 15 minor; curriculum-auditor: 2 major + 9 minor):
+- **SR-68-001 (critical, reviewer/auditor):** `CTRLPF = $20` is repeat, not reflect; the doc said reflect/mirrored/V in ~12 places. Fixed by the design choice `#$21` (reflect + 4-pixel ball) in all four sources; the captures were re-taken and the doc's reflect claims are now true (SPLIT V, STARFIELD symmetry, STATUS mirror; mirror checks 99.03%/97.77%/99.73%).
+- **SR-68-002 (major, reviewer):** the zone macros set up the colour/pointer/rows before the clears, so the previous band's PF0/PF1/player could leak onto the boundary line. Fixed by clearing PF0/PF1/PF2/GRP0/GRP1/ENABL first (PF0 by cycle 18); the boundary lines are clean; the `+kf_ramp` gutter exception is disclosed.
+- **SR-68-003 (major, auditor):** the doc claimed the exercise solutions use `+kf_custom`, but no file did. Fixed by converting exercise 1 to `+kf_custom 12, BallBand`; the five-zone ledger is 13+49+39+13+78 = 192.
+- Minors fixed: the framework contract (`GRP1=0`, never ENAM0/1), the PF row 57/152, the dispatch 8/14/18 and trampoline reason, ex1 ball x≈59, ex2's page-alignment comments, ex3's star row 0-94 and `SpriteY` gate, ex2's layout 3, the solution build headers, the 48+1/48+1/77+1 prose, the next title "Capstone 1 — Pong", the scratch preflight/capture wording, and the plan's RAM/checkpoint/`KF_TOTAL`/sidebar pins.
+
+**Round 2** (no critical/major): the ex1 ledger/BallData comments, the ex2 layout-3 map line, the ex3 star-seed wording, the 03 exercise-1 description, and the 99 Session A RAM map were corrected. Final 0 critical, 0 major open.

@@ -63,9 +63,9 @@ reports the first cycle of the instruction that follows it.
 | ST-68.1 | Assemble the main ROM and framework | 4,096 bytes; `+kf_end` passes for all three layouts; changing a zone line by one makes `+kf_end` fail with a 191/193 error | `acme` (positive + negative) |
 | ST-68.2 | Run the three layouts | STATUS, STARFIELD, SPLIT differ; SELECT cycles; 3 captures | Screenshots + pixel check |
 | ST-68.3 | Inspect the frame and layout state | `StartFrame` 259/3; `VblankStart` 0/5; `BodyStart` 37/5; `OverscanStart` 229/19; `LayoutWrite` A=0→1→2; `Frame` advances; `KernelEnd` at the last zone | State log |
-| ST-68.4 | Verify the budget | The source's `KF_LINES` ledger sums 192 for each layout; the measured Body→Overscan span is exactly 192 scanlines (37 → 229) | Static ledger + state log |
+| ST-68.4 | Verify the budget | The source's `KF_TOTAL` ledger sums 192 for each layout; the measured Body→Overscan span is exactly 192 scanlines (37 → 229) | Static ledger + state log |
 | ST-68.5 | Assemble/run the exercises | ex1 4,096 with the ball zone; ex2 4,096 with a fourth layout/selector; ex3 4,096 with a runtime zone | `acme`, Stella logs |
-| ST-68.6 | Site integration | Index row 68 ✅; prev 67/next 69; sidebar `config.ts:155`; `<RomPlayer>` path; README unchanged | Page check |
+| ST-68.6 | Site integration | Index row 68 ✅; prev 67/next 69; sidebar `config.ts:157`; `<RomPlayer>` path; README unchanged | Page check |
 
 ## Test Categories
 
