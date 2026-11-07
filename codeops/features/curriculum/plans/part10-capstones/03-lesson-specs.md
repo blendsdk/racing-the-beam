@@ -54,9 +54,9 @@
 - **Prerequisites:** Lesson 03 (the anatomy), Lesson 04 (registers), Lesson 12 (the frame),
   Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 25 (players), Lesson 26 (positioning),
   Lesson 28 (two players), Lesson 29 (the ball), Lesson 33 (controllers), Lesson 38 (collision),
-  Lesson 41 (game states), Lesson 49 (the two-line kernel), Lesson 52 (fine scrolling), Lesson 63
-  (the score library), Lesson 68 (the kernel framework).
-- **Concepts:** the two-player input map (SWCHA bits 0/1 and 4/5); the paddle as a vertical
+  Lesson 41 (game states), Lesson 49 (the two-line kernel), Lesson 52 (fine scrolling), Lesson 39
+  (the scoreboard and score library), Lesson 68 (the kernel framework).
+- **Concepts:** the two-player input map (SWCHA bits 4/5 = P0 up/down, bits 0/1 = P1 up/down); the paddle as a vertical
   8×24 strip; the ball as a 4×8 object with a signed velocity; wall and paddle collision; the
   collision latches read in VBLANK and cleared with `CXCLR`; the angle from the paddle hit
   offset; the serve state; the one-digit-per-player score (P0 left, P1 right); the row-table
@@ -79,25 +79,27 @@
   - `$80-$D8` `RowTable` (89 bytes, one byte per row; bit 0 P0, bit 1 P1, bit 2 ball).
   - `$D9` `LeftScore` 0-9; `$DA` `RightScore` 0-9.
   - `$DB` `P0Y` (8-148), `$DC` `P1Y` (8-148).
-  - `$DD` `BallX` (8-152), `$DE` `BallY` (8-164), `$DF` `BallVX` (signed), `$E0` `BallVY` (signed).
+  - `$DD` `BallX` (4-152), `$DE` `BallY` (8-164), `$DF` `BallVX` (signed), `$E0` `BallVY` (signed).
   - `$E1` `Frame`, `$E2` `ServeTimer`, `$E3` `GameState` (0=play, 1=over), `$E4` `ScoreFlash`.
   - `$E5` `Temp`, `$E6` `CurP0`, `$E7` `CurP1`, `$E8` `CurBall`.
   - `$E9` `P0Row`, `$EA` `P1Row`, `$EB` `BallRow`, `$EC` `P0RowEnd`, `$ED` `P1RowEnd`,
     `$EE` `BallRowEnd`, `$EF` `PrevFire`, `$F0` `AutoTimer`.
   - `$F1-$FF` stack.
 - **Game logic:**
-  - Read SWCHA: P0 up bit 0, down bit 1; P1 up bit 4, down bit 5 (active low). Move 2 px/frame;
-    clamp 8..148. Fire (INPT4/INPT5) starts a serve or restarts after game over.
+  - Read SWCHA: P0 up bit 4, down bit 5; P1 up bit 0, down bit 1 (active low). Move 2 px/frame;
+    clamp 8..148. Fire (INPT4) starts a serve or restarts after game over.
   - Ball: VX = ±2; VY from the 5-entry angle table `(-2,-1,0,1,2)` indexed by the hit offset
     `(BallY - PaddleY) / 5` (0..4). Move; bounce at Y=8 and Y=164; a paddle hit via CXP0FB/CXP1FB
     bit 6 reverses VX and sets VY; the paddle moves the ball out of the paddle.
   - Score: BallX < 6 -> right scores; BallX > 150 -> left scores. Cap at 9. ServeTimer=60;
-    the ball parks at X=80, Y=90; at zero it serves toward the player who lost.
+    the ball parks at X=80, Y=90; the first serve is fixed left, later serves go toward the
+    player who lost.
   - Game over: the first to 9 sets GameState=1; the winning digit flashes (`Frame & $10`);
     fire/SELECT resets the scores and serves.
-  - Auto-demo: after 120 frames with no direction held, both paddles track the ball by 1 px/frame;
-    the left paddle lags 2 px every 30 frames so the right side can score; a manual direction
-    takes over. The auto-demo is deterministic enough for the 2 s/6 s/12 s captures.
+  - Auto-demo: after 120 frames with no direction held, the right paddle tracks at 2 px/frame and
+    the left at 1 px/frame toward a target 40 px below the ball, so the right side can score; the
+    demo shortens the first serve after 2 s. A manual up/down takes over. The auto-demo is
+    deterministic enough for the 2 s/about-6 s/12 s captures.
 - **Row table:** clear 89 bytes; for P0 rows `P0Row..P0Row+11` OR bit 0; P1 rows `P1Row..+11` OR
   bit 1; ball rows `BallRow..+3` OR bit 2. `P0Row = P0Y/2`, `P1Row = P1Y/2`, `BallRow = BallY/2`.
   The table is built in VBLANK after the game logic.
@@ -110,8 +112,9 @@
 - **Exercises (4,096 each):**
   1. **CPU opponent.** Replace the right paddle's joystick with a follower that tracks the ball
      with a speed cap; SELECT toggles easy/hard; the left stays human. `exercise-01-solution.asm`.
-  2. **Spin and speed.** Add the 5-zone angle table and a speed-up after four paddle hits; the
-     ball's VX grows to ±3. `exercise-02-solution.asm`.
+  2. **Spin and speed.** The main already has the 5-zone angle table; extend it with a speed-up
+     after four paddle hits, so the ball's VX grows to ±3 and the ex2 demo reaches 3-153.
+     `exercise-02-solution.asm`.
   3. **Best-of-three.** Add a title/attract screen, a best-of-three match (first to 2 wins), a
      serve countdown, and a game-over screen; SELECT starts. `exercise-03-solution.asm`.
 - **The doc:** the Pong architecture, the row table, the two-line kernel and the cycle-49 failure,
@@ -274,7 +277,7 @@
 - **Goal:** turn the reader into a game designer and producer: scope a 4K game, write the design
   document, plan the RAM/screen maps and milestones, and start from a complete skeleton.
 - **Prerequisites:** all of Parts 1–10; especially Lesson 41 (states), Lesson 45 (memory), Lesson
-  46 (debugging), Lesson 47 (dev tools), Lesson 63 (score), Lesson 69 (Pong), Lesson 70
+  46 (debugging), Lesson 47 (dev tools), Lesson 39 (the scoreboard and score library), Lesson 69 (Pong), Lesson 70
   (Breakout), Lesson 71 (Maze).
 - **Concepts:** the game design document (concept, core loop, controls, screen, objects, states,
   win/lose, audio, milestones); the 4K budget worksheet; the RAM/screen maps; the risk list; the

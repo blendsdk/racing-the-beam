@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 19:20
-> **Progress**: 0/5 tasks (0%)
+> **Last Updated**: 2026-11-07 22:30
+> **Progress**: 1/5 tasks (20%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -73,25 +73,25 @@ is authorized by the user's directive to execute RD-10 and the Part 1–9 practi
 **Reference**: [03 §Lesson 69](03-lesson-specs.md) · AR-10–AR-13, AR-24
 **Objective**: ship the complete two-player Pong, the three solutions, and the document.
 
-- [ ] 1.1.1 Lesson 69 — Capstone 1: Pong: Session A freezes ST-69.1–ST-69.8 (red baseline),
+- [x] 1.1.1 Lesson 69 — Capstone 1: Pong: Session A freezes ST-69.1–ST-69.8 (red baseline),
   Session B implements the game, the custom score, the row table, the three solutions, and the
   document, Session C verifies to green and hardens; commit via the `git-commit` skill in push
-  mode — `feat(lesson69): Capstone 1 — Pong`
+  mode — `feat(lesson69): Capstone 1 — Pong` ✅ (completed: 2026-11-07 22:30)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 20:47): ST-69.1–ST-69.8 re-affirmed against [03](03-lesson-specs.md) §Lesson 69. Design pins: the doc title is the curriculum/stub title **"Lesson 69: Capstone 1 — Pong"**; the main ROM is `69-pong.asm` (4,096) with three 4,096-byte solutions. The screen is **8 score + 1 blank + 5 positioner + 178 play = 192**; the play area is 89 rows × 2 lines driven by a **precomputed 89-byte row table** (bit 0 P0, bit 1 P1, bit 2 ball) at `$80-$D8`; the stores are at the start of each row's first line (a lookahead decode of the next row during the second line), because the preflight's one-line range-test kernel wrote GRP0 at cycle 49 and P0 at X=16 was invisible. The **custom one-digit-per-player score** uses P0 at X=64 and P1 at X=88 for the left/right digits (8×7 glyphs; 10×8 font); Pong does not use `include/score.asm`, so `$A0-$D7` is free for the row table. The RAM map is `$80-$D8` row table, `$D9-$F0` variables, `$F1-$FF` stack. The game is two-player (SWCHA bits 0/1 and 4/5), first to 9, 60-frame serve; the auto-demo tracks the ball after 120 idle frames. Captures: `serve.png` (2 s), `rally.png` (6 s), `game-over.png` (12 s), title `Stella 7.0: "69-pong"`, no cursor. The Part 10 index is rebuilt to the Part 7/8/9 format (PF-09). Red baseline confirmed: no `lessons/part10-capstones/69-pong`, no `docs/public/images/lesson69`, no Part 10 69 ROMs, the Part 10 index is intro-only, the document is the `🔒 Coming Soon` stub, sidebar `config.ts:164`, `verify.sh --no-docs` green at `771ab74`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 21:48): `69-pong.asm` (4,096) with the 89-byte row table at `$80-$D8`, the custom one-digit-per-player score, the two-player input, the 5-zone angle table, the serve/game-over states, and the auto-demo; three 4,096-byte solutions (CPU opponent, spin/speed, best-of-three); the Part 10 index rebuilt (row 69 ✅); three captures. The critical review fix was the range clamp after the move (all four sources) plus the `ClampPaddle` row-table safety net; the majors were the four-hit rally list, the TypeScript P0_X/P1_X, the ex3 stack hint, and the Lesson 39 prerequisite.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-07 22:30): `bash scripts/verify.sh` PASSED (256 sources, no drift, docs build); four ROMs 4,096 and byte-identical; Full Source verbatim (1,110 source / 1,958 doc lines); `npm run roms` 256. Frame: `StartFrame` `$F071` 259/3, `VblankStart` `$F07F` 0/5, `BodyStart` `$F0CF` 37/5, `ScoreDone` `$F454` 46/11, `PositionDone` `$F12A` 51/3, `OverscanStart` `$F155` 229/6. State: `P0YRead`/`P1YRead` A=$5A, `BallXRead` A=$50, `BallYRead` A=$5A; `PaddleHit` 89/145/200/255 A=0/1/0/1; `ScoreRight` A=1..9 at 319..631; `GameStateRead` A=0->1 at 632; `ServeStart` A=$FE at 60, 320, 359, 398, 437; `RowTableWrite` A=$00. Captures: serve/rally/game-over 1010×807, titles `Stella 7.0: "69-pong"`, no cursor; scores 00/01/09; paddles at TIA 16/136. Clamp scratch tests: 9->8, 147->148, 200->148; row index max $D5. Site: index row 69 ✅, rows 70-72 Coming Soon; prev 68/next 70; sidebar `config.ts:164`; README row 10 unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (odd-Y clamp) + 1 major (rally list) + 8 minor, then no critical/major; curriculum-auditor — 3 major (TypeScript, ex3 stack, Lesson 39) + 9 minor, then no critical/major. All fixed; final 0 critical, 0 major open. Lesson 69 is complete.
 
 **Deliverables**:
-- [ ] `69-pong.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
-- [ ] The 89-byte row table, the custom one-digit score, the two-player input, the auto-demo.
-- [ ] `docs/part10-capstones/69-pong.md` (six-section template, Full Source verbatim, 3 images,
+- [x] `69-pong.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
+- [x] The 89-byte row table, the custom one-digit score, the two-player input, the auto-demo.
+- [x] `docs/part10-capstones/69-pong.md` (six-section template, Full Source verbatim, 3 images,
   1 player, three exercises with solutions).
-- [ ] Part 10 index rebuilt to the Part 7/8/9 format; row 69 ✅; prev 68 / next 70; sidebar; README
+- [x] Part 10 index rebuilt to the Part 7/8/9 format; row 69 ✅; prev 68 / next 70; sidebar; README
   unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 
