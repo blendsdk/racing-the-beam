@@ -24,5 +24,5 @@
 | RD-07 | Part 7 — Kernel Mastery | [RD-07](requirements/RD-07-part7-kernel-mastery.md) | [part7-kernel-mastery](plans/part7-kernel-mastery/00-index.md) | Done | ✅ | 2026-11-06 | depends on RD-06 |
 | RD-08 | Part 8 — Advanced Topics | [RD-08](requirements/RD-08-part8-advanced.md) | [part8-advanced](plans/part8-advanced/00-index.md) | Done | ✅ | 2026-11-07 | depends on RD-07 |
 | RD-09 | Part 9 — The DSL Path | [RD-09](requirements/RD-09-part9-dsl-path.md) | [part9-dsl-path](plans/part9-dsl-path/00-index.md) | Done | ✅ | 2026-11-07 | depends on RD-08 |
-| RD-10 | Part 10 — Capstone Projects | [RD-10](requirements/RD-10-part10-capstones.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-09 |
+| RD-10 | Part 10 — Capstone Projects | [RD-10](requirements/RD-10-part10-capstones.md) | [part10-capstones](plans/part10-capstones/00-index.md) | Executing | 🔄 | 2026-11-07 | depends on RD-09 |
 | RD-11 | Part 11 — Legendary Techniques | [RD-11](requirements/RD-11-part11-legendary.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-10 |
