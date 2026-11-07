@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 11:45
-> **Progress**: 0/4 tasks (0%)
+> **Last Updated**: 2026-11-07 15:19
+> **Progress**: 1/4 tasks (25%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -62,7 +62,7 @@ is authorized by the user's directive to execute RD-09 and the Part 1–8 practi
 > **Phase baseline tree**: the plan+preflight commit (clean tree at phase start; scope: strict)
 > **Expected modifications**: `lessons/part9-dsl-path/66-analyzing-batari-basic/` (demo, `.bas`,
 > generated listing) · `docs/part9-dsl-path/66-analyzing-batari-basic.md` ·
-> `docs/part9-dsl-path/index.md` (row 66) ·
+> `docs/part9-dsl-path/index.md` (rebuild to the Part 7/8 format + row 66) ·
 > `docs/public/roms/part9-dsl-path/66-analyzing-batari-basic/` (demo + bB reference) ·
 > `docs/public/images/lesson66/` (3 demo + 1 reference) · `99-execution-plan.md` +
 > `05-findings.md` + roadmaps
@@ -75,24 +75,24 @@ is authorized by the user's directive to execute RD-09 and the Part 1–8 practi
 **Objective**: ship the three-lens demo, the committed bB 1.9 reference, and the document that
 maps the generated code to the 6502/TIA concepts.
 
-- [ ] 1.1.1 Lesson 66 — Analyzing batari BASIC: Session A freezes ST-66.1–ST-66.6 (red baseline),
+- [x] 1.1.1 Lesson 66 — Analyzing batari BASIC: Session A freezes ST-66.1–ST-66.6 (red baseline),
   Session B implements the demo, the bB reference, and the document, Session C verifies to green
   and hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson66): Analyzing batari BASIC`
+  `feat(lesson66): Analyzing batari BASIC` ✅ (completed: 2026-11-07 15:19)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 11:47): ST-66.1–ST-66.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 66. Design pins: the doc title is the curriculum/stub title **"Lesson 66: Analyzing batari BASIC — How bB Works"**; the demo is a hand-written ACME `demo-66.asm` (4,096) with three SELECT lenses (RUN/ZONES/VARS), and the bB 1.9 reference is a separate artifact set (`lesson66.bas`, `lesson66.generated.txt`, `lesson66-bb.bin` 4,096) never described as the demo. The bB compile uses bB 1.9 (wasm) + wasmtime 50.0.1 at `/tmp/opencode/part9-preflight/bB`; the generated listing is CC0. The doc quotes the committed listing with line numbers and explains the pipeline, `start`, `.main`, `drawscreen`, the 2-line kernel, `vblank_bB_code`, the overscan, the reversed `if`, the BCD score, and the variable map. Captures: 3 from `demo-66.bin` + 1 from `lesson66-bb.bin`, titles `Stella 7.0: "demo-66"` / `"lesson66-bb"`, no cursor. The Part 9 index is rebuilt to the Part 7/8 format in this lesson (PF-14). No exercise solution files. Red baseline confirmed: no `lessons/part9-dsl-path/66-analyzing-batari-basic`, no `docs/public/images/lesson66`, no Part 9 66 ROMs, the document is the `🔒 Coming Soon` stub, sidebar `config.ts:155`, Lesson 65's `next` already points to 66, `verify.sh` green at `81837ba`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 14:24): `demo-66.asm` (4,096) with three SELECT/auto-demo lenses (RUN, ZONES, VARS); `lesson66.bas` compiled with bB 1.9 + wasmtime 50.0.1 to a 4,096-byte reference ROM; the CC0 generated listing plus the address listing, symbol table, and variable-redefs header committed. The Part 9 index was rebuilt to the Part 7/8 format (row 66 ✅). Four captures (1010×807, title bars, no cursor). The doc is 1,906 lines with the Full Source verbatim (1,242 lines). Review fixes: the band preload, the starfield/row-191 timing, the VARS `WriteGridLine` split and the tail guard, the dead-state removal, the committed bB evidence files, the symbol/row/timer wording, and the plan corrections.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-07 15:19): `bash scripts/verify.sh` PASSED (244 sources, no drift, docs build); demo 4,096 (md5 `a5e88b2082d1e8070e0577b7334f2df0`); bB reference 4,096 (md5 `49f1144d8497b1ef7dd484887e5514c5`, matches a fresh bB 1.9 compile); Full Source verbatim (1,242 source / 1,906 doc lines). Frame: `StartFrame` `$F1A9` 259/3; `VblankStart` `$F1B7` 0/5; `BodyStart` `$F2F2` 37/5; `OverscanStart` `$F66B` 229/6 (680/680 hits); `LensWrite` `$F68B` A=1/2/0 at frames 241/481/721; `LensRead` `$F1F3` A=0/1/2; `FrameRead` `$F1F0`; `MapIndexRead` `$F28E` A=00..1E. The bB listing checkpoints: `start` L51/$F000, `.main` L1832/$F4D0, `drawscreen` L1418/$F3BF, `kernel` L114/$F034, `vblk` L1634/$F438, `overscan` L1469/$F3BF; the reversed `if` and BCD score excerpts match. Captures: run/zones/variables/bb-run 1010×807, titles `Stella 7.0: "demo-66"` / `"lesson66-bb"`, no cursor. Site: Part 9 index rebuilt, row 66 ✅; prev 65/next 67; sidebar `config.ts:155`; README row 9 unchanged. Reviews (AR-5): atari2600-reviewer — 2 major (RUN comments, band tear) + 8 minor, then 1 minor (VARS preload) + 2 residual, then 2 minor (tail OOB, ball column); curriculum-auditor — 2 major (missing artifacts, exercise references) + 14 minor, then 4 minor (plan wording/artifacts, 682, StarLast). All fixed; final 0 critical, 0 major open. Lesson 66 is complete.
 
 **Deliverables**:
-- [ ] `demo-66.asm` (4,096) with RUN/ZONES/VARS lenses and SELECT.
-- [ ] `lesson66.bas`, `lesson66.generated.txt`, `lesson66-bb.bin` (4,096) with bB 1.9 provenance.
-- [ ] `docs/part9-dsl-path/66-analyzing-batari-basic.md` (six-section template, Full Source
+- [x] `demo-66.asm` (4,096) with RUN/ZONES/VARS lenses and SELECT.
+- [x] `lesson66.bas`, `lesson66.generated.txt`, `lesson66-bb.bin` (4,096) with bB 1.9 provenance.
+- [x] `docs/part9-dsl-path/66-analyzing-batari-basic.md` (six-section template, Full Source
   verbatim, 3 demo images + bB reference player, three analysis exercises answered).
-- [ ] Index row 66 ✅; prev 65 / next 67; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] Part 9 index rebuilt to the Part 7/8 format; row 66 ✅; prev 65 / next 67; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 

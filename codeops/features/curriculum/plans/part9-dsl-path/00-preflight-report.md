@@ -17,7 +17,7 @@
 | ID | Finding | Risk | Resolution |
 | --- | --- | --- | --- |
 | PF-01 | The Lesson 68 stub promises `include/kernel_framework.asm`, which does not exist. The course has only `include/kernel_patterns.asm` (four band routines) and no zone table, dispatcher, or line-budget check. | A lesson that promises a framework without one would either ship no artifact or invent an unverified library. | **Resolved:** create `include/kernel_framework.asm` as a macro-composed zone framework over `kernel_patterns.asm`. The prototype assembled a 4,096-byte three-layout ROM, the build-time budget check caught a 191-line layout, and the final layouts produce a 262-line frame (`BodyStart` 37/5, `OverscanStart` 229/19). AR-16–AR-19; spec §Lesson 68. |
-| PF-02 | The Lesson 66 stub requires analyzing batari BASIC output, but bB is not installed and the repository has no bB build path. A theory lesson without real compiler output would be prose about an unverified tool. | The lesson's central claims (`if` lowering, score BCD, kernel shape) would be unverifiable. | **Resolved:** bB 1.9 (wasm) + wasmtime 50.0.1 compile a course-authored `.bas` on Linux to a 4,096-byte ROM and a 41,044-byte generated listing. The listing is CC0; the bB README exempts games created with bB from the GPL. The `.bas`, the listing, and the reference ROM are committed; the compiler is not vendored. AR-9–AR-12; spec §Lesson 66. |
+| PF-02 | The Lesson 66 stub requires analyzing batari BASIC output, but bB is not installed and the repository has no bB build path. A theory lesson without real compiler output would be prose about an unverified tool. | The lesson's central claims (`if` lowering, score BCD, kernel shape) would be unverifiable. | **Resolved:** bB 1.9 (wasm) + wasmtime 50.0.1 compile a course-authored `.bas` on Linux to a 4,096-byte ROM and a generated listing (the preflight sample: 41,044 bytes). The listing is CC0; the bB README exempts games created with bB from the GPL. The `.bas`, the listing, and the reference ROM are committed; the compiler is not vendored. AR-9–AR-12; spec §Lesson 66. |
 
 ### Major
 
@@ -39,6 +39,7 @@
 | PF-11 | The Lesson 67 spec language needs a bounded grammar, not free prose, or the generator cannot validate it. | The spec pins the line-oriented fields and ranges; the generator exits nonzero on a bad spec. AR-14. |
 | PF-12 | Lesson 66's three lenses and Lesson 68's three layouts are moving states; a fixed sleep may capture the wrong lens/layout. | Capture from the committed ROM after a SELECT or a measured frame; the state log records `Lens`/`Layout`; the doc discloses the method. AR-7/AR-22. |
 | PF-13 | The bB variable map is version-specific; a future bB could move it. | Pin bB 1.9; the doc quotes the committed `2600basic_variable_redefs.h`/symbol file, not a generic claim. AR-9. |
+| PF-14 | The Part 9 index is intro-only (no lesson table), unlike the Part 7/8 indexes. | Lesson 66 rebuilds the Part 9 index to the Part 7/8 format (big-idea intro + lesson table + What You'll Learn) and flips row 66. |
 
 ### Observations
 

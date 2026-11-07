@@ -44,7 +44,7 @@
 
 ---
 
-## Lesson 66: Analyzing batari BASIC — How a Compiler Races the Beam
+## Lesson 66: Analyzing batari BASIC — How bB Works
 
 - **Goal:** read a real batari BASIC 1.9 compilation and map every generated construct back to the
   6502/TIA concepts from Parts 1–8; understand what a high-level 2600 tool must generate and where
@@ -61,13 +61,14 @@
   kernel shapes, per-statement cost, the 4K/8K/16K/32K choices); when to drop to assembly.
 - **ROM:** `demo-66.asm` — **"the bB anatomy viewer"**, 4,096 bytes. A theory lesson whose demo
   visualizes the bB architecture in three SELECT lenses:
-  - **Lens 0 — RUN:** a 16-line label band + a 176-line picture. A starfield playfield, a green
+  - **Lens 0 — RUN:** a 16-line score/header band + a 176-line picture. A starfield playfield, a green
     player 0 "ship" that moves left/right (or auto-pans), a gold player 1 "enemy", and a white
     ball. The lens mirrors the bB sample's objects and shows the same kind of picture the bB
     reference ROM draws.
   - **Lens 1 — ZONES:** the frame map. The 192 visible lines are a teaching projection of
     VSYNC (3), VBLANK (37), kernel (192), and overscan (30): four background bands and a row bar
-    that steps across them. The label names the phase. The doc states plainly that the blanked
+    that steps across them. There are no on-screen labels; the lesson's table names the phases.
+    The doc states plainly that the blanked
     phases are invisible on a TV and that the map compresses the true line counts.
   - **Lens 2 — VARS:** a 16×8 grid of 128 cells, one per RIOT RAM byte `$80–$FF`. The grid marks
     the bB system variables, the `dim` aliases, the 3-byte score, the temporary bytes, the stack,
@@ -77,19 +78,26 @@
     `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6.
 - **bB reference artifacts (committed, clearly separated from the demo):**
   - `lesson66.bas` — a course-authored bB 1.9 program: `set romsize 4k`, `set kernel_options
-    no_blank_lines`, a 12-row playfield, two 6-row players, a ball, positions, a main loop that
+    no_blank_lines`, an 11-row playfield (bB 1.9's default), two 6-row players, a ball, positions, a main loop that
     moves `player0y`, an `if` that wraps it, `score = score + 1`, `drawscreen`, and `goto`.
+  - `lesson66.bas.list.txt`, `lesson66.bas.symbol.txt`, and `2600basic_variable_redefs.h` — the
+    compiler's CC0 address listing, symbol table, and variable-redefs header, committed so the
+    doc's addresses and the exercises are reproducible without installing bB.
   - `lesson66.generated.txt` — the linked bB 1.9 generated assembly (CC0), with a header naming
     the bB/wasmtime versions and the compile command. The doc quotes it with line numbers.
   - `lesson66-bb.bin` — the 4,096-byte bB reference ROM, committed under
     `docs/public/roms/part9-dsl-path/66-analyzing-batari-basic/` for a second `<RomPlayer>`. It is
     not built by `npm run roms`; the doc says so and gives the bB command.
-- **RAM (demo):** `$80` `Lens`, `$81` `Frame`, `$82` `ShipX`, `$83` `ShipDir`, `$84` `EnemyY`,
-  `$85` `MapIndex`, `$86` `PrevSelect`, `$87` `NewSelect`, `$88` `Startup`, `$89–$9F` free;
-  `$A0–$D7` the score library; `$D8–$F7` free; `$F8–$FF` stack.
-- **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `OverscanStart`, `Lens` (A=0/1/2),
-  `LensWrite` (A=the new lens), `Frame` (A=the frame count), `MapIndex` (A=the highlighted RAM
-  byte index). The bB listing checkpoints are quoted by label, not by the demo's symbols.
+- **RAM (demo):** `$80` `Lens`, `$81` `Frame`, `$82` `ShipX`, `$83` `ShipDir`, `$85` `MapIndex`,
+  `$86` `PrevSelect`, `$87` `NewSelect`, `$89` `BallX`, `$8B` `TmpA`, `$8C` `GridRow`, `$8D`
+  `ScreenY`, `$8E` `BarIdx`, `$8F` `LineCount`, `$90` `SelectedRow`, `$91` `OwnerGroup`, `$92`
+  `MapTick`, `$95` `LensTimer`, `$97` `TmpB`; `$84`, `$88`, `$8A`, `$93-$94`, `$96`, `$98-$9F`
+  free; `$A0–$D7` the score library; `$D8–$F7` free; `$F8–$FF` stack. The source header is the
+  exact map.
+- **Checkpoints:** `StartFrame` (`$F1A9`, 259/3), `VblankStart` (`$F1B7`, 0/5), `BodyStart`
+  (`$F2F2`, 37/5), `OverscanStart` (`$F66B`, 229/6), `LensRead` (A=0/1/2), `LensWrite` (`$F68B`, A=the new
+  lens), `FrameRead` (A=the frame count), `MapIndexRead` (A=the highlighted RAM byte index). The
+  bB listing checkpoints are quoted by label, not by the demo's symbols.
 - **Evidence pins:** the demo runs; the three lenses differ; the state log shows `LensWrite`
   changing 0→1→2; the frame is 262; the bB reference ROM is 4,096 and Stella runs it; the bB
   listing shows `start`, `.main`, `drawscreen`, `kernel`, `vblank_bB_code`, `overscan`, the
@@ -108,7 +116,7 @@
   3. **Trace `drawscreen`.** Find the 2-line kernel, the `vblank_bB_code` hook, and the overscan;
      measure the frame in Stella; explain what the 2-line kernel buys and what it costs; name one
      thing the reader would hand-write instead.
-- **Integration:** prev 65; next 67; index row 66 ✅; sidebar `config.ts:153`.
+- **Integration:** prev 65; next 67; **rebuild the Part 9 index** to the Part 7/8 format (the big-idea intro, a lesson table with rows 66–68, and a "What You'll Learn" section), row 66 ✅; sidebar `config.ts:155`.
 - **Risks:** bB output is version-specific (pin 1.9); the demo is not generated code (say so);
   the ZONES lens is a projection (say so); the bB reference ROM is not drift-checked (say so).
 

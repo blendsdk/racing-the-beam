@@ -33,7 +33,7 @@ is part of the repository or CI.
 
 | File | Purpose | Changes Needed |
 | ---- | ------- | -------------- |
-| `docs/part9-dsl-path/index.md` | Part 9 index | Flip rows 66–68 per lesson |
+| `docs/part9-dsl-path/index.md` | Part 9 intro only (no lesson table) | Rebuild to the Part 7/8 format in Lesson 66; flip rows 66–68 |
 | `docs/part9-dsl-path/66-analyzing-batari-basic.md` | Lesson 66 stub | Replace with the full lesson |
 | `docs/part9-dsl-path/67-automatable-patterns.md` | Lesson 67 stub | Replace with the full lesson |
 | `docs/part9-dsl-path/68-kernel-architecture.md` | Lesson 68 stub | Replace with the full lesson |
