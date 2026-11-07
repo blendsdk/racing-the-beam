@@ -1,0 +1,32 @@
+# waves-a.txt — level A for the Lesson 67 wave lab
+#
+# Grammar: level, name, bg, pf, eight backdrop rows, then wave lines.
+# Every wave is `index frame x y speed type`.
+# The first wave is aligned with the player's default shot so a fire press
+# produces a hit; the state log uses that to prove ScoreWrite.
+
+level A
+name WAVE-A
+bg $02
+pf $1A
+
+backdrop ....XXXX............
+backdrop ...XXXXXX...........
+backdrop ..XXXXXXXX..........
+backdrop .XXXXXXXXXX.........
+backdrop XXXX....XXXXXXXX....
+backdrop XXXX....XXXXXXXX....
+backdrop XXXXXXXXXXXXXXXXXXXX
+backdrop XXXXXXXXXXXXXXXXXXXX
+
+wave 0 0 84 100 1 0
+wave 1 12 40 120 2 1
+wave 2 24 128 96 1 0
+wave 3 36 64 140 2 1
+wave 4 48 112 80 3 0
+wave 5 60 24 104 1 1
+wave 6 72 144 120 2 1
+wave 7 84 88 100 3 0
+wave 8 96 56 136 1 1
+wave 9 108 120 88 2 0
+wave 10 120 32 112 3 1

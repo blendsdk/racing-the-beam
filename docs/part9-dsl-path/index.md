@@ -9,7 +9,7 @@ Analyze how batari BASIC turns a high-level program into a beam-racing kernel, i
 | # | Lesson | Status |
 |---|--------|--------|
 | 66 | [Analyzing batari BASIC — How bB Works](./66-analyzing-batari-basic) | ✅ Complete |
-| 67 | [Identifying Automatable Patterns](./67-automatable-patterns) | 🔒 Coming Soon |
+| 67 | [Identifying Automatable Patterns](./67-automatable-patterns) | ✅ Complete |
 | 68 | [Designing Your Kernel Architecture](./68-kernel-architecture) | 🔒 Coming Soon |
 
 ## What You'll Learn

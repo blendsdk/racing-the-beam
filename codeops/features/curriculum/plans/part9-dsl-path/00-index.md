@@ -112,7 +112,7 @@ bash scripts/verify.sh
 | RAM | framework owns `$80–$82`; lesson variables from `$83` (AR-20) |
 | Frame | NTSC 262; `OverscanStart` 229 (cycle varies with the layout) (AR-21) |
 | Evidence | State logs + static ledgers + pixel checks + committed bB listing (AR-22) |
-| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 9 screenshots, 252/253 ROMs (AR-26) |
+| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 10 screenshots, 252/253 ROMs (AR-26) |
 
 ## Specialist Agents
 

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Lesson 66 complete after round 3 — 0 critical, 0 major open. Lessons 67–68 pending.
+> **Status**: Lesson 67 complete after round 3 — 0 critical, 0 major open. Lesson 68 pending.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
@@ -13,7 +13,7 @@
 | Lesson | Critical | Major | Minor | Open critical/major |
 | --- | --- | --- | --- | --- |
 | 66 | 0 | 4 | 27 | 0 |
-| 67 | 0 | 0 | 0 | 0 |
+| 67 | 1 | 4 | 20 | 0 |
 | 68 | 0 | 0 | 0 | 0 |
 
 ## Lesson 66 — Analyzing batari BASIC
@@ -33,7 +33,18 @@
 
 ## Lesson 67 — Automatable Patterns
 
-_No phase findings yet._
+**Round 1** (atari2600-reviewer: 1 critical + 4 major + 8 minor; curriculum-auditor: 4 major + 7 minor):
+- **SR-67-001 (critical, reviewer):** `NameBuf` at `$DA-$F7` sat under the stack; the first score hit's 14-byte call chain overwrote the name. Fixed by emitting `LevelNName` in ROM and drawing the name from it; the post-hit capture shows `WAVE-A` + `000001` with 0 differing name-band pixels.
+- **SR-67-002 (major, reviewer/auditor):** the play-area partition was off by one (actual 16 band + 1 transition + 64 backdrop + 111 play = 192; HMOVE 122/notch 123). The source/doc now use the measured partition; the plan spec was updated.
+- **SR-67-003 (major, reviewer):** a wave reused an active slot without a check. Fixed with a first-inactive-slot scan; a wave with all four slots busy is dropped and its index consumed; the doc states the rule.
+- **SR-67-004 (major, reviewer/auditor):** exercise 3's `CurrentColor=$A5` was `ScoreDigits[5]`; a hit overwrote it. Fixed with a per-frame recompute and `$8E`/`$DB`; the hit-between-entries log has no `$01`.
+- **SR-67-005 (major/minor, reviewer/auditor):** the generated include headers were hard-coded to the main specs/out. Fixed by threading the actual spec/out through `_regenerate_command`, then adding the `--type-max`, `--allow-level`, and `--allow-color` dialect flags so the stock generator reproduces all four includes.
+- **SR-003 (major, auditor):** the doc claimed every solution sources `generated-levels.inc`; each sources its own include. Fixed.
+- Minors fixed: the true zigzag triangle, the dead `Startup`/`TYPE_SHIFT`/`BAND_LINES`/`PLAY_LINES`/`SLOT*_TYPE` symbols, the three-field packed byte, six/seven colours, the prepare-cost wording, ex3 offsets 0..14, the bad-spec test, the level-A caption (the 2 s wave is later; the hit capture is the frame-0 proof), the WaveSpawn 0..4/X=slot table, the abridged TypeScript note, the positioner/row/band labels, the duplicated HMOVE sentence, and the stack-map precision (`$DB-$F1` free, `$F2-$FF` effective stack).
+
+**Round 2** (no critical): the generator's `_regenerate_command` still used `DEFAULT_INCLUDE_NAME`; fixed by passing the out basename. The exercise `--check` forms then needed the dialect flags; added in round 3.
+
+**Round 3** (no critical/major): all four `--check` forms pass with the stock generator; the comment/label residuals were fixed. Final 0 critical, 0 major open.
 
 ## Lesson 68 — Kernel Architecture
 

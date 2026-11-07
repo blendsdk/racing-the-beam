@@ -48,13 +48,13 @@ reports the first cycle of the instruction that follows it.
 
 | ID | What | Expected | Evidence |
 | --- | --- | --- | --- |
-| ST-67.1 | Validate the specs | `lesson67-generate.py --check` exits 0; a deliberately bad spec exits nonzero with `spec:line`; the two specs produce the committed `generated-levels.inc` | Generator run |
+| ST-67.1 | Validate the specs | `lesson67-generate.py --check` exits 0 with and without `--out`; a bad spec (frame 300) exits 1 with `spec:line`; a tampered include exits 1 with a drift diff; the two specs produce the committed `generated-levels.inc` | Generator run |
 | ST-67.2 | Assemble the main ROM | 4,096 bytes; the generated include is `!source`d; Full Source verbatim | `acme`, byte compare |
-| ST-67.3 | Run both levels | Level A and B differ (name, colours, backdrop, waves); SELECT switches; 2 captures; the waves spawn at the generated frames | Screenshots + pixel check |
-| ST-67.4 | Inspect the state | `Level` A=0/1; `LevelWrite` A=0/1; `WaveSpawn` reports a generated index; `ScoreWrite` advances; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
+| ST-67.3 | Run both levels | Level A and B differ (name, colours, backdrop, waves); SELECT switches; 3 captures (level-a, level-a-hit, level-b); the waves spawn at the generated frames | Screenshots + pixel check |
+| ST-67.4 | Inspect the state | `LevelRead` A=0/1; `LevelWrite` A=1 on the SELECT edge; `WaveSpawn` A=the wave index and X=the slot offset; `ScoreWrite` advances; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
 | ST-67.5 | Verify the generated tables | The host parser reads the spec and the include; every `WaveFrame/X/Y/Speed/Type` matches; the level descriptor pointers resolve; the backdrop is 8×3 bytes | Host-side check |
-| ST-67.6 | Assemble/run the exercises | ex1 4,096 with type 2; ex2 4,096 with three levels; ex3 4,096 with the colour schedule; each runs | `acme`, Stella logs |
-| ST-67.7 | Site integration | Index row 67 ✅; prev 66/next 68; sidebar `config.ts:154`; `<RomPlayer>` path; README unchanged | Page check |
+| ST-67.6 | Assemble/run the exercises | ex1 4,096 with type 2 (true triangle); ex2 4,096 with three levels (source inspection + start-at-C, disclosed); ex3 4,096 with the colour schedule (hit-between-entries log) | `acme`, Stella logs |
+| ST-67.7 | Site integration | Index row 67 ✅; prev 66/next 68; sidebar `config.ts:156`; `<RomPlayer>` path; README unchanged | Page check |
 
 ## Lesson 68 — Kernel Architecture
 

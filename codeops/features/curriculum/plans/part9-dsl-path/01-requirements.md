@@ -32,7 +32,7 @@
 | Lesson 68 exercises | Three, each with a 4,096-byte solution ROM | AR-23 |
 | Zone budget | data lines + one boundary line per zone = 192 | AR-17 |
 | Screenshots | 3 (66) + 2 (67) + 3 (68) lesson captures + 1 bB reference | AR-7 |
-| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 9 screenshots, 252/253 ROMs | AR-26 |
+| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 10 screenshots, 252/253 ROMs | AR-26 |
 
 ## Acceptance Criteria
 

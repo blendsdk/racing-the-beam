@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 15:19
-> **Progress**: 1/4 tasks (25%)
+> **Last Updated**: 2026-11-07 17:32
+> **Progress**: 2/4 tasks (50%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -105,7 +105,7 @@ maps the generated code to the 6502/TIA concepts.
 > solutions + generator + specs + generated include) · `docs/part9-dsl-path/67-automatable-patterns.md` ·
 > `docs/part9-dsl-path/index.md` (row 67) ·
 > `docs/public/roms/part9-dsl-path/67-automatable-patterns/` ·
-> `docs/public/images/lesson67/` (2 captures) · `99-execution-plan.md` + `05-findings.md`
+> `docs/public/images/lesson67/` (3 captures) · `99-execution-plan.md` + `05-findings.md`
 > **Reasoning**: high — the generator, the DSL, and the playable engine must agree on every field;
 > the lesson's claims rest on the committed generated include
 
@@ -115,25 +115,24 @@ maps the generated code to the 6502/TIA concepts.
 **Objective**: ship the wave-spec DSL, the Python generator, the playable wave lab, and the
 generated levels.
 
-- [ ] 2.1.1 Lesson 67 — Automatable Patterns: Session A freezes ST-67.1–ST-67.7 (red baseline),
+- [x] 2.1.1 Lesson 67 — Automatable Patterns: Session A freezes ST-67.1–ST-67.7 (red baseline),
   Session B implements the generator, the spec language, the ROM, the three solutions, and the
   document, Session C verifies to green and hardens; commit via the `git-commit` skill in push
-  mode — `feat(lesson67): Automatable Patterns`
+  mode — `feat(lesson67): Identifying Automatable Patterns` ✅ (completed: 2026-11-07 17:32)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 15:20): ST-67.1–ST-67.7 re-affirmed against [03](03-lesson-specs.md) §Lesson 67. Design pins: the doc title is the curriculum/stub title **"Lesson 67: Identifying Automatable Patterns — A Wave Compiler"**; the main ROM is `67-automatable-patterns.asm` (4,096, "the wave lab"), with `lesson67-generate.py`, the two specs `waves-a.txt`/`waves-b.txt`, the committed generated include `generated-levels.inc`, and three solutions (`exercise-01/02/03-solution.asm`, 4,096 each). The wave spec is line-oriented (`level`, `name`, `bg`, `pf`, `backdrop`, `wave <index> <frame> <x> <y> <speed> <type>`); the generator validates ranges, emits the include, and has `--check`; CI never runs Python. The picture is a 16-line band + 64-line generated backdrop + 112-line play area; the player P0 moves and fires the ball; enemies use P1/M0/M1/ball; the two levels differ in name/colours/backdrop/waves; SELECT switches; the frame is 262 (`StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6). Captures: `level-a.png`/`level-b.png`. Exercises: zigzag type 2; a third level/selector; a generated colour schedule. Red baseline confirmed: no `lessons/part9-dsl-path/67-automatable-patterns`, no `docs/public/images/lesson67`, no Part 9 67 ROMs, the document is the `🔒 Coming Soon` stub, index row 67 Coming Soon, sidebar `config.ts:156`, `verify.sh --no-docs` green at `a550b97`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 16:02): `67-automatable-patterns.asm` (4,096) with the 16-line band, the 64-line generated backdrop, and the 111-line play area; `lesson67-generate.py` with the wave DSL, validation, `--check`, and the `--type-max`/`--allow-level`/`--allow-color` dialect flags; `waves-a.txt`/`waves-b.txt` and the committed `generated-levels.inc`; three 4,096-byte solutions with their own generated includes; the doc with 3 captures (level-a, level-a-hit, level-b). The critical name/stack collision was fixed by moving the name to a generated ROM table; the slot rule, the ex3 colour recompute, the play-area partition, and the generator headers were corrected in review.
 
-**Session C record**:
-
+**Session C record** (verify + evidence, 2026-11-07 17:32): `bash scripts/verify.sh` PASSED (248 sources, no drift, docs build); main + 3 solutions 4,096 and byte-identical; Full Source verbatim (1,263 source / 2,101 doc lines); all four include `--check` forms pass with the stock generator; a tampered copy exits 1; a bad spec (`frame 300`) exits 1 with `spec:line`; the host parser matches every wave/backdrop. Frame: `StartFrame` 259/3 (power-on 29/18), `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/6; `LevelRead` A=0/1; `LevelWrite` A=1; `WaveSpawn` A=0..4 with X=0/4/8/12/4; `ScoreWrite` A=1; `FrameRead` A=0,1,2. Captures: level-a (WAVE-A/000000), level-a-hit (WAVE-A/000001, name band intact), level-b (WAVE-B/000000, `-holdselect`), all 1010×807 with title bars, no cursor. Site: index row 67 ✅, row 68 Coming Soon; prev 66/next 68; sidebar `config.ts:156`; README row 9 unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (name/stack) + 4 major + 8 minor, then 1 major (header) + 4 minor, then no critical/major; curriculum-auditor — 4 major + 7 minor, then 1 major (exercise regeneration) + 4 minor, then no critical/major. All fixed; final 0 critical, 0 major open. Lesson 67 is complete.
 **Deliverables**:
-- [ ] `67-automatable-patterns.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
-- [ ] `lesson67-generate.py` with `--check`; `waves-a.txt`, `waves-b.txt`;
+- [x] `67-automatable-patterns.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
+- [x] `lesson67-generate.py` with `--check`; `waves-a.txt`, `waves-b.txt`;
   `generated-levels.inc`.
-- [ ] `docs/part9-dsl-path/67-automatable-patterns.md` (DSL grammar, generator, engine, two
-  levels, 2 images, 1 player, three exercises with solutions).
-- [ ] Index row 67 ✅; prev 66 / next 68; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] `docs/part9-dsl-path/67-automatable-patterns.md` (DSL grammar, generator, engine, two
+  levels, 3 images, 1 player, three exercises with solutions).
+- [x] Index row 67 ✅; prev 66 / next 68; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 
@@ -191,7 +190,7 @@ document that teaches the kernel architecture.
 
 ### Step 4.1: Part 9 completion gate (a gate, not a fourth lesson)
 
-- [ ] 4.1.1 Part 9 completion gate: 9 ACME sources/ROMs + 1 bB reference, 3 docs, 9 screenshots,
+- [ ] 4.1.1 Part 9 completion gate: 9 ACME sources/ROMs + 1 bB reference, 3 docs, 10 screenshots,
   `npm run roms` 252, 253 total `.bin`, index 66–68 ✅, RD-09 Done, feature roadmap 9/11, portfolio
   9 plans, all completion criteria ticked, final `verify.sh` green; commit via the `git-commit`
   skill in push mode — `docs(curriculum): complete Part 9 (lessons 66-68)`
@@ -220,7 +219,7 @@ Part 9 completion gate
 
 - [ ] All three phases marked `[x]` with Session A/C records.
 - [ ] 9 ACME sources/ROMs (1 demo + 4 + 4) + 1 bB reference ROM, all 4,096 bytes.
-- [ ] 3 documents, 9 screenshots (8 lesson captures + 1 bB reference).
+- [ ] 3 documents, 10 screenshots (9 lesson captures + 1 bB reference).
 - [ ] Lesson 66: three lenses, bB listing, reference player, three analysis exercises.
 - [ ] Lesson 67: generator `--check` clean, two levels, three solutions.
 - [ ] Lesson 68: `+kf_end` 192 for every layout, three layouts, three solutions.

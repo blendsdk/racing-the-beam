@@ -1,0 +1,30 @@
+# waves-c.txt — exercise 2: a third level
+#
+# The exercise generator accepts level C, and generated-three.inc carries
+# A, B and C.  SELECT cycles 0 -> 1 -> 2 -> 0.
+
+level C
+name WAVE-C
+bg $08
+pf $C8
+
+backdrop X..X..X..X..X..X..X.
+backdrop X..X..X..X..X..X..X.
+backdrop .X..X..X..X..X..X..X
+backdrop .X..X..X..X..X..X..X
+backdrop X..X..X..X..X..X..X.
+backdrop X..X..X..X..X..X..X.
+backdrop .X..X..X..X..X..X..X
+backdrop .X..X..X..X..X..X..X
+
+wave 0 0 84 100 1 0
+wave 1 12 40 120 2 1
+wave 2 24 128 96 1 0
+wave 3 36 64 140 2 1
+wave 4 48 112 80 3 0
+wave 5 60 24 104 1 1
+wave 6 72 144 120 2 1
+wave 7 84 88 100 3 0
+wave 8 96 56 136 1 1
+wave 9 108 120 88 2 0
+wave 10 120 32 112 3 1

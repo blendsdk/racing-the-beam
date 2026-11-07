@@ -136,8 +136,8 @@
   generated tables vs generated code; the runtime interpreter; the cost of table indirection; the
   design of a level format that a human can edit and a machine can validate.
 - **ROM:** `67-automatable-patterns.asm` — **"the wave lab"**, 4,096 bytes.
-  - The picture: a 16-line label/score band, a 64-line generated backdrop (8 playfield rows),
-    and a 112-line play area. The player (P0) sits near the bottom and moves left/right with the
+  - The picture: a 16-line band, a 1-line transition, a 64-line generated backdrop (8 playfield
+    rows), and a 111-line play area (7 setup + 51 rows / 102 game lines + 2 blank) = 192. The player (P0) sits near the bottom and moves left/right with the
     joystick; fire (`INPT4` bit 7) launches the ball upward; enemies are P1, M0, M1, and the ball
     (four slots). Generated waves spawn enemies at the spec's frames and positions; type 0 falls
     straight, type 1 drifts left/right. A shot that hits an enemy deactivates it, increments the
@@ -163,7 +163,8 @@
   more `--spec` files, emits an ACME include with a shared level descriptor table and per-level
   arrays, and supports `--check` (regenerate in memory and compare with the committed include;
   nonzero on drift), `--out <path>`, and `--report`. The committed include is
-  `generated-levels.inc`; the main source and the solutions `!source` it. CI does not run Python;
+  `generated-levels.inc`; the main source sources it, and each exercise solution sources its own
+  generated include (`generated-zigzag.inc`, `generated-three.inc`, `generated-color.inc`). CI does not run Python;
   the author runs `--check` before each commit.
 - **Generated include shape:** `LevelCount`; `LevelName` (6 bytes/level); `LevelBG`, `LevelPF`
   (1 byte/level); `LevelWaveCount` (1 byte/level); a per-level descriptor with pointers to the
@@ -171,18 +172,22 @@
   arrays; per-level 8×3 backdrop bytes. The exact symbol names are in the generator and the doc.
 - **RAM:** `$80` `Level`, `$81` `Frame`, `$82` `WaveIndex`, `$83` `WaveCount`, `$84` `LevelPtrLo`,
   `$85` `LevelPtrHi`, `$86` `PlayerX`, `$87` `ShotX`, `$88` `ShotY`, `$89` `ShotActive`, `$8A`
-  `Score`, `$8B` `PrevSelect`, `$8C` `NewSelect`, `$8D` `PrevFire`, `$8E` `Startup`, `$8F–$9F`
-  the four enemy slots (active/x/y/type/speed) and scratch; `$A0–$D7` the score library; `$D8–$F7`
-  free; `$F8–$FF` stack.
+  `Score`, `$8B` `PrevSelect`, `$8C` `NewSelect`, `$8D` `PrevFire`, `$8E` free (exercise 3 uses it),
+  `$8F-$9E` the four enemy slots (active/x/y/type/speed), `$9F` `Tmp`; `$A0-$D7` the score library;
+  `$D8-$D9` `ArrayPtr`, `$DA` `SlotOfs`, `$DB-$F7` free; `$F8-$FF` stack. The name is drawn from
+  the generated `LevelNName` ROM table, so no name buffer sits under the stack.
 - **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `OverscanStart`, `Level` (A=0/1),
   `LevelWrite` (A=the new level), `WaveSpawn` (A=the wave index), `ScoreWrite` (A=the score),
   `Frame`. The state log proves the SELECT level switch, a generated wave spawn, and a score
   increment.
-- **Evidence pins:** `acme` 4,096; the generator `--check` passes; the two specs validate; the two
-  levels' captures differ; `WaveSpawn` reports a generated index; `ScoreWrite` advances; the frame
-  is 262; the generated include's arrays match the spec fields (a host-side parse check).
-- **Screenshots:** `level-a.png` and `level-b.png` from the committed ROM; the second after a
-  SELECT; the doc discloses the path. The two images show different names/colours/backdrops/waves.
+- **Evidence pins:** all four ROMs 4,096; the generator `--check` passes (with and without `--out`),
+  a bad spec exits 1 with `spec:line`, and a tampered include exits 1 with a drift diff; the two
+  specs validate; the three captures show the two levels and the post-hit band with `WAVE-A`
+  intact; `WaveSpawn` reports the wave index and slot; `ScoreWrite` advances; the frame is 262;
+  the generated include's arrays match the spec fields (a host-side parse check).
+- **Screenshots:** `level-a.png` (normal run), `level-a-hit.png` (after a score hit, name intact),
+  and `level-b.png` (`-holdselect` at power-on) from the committed ROM; the doc discloses the
+  paths. The images show the two levels and the post-hit band.
 - **Exercises:** each ships a 4,096-byte solution.
   1. **Add a zigzag wave.** Add type 2 to the generator's validation and the engine's update (a
      triangle-wave X offset); add a spec with zigzag waves; ship `exercise-01-solution.asm` with
@@ -193,7 +198,7 @@
   3. **Generate a colour schedule.** Extend the generator with `color <frame> <value>` lines and
      the engine with a schedule apply; ship `exercise-03-solution.asm` with a colour-cycling level.
      The doc shows the generated schedule and the ROM.
-- **Integration:** prev 66; next 68; index row 67 ✅; sidebar `config.ts:154`.
+- **Integration:** prev 66; next 68; index row 67 ✅; sidebar `config.ts:156`.
 - **Risks:** generator/include drift (`--check`); a spec range that puts an enemy off-screen
   (validation); the 4K budget with two levels (compact arrays); the score/label window (reuse
   `include/score.asm`).

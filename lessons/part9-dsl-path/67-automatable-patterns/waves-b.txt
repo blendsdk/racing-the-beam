@@ -1,0 +1,33 @@
+# waves-b.txt — level B for the Lesson 67 wave lab
+#
+# A different backdrop, palette, wave count, timing and mix of straight and
+# drifting enemies.  The last frame is 120; 120 + 120 = 240 fits the byte
+# frame counter, so the level loops at frame 240.
+
+level B
+name WAVE-B
+bg $08
+pf $46
+
+backdrop XX....XX....XX....XX
+backdrop XX....XX....XX....XX
+backdrop ..XX....XX....XX....
+backdrop ..XX....XX....XX....
+backdrop ....XX....XX....XX..
+backdrop ....XX....XX....XX..
+backdrop XX....XX....XX....XX
+backdrop XX....XX....XX....XX
+
+wave 0 0 40 140 2 1
+wave 1 10 120 80 1 0
+wave 2 20 72 120 3 1
+wave 3 30 136 100 1 0
+wave 4 40 88 150 2 1
+wave 5 50 24 88 3 0
+wave 6 60 144 136 1 1
+wave 7 70 56 108 2 0
+wave 8 80 112 96 1 1
+wave 9 90 32 128 3 0
+wave 10 100 128 84 2 1
+wave 11 110 80 144 1 0
+wave 12 120 16 100 3 1

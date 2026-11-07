@@ -1,0 +1,75 @@
+# waves-color.txt — exercise 3: a generated colour schedule
+#
+# The exercise generator accepts `color <frame> <value>` lines and emits
+# LevelColorCount + a per-level ColorFrame/ColorValue pair.  The engine
+# applies the colour whose frame has just arrived and keeps it until the
+# next entry.  Frame 0 is the level's opening colour.
+
+level A
+name WAVE-A
+bg $02
+pf $1A
+
+backdrop ....XXXX............
+backdrop ...XXXXXX...........
+backdrop ..XXXXXXXX..........
+backdrop .XXXXXXXXXX.........
+backdrop XXXX....XXXXXXXX....
+backdrop XXXX....XXXXXXXX....
+backdrop XXXXXXXXXXXXXXXXXXXX
+backdrop XXXXXXXXXXXXXXXXXXXX
+
+color 0 $02
+color 24 $06
+color 48 $0A
+color 72 $0C
+color 96 $08
+color 120 $04
+
+wave 0 0 84 100 1 0
+wave 1 12 40 120 2 1
+wave 2 24 128 96 1 0
+wave 3 36 64 140 2 1
+wave 4 48 112 80 3 0
+wave 5 60 24 104 1 1
+wave 6 72 144 120 2 1
+wave 7 84 88 100 3 0
+wave 8 96 56 136 1 1
+wave 9 108 120 88 2 0
+wave 10 120 32 112 3 1
+
+level B
+name WAVE-B
+bg $08
+pf $46
+
+backdrop XX....XX....XX....XX
+backdrop XX....XX....XX....XX
+backdrop ..XX....XX....XX....
+backdrop ..XX....XX....XX....
+backdrop ....XX....XX....XX..
+backdrop ....XX....XX....XX..
+backdrop XX....XX....XX....XX
+backdrop XX....XX....XX....XX
+
+color 0 $08
+color 20 $0A
+color 40 $0C
+color 60 $0E
+color 80 $06
+color 100 $04
+color 120 $02
+
+wave 0 0 40 140 2 1
+wave 1 10 120 80 1 0
+wave 2 20 72 120 3 1
+wave 3 30 136 100 1 0
+wave 4 40 88 150 2 1
+wave 5 50 24 88 3 0
+wave 6 60 144 136 1 1
+wave 7 70 56 108 2 0
+wave 8 80 112 96 1 1
+wave 9 90 32 128 3 0
+wave 10 100 128 84 2 1
+wave 11 110 80 144 1 0
+wave 12 120 16 100 3 1
