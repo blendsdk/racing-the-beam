@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-06 23:35
-> **Progress**: 8/10 tasks (80%)
+> **Last Updated**: 2026-11-07 02:42
+> **Progress**: 9/10 tasks (90%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -315,16 +315,16 @@ AR-25
 AR-25
 **Objective**: Deliver Lesson 64 end to end.
 
-- [ ] 9.1.1 Lesson 64 — Building Your Own Cartridge: Session A freezes ST-64.1–ST-64.6 (red
+- [x] 9.1.1 Lesson 64 — Building Your Own Cartridge: Session A freezes ST-64.1–ST-64.6 (red
   baseline), Session B implements the demo and the document, Session C verifies to green and
   hardens; commit via the `git-commit` skill in push mode —
-  `feat(lesson64): Building Your Own Cartridge`
+  `feat(lesson64): Building Your Own Cartridge` ✅ (completed: 2026-11-07 02:42)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-06 23:47): ST-64.1–ST-64.6 re-affirmed against [03](03-lesson-specs.md) §Lesson 64. Design pins: theory/production lesson with `demo-64.asm` — **"the burn-in test"**, 4,096 bytes. Page 0: a colour-bar pattern, a 16-bit ROM checksum computed at runtime over the 4,096-byte image and shown as four hex digits, a RIOT RAM write/read test (`$A5`/`$5A`, pass/fail), a frame counter, and a "CARTRIDGE TEST" label. Page 1: the controller test (raw `SWCHA`, `SWCHB`, `INPT4` bits). SELECT cycles the pages. Frame: 262 lines; `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `OverscanStart` 229/8 on both pages. RAM: `$80` `Checksum` (2 bytes), `$82` `RamResult`, `$83` `Page`, `$84` `Frame`, `$85` `Swcha`, `$86` `Swchb`, `$87` `Inpt4`; `$88-$9F` the checksum/character/bit scratch; `$A0-$D7` the score library; `$D8-$DB` `FrameChars`; stack `$F8-$FF`. Checkpoints: `ChecksumRead` (A = the low/high byte), `RamResult` (A = 0/1), `Page` (A = 0/1), `Frame` (A = the frame count). The doc covers the cartridge PCB, the SST39SF010A ROM example, the TL866II Plus programmer/adapter, soldering, the shell, the label, the burn-in test, the flash-cart vs production-cart difference, the ROM size/mapper, and the power-on test; it does not claim a physical build was performed in this repository. The three production exercises (add the checksum, the RAM test, the controller test) are answered with the demo's reference implementations; no exercise solution files. Captures: `burn-in.png` and `controller.png`. Red baseline confirmed: no `lessons/part8-advanced/64-building-cartridges`, no `docs/public/images/lesson64`, no Part 8 64 ROMs, the document is the `🔒 Coming Soon` stub, index row 64 Coming Soon, sidebar `config.ts:147`, `verify.sh --no-docs` green at `bafc1a3`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 01:00): One `demo-64.asm` (4,096 bytes), the 1,834-line document, two committed captures (burn-in/controller), and one committed ROM. Page 0: eight colour bars, CART / TEST, SUM / 2769, RAM / PASS, FRAME / 0092. Page 1: CTRL / TEST, JOY / RLDU, CONS / SWCHB, FIRE, FRAME / 0037, with the raw SWCHA/SWCHB/INPT4 blocks. SELECT switches pages. The review fixes: the bar body starts at cycle 5 via `WSYNC`/`BIT`/`NOP` with a black alignment line (54/26 + 1 = 55/27, 192 lines, `OverscanStart` 229/8); the labels are single contiguous six-column blocks (CART/TEST, CTRL/TEST; the full CARTRIDGE/CONTROLLER words are not split); the RLDU and SWCHB legends and the non-contiguous SWCHB bit map; the SELECT/RESET power-on-hold explanation; the frames 0092/0037; the SUM cells blank until the checksum completes; the TypeScript select edge; the CTRL PF repeat (16 blocks); the Javatari note; the A12/data-bus prose; the prereqs 18/39/55/63.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-07 02:42): `bash scripts/verify.sh` PASSED (239 ROMs, no drift, docs build); `demo-64.bin` is 4,096 bytes; Full Source verbatim (1,088 source lines / 1,834 doc lines). Frame: `StartFrame` `$F1B7` 259/3, `VblankStart` `$F1C5` 0/5, `BodyStart` `$F22E` 37/5, `OverscanStart` `$F699` 229/8 on both pages; 262 lines. Checksum: host `sum(data)&0xFFFF` = `$2769`; `$80`=`$69`, `$81`=`$27`; display high-first `2769`; `ChecksumRead` `$F78A` A=`$69` from frame 65. RAM: `RamResultRead` `$F7A5` A=0 (PASS). Page `$F222` A=0/1; `FrameRead` `$F1FF` A=1..255. Inputs: `SwchaRead` `$F1D7` `$FF`/`$EF`/`$AF`; `SwchbRead` `$F1DD` `$3D`/`$3F`; `Inpt4Read` `$F1E2` `$8C`/`$0C`. Captures: burn-in (bars 114/126x6/90 px, CART/TEST, SUM 2769, RAM PASS, FRAME 0092) and controller (CTRL/TEST, JOY/RLDU, CONS/SWCHB, FIRE, FRAME 0037; idle blocks); titles `Stella 7.0: "demo-64"`, no cursor. The bar alignment: first store at cycle 22/clock 66, identical to a mid-field line; the old top strip is gone. Site: index row 64 ✅; prev 63/next 65; sidebar `config.ts:147`; README unchanged. Reviews (AR-5): atari2600-reviewer — 4 major (bar alignment, frame 0023 vs image, SELECT/RESET claim, UDLR order) + 11 minor, then round 2: 1 major (the RESET half) + 2 minor; curriculum-auditor — 2 major (frame mismatch, blank SUM dashes) + 8 minor, then round 2: 1 major (the RESET half) + 2 minor. All fixed: the bar alignment/192-line ledger; the CART/TEST and CTRL/TEST labels; the RLDU/SWCHB legends and bit map; the SELECT/RESET disclosure; the 0092/0037 frames; the blank SUM; the luminance, checksum-cost, whole-word, TypeScript, repeat, burn-in-wrap, Javatari, A12, index, prereq, capture-wait, COLUBK-store, CART/TEST, and RESET-observability corrections. Final state: 0 critical, 0 major open. Lesson 64 is complete.
 
 ---
 

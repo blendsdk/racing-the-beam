@@ -127,7 +127,7 @@ reports the first cycle of the instruction that follows it.
 | ST-64.1 | Assemble the demo | 4,096 bytes | `acme` |
 | ST-64.2 | Run the burn-in test | The color bars, checksum, RAM pass, controller bits, frame counter; SELECT cycles pages; two captures | Screenshots + pixel check |
 | ST-64.3 | Inspect the tests | The checksum equals an independent calculation; `RamResult` = pass; the controller bits change with `-holdjoy0`; `Frame` advances | State log + host checksum |
-| ST-64.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/6 | State log |
+| ST-64.4 | Inspect the frame | 262 lines; `BodyStart` 37/5, `OverscanStart` 229/8 on both pages | State log |
 | ST-64.5 | Exercises | The doc answers the three production exercises (checksum, RAM test, controller) with the demo's code | Doc |
 | ST-64.6 | Site integration | Row 64 ✅; prev 63, next 65; sidebar `config.ts:147` | Build + page check |
 

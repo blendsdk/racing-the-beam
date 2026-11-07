@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Phase 8 complete — 0 critical, 0 major open. Lessons 56–63 are committed.
+> **Status**: Phase 9 complete after round 2 — 0 critical, 0 major open. Lessons 56–64 are committed.
 > **Rule**: every reviewer finding is recorded here with its severity, its location, and the
 > fix that closed it. A lesson is not done while a critical/major row is open.
 
@@ -179,3 +179,23 @@ non-buildable DPC+ promise (PF-02); both are corrected in the Lesson 65 and Less
 | SR-63-012 | 63 | 🟡 MINOR | The 24-pixel gap's mirror halves were swapped in the pixel-check paragraph. | fixed — the left half's 17–19 plus the right half's 0–2. |
 | SR-63-013 | 63 | 🟡 MINOR | "The call depth is one level" was false; `ScoreSetup` nests `ScoreSetupP0/P1`. | fixed — the source states the two-level demo and the exercise's stack headroom. |
 | SR-63-014 | 63 | 🟡 MINOR | The title pixel table said x=373–642; the committed burst frame measures x=367–636. | fixed; the log-cycle and first-star-line caveats are also documented. |
+| SR-64-001 | 64 | 🟠 MAJOR | The first colour-bar body was entered after the page dispatch, so its first store landed at cycle 38 and the top line had a partial/black strip; the band ledger summed to 191. | fixed — `ColourBars` now starts with `WSYNC`/`BIT`/`NOP` at cycle 5, with a black alignment line; the field is 55/27 and the page is 192 lines; the top strip is gone; `OverscanStart` 229/8. |
+| SR-64-002 | 64 | 🟠 MAJOR | The controller capture read FRAME 0035 (later 0037), but the doc said 0023/0103. | fixed — the captures are re-taken and the alt/caption/pixel table say 0092 (burn-in) and 0037 (controller). |
+| SR-64-003 | 64 | 🟠 MAJOR | The doc claimed a held SELECT/RESET would show the SWCHB blocks on the controller page; SELECT switches the page and RESET holds the CPU. | fixed — SELECT is consumed by the page switch and its block is observable only with the switch held across power-on (`-holdselect`); RESET restarts the console and cannot be observed while the program runs; the still is idle. |
+| SR-64-004 | 64 | 🟠 MAJOR | The P0 direction legend said UDLR, but the blocks left-to-right are R, L, D, U; the SWCHB bits are not contiguous. | fixed — the screen legend is RLDU; the doc gives the SWCHA/SWCHB bit maps; the exercise hint matches. |
+| SR-64-005 | 64 | 🟠 MAJOR | The doc said the SUM row shows `----` before the checksum completes; it is blank. | fixed — the four SUM cells stay blank; the wording is corrected everywhere. |
+| SR-64-006 | 64 | 🟡 MINOR | "Luminance-6 hues" was wrong: the bars have different luminances. | fixed. |
+| SR-64-007 | 64 | 🟡 MINOR | The checksum chunk cost was estimated at ~1,344 cycles; the actual is ~1,620 average/1,750 worst, margin ~490. | fixed. |
+| SR-64-008 | 64 | 🟡 MINOR | "Wrapped at whole words" was false: CARTRIDGE/CONTROLLER do not fit six columns. | fixed — the screen uses CART/TEST and CTRL/TEST; the doc says the full words are not split. |
+| SR-64-009 | 64 | 🟡 MINOR | The TypeScript toggled the page every frame while SELECT was held; the hardware uses an edge. | fixed — `prevSelect` and an edge test. |
+| SR-64-010 | 64 | 🟡 MINOR | `CTRLPF=0` repeats the bit blocks; the doc said eight, but 16 are visible. | fixed — the repeat is documented and the table samples the left group. |
+| SR-64-011 | 64 | 🟡 MINOR | The burn-in capture showed FRAME 0060 with the checksum, which needs a post-wrap counter; the doc said 4 s. | fixed — the re-captured burn-in is 0092 (pre-wrap) and the doc states the 2.5 s/startup timing. |
+| SR-64-012 | 64 | 🟡 MINOR | The Javatari muted-player note was missing. | fixed. |
+| SR-64-013 | 64 | 🟡 MINOR | "the read signals" / "the console asserts chip select" were not 2600 facts. | fixed — the console's address decode uses A12; the board maps A0-A11; the ROM drives the data bus. |
+| SR-64-014 | 64 | 🟡 MINOR | The Part 8 index said Lesson 64 "turns a ROM into a physical cartridge", promising a build the lesson disclaims. | fixed — the index says the lesson covers the ROM-to-cartridge pipeline and verifies the image with the burn-in test. |
+| SR-64-015 | 64 | 🟡 MINOR | The prerequisites omitted Lessons 18, 39, 55, and 63. | fixed in the doc and 03. |
+| SR-64-016 | 64 | 🟡 MINOR | The capture note said both stills waited 2.5 s, but the burn-in is FRAME 0092 and the controller 0037. | fixed — the burn-in waited 2.5 s; the controller was captured earlier at 0037 once the page was stable. |
+| SR-64-017 | 64 | 🟡 MINOR | "The board decodes A12" conflicted with the console's address decode. | fixed — the console's decode uses A12; the board maps A0-A11; the ROM drives the data bus. |
+| SR-64-018 | 64 | 🟡 MINOR | "The VBLANK sets COLUBK to zero" was wrong; the stores are in `BodyStart`/`ColourBars`. | fixed. |
+| SR-64-019 | 64 | 🟡 MINOR | The meta said "a CART TEST label"; the screen has CART and TEST. | fixed — "CART and TEST labels". |
+| SR-64-020 | 64 | 🟠 MAJOR | The doc still claimed the RESET block was observable with the switch held across power-on; RESET holds the CPU in reset. | fixed — SELECT is observable with `-holdselect`; RESET restarts the console and its block cannot be observed while the program runs (released = 1). |

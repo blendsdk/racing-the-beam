@@ -14,7 +14,7 @@ Push beyond 4KB — bankswitching, illegal opcodes, DPC+, compression, and build
 | 61 | [Compression & Data Encoding — Fitting More in 4KB](./61-compression) | ✅ Complete |
 | 62 | [Reverse Engineering a Classic Game](./62-reverse-engineering) | ✅ Complete |
 | 63 | [Modern Homebrew — Dev Carts and Community](./63-modern-homebrew) | ✅ Complete |
-| 64 | [Building Your Own Cartridge — From ROM to Physical Cart](./64-building-cartridges) | 🔒 Coming Soon |
+| 64 | [Building Your Own Cartridge — From ROM to Physical Cart](./64-building-cartridges) | ✅ Complete |
 | 65 | [PAL/NTSC Universal ROM — One Cart, Every TV](./65-pal-ntsc-universal) | 🔒 Coming Soon |
 
 ## What You'll Learn
@@ -29,7 +29,7 @@ Part 8 leaves the 4K world and teaches how real 2600 software is shipped:
 - **Lesson 61** stores a detailed logo as a run-length-encoded stream and decompresses it a row at a time in "the compressed logo"
 - **Lesson 62** reverses a course-written classic-style game with the Stella debugger in "Wall Buster"
 - **Lesson 63** builds a polished attract mode and surveys the Harmony/UnoCart, AtariAge, and publishing landscape
-- **Lesson 64** turns a ROM into a physical cartridge and verifies it with "the burn-in test"
+- **Lesson 64** covers the ROM-to-cartridge pipeline and verifies the image with "the burn-in test"
 - **Lesson 65** ships one ROM that selects NTSC or PAL timing at the title screen in "the world traveler"
 
 By the end of Part 8 you can choose a mapper, lay out a banked image, read the DPC register map, compress a picture, reverse a ROM, and explain why a stock 2600 cannot auto-detect the TV system.

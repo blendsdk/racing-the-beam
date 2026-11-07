@@ -408,20 +408,22 @@
 
 - **Goal:** turn a `.bin` into a physical cartridge and verify it with a burn-in test ROM.
 - **Prerequisites:** Lesson 03 (the anatomy), Lesson 04 (registers), Lesson 12 (the frame),
-  Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 19 (the playfield), Lesson 25 (players),
-  Lesson 48 (the taxonomy), Lesson 56 (banking).
+  Lesson 14 (`WSYNC`), Lesson 17 (cycle counting), Lesson 18 (mid-line changes), Lesson 19 (the
+  playfield), Lesson 25 (players), Lesson 39 (the score kernel), Lesson 48 (the taxonomy), Lesson
+  55 (the text window), Lesson 56 (banking), Lesson 63 (the score library).
 - **Concepts:** the cartridge PCB; the ROM chip (SST39SF010A); the TL866II Plus programmer and
   adapter; the socket/shell; soldering; the label; the burn-in test; the difference between a
   flash cart (Harmony/UnoCart) and a production cart; the ROM size/mapper; the power-on test.
 - **ROM:** `demo-64.asm` — **"the burn-in test"**, 4,096 bytes. A test screen with:
   a color-bar pattern; a ROM checksum (computed at runtime over the 4K image, shown as four hex
   digits); a RIOT RAM test (write/read `$A5`/`$5A`, pass/fail); a joystick/switch test (raw
-  `SWCHA`, `SWCHB`, `INPT4` bits); a frame counter; and a "CARTRIDGE TEST" label. SELECT cycles
+  `SWCHA`, `SWCHB`, `INPT4` bits); a frame counter; and the short CART / TEST label (the full word CARTRIDGE does not fit the six-column window). SELECT cycles
   the test pages.
   - Frame: 262 lines; 3 + 37 + 192 + 30; `StartFrame` 259/3, `VblankStart` 0/5,
-    `BodyStart` 37/5, `OverscanStart` 229/6.
+    `BodyStart` 37/5, `OverscanStart` 229/8 on both pages.
   - RAM: `$80` `Checksum` (2 bytes), `$82` `RamResult`, `$83` `Page`, `$84` `Frame`, `$85`
-    `Swcha`, `$86` `Swchb`, `$87` `Inpt4`, `$88–$9F` free; stack `$F8–$FF`.
+    `Swcha`, `$86` `Swchb`, `$87` `Inpt4`; `$88-$9F` the checksum/character/bit scratch;
+    `$A0-$D7` the score library; `$D8-$DB` `FrameChars`; stack `$F8-$FF`.
   - Checkpoints: `ChecksumRead` (A = the low/high byte), `RamResult`, `Page`, `Frame`.
 - **Evidence pins:** the checksum matches an independent calculation over the committed ROM; the
   RAM test passes in Stella; the controller bits change with `-holdjoy0`; the capture shows the
