@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 18:54
-> **Progress**: 3/4 tasks (75%)
+> **Last Updated**: 2026-11-07 18:57
+> **Progress**: 4/4 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -189,12 +189,12 @@ document that teaches the kernel architecture.
 
 ### Step 4.1: Part 9 completion gate (a gate, not a fourth lesson)
 
-- [ ] 4.1.1 Part 9 completion gate: 9 ACME sources/ROMs + 1 bB reference, 3 docs, 10 screenshots,
+- [x] 4.1.1 Part 9 completion gate: 9 ACME sources/ROMs + 1 bB reference, 3 docs, 10 screenshots,
   `npm run roms` 252, 253 total `.bin`, index 66–68 ✅, RD-09 Done, feature roadmap 9/11, portfolio
   9 plans, all completion criteria ticked, final `verify.sh` green; commit via the `git-commit`
-  skill in push mode — `docs(curriculum): complete Part 9 (lessons 66-68)`
+  skill in push mode — `docs(curriculum): complete Part 9 (lessons 66-68)` ✅ (completed: 2026-11-07 18:57)
 
-**Completion gate record**:
+**Completion gate record** (2026-11-07 18:57): **PASSED.** Counts: `find lessons/part9-dsl-path -name '*.asm'` = **9**; `find docs/public/roms/part9-dsl-path -name '*.bin'` = **10** (9 ACME + the bB reference); `find docs/public/roms -name '*.bin'` = **253**; `docs/part9-dsl-path/[0-9]*.md` = **3**; `docs/public/images/lesson66/67/68/*.png` = **10** (Lesson 66: 4; Lesson 67: 3; Lesson 68: 3). `bash scripts/verify.sh` PASSED: 252 lesson sources, no ROM drift, VitePress build OK. The Part 9 index rows 66–68 are all ✅. Both specialists report 0 critical/major open for every lesson (05-findings.md). RD-09 is Done; the feature roadmap is 9/11; the portfolio is 9 plans done. README row 9 is unchanged. The post-completion analysis is recorded below.
 
 ---
 
@@ -216,19 +216,52 @@ Part 9 completion gate
 
 ## Completion Criteria
 
-- [ ] All three phases marked `[x]` with Session A/C records.
-- [ ] 9 ACME sources/ROMs (1 demo + 4 + 4) + 1 bB reference ROM, all 4,096 bytes.
-- [ ] 3 documents, 10 screenshots (9 lesson captures + 1 bB reference).
-- [ ] Lesson 66: three lenses, bB listing, reference player, three analysis exercises.
-- [ ] Lesson 67: generator `--check` clean, two levels, three solutions.
-- [ ] Lesson 68: `+kf_end` 192 for every layout, three layouts, three solutions.
-- [ ] Part 9 index rows 66–68 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit (252 ACME sources).
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security N/A (static content, no input).
-- [ ] The post-completion re-analysis is recorded.
-- [ ] RD-09 Done; feature roadmap 9/11 RDs; portfolio 9 plans done.
+- [x] All three phases marked `[x]` with Session A/C records.
+- [x] 9 ACME sources/ROMs (1 demo + 4 + 4) + 1 bB reference ROM, all 4,096 bytes.
+- [x] 3 documents, 10 screenshots (9 lesson captures + 1 bB reference).
+- [x] Lesson 66: three lenses, bB listing, reference player, three analysis exercises.
+- [x] Lesson 67: generator `--check` clean (all four includes), two levels + the post-hit capture, three solutions.
+- [x] Lesson 68: `+kf_end` 192 for every layout, three layouts, three solutions.
+- [x] Part 9 index rows 66–68 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit (252 ACME sources).
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security N/A (static content, no input).
+- [x] The post-completion re-analysis is recorded below.
+- [x] RD-09 Done; feature roadmap 9/11 RDs; portfolio 9 plans done.
 
-## Post-Completion Analysis
+## Post-Completion Analysis (2026-11-07)
 
-_To be filled at the gate._
+**What shipped.** Three lessons, **9 ACME sources/ROMs + 1 bB reference ROM**, **3 documents**, and
+**10 Stella screenshots** (Lesson 66: 4; Lesson 67: 3; Lesson 68: 3). `npm run roms` builds **252**
+ACME ROMs; the repository has **253** `.bin` files including the bB reference. Part 9 moved from
+reading a compiler to writing one: a real batari BASIC 1.9 compilation and its generated listing;
+a wave-spec DSL, a Python generator with a read-only `--check` and dialect flags, and a playable
+two-level wave lab; and a macro-composed kernel framework with a build-time 192-line assertion,
+three layouts, and a runtime selector.
+
+**What the preflight prevented.** The bB compilation was proven before the plan (bB 1.9 + wasmtime
+50.0.1; the generated listing is CC0; games are exempt from the GPL); the framework prototype
+caught the 191-line budget, the ROM-resident dispatch vector, and the `$80-$82` collision before
+the lesson existed; the play-area boundary line and the 13-cycle dispatch tax were measured, not
+guessed. The three ambiguity-register decisions that mattered most were the demo/bB separation
+(AR-11/AR-12), the generator's `--check`/dialect design (AR-13/AR-14), and the framework budget
+(AR-16/AR-17).
+
+**What the reviews caught.** The per-lesson gate caught the defects a build-only gate would have
+missed: the Lesson 66 band tear, starfield shear, missing symbol/list/redefs artifacts, and the
+VARS preload/tail; the Lesson 67 name/stack collision (the first score hit overwrote the name
+buffer), the slot-reuse rule, the exercise-3 score-owned colour byte, and the generator header
+provenance; the Lesson 68 `CTRLPF` polarity (repeat vs reflect), the boundary-line clear order,
+and the `+kf_custom` claim. All were fixed in the implementation or the doc, never by weakening a
+frozen expectation.
+
+**What to carry forward.** (1) A moving state needs an auto-demo or a measured frame, not a fixed
+sleep. (2) Generated evidence must be committed with the toolchain provenance and a reproducible
+`--check`; a check that writes before comparing is not a check. (3) Put the budget in the
+assembler: `!error` catches a 191-line layout before Stella does. (4) The boundary line is part of
+the architecture, not overhead. (5) The score library owns `$A0-$D7`; a lesson that borrows those
+bytes must say so.
+
+**Final state.** `verify.sh` green (252 ROMs, no drift, docs build); the Part 9 index 66–68 ✅;
+RD-09 Done; feature roadmap 9/11; portfolio 9 plans done; README row 9 unchanged. The next
+curriculum work is RD-10 (Part 10 — Capstone Projects).

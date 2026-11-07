@@ -108,3 +108,20 @@ ROM that interprets the generated tables.
 | RAM collision with `$80–$82` | Medium | High | Framework owns `$80–$82`; lesson variables from `$83` |
 | 4K overflow | Medium | Medium | Compact tables; assemble before capture; size pin |
 | Moving-state screenshot | Medium | Medium | SELECT/frame-based capture; state log proves the state |
+
+## Final State (2026-11-07)
+
+Part 9 is complete. The three lessons ship **9 ACME sources/ROMs** (Lesson 66: `demo-66.asm`;
+Lesson 67: the main + three solutions; Lesson 68: the main + three solutions) plus **1 bB reference
+ROM**, **3 documents**, and **10 Stella screenshots** (Lesson 66: 4; Lesson 67: 3; Lesson 68: 3).
+`npm run roms` builds **252** ACME ROMs; the repository has **253** `.bin` files including the bB
+reference. `bash scripts/verify.sh` passes with no drift and a successful VitePress build. The
+Part 9 index rows 66–68 are all ✅; the sidebar, prev/next links, and README row 9 are unchanged.
+
+The preflight's facts held: bB 1.9 + wasmtime 50.0.1 compile the course-authored `.bas` to 4,096
+bytes and a CC0 listing; the framework's zone budget, build-time `!error`, branch dispatcher, and
+`$80-$82` ownership are correct; the 13-cycle dispatch tax lands the overscan at 229/19 on a
+262-line frame. The per-lesson review gate caught the remaining defects before each commit (the
+Lesson 66 band/starfield/artifact fixes, the Lesson 67 name/stack and generator fixes, the Lesson
+68 `CTRLPF`/boundary/`+kf_custom` fixes); the details are in `05-findings.md`. RD-09 is Done, the
+feature roadmap is 9/11, and the portfolio records 9 plans done.

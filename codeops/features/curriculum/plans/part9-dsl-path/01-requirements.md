@@ -36,11 +36,11 @@
 
 ## Acceptance Criteria
 
-1. [ ] Lessons 66–68 each have the artifact set named in RD-09 AC 1.
-2. [ ] `bash scripts/verify.sh` passes with 252 ACME sources; the committed ROMs are byte-identical.
-3. [ ] The bB reference ROM is 4,096 bytes and runs in Stella; the generated listing is committed.
-4. [ ] The Lesson 67 generator's `--check` mode reports no drift; the two specs validate.
-5. [ ] Every Lesson 68 layout passes the build-time 192-line check and measures a 262-line frame.
-6. [ ] Both specialists report no critical/major open for each lesson.
-7. [ ] The Part 9 index rows 66–68 are ✅; sidebar, prev/next, `<RomPlayer>`, README row 9 checked.
-8. [ ] RD-09 is Done; feature roadmap 9/11; portfolio 9 plans done.
+1. [x] Lessons 66–68 each have the artifact set named in RD-09 AC 1.
+2. [x] `bash scripts/verify.sh` passes with 252 ACME sources; the committed ROMs are byte-identical.
+3. [x] The bB reference ROM is 4,096 bytes and runs in Stella; the generated listing is committed.
+4. [x] The Lesson 67 generator's `--check` mode reports no drift; the two specs validate.
+5. [x] Every Lesson 68 layout passes the build-time 192-line check and measures a 262-line frame.
+6. [x] Both specialists report no critical/major open for each lesson.
+7. [x] The Part 9 index rows 66–68 are ✅; sidebar, prev/next, `<RomPlayer>`, README row 9 checked.
+8. [x] RD-09 is Done; feature roadmap 9/11; portfolio 9 plans done.

@@ -1,7 +1,7 @@
 # Part 9 — The DSL Path (Lessons 66–68) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 9 by shipping lessons 66–68 as a reviewed lesson set
-> **Status**: Planning Complete (preflighted; ready for execution)
+> **Status**: Complete (3/3 lessons; RD-09 Done)
 > **Created**: 2026-11-07
 > **Implements**: curriculum/RD-09
 > **Source**: ../../requirements/RD-09-part9-dsl-path.md
@@ -112,7 +112,7 @@ bash scripts/verify.sh
 | RAM | framework owns `$80–$82`; lesson variables from `$83` (AR-20) |
 | Frame | NTSC 262; `OverscanStart` 229 (cycle varies with the layout) (AR-21) |
 | Evidence | State logs + static ledgers + pixel checks + committed bB listing (AR-22) |
-| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 10 screenshots, 252/253 ROMs (AR-26) |
+| Completion | 9 ACME + 1 bB reference ROM, 3 docs, 10 screenshots, 252/253 ROMs (AR-26) — achieved |
 
 ## Specialist Agents
 

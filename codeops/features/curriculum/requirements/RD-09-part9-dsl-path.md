@@ -1,8 +1,9 @@
 # RD-09: Part 9 — The DSL Path (lessons 66–68)
 
 > **Document**: RD-09-part9-dsl-path.md
-> **Status**: Draft
+> **Status**: Done
 > **Created**: 2026-10-10
+> **Completed**: 2026-11-07
 > **Project**: Racing the Beam
 > **Depends On**: RD-08 (Part 8 — Advanced Topics)
 > **CodeOps Artifact Schema**: 1
