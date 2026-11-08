@@ -1631,4 +1631,4 @@ Each exercise ships a complete 4,096-byte `exercise-NN-solution.asm`. The soluti
 
 ## What's Next
 
-This is the first published lesson of Part 11. [The Part 11 index](/part11-legendary/) lists the anthology: Lessons 73–78 — the HMOVE comb and the Cosmic Ark starfield, skipdraw, the pseudo-3D road, procedural worlds, interlaced flicker, and the Adventure room engine — remain coming soon. Return to the index for the part's overview, or continue with the next legendary technique when it lands.
+This is one of the first published lessons of Part 11: Lesson 73 (the HMOVE comb and the Cosmic Ark starfield) and this Lesson 79 are live; Lessons 74–78 — skipdraw, the pseudo-3D road, procedural worlds, interlaced flicker, and the Adventure room engine — remain coming soon. [The Part 11 index](/part11-legendary/) lists the anthology.

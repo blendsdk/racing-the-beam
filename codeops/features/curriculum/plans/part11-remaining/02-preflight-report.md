@@ -20,7 +20,7 @@ No forward reference: each document names only earlier lessons, except its What'
 
 | Lesson | Check | Source / method |
 |---|---|---|
-| 73 | Repeated `HMOVE` re-applies the motion registers; HMOVE in the visible line blanks the leftmost 8 pixels | `references/legendary.md`, problemkaputt.de TIA notes; verify in Stella |
+| 73 | Repeated `HMOVE` re-applies the motion registers (the walk); HMOVE in HBLANK blanks the leftmost 8 pixels (the bar); a visible-line HMOVE stalls/plugs not-yet-drawn pixels rightward | `references/legendary.md`, problemkaputt.de TIA notes; verified in Stella |
 | 73 | `RESM0`/`RESBL` position at the beam with a fixed output delay; `NUSIZ=3` is three close copies | `references/tia-hardware.md`, Lessons 26/31 |
 | 74 | `SBC`/`CMP` carry is the unsigned "below" test; the skip branch is the only branch; both paths must be cycle-padded | `references/6502-cpu.md`; count both paths in Stella |
 | 74 | The missile form `ROL; ROL; EOR #2` turns carry into `ENAM0`'s bit 1 without a branch | Derived from the carry/rotate semantics; verify in Stella |
@@ -36,7 +36,7 @@ Two captures per lesson, from the committed main ROM, 1010x807, title bar
 
 | Lesson | Capture A | Capture B |
 |---|---|---|
-| 73 | `starfield.png` — clean field, stars + planet + ship | `comb.png` — comb mode, 8-pixel bars at the left |
+| 73 | `starfield.png` — single-strobe walk, stars + planet + ship + the HMOVE bar | `comb.png` — second visible-line strobe; the field shifts, the bar remains |
 | 74 | `rocket-low.png` — rocket low, exhaust clipped at the ground | `rocket-high.png` — rocket high, exhaust follows |
 | 75 | `straight.png` — road at phase 0 | `curve.png` — road curved, centre line visible |
 | 76 | `world-seed-a.png` — seed A world | `world-seed-b.png` — seed B, visibly different |
@@ -47,8 +47,8 @@ Each document shows both captures and one `<RomPlayer>` for the main ROM.
 
 ## Risks carried into implementation
 
-- Lesson 73: the comb must be visible without corrupting the whole picture; the auto-demo
-  toggle must be scripted, not input-dependent.
+- Lesson 73: the HMOVE bar is inherent to the walk and is present in both states; the second
+  strobe's shift is a visible-line stall. The auto-demo toggle must be one-shot.
 - Lesson 74: a 1-line kernel has 76 cycles; the P0 and M0 paths must fit with the playfield
   and the loop.
 - Lesson 75: asymmetric playfield timing is the hardest part; fall back to a symmetric road

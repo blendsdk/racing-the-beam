@@ -9,21 +9,32 @@ ROM auto-demos (no input needed for the captures); SELECT toggles the second vis
 ## Lesson 73 — The HMOVE Comb & the Cosmic Ark Starfield
 
 **Artifact**: a 192-line starfield over a planet limb, with a small ship. Sparse single-pixel
-stars come from one missile in three-copy mode plus the ball; the sky colour cycles slowly.
+stars come from one missile in three-copy mode plus the ball; the sky cycles through four blues.
 
-**Mechanism**: per-line repositioning (`RESM0`/`RESBL`) from a 32-entry X table and a 24-byte
-sparse line mask; `HMOVE` is strobed every line to re-apply the fine motion. The comb is the
-8-pixel black bar that appears when `HMOVE` is strobed in the visible line instead of HBLANK;
-SELECT/auto-demo toggles comb mode. The lesson reproduces the *look* and names the historical
-Cosmic Ark effect without claiming bit-exactness.
+**Mechanism**: the HMOVE walk. Missile 0 and the ball are positioned **once**; every visible
+line writes `HMM0`/`HMBL` from a 160-entry motion table and strobes `HMOVE`, so each object's X
+is the accumulated signed motion (positive moves left). The 8-pixel HMOVE blanking bar is the
+border-colour notch on every star line in both states. A second `HMOVE` in the visible line is
+the comb/visible-line experiment: it stalls (plugs) the not-yet-drawn pixels rightward by a
+bounded, line-dependent amount; it does not re-apply a 4-px left motion. The mask scrolls every
+8 frames. SELECT or the one-shot auto-demo at frame 240 adds the second strobe. The lesson
+reproduces the documented repeated-HMOVE look without claiming bit-exact Cosmic Ark.
 
-**Frame**: 37 VBLANK; 192 visible (planet limb bottom 32 lines, ship 8x8 at the lower centre,
-stars above); 30 overscan.
+**Frame**: 37 VBLANK; 160 star lines + 32 planet lines = 192; 30 overscan; 262. The planet limb
+is 16 rows x 2 lines, continuous from a 4-px cap to the full width (rows 12-15 use PF1=$FF plus
+PF0=$80/$C0/$E0/$F0; half-widths 68/72/76/80), with the ship on rows 10-13.
 
-**Captures**: `starfield.png` (clean field, comb mode off) and `comb.png` (comb bars at the
-left edge, stars shifted). The auto-demo switches comb mode after 180 frames.
+**Captures**: `starfield.png` (single-strobe walk; the bar is present) and `comb.png` (the
+second visible-line strobe; the field shifts right, the bar is still present). The auto-demo
+switches at frame 240; captures at 2 s and 5 s.
 
-**Exercises**: (1) denser field and a per-band star colour; (2) a vertical scroll plus twinkle.
+**Exercises**: (1) a 73-star mask with five 32-line colour bands; (2) a 2-frame scroll plus a
+16-frame twinkle. Both keep the walk and the single strobe.
+
+> **Amended 2026-11-08** after the mechanism probe and the first review: the original spec used
+> per-line `RESM0`/`RESBL` positioning, which does not demonstrate the repeated-HMOVE scatter;
+> the delivered walk does. The second strobe is a visible-line stall, not a 4-px left
+> re-application. The bar is inherent to the walk and is present in both captures.
 
 ## Lesson 74 — Skipdraw — The Classic Sprite Kernel Idiom
 

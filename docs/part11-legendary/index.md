@@ -4,13 +4,13 @@
 
 An anthology of famous, historically documented Atari 2600 tricks — the masters' greatest hits. By this point in the course you know enough to *appreciate* and *reimplement* the techniques that defined the platform.
 
-**Lesson 79 is complete; lessons 73–78 are in production.**
+**Lessons 73 and 79 are complete; lessons 74–78 are in production.**
 
 ## Lessons
 
 | # | Lesson | Status |
 |---|--------|--------|
-| 73 | **The HMOVE Comb & the Cosmic Ark Starfield** — abusing repeated HMOVE strobes to scatter a single missile into a whole star field | 🔮 Coming Soon |
+| 73 | [**The HMOVE Comb & the Cosmic Ark Starfield**](./73-cosmic-ark-starfield) — abusing repeated HMOVE strobes to scatter a single missile into a whole star field | ✅ Complete |
 | 74 | **Skipdraw — The Classic Sprite Kernel Idiom** — the branchless per-scanline sprite idiom, driven by carry math instead of a compare-and-branch | 🔮 Coming Soon |
 | 75 | **Pseudo-3D Road — The Enduro / Pole Position Effect** — a perspective road that rushes toward the player using per-scanline width, colour bands, and a curve-offset table | 🔮 Coming Soon |
 | 76 | **Procedural Worlds from a Seed — Pitfall! & River Raid** — an entire world generated from a tiny LFSR seed, deterministic forward and backward | 🔮 Coming Soon |
@@ -30,4 +30,4 @@ Part 11 is the anthology of the techniques that defined the platform:
 - **Lesson 78** builds the room-and-object engine that invented the action-adventure genre.
 - **Lesson 79** puts the 48-pixel trick in the bottom band: a static `RACING` publisher mark drawn from a page-aligned ROM table, with a second handover and a SELECT toggle, beside the score and a small play field.
 
-*The anthology completes the masterclass at 79 lessons. Lesson 79 is live; lessons 73–78 are coming soon.*
+*The anthology completes the masterclass at 79 lessons. Lessons 73 and 79 are live; lessons 74–78 are coming soon.*

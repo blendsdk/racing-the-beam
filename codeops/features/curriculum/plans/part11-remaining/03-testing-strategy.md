@@ -8,10 +8,10 @@
 | ID | Case | Method | Expected |
 |---|---|---|---|
 | ST-73.1 | Assemble the artifact set | `acme` for 3 sources (main + 2 solutions) | 3 x 4,096 bytes; byte-identical to the committed ROMs |
-| ST-73.2 | Frame | Stella state log | 262 lines; `StartFrame` 259/3, `Vblank` 0/5, `Body` 37/5, `Overscan` 229/6 |
-| ST-73.3 | Stars | Pixel check + state log | At least 40 star pixels; 3 copies of M0; no stars below the horizon |
-| ST-73.4 | Comb | Pixel check | `comb.png` has an 8-pixel dark bar at the left of the star band; `starfield.png` does not |
-| ST-73.5 | Exercises | Assemble + run | ex1 denser field; ex2 scroll/twinkle; both 4,096 and 262 lines |
+| ST-73.2 | Frame | Stella state log | 262 lines; `StartFrame` 259/3, `Vblank` 0/5, `Body` 37/5, `Planet` 197/5, `Overscan` 229/3 (line 229) |
+| ST-73.3 | Stars | Pixel check + state log | At least 40 star pixels; 3 M0 copies (mod 160); no stars below the horizon; 160/160 bar in both states |
+| ST-73.4 | Second strobe | Pixel check + state log | The bar is on 160/160 star lines in both states; the visible-line strobe shifts the field right (bounded, line-dependent); the frame stays 262 |
+| ST-73.5 | Exercises | Assemble + run | ex1 73-star, five-band field; ex2 2-frame scroll + 16-frame twinkle; both 4,096 and 262 lines |
 | ST-74.1 | Assemble | `acme` | 3 x 4,096 |
 | ST-74.2 | Frame | State log | 262; Body 37/5; Overscan 229/6 |
 | ST-74.3 | Skipdraw | State log + pixel check | Rocket rows only at RocketY..RocketY+15; GRP0=0 above/below; the two captures show two heights |

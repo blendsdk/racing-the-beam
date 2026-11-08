@@ -172,7 +172,7 @@ export default defineConfig({
           collapsed: true,
           items: [
             { text: 'Overview', link: '/part11-legendary/' },
-            { text: '73 — Cosmic Ark Starfield', link: '/part11-legendary/' },
+            { text: '73 — Cosmic Ark Starfield', link: '/part11-legendary/73-cosmic-ark-starfield' },
             { text: '74 — Skipdraw Sprite Kernel', link: '/part11-legendary/' },
             { text: '75 — Pseudo-3D Road', link: '/part11-legendary/' },
             { text: '76 — Procedural Worlds (LFSR)', link: '/part11-legendary/' },
