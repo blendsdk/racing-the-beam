@@ -13,7 +13,7 @@
 | ST-73.4 | Second strobe | Pixel check + state log | The bar is on 160/160 star lines in both states; the visible-line strobe shifts the field right (bounded, line-dependent); the frame stays 262 |
 | ST-73.5 | Exercises | Assemble + run | ex1 73-star, five-band field; ex2 2-frame scroll + 16-frame twinkle; both 4,096 and 262 lines |
 | ST-74.1 | Assemble | `acme` | 3 x 4,096 |
-| ST-74.2 | Frame | State log | 262; Body 37/5; Overscan 229/6 |
+| ST-74.2 | Frame | State log | 262; Body 37/5; first blanked line 229 (label 228/12) |
 | ST-74.3 | Skipdraw | State log + pixel check | Rocket rows only at RocketY..RocketY+15; GRP0=0 above/below; the two captures show two heights |
 | ST-74.4 | Cycles | Static ledger + Stella | P0 path and skip path both 76 cycles or less; no frame growth |
 | ST-74.5 | Exercises | Assemble + run | ex1 second sprite; ex2 branchless form; 4,096 and 262 |
@@ -42,7 +42,7 @@
 
 | ID | Case | Method | Expected |
 |---|---|---|---|
-| ST-P11.1 | ROM drift | `npm run roms` + `verify.sh` | 287 ACME ROMs (269 + 18), no drift |
+| ST-P11.1 | ROM drift | `npm run roms` + `verify.sh` | The count `verify.sh` reports (275 after Lesson 74; 287 after Lesson 78), no drift |
 | ST-P11.2 | Full source | Source vs document block | Exact match for all six |
 | ST-P11.3 | Site | `npm run docs:build` | No dead links; all six sidebar entries and part-index rows live |
 | ST-P11.4 | README | Read the curriculum table | 79 lessons; Part 11 = 73–79 (unchanged from the amendment) |

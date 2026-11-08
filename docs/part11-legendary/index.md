@@ -1,17 +1,17 @@
 # Part 11: Legendary Techniques
 
-> 🧭 **The Big Idea — The Masters' Greatest Hits.** Every earlier part taught a mechanism; this part studies the tricks that made the commercial 2600 games famous. Some are happy accidents (the HMOVE comb), some are branchless idioms (skipdraw), some are data compression (procedural worlds), and some are production craft (the in-game publisher mark). Each one is a documented technique, rebuilt from the mechanism rather than copied from a screen.
+> 🧭 **The Big Idea — The Masters' Greatest Hits.** Every earlier part taught a mechanism; this part studies the tricks that made the commercial 2600 games famous. Some are happy accidents (the HMOVE comb), some are one-branch idioms (skipdraw), some are data compression (procedural worlds), and some are production craft (the in-game publisher mark). Each one is a documented technique, rebuilt from the mechanism rather than copied from a screen.
 
 An anthology of famous, historically documented Atari 2600 tricks — the masters' greatest hits. By this point in the course you know enough to *appreciate* and *reimplement* the techniques that defined the platform.
 
-**Lessons 73 and 79 are complete; lessons 74–78 are in production.**
+**Lessons 73, 74 and 79 are complete; lessons 75–78 are in production.**
 
 ## Lessons
 
 | # | Lesson | Status |
 |---|--------|--------|
 | 73 | [**The HMOVE Comb & the Cosmic Ark Starfield**](./73-cosmic-ark-starfield) — abusing repeated HMOVE strobes to scatter a single missile into a whole star field | ✅ Complete |
-| 74 | **Skipdraw — The Classic Sprite Kernel Idiom** — the branchless per-scanline sprite idiom, driven by carry math instead of a compare-and-branch | 🔮 Coming Soon |
+| 74 | [**Skipdraw — The Classic Sprite Kernel Idiom**](./74-skipdraw-kernel) — the one-branch per-scanline sprite idiom, driven by carry math and an unconditional store | ✅ Complete |
 | 75 | **Pseudo-3D Road — The Enduro / Pole Position Effect** — a perspective road that rushes toward the player using per-scanline width, colour bands, and a curve-offset table | 🔮 Coming Soon |
 | 76 | **Procedural Worlds from a Seed — Pitfall! & River Raid** — an entire world generated from a tiny LFSR seed, deterministic forward and backward | 🔮 Coming Soon |
 | 77 | **Interlaced Flicker — Faking More Colours & Resolution** — time-multiplexing the display across alternating frames to exceed the hardware's limits | 🔮 Coming Soon |
@@ -23,11 +23,11 @@ An anthology of famous, historically documented Atari 2600 tricks — the master
 Part 11 is the anthology of the techniques that defined the platform:
 
 - **Lesson 73** rebuilds the Cosmic Ark starfield from the HMOVE comb: one missile, repeated strobes, and a star field that costs almost nothing.
-- **Lesson 74** builds the skipdraw sprite kernel: the branchless per-scanline idiom that every commercial game used.
+- **Lesson 74** builds the skipdraw sprite kernel: the one-branch per-scanline idiom with an unconditional store.
 - **Lesson 75** renders a pseudo-3D road with per-scanline width, colour bands, and a curve table.
 - **Lesson 76** generates a procedural world from a tiny LFSR seed, deterministic in both directions.
 - **Lesson 77** uses interlaced flicker to fake more colours and resolution than the TIA has.
 - **Lesson 78** builds the room-and-object engine that invented the action-adventure genre.
 - **Lesson 79** puts the 48-pixel trick in the bottom band: a static `RACING` publisher mark drawn from a page-aligned ROM table, with a second handover and a SELECT toggle, beside the score and a small play field.
 
-*The anthology completes the masterclass at 79 lessons. Lessons 73 and 79 are live; lessons 74–78 are coming soon.*
+*The anthology completes the masterclass at 79 lessons. Lessons 73, 74 and 79 are live; lessons 75–78 are coming soon.*

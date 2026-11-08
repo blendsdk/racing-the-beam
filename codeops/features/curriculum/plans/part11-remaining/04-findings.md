@@ -7,9 +7,9 @@
 
 | Severity | Raised | Open | Accepted | Fixed |
 |---|---:|---:|---:|---:|
-| Critical | 3 | 0 | 0 | 3 |
-| Major | 10 | 0 | 0 | 10 |
-| Minor | 22 | 0 | 0 | 22 |
+| Critical | 4 | 0 | 0 | 4 |
+| Major | 13 | 0 | 0 | 13 |
+| Minor | 33 | 0 | 0 | 33 |
 
 ## Lesson 73
 
@@ -62,6 +62,33 @@
 | L73-m20 | The `PlanetRow` label said 200/3; the measured first row is 199/3; the Lesson 79 What's Next still said 73–78 coming; the doc prose said rows 12–14; the second strobe was called ~30 cycles | 199/3; Lesson 79 points at Lesson 73; rows 12–15; second strobe ~44 cycles | Fixed |
 | L73-m21 | The doc's absolute landing was reported as 16/21 in the current build while the walk check and ledger used 78/83 | The main ROM's measured start is 78/83 (the 16/21 probe was a different build); doc/source/TS now use 78; the relative walk is the claim | Fixed |
 | L73-m22 | The ship X was reported as 78–86 in the ledger and 97–105 in the exercises, while a fresh capture of the committed 22-NOP ROM measures 57–65; the star minimum/ball citations/Step 6 snippet had residuals | Fresh 2 s/5 s captures from the committed ROM both measure the ship at TIA 57–65; the doc/source use 57–65; ledger m4/m6 updated; star min 24; Step 6 verbatim; ex2 2 frames | Fixed |
+
+## Lesson 74
+
+### Critical / major
+
+| ID | Source | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|
+| L74-C1 | atari2600-reviewer, curriculum-auditor | 🔴 Critical | The flight-band `BCC .draw` and `BNE FlightLoop` crossed a page, so the draw path was 26 and the line 51–52, not 25/25 and 50/53 | Page-aligned `FlightLoop` (`$F100`); scan shows both branches same-page; ledger 25/25, line 50/53 | Fixed |
+| L74-M1 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The Step 8 trace mixed start and completion cycles; store/ENAM0/WSYNC values disagreed across the doc | Re-traced with `-dbg.logtrace`; one convention stated; STY 22→25, ENAM0 40→43, WSYNC 50→53, margins 23/6/23 | Fixed |
+| L74-M2 | curriculum-auditor, atari2600-reviewer | 🟠 Major | Exercise 1's flight `BNE` crossed; the 73+3=76 worst case was unproven and the overlap windows were not measured | Moon uses the branchless 256-byte table; loop page-aligned; worst case 65/68; captures at 2 s/5 s; ex1 gate at 1.3 s/2.6 s | Fixed |
+| L74-M3 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The PF write deadlines were wrong (22.7/38.7/70.7); the correct first-chunk times are 22.67/28.0/38.67 | Doc/source corrected; first star line 17/24/31, steady 7/14/21, ground 15/18/21 | Fixed |
+
+### Minor
+
+| ID | Finding | Resolution | Status |
+|---|---|---|---|
+| L74-m1 | Capture method not disclosed | 73-style note added (committed ROM, script, 2 s/5 s, pointer, 1010x807) | Fixed |
+| L74-m2 | The auto-demo timeline said four seconds low; the table is high at 4 s | ROM-time holds stated (low 0.93–2.25 s, high 2.80–4.25 s); captures at 1.3 s/2.6 s | Fixed |
+| L74-m3 | Checkpoint cycles disagreed across source/doc/plan | One measured convention (61/2, 205/2, 229/2; GroundStart 204/49) | Fixed |
+| L74-m4 | Wrap range said 128..255; the true floor is 112 | 112..255 in source/doc/ex2 | Fixed |
+| L74-m5 | The Part 11 index called skipdraw "branchless"/"every commercial game" | Parent edited the index to "one-branch ... unconditional store"; no universal claim | Fixed |
+| L74-m6 | Ground PF stores said 10/13/16 | 15/18/21 | Fixed |
+| L74-m7 | The two ENAM0 clears were not taught | Step 4 snippet + VBLANK/GroundLine sentence | Fixed |
+| L74-m8 | "Nine instructions" for eight | Eight | Fixed |
+| L74-m9 | Pixel boxes were short of the 8-px/24-row extents | Inclusive x 76–83 (half-open 84), rows 144–167; sampling artifacts labelled | Fixed |
+| L74-m10 | GRP0 ground invariant not stated | Last flight line is always a skip for RocketY≤144; widening the table needs a clear | Fixed |
+| L74-m11 | History sourcing was unnamed | 8bitworkshop VCS material + AtariAge community descriptions; no universal claim | Fixed |
 
 ### Accepted limitations
 

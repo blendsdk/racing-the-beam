@@ -36,7 +36,7 @@ the summary in `04-findings.md` and the final state in this file.
 | Lesson | Commit | Gate | Reviews |
 |---|---|---|---|
 | 73 | `14706c2` | PASSED (272 sources, docs build) | 3 critical, 10 major, 22 minor fixed |
-| 74 | in progress | — | — |
+| 74 | `pending-commit` | PASSED (275 sources, docs build) | 1 critical, 3 major, 11 minor fixed |
 | 75 | pending | — | — |
 | 76 | pending | — | — |
 | 77 | pending | — | — |
