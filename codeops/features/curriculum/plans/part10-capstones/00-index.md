@@ -1,7 +1,7 @@
 # Part 10 — Capstone Projects (Lessons 69–72) Implementation Plan
 
 > **Feature**: Curriculum — complete Part 10 by shipping four capstone lessons
-> **Status**: Planning Complete (preflighted; ready for execution)
+> **Status**: Complete (4/4 lessons; RD-10 Done)
 > **Created**: 2026-11-07
 > **Implements**: curriculum/RD-10
 > **Source**: ../../requirements/RD-10-part10-capstones.md
@@ -118,7 +118,7 @@ bash scripts/verify.sh
 | Lesson 72 | Skeleton mini-game + GDD/RAM/screen templates (AR-22) |
 | Frame | NTSC 262; StartFrame 259, Body 37, Overscan 229 (AR-25) |
 | Evidence | State logs + ledgers + PIL checks + generator checks (AR-26) |
-| Completion | 13 ACME sources, 4 docs, 11 screenshots, 265/266 ROMs (AR-28) |
+| Completion | 13 ACME sources, 4 docs, 11 screenshots, 265/266 ROMs (AR-28) — achieved |
 
 ## Specialist Agents
 

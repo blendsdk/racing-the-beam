@@ -1,8 +1,9 @@
 # RD-10: Part 10 — Capstone Projects (lessons 69–72)
 
 > **Document**: RD-10-part10-capstones.md
-> **Status**: Draft
+> **Status**: Done
 > **Created**: 2026-10-10
+> **Completed**: 2026-11-08
 > **Project**: Racing the Beam
 > **Depends On**: RD-09 (Part 9 — The DSL Path)
 > **CodeOps Artifact Schema**: 1

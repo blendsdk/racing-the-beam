@@ -33,11 +33,11 @@
 
 ## Acceptance Criteria
 
-1. [ ] Lessons 69–72 each have the artifact set named in RD-10 AC 1.
-2. [ ] `bash scripts/verify.sh` passes with 265 ACME sources; the committed ROMs are byte-identical.
-3. [ ] Every game's auto-demo produces deterministic captures; the three/four states per lesson differ.
-4. [ ] The Lesson 71 generator's `--check` mode reports no drift; the maze spec validates.
-5. [ ] Every kernel ledger matches the measured Stella scanlines (259/37/229; 262 lines).
-6. [ ] Both specialists report no critical/major open for each lesson.
-7. [ ] The Part 10 index rows 69–72 are ✅; sidebar, prev/next, `<RomPlayer>`, README row 10 checked.
-8. [ ] RD-10 is Done; feature roadmap 10/11; portfolio 10 plans done.
+1. [x] Lessons 69–72 each have the artifact set named in RD-10 AC 1.
+2. [x] `bash scripts/verify.sh` passes with 265 ACME sources; the committed ROMs are byte-identical.
+3. [x] Every game's auto-demo produces deterministic captures; the three/four states per lesson differ.
+4. [x] The Lesson 71 generator's `--check` mode reports no drift; the maze spec validates.
+5. [x] Every kernel ledger matches the measured Stella scanlines (259/37/229; 262 lines).
+6. [x] Both specialists report no critical/major open for each lesson.
+7. [x] The Part 10 index rows 69–72 are ✅; sidebar, prev/next, `<RomPlayer>`, README row 10 checked.
+8. [x] RD-10 is Done; feature roadmap 10/11; portfolio 10 plans done.

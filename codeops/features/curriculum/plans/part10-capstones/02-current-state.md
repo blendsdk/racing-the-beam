@@ -115,3 +115,21 @@ mirror maze.
 | Generator drift | Medium | High | `--check` before commit; the include is committed |
 | 4K overflow | Medium | Medium | Compact tables; assemble before capture; size pins |
 | Moving-state screenshot | Medium | Medium | Deterministic auto-demos; disclosed waits |
+
+
+## Final State (2026-11-08)
+
+Part 10 is complete. The four lessons ship **13 ACME sources/ROMs** (Lesson 69: main + 3;
+Lesson 70: main + 3; Lesson 71: main + 3 + the generator/spec/include; Lesson 72: the
+`demo-72.asm` skeleton), **4 documents**, and **11 Stella screenshots** (3 + 3 + 3 + 2).
+`npm run roms` builds **265** ACME ROMs; the repository has **266** `.bin` files including the
+Part 9 bB reference. `bash scripts/verify.sh` passes with no drift and a successful VitePress
+build. The Part 10 index rows 69–72 are all ✅; the sidebar, prev/next links, and README row 10
+are unchanged.
+
+The preflight's facts held: the row-table two-line kernel measured 259/37/229; the score
+library's P0/P1 conflict was solvable; the mirror maze avoided the split-playfield risk; the
+RAM budgets fit. The per-lesson review gate caught the remaining defects before each commit (the
+Pong odd-Y clamp, the Breakout PF2/positioner fixes, the Maze lose rule/VDELP1, the Lesson 72
+HMOVE/timer bar); the details are in `05-findings.md`. RD-10 is Done, the feature roadmap is
+10/11, and the portfolio records 10 plans done.

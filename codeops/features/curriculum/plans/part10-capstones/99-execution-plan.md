@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-08 06:11
-> **Progress**: 4/5 tasks (80%)
+> **Last Updated**: 2026-11-08 06:14
+> **Progress**: 5/5 tasks (100%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -223,12 +223,12 @@ the document.
 
 ### Step 5.1: Part 10 completion gate (a gate, not a fifth lesson)
 
-- [ ] 5.1.1 Part 10 completion gate: 13 ACME sources/ROMs, 4 docs, 11 screenshots,
+- [x] 5.1.1 Part 10 completion gate: 13 ACME sources/ROMs, 4 docs, 11 screenshots,
   `npm run roms` 265, 266 total `.bin`, index 69–72 ✅, RD-10 Done, feature roadmap 10/11,
   portfolio 10 plans, all completion criteria ticked, final `verify.sh` green; commit via the
-  `git-commit` skill in push mode — `docs(curriculum): complete Part 10 (lessons 69-72)`
+  `git-commit` skill in push mode — `docs(curriculum): complete Part 10 (lessons 69-72)` ✅ (completed: 2026-11-08 06:14)
 
-**Completion gate record**:
+**Completion gate record** (2026-11-08 06:14): **PASSED.** Counts: `find lessons/part10-capstones -name '*.asm'` = **13**; `find docs/public/roms/part10-capstones -name '*.bin'` = **13**; `find docs/public/roms -name '*.bin'` = **266** (**265 ACME + the bB reference**); `docs/part10-capstones/[0-9]*.md` = **4**; the four lesson image folders = **11** (Lesson 69: 3; Lesson 70: 3; Lesson 71: 3; Lesson 72: 2). `bash scripts/verify.sh` PASSED: 265 lesson sources, no ROM drift, VitePress build OK. The Part 10 index rows 69–72 are all ✅. Both specialists report 0 critical/major open for every lesson (05-findings.md). RD-10 is Done; the feature roadmap is 10/11; the portfolio is 10 plans done. README row 10 is unchanged. The post-completion analysis is recorded below.
 
 ---
 
@@ -252,20 +252,49 @@ Part 10 completion gate
 
 ## Completion Criteria
 
-- [ ] All four phases marked `[x]` with Session A/C records.
-- [ ] 13 ACME sources/ROMs (4 + 4 + 4 + 1), all 4,096 bytes.
-- [ ] 4 documents, 11 screenshots (3 + 3 + 3 + 2).
-- [ ] Lesson 69: row table, custom score, two-player input, auto-demo, three solutions.
-- [ ] Lesson 70: brick map, PF table, dual-zone ball, lives/levels, three solutions.
-- [ ] Lesson 71: generator `--check`, mirror maze, AI, keys/win/lose, three solutions.
-- [ ] Lesson 72: skeleton mini-game, GDD/RAM/screen/4K/milestone templates, three exercises.
-- [ ] Part 10 index rows 69–72 all ✅ Complete.
-- [ ] `bash scripts/verify.sh` green at the final commit (265 ACME sources).
-- [ ] Both specialists report no critical/major open for every lesson.
-- [ ] No dead code, no unused symbols/tables; security N/A (static content, no input).
-- [ ] The post-completion re-analysis is recorded.
-- [ ] RD-10 Done; feature roadmap 10/11 RDs; portfolio 10 plans done.
+- [x] All four phases marked `[x]` with Session A/C records.
+- [x] 13 ACME sources/ROMs (4 + 4 + 4 + 1), all 4,096 bytes.
+- [x] 4 documents, 11 screenshots (3 + 3 + 3 + 2).
+- [x] Lesson 69: row table, custom score, two-player input, auto-demo, three solutions.
+- [x] Lesson 70: brick map, PF table, dual-zone ball, lives/levels, three solutions.
+- [x] Lesson 71: generator `--check`, mirror maze, AI, keys/win/lose, three solutions.
+- [x] Lesson 72: skeleton mini-game, GDD/RAM/screen/4K/milestone templates, three exercises.
+- [x] Part 10 index rows 69–72 all ✅ Complete.
+- [x] `bash scripts/verify.sh` green at the final commit (265 ACME sources).
+- [x] Both specialists report no critical/major open for every lesson.
+- [x] No dead code, no unused symbols/tables; security N/A (static content, no input).
+- [x] The post-completion re-analysis is recorded below.
+- [x] RD-10 Done; feature roadmap 10/11 RDs; portfolio 10 plans done.
 
-## Post-Completion Analysis
+## Post-Completion Analysis (2026-11-08)
 
-_To be filled at the gate._
+**What shipped.** Four capstone lessons, **13 ACME sources/ROMs**, **4 documents**, and **11
+Stella screenshots** (Lessons 69/70/71: 3 each; Lesson 72: 2). `npm run roms` builds **265** ACME
+ROMs; the repository has **266** `.bin` files including the Part 9 bB reference. Pong taught the
+precomputed object row table and the two-line kernel; Breakout added the brick map, the 64x3 PF
+table, the dual-zone ball, and the score library; Maze Explorer added the generated mirror maze,
+the 44-byte object table, the chase AI, and the keys; Your Own Game turned the pipeline into the
+reader's own project with the GDD/RAM/screen/4K/milestone templates and the skeleton mini-game.
+
+**What the preflight prevented.** The one-line multi-object kernel was measured writing GRP0 at
+cycle 49, after P0's pixel time at X=16; the plan moved to the row table before the lesson
+existed. The score library's P0/P1 conflict, the 128-byte RAM budget with the score/sound
+libraries, and the mirror-versus-split-playfield decision were all settled before implementation.
+
+**What the reviews caught.** The Pong odd-Y clamp runaway (a critical that could corrupt the
+stack), the Breakout PF2 bit order (the last three bricks rendered at the wrong X) and the
+positioner overrun (263/264-line frames), the Maze lose rule (the player could walk into an enemy
+and survive), the P1 VDELP1 one-row offset, the exercise-3 win-PF overrun, and the Lesson 72
+HMOVE-window writes and shifted timer-bar table. All were fixed in the implementation or the
+doc, never by weakening a frozen expectation.
+
+**What to carry forward.** (1) A multi-object one-line kernel needs a precomputed row table; the
+range tests do not fit before the leftmost object's pixel time. (2) Put positioners in VBLANK or
+give them a fixed-length line; a late divide grows the frame. (3) Generate a large world and
+commit the include with a read-only `--check`; the generator is part of the lesson. (4) A game
+skeleton is a complete mini-game, not a blank template. (5) The production templates are the
+lesson: the reader's own game is the deliverable.
+
+**Final state.** `verify.sh` green (265 ROMs, no drift, docs build); the Part 10 index 69–72 ✅;
+RD-10 Done; feature roadmap 10/11; portfolio 10 plans done; README row 10 unchanged. The next
+curriculum work is RD-11 (Part 11 — Legendary Techniques).

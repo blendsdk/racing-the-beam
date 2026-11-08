@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Part 10 lessons complete — 0 critical, 0 major open. Lessons 69–72 are committed; the completion gate remains.
+> **Status**: Part 10 complete — 0 critical, 0 major open. Lessons 69–72 are committed.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
