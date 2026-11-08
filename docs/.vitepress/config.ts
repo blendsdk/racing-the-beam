@@ -171,14 +171,14 @@ export default defineConfig({
           text: 'Part 11: Legendary Techniques 🔮',
           collapsed: true,
           items: [
-            { text: 'Overview (Coming Soon)', link: '/part11-legendary/' },
+            { text: 'Overview', link: '/part11-legendary/' },
             { text: '73 — Cosmic Ark Starfield', link: '/part11-legendary/' },
             { text: '74 — Skipdraw Sprite Kernel', link: '/part11-legendary/' },
             { text: '75 — Pseudo-3D Road', link: '/part11-legendary/' },
             { text: '76 — Procedural Worlds (LFSR)', link: '/part11-legendary/' },
             { text: '77 — Interlaced Flicker', link: '/part11-legendary/' },
             { text: '78 — Room & Object Engine', link: '/part11-legendary/' },
-            { text: '79 — The Publisher Mark', link: '/part11-legendary/' },
+            { text: '79 — The Publisher Mark', link: '/part11-legendary/79-publisher-mark' },
           ],
         },
         {

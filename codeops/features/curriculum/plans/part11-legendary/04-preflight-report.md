@@ -13,7 +13,7 @@
 | Lesson 21 — asymmetric playfield | Exercise 3 draws the mark with PF bytes in SCORE mode | ✅ |
 | Lesson 23 — data-driven playfield | Exercise 3’s 3-byte-per-row mark table | ✅ |
 | Lesson 26 — horizontal positioning | `RESPx`/`HMPx`/`HMOVE`; X=16/24; the `+3` bias | ✅ |
-| Lesson 31 — copies and sizes | `NUSIZ=3` for the 48-pixel block; `NUSIZ=1` for the play | ✅ |
+| Lesson 31 — copies and sizes | `NUSIZ=3` for the 48-pixel block; `NUSIZ=0` for the play (one copy) | ✅ |
 | Lesson 32 — vertical delay | VDEL for the 48-pixel kernel; clearing it for the play | ✅ |
 | Lesson 39 — the scoreboard | The 48-pixel trick, `ScoreSetup`/`ScoreDraw`, the 9-line kernel, the 48-byte buffer | ✅ |
 | Lesson 50 — multi-zone kernel | Zones, line budget, the second HMOVE, the 24-cycle rule, the handover | ✅ |

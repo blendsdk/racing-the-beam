@@ -227,7 +227,7 @@ The auto-demo scrolls without input. The two-frame step means one full cycle of 
 
 ### A Historical Note: The Activision Logo
 
-Activision was founded in 1979 by former Atari employees, and its early Atari 2600 titles opened with a logo screen. The logo was a **graphic moved across the screen**, not a general text engine: the cartridge held a small bitmap and the kernel changed what the players drew as the picture moved. The 48-pixel two-player trick in this lesson is the same family of technique — two players in three-copy close mode make a wide, detailed strip — but this marquee is a teaching program, not a bit-exact reproduction of any Activision screen. The history is context; the code is the lesson.
+Activision was founded in 1979 by former Atari employees, and its early Atari 2600 titles opened with a logo screen. The logo was a **graphic moved across the screen**, not a general text engine: the cartridge held a small bitmap and the kernel changed what the players drew as the picture moved. The 48-pixel two-player trick in this lesson is the same family of technique — two players in three-copy close mode make a wide, detailed strip — but this marquee is a teaching program, not a bit-exact reproduction of any Activision screen. The history is context; the code is the lesson. The persistent in-game publisher mark — a static 48-pixel wordmark in the bottom band — is Lesson 79's subject; this lesson scrolls a logo screen.
 
 ## The Code
 

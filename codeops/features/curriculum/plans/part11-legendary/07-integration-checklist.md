@@ -86,20 +86,20 @@ briefs; leave historical session records untouched.
 
 ## 5. VitePress checklist
 
-- [ ] Sidebar entry for 79 links to the doc.
-- [ ] Part 11 index lists 79 ✅ and 73–78 🔮.
-- [ ] Lesson 79 `prev` points to `/part11-legendary/`; no `next`.
-- [ ] RomPlayer under the screenshot.
-- [ ] Captures at `/images/lesson79/…`.
-- [ ] `npm run docs:build` passes.
-- [ ] No broken links to 73–78.
+- [x] Sidebar entry for 79 links to the doc.
+- [x] Part 11 index lists 79 ✅ and 73–78 🔮.
+- [x] Lesson 79 `prev` points to `/part11-legendary/`; no `next`.
+- [x] RomPlayer under the screenshot.
+- [x] Captures at `/images/lesson79/…`.
+- [x] `npm run docs:build` passes.
+- [x] No broken links to 73–78.
 
 ## 6. README checklist
 
-- [ ] Line 3 says 79 lessons.
-- [ ] Part 11 row says 73–79.
-- [ ] The README change is in the curriculum-amendment commit.
-- [ ] No stale “78” or “73–78” remains in the current README.
+- [x] Line 3 says 79 lessons.
+- [x] Part 11 row says 73–79.
+- [x] The README change is in the curriculum-amendment commit.
+- [x] No stale “78” or “73–78” remains in the current README.
 
 ## 7. Commit order
 

@@ -1,10 +1,10 @@
 # Execution Plan: Lesson 79 — The Publisher Mark
 
 > **Document**: `99-execution-plan.md`
-> **Status**: Adopted 2026-11-08 — Phase 0 done; Session A next
+> **Status**: Sessions A/B/C complete; committing. Phase 0 done.
 > **Base**: `255b534` (Part 10 complete)
 > **Plan adoption**: `d7a952a` (curriculum amendment and plan)
-> **Progress**: 1/6 tasks (Phase 0)
+> **Progress**: 4/6 tasks (Phase 0, Session A, Session B, Session C)
 > **Plan directory**: `codeops/features/curriculum/plans/part11-legendary/`
 
 ## 1. Overview
@@ -85,7 +85,7 @@ green; the README and site say 79 / 73–79.
 
 **Gate**: ST-79.1–ST-79.10 frozen; red baseline recorded; verify green.
 
-**Session A record**: pending.
+**Session A record** (2026-11-08 09:07): ST-79.1–ST-79.10 re-affirmed against `05-testing-strategy.md`. Design pins from `03-lesson-spec.md`: the frame is **9 score + 5 top positioner + 164 play + 5 handover + 9 mark = 192** (absolute 37–45 score, 46–50 top positioner, 51–214 play, 215–219 handover, 220–228 mark, 229 overscan); the score uses the Lesson 39 48-pixel kernel at P0=56/P1=64, the mark a `MarkDraw` clone at P0=16/P1=24; `MarkBuf` is 48 bytes, page-aligned, column-major, bottom-up; RAM `$80–$8F` game, `$90–$9F` free, score `$A0–$D7`, stack `$F8–$FF`; three HMOVEs (score in VBLANK, top positioner, handover) with the 24-cycle rule; SELECT toggles `MarkVisible`; the auto-demo scripts the toggle for `game.png` (mark visible) and `no-mark.png` (hidden). Red baseline confirmed at `cf5aab1`: no `lessons/part11-legendary/79-publisher-mark`, no `docs/public/images/lesson79`, no `docs/public/roms/part11-legendary/79-publisher-mark`; the Part 11 index lists 79 as Coming Soon; the sidebar 79 entry points to `/part11-legendary/`; README says 79 / 73–79; `bash scripts/verify.sh --no-docs` green. No implementation logic read (AR-2).
 
 ## 5. Phase 2 — Session B: implement
 
@@ -113,7 +113,7 @@ bash scripts/verify.sh --no-docs
 **Gate**: the four ROMs assemble; Stella shows the specified screen; the captures
 exist; the site page builds.
 
-**Session B record**: pending.
+**Session B record** (2026-11-08 10:05): `79-publisher-mark.asm` (4,096) with the 9+5+164+5+9 frame, the Lesson 39 score band at 56/64, the 48-pixel `RACING` mark at 16/24 from a page-aligned 48-byte `MarkBuf`, the unrolled `MarkDraw` clone (C commit at CLK 93, 0/384), the top positioner and the handover (three HMOVEs), the play field (82 rows x 2), the SELECT toggle, and the auto-demo; three 4,096-byte solutions (ten-letter mark, bottom-centre mark, playfield mark); the doc (1,634 lines); the two captures. The review fixes were the ex3 PF0 order, the C-column bleed, the WSYNC tip, the single overscan timer, the auto-demo narrative, and the doc/comment residuals.
 
 ## 6. Phase 3 — Session C: verify + review
 
@@ -133,7 +133,7 @@ exist; the site page builds.
 
 **Gate**: ST-79.1–ST-79.10 pass; 0 critical/major open; verify green.
 
-**Session C record**: pending.
+**Session C record** (2026-11-08 10:20): `bash scripts/verify.sh` PASSED (269 sources, no drift, docs build); four ROMs 4,096 and byte-identical; Full Source exact (990 source / 1,634 doc lines); `npm run roms` 269. Frame: `StartFrame` `$F04D` 259/3, `VblankStart` `$F05B` 0/5, `BodyStart` `$F169` 37/5, `ScoreDone` `$F16C` 46/5, `PlayStart` `$F1A2` 51, `HandoverStart` `$F216` 215, `MarkStart` `$F248` 220, `MarkDone`/`OverscanStart` `$F24F` 229/6. The mark host-vs-capture check is 0/384; the score block is X=56-103; the mark block X=16-63, visible 184-190; `no-mark.png` has 0 gold pixels in the band; the auto-demo timeline is 63/188/250/312...; the toggle is at frame 240 (Stella 241). Reviews (AR-5): atari2600-reviewer — 4 major (ex3 PF0, C bleed, WSYNC tip, double timer) + 8 minor, then 4 minor, fixed; curriculum-auditor — 1 major (auto-demo) + 9 minor, then 6 minor, fixed. Final 0 critical, 0 major open; 1 accepted limitation (the 0/384 check is against the 960x606 window capture, not a native TIA dump). The Part 11 index row 79 is now Complete and the sidebar 79 links to the doc; 73-78 remain Coming Soon.
 
 ## 7. Phase 4 — Commit
 

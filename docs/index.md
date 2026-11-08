@@ -45,4 +45,4 @@ features:
 | 8 | **Advanced** | 56–65 | Bankswitching, illegal opcodes, DPC+, compression, cartridge building |
 | 9 | **DSL Path** | 66–68 | batari BASIC analysis, automatable patterns, kernel architecture |
 | 10 | **Capstones** | 69–72 | Pong, Breakout, Maze Explorer, your own game |
-| 11 | **Legendary Techniques** 🔮 | 73–79 | Cosmic Ark starfield, skipdraw, pseudo-3D road, procedural worlds, interlaced flicker, Adventure engine, publisher mark *(coming soon)* |
+| 11 | **Legendary Techniques** 🔮 | 73–79 | Cosmic Ark starfield, skipdraw, pseudo-3D road, procedural worlds, interlaced flicker, Adventure engine, publisher mark *(lesson 79 live; 73–78 coming soon)* |

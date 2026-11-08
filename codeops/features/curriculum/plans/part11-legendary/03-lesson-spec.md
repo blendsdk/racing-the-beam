@@ -97,7 +97,7 @@ The mark table is **not** in RAM. It is a 48-byte ROM table.
 ## 6. The top positioner
 
 - P0 moves from X=56 to `PlayerX`; the ball moves to `BallX`.
-- `NUSIZ0=1`, `NUSIZ1=1`; `VDELP0/VDELP1=0`; `ENABL=1`.
+- `NUSIZ0=0`, `NUSIZ1=0` (one copy; `NUSIZ=1` is two close copies); `VDELP0/VDELP1=0`; `ENABL=1`.
 - `COLUP0` = red; `COLUPF` = the play-field/ball colour.
 - `SetGameP0` and `SetGameBall` are the Lesson 39 divide-by-15 routines with the
   Lesson 26 bias (`+3`). Each takes two lines; the fifth line carries the HMOVE.
