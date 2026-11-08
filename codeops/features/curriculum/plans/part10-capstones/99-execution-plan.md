@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-08 01:20
-> **Progress**: 2/5 tasks (40%)
+> **Last Updated**: 2026-11-08 04:37
+> **Progress**: 3/5 tasks (60%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -151,24 +151,24 @@ is authorized by the user's directive to execute RD-10 and the Part 1–9 practi
 **Reference**: [03 §Lesson 71](03-lesson-specs.md) · AR-17–AR-21, AR-24, AR-29
 **Objective**: ship the generated mirror maze, the three solutions, and the document.
 
-- [ ] 3.1.1 Lesson 71 — Capstone 3: Maze Explorer: Session A freezes ST-71.1–ST-71.9 (red
+- [x] 3.1.1 Lesson 71 — Capstone 3: Maze Explorer: Session A freezes ST-71.1–ST-71.9 (red
   baseline), Session B implements the generator, the mirror maze, the AI, the keys/win/lose, the
   three solutions, and the document, Session C verifies to green and hardens; commit via the
-  `git-commit` skill in push mode — `feat(lesson71): Capstone 3 — Maze Explorer`
+  `git-commit` skill in push mode — `feat(lesson71): Capstone 3 — Maze Explorer` ✅ (completed: 2026-11-08 04:37)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-08 01:53; corrected at execution, 2026-11-08 04:30): ST-71.1–ST-71.9 re-affirmed against [03](03-lesson-specs.md) §Lesson 71. Design pins: the doc title is the curriculum/stub title **"Lesson 71: Capstone 3 — Maze Explorer"**; the main ROM is `71-maze-explorer.asm` (4,096) with three 4,096-byte solutions; the **mirror maze** is 10 unique columns × 11 rows (each cell 8×16 px, 2 chunks), drawn in reflect mode so the screen shows 20×11 cells. The screen is **16 status + 176 maze = 192**; the status band's 8 lines show three key slots (unique slots at X=16/40/64; an empty slot is its left 4-px chunk, a collected key adds the right chunk; the reflect mirrors are at 140/116/92 empty and 136/112/88 full) and the other 8 lines carry the setup; the four positioners run in VBLANK, then one HMOVE. The maze PF rows are **11×3 bytes** (20 chunks, reflect); the **44-byte `ObjRowTable`** at `$80-$AB` carries four bits per 4-line row (player, enemy1, enemy2, key); the game variables are `$AC-$C7` (28 bytes); `$C8-$DD` scratch; `$DE-$F7` free; `$F8-$FF` stack. The player is an 8-pixel cell drawn as a 4-pixel gold bar (P0 `$3C`); P1 is red, M0 gold, the ball is the 8×8 key and blinks. The **generator** `lesson71-generate.py` (Python 3, no deps) uses `--spec maze-spec.txt --out maze-data.inc --check`; the spec is `seed 20261010`, `width 10`, `height 11`, `keys 3`, `enemies 2`; it builds a perfect maze, opens the mirror seam at rows 4/6, places 3 keys in dead ends and 2 enemies at `(0,0)`/`(18,10)`, and emits `MazePF` (11×3), `MazeWalls` (11×2), `KeyCells` (3×2), `EnemyCells` (2×2), `DemoPath`/`DemoSteps`, and the constants. The player starts at `(0,10)`; the mirror transform is `col < 10 ? col : 19-col`; the enemies move every 8 frames toward the player (and stay when already on the player's cell); the ball is the current key; 3 keys wins, an enemy in the player's cell loses (also after the player's own move); fire restarts. Captures: `maze-start.png` (2 s), `maze-key.png` (6 s), `maze-win.png` (10 s), title `Stella 7.0: "71-maze-explorer"`, no cursor. Red baseline confirmed: no `lessons/part10-capstones/71-maze-explorer`, no `docs/public/images/lesson71`, no Part 10 71 ROMs, index row 71 Coming Soon, sidebar `config.ts:166`, `verify.sh --no-docs` green at `7039fa2`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-08 02:25): `71-maze-explorer.asm` (4,096) with the generated mirror maze (10 unique columns/20 visible), the 44-byte object row table, the PF rows, the four positioners in VBLANK, the two chase enemies, the three keys, the win/lose, and the scripted demo; three 4,096-byte solutions (fog, smarter enemies, timer/bonus); `lesson71-generate.py`, `maze-spec.txt`, `maze-data.inc`; three captures. The review fixes were the lose rule, the ex3 win-PF timing, the P1 VDELP1 row offset, the cycle ledger, the alignment, the slot mirrors, the move cadence, the generator phase/validation, and the doc precision.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-08 04:37): `bash scripts/verify.sh` PASSED (264 sources, no drift, docs build); four ROMs 4,096 and byte-identical; Full Source exact (1,401 source / 2,296 doc lines); `npm run roms` 264. Generator: `--check` exit 0; bad width 0 exits 1 (`spec:2`); tampered include exits 1; the host-side maze is 61 open unique cells/60 edges, perfect; seam rows 4/6; keys (4,10)/(19,8)/(11,0); enemies (0,0)/(18,10); PF/wall rows 11/11 agree. Frame: `StartFrame` `$F04E` 259/3, `VblankStart` `$F05C` 0/5, `BodyStart` `$F0D4` 37/5, `MazeRowStart` `$F13A` 53/2, `OverscanStart` `$F22E` 229/7; ex3 play and win both 259/3, 53/2, 229/7. State: `PlayerCell` 2/10 -> 1/10 -> 2/10 -> 2/9; `WallRead` $F7/$00/$10; `KeyGet` A=1/2/3 at 220/365/445; `EnemyStep` A=0/1 every 8 frames; `GameState` 1 from 446; the lose on a scratch data-patched ROM A=2 at frame 9 (enemy on the player's cell) and frame 2 (player walks in). Captures: maze-start/maze-key/maze-win 1010x807, titles `Stella 7.0: "71-maze-explorer"`, no cursor; the key capture shows one slot pair full, the win is green with six full slots. Site: index row 71 Done, row 72 Coming Soon; prev 70/next 72; sidebar `config.ts:166`; README row 10 unchanged. Reviews (AR-5): atari2600-reviewer — 2 major (lose, ex3 timing) + 10 minor, then 1 major (ex3 win frame) + 8 minor, then no critical/major; curriculum-auditor — 12 minor (P1 offset etc.), then no critical/major. All fixed; final 0 critical, 0 major open. Lesson 71 is complete.
 
 **Deliverables**:
-- [ ] `71-maze-explorer.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
-- [ ] `lesson71-generate.py` with `--check`; `maze-spec.txt`; `maze-data.inc`.
-- [ ] `docs/part10-capstones/71-maze-explorer.md` (six-section template, Full Source verbatim,
+- [x] `71-maze-explorer.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
+- [x] `lesson71-generate.py` with `--check`; `maze-spec.txt`; `maze-data.inc`.
+- [x] `docs/part10-capstones/71-maze-explorer.md` (six-section template, Full Source verbatim,
   3 images, 1 player, three exercises with solutions).
-- [ ] Index row 71 ✅; prev 70 / next 72; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] Index row 71 ✅; prev 70 / next 72; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 

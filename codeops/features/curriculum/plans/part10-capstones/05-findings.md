@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Lesson 70 complete after round 2 — 0 critical, 0 major open. Lessons 71–72 pending.
+> **Status**: Lesson 71 complete after three rounds — 0 critical, 0 major open. Lesson 72 pending.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
@@ -14,7 +14,7 @@
 | --- | --- | --- | --- | --- |
 | 69 | 1 | 4 | 12 | 0 |
 | 70 | 1 | 2 | 20 | 0 |
-| 71 | 0 | 0 | 0 | 0 |
+| 71 | 0 | 3 | 20 | 0 |
 | 72 | 0 | 0 | 0 | 0 |
 
 ## Lesson 69 — Pong
@@ -41,7 +41,15 @@
 
 ## Lesson 71 — Maze Explorer
 
-_No phase findings yet._
+**Round 1** (atari2600-reviewer: 2 major + 10 minor; curriculum-auditor: 12 minor, including a possible P1 vertical offset):
+- **SR-001 (major, reviewer/auditor):** the lose rule was not enforced on the player's own move. `EnemyOne` stepped off the player's cell when DeltaX=DeltaY=0, so a player walking into an enemy survived. Fixed by returning immediately for a zero delta, calling `CheckCollision` after a player move, and aligning the generator's `_simulate`. Scratch tests: enemy on the player's cell -> A=2 at frame 9; player walks into the enemy -> A=2 at frame 2.
+- **SR-002 (major, reviewer):** exercise 3's per-line `GameState` test pushed the PF/ENAM0 stores past their deadlines (6-px blue tabs/stubs). Fixed by moving the win PF decision off the scanline; the 2 s bar is clean and the 7.5 s screen is solid green.
+- **SR-003 (major, rendering):** the red P1 enemy was one object row (4 lines) low. Root cause: `VDELP1` lost the second setup graphics store; fixed by clearing VDELP1, writing P1 immediately on the object row's first line, and unrolling the four object rows. The 2 s image now has the red box at picture lines 16-31 (row 0) and the player at 176-191 (row 10).
+- Minors fixed: the cycle ledger (zero-page 3-cycle stores; PF0 8, P1 14, ENAM0 20, PF1 27, PF2 34), `!align 255`, the empty-slot mirrors 140/116/92 vs full 136/112/88, the 8-frame move cadence, the generator's demo/enemy phase and `--report` 220/365/445, the generator validation (duplicate key/enemy, key at start), the `COLUP0` gold comments, the dead `Temp`/`MAZE_ROW_LINES`/`OBJ_ROW_LINES`, the exercise maps, the ENAM0 deadline 22.7, the 4-px player-bar wording, the prerequisite order, the TS BFS relabel, the lose provenance, and the exercise state-log wording.
+
+**Round 2** (no critical; 1 new major): exercise 3's win override on setup line 9 overran the line, growing the frame to 263. Fixed by moving the `$FF` override to the idle line 10; the play and win states both measure 259/3, 53/2, 229/7. The remaining minors (the blue off-phase, the host-side PF/wall check, the dead line-15 `LDX`, the exercise allocation headings, the TS `enemyStep` signs, the capture captions, the "one line shorter" wording, and the 8-takeaway cap) were fixed.
+
+**Round 3** (no critical/major): the win frame, the PF/wall report, and the doc claims are confirmed. Final 0 critical, 0 major open.
 
 ## Lesson 72 — Your Own Game
 

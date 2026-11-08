@@ -223,8 +223,9 @@
   row table inside 16-line maze rows; the key icons as playfield blocks; the enemy chase; the
   win/lose states; the generator, spec, include, and `--check`.
 - **Screen (192 visible lines):**
-  - Status band 0-15: 8 lines of key icons (three 8×8 PF blocks at X=64, 80, 96; filled when
-    collected) + 8 lines for the positioners/blank.
+  - Status band 0-15: 8 lines of key slots + their reflect-mode mirrors (three unique slots; an
+    empty slot is its left 4-pixel chunk, a collected key adds the right chunk; the three pairs
+    fill outer -> middle -> inner) + 8 lines for the positioners/setup.
   - Maze 16-191: 11 maze rows × 16 lines = 176. Each maze row is 10 unique cells × 2 chunks =
     20 chunks, reflect mode -> 20 cells. The PF bytes load once per maze row (3 bytes); the
     object row table is decoded every 4 lines (4 object rows per maze row).
@@ -233,33 +234,41 @@
 - **RAM map:**
   - `$80-$AB` `ObjRowTable` (44 bytes; 4 bits per 4-line row: bit 0 player, bit 1 enemy1,
     bit 2 enemy2, bit 3 key).
-  - `$AC-$D7` game variables: `PlayerCol`, `PlayerRow`, `PrevJoy`, `MoveTimer`, `Enemy1Col`,
-    `Enemy1Row`, `Enemy2Col`, `Enemy2Row`, `EnemyTimer`, `KeyCol`, `KeyRow`, `KeysLeft`,
-    `KeyIndex`, `Frame`, `GameState`, `Temp`, `CurP0`, `CurP1`, `CurM0`, `CurBall`, `P0Row`,
-    `P1Row`, `M0Row`, `BallRow`, `P0RowEnd`, `P1RowEnd`, `M0RowEnd`, `BallRowEnd` (28 bytes).
-  - `$D8-$F7` scratch/free; `$F8-$FF` stack.
+  - `$AC-$C7` the 28 game variables: `PlayerCol`, `PlayerRow`, `PrevJoy`, `MoveTimer`,
+    `Enemy1Col`, `Enemy1Row`, `Enemy2Col`, `Enemy2Row`, `EnemyTimer`, `KeyCol`, `KeyRow`,
+    `KeysLeft`, `KeyIndex`, `Frame`, `GameState`, `Temp`, `CurP0`, `CurP1`, `CurM0`, `CurBall`,
+    `P0Row`, `P1Row`, `M0Row`, `BallRow`, `P0RowEnd`, `P1RowEnd`, `M0RowEnd`, `BallRowEnd`.
+  - `$C8-$DD` scratch (PF pointers/values, the target column/row/direction); `$DE-$F7` free;
+    `$F8-$FF` stack.
   - The maze PF bytes and wall map are in ROM (`maze-data.inc`).
 - **Maze generation:** `lesson71-generate.py` (Python 3, no third-party deps) with
   `--spec maze-spec.txt --out maze-data.inc --check`; the spec: `seed 20261010`, `width 10`,
   `height 11`, `keys 3`, `enemies 2`. The generator:
   - builds a perfect maze on the 10×11 grid with a recursive backtracker;
   - opens a seam between columns 9 and 10 (the mirror seam) at one or two rows;
-  - places 3 keys in dead ends (one per region), 2 enemy starts away from the player;
+  - places 3 keys in dead ends (three unique cells with at least two distinct rows, top and
+    bottom halves, one in the mirror half), 2 enemy starts on open cells away from the player;
   - emits the header (canonical command), `MazePF` (11×3 bytes), `MazeWalls` (11×2 bytes, 10 bits
-    per row), `KeyCells` (3×2), `EnemyCells` (2×2), and the `MazeRows`/`MazeCols` constants;
+    per row), `KeyCells` (3×2), `EnemyCells` (2×2), `DemoPath` (the scripted route),
+    `DemoSteps`, and the `MazeRows`/`MazeCols` constants;
   - `--check` regenerates in memory and compares; a bad spec exits 1 with `spec:line`.
 - **Movement:** the player starts at `(0,10)`; a joystick direction tries the next cell:
   `col < 10 ? col : 19-col` maps to the unique wall map; open -> move, update X/Y; the move timer
-  repeats every 8 frames if held. The player sprite is 8×16; X = col*8, Y = 16 + row*16.
+  repeats every 8 frames if held. The player is an 8-pixel cell drawn as a 4-pixel bar; X = col*8, Y = 16 + row*16. The four positioners (P0/P1/M0/ball) run in VBLANK, then one HMOVE.
 - **Enemies:** two; move every 8 frames; choose the axis with the larger distance to the player;
   if blocked, try the other; if blocked, stay; the mirror transform for the wall check. The
   enemy sprites are 8×16. A collision with the player's cell -> the lose state.
+- **Objects/colour:** the player is an 8-pixel player cell drawn as a 4-pixel gold bar (P0 $3C);
+  P1 is the red 8×16 enemy, M0 the gold 8×16 enemy; the ball is the 8×8 key and blinks because it
+  shares COLUPF with the walls. P0 and M0 share COLUP0, so the narrower bar keeps the player and
+  the gold enemy apart.
 - **Keys:** the ball is the current key; entering its cell increments `KeysLeft`, moves the ball
   to the next key, and fills the next status icon; after 3, the win state (the maze flashes green).
 - **Win/lose:** win -> `GameState=1` (green flash, the icons all filled); lose -> `GameState=2`
   (red flash); fire restarts (reset the player/enemies/keys).
-- **Auto-demo:** a scripted path visits the first key, passes an enemy, and reaches the win; the
-  captures at 2 s/6 s/10 s show the start, a key collected, and the win.
+- **Auto-demo:** the generator emits `DemoPath`/`DemoSteps` (a 65-byte route); the ROM walks it
+  past the first key and an enemy to the win; the captures at 2 s/6 s/10 s show the start, a key
+  collected, and the win.
 - **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `MazeRowStart`, `OverscanStart`,
   `PlayerCell` (A=col, X=row), `MoveTry` (A=the direction), `WallRead` (A=the wall byte),
   `KeyGet` (A=the new keys-left), `EnemyStep` (A=enemy 0/1), `GameStateRead`, `ObjRowWrite`.

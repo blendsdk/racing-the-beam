@@ -1,0 +1,12 @@
+# Lesson 71 — the maze spec.
+# The generator reads these five directives, builds a perfect 10 x 11 maze
+# with two seam openings, and lowers it into maze-data.inc.
+#
+# Regenerate the committed include from this folder with:
+#   python3 lesson71-generate.py --spec maze-spec.txt --out maze-data.inc
+#
+seed 20261010
+width 10
+height 11
+keys 3
+enemies 2

@@ -10,7 +10,7 @@ Pong, Breakout, and Maze Explorer apply the accumulated technique; the final les
 |---|--------|--------|
 | 69 | [Capstone 1 — Pong](./69-pong) | ✅ Complete |
 | 70 | [Capstone 2 — Breakout](./70-breakout) | ✅ Complete |
-| 71 | [Capstone 3 — Maze Explorer](./71-maze-explorer) | 🔒 Coming Soon |
+| 71 | [Capstone 3 — Maze Explorer](./71-maze-explorer) | ✅ Complete |
 | 72 | [Capstone 4 — Your Own Game](./72-your-game) | 🔒 Coming Soon |
 
 ## What You'll Learn
