@@ -9,7 +9,7 @@
 |---|---:|---:|---:|---:|
 | Critical | 4 | 0 | 0 | 4 |
 | Major | 30 | 0 | 0 | 30 |
-| Minor | 57 | 0 | 0 | 57 |
+| Minor | 68 | 0 | 0 | 68 |
 
 ## Lesson 73
 
@@ -150,6 +150,31 @@
 | L76-m10 | Seed-B "four-row wall block"; player X=40 vs 72 | Three-row wall block; X=40 at power-on, X=72 in the capture | Fixed |
 | L76-m11 | ShiftRing "900 cycles"/"a third of VBLANK" | ~600 cycles (~22%) | Fixed |
 | L76-m12 | "Three moments"/frame 8-14; prerequisites; What's Next 77; provenance | Four moments; through frame 15; Lesson 26 added; Lesson 77 named; model + Stella trace disclosed | Fixed |
+
+## Lesson 77
+
+### Critical / major
+
+| ID | Source | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|
+| — | — | — | No critical or major code findings. | — | — |
+| L77-M1 | atari2600-reviewer | 🟠 Major (wording) | The doc claimed the two frames have "the same brightness"/the stack is "steady"; the TIA luma codes differ and the rendered brightness varies with hue, so the alternation is mildly flickery | "At the same TIA luminance level; the composite luma stays close to constant on real hardware, but the rendered brightness still varies with hue; close to steady" | Fixed |
+
+### Minor
+
+| ID | Finding | Resolution | Status |
+|---|---|---|---|
+| L77-m1 | Band 5 "pale rose" vs the arithmetic (lavender) | "Pale lavender (periwinkle)"; "white-ish" consistent | Fixed |
+| L77-m2 | Ex2 hint 3 said all three writes beat 22.67 | PF0 22.67, PF1 28.0, PF2 38.7; first row 19/26/33, later 14/21/28 | Fixed |
+| L77-m3 | Ex2 hint 4 said the pattern is latched for the whole line | The PF registers are live; a later write blanks the rest of the line | Fixed |
+| L77-m4 | Frame ledger labelled LDA/STA with the STA start | `STA COLUBK`: LDA 37/7, STA 37/11 -> 37/14; bands 1-7 STA 14 -> 18 | Fixed |
+| L77-m5 | "CTRLPF=0 no playfield" | The playfield is blank because PF0/1/2 are zero | Fixed |
+| L77-m6 | The reset StagePalette "without it the first frame draws RAM" | Redundant first staging; the first blank stages again | Fixed |
+| L77-m7 | Dead `DEMO_SEGMENTS`; `FrameLo` unlisted | Removed; `FrameLo` documented as the frame counter | Fixed |
+| L77-m8 | Ex2 607 rows / 3-pixel shift | 606 rows / 3-row vertical shift; the captures are local verification, not committed | Fixed |
+| L77-m9 | Muted-player note missing | "Javatari starts muted; this ROM is silent." | Fixed |
+| L77-m10 | The build-time assertion was vacuous | `!if BAND_COUNT * BAND_LINES != 192` | Fixed |
+| L77-m11 | StagePalette 136 vs ~155; "six instructions" vs nine; ex1 capture times | ~155 (135 loop); eight instructions + WSYNC; 3.5/5.5/7.5 s | Fixed |
 
 ### Accepted limitations
 

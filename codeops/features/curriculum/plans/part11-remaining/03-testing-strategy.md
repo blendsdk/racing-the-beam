@@ -28,7 +28,7 @@
 | ST-76.4 | World | Pixel check | Four tile types visible; the player sprite sits in the world band |
 | ST-76.5 | Exercises | Assemble + run | ex1 palette/density; ex2 reverse step; 4,096 and 262 |
 | ST-77.1 | Assemble | `acme` | 3 x 4,096 |
-| ST-77.2 | Frame | State log | 262; Body 37/5; Overscan 229/6 |
+| ST-77.2 | Frame | State log | 262; Body 37/5; Overscan 229/10 label / 229/15 VBLANK |
 | ST-77.3 | Phase | State log + pixel check | Phase toggles every frame; the 8 bands' colours differ between the captures |
 | ST-77.4 | Freeze | State log | SELECT/freeze holds one phase; the frame stays 262 |
 | ST-77.5 | Exercises | Assemble + run | ex1 third pair; ex2 interlace fields; 4,096 and 262 |

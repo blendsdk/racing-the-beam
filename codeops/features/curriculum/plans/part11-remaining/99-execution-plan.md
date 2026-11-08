@@ -39,6 +39,6 @@ the summary in `04-findings.md` and the final state in this file.
 | 74 | `pending-commit` | PASSED (275 sources, docs build) | 1 critical, 3 major, 11 minor fixed |
 | 75 | `pending-commit` | PASSED (278 sources, docs build) | 12 major, 12 minor fixed |
 | 76 | `pending-commit` | PASSED (281 sources, docs build) | 0 critical/major, 12 minor fixed |
-| 77 | pending | — | — |
+| 77 | `pending-commit` | PASSED (284 sources, docs build) | 0 critical, 11 minor fixed |
 | 78 | pending | — | — |
 | Integration | pending | — | — |
