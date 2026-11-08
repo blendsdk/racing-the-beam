@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-07 22:30
-> **Progress**: 1/5 tasks (20%)
+> **Last Updated**: 2026-11-08 01:20
+> **Progress**: 2/5 tasks (40%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -112,25 +112,25 @@ is authorized by the user's directive to execute RD-10 and the Part 1–9 practi
 **Reference**: [03 §Lesson 70](03-lesson-specs.md) · AR-14–AR-16, AR-24
 **Objective**: ship the complete Breakout, the three solutions, and the document.
 
-- [ ] 2.1.1 Lesson 70 — Capstone 2: Breakout: Session A freezes ST-70.1–ST-70.8 (red baseline),
+- [x] 2.1.1 Lesson 70 — Capstone 2: Breakout: Session A freezes ST-70.1–ST-70.8 (red baseline),
   Session B implements the brick field, the collision math, the levels, the three solutions, and
   the document, Session C verifies to green and hardens; commit via the `git-commit` skill in push
-  mode — `feat(lesson70): Capstone 2 — Breakout`
+  mode — `feat(lesson70): Capstone 2 — Breakout` ✅ (completed: 2026-11-08 01:20)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-07 22:46): ST-70.1–ST-70.8 re-affirmed against [03](03-lesson-specs.md) §Lesson 70. Design pins: the doc title is the curriculum/stub title **"Lesson 70: Capstone 2 — Breakout"**; the main ROM is `70-breakout.asm` (4,096) with three 4,096-byte solutions. The screen is **9 score + 1 blank + 5 positioner + 48 brick + 128 play + 1 blank = 192**; the score library draws the nine score lines, then P0 and the ball are repositioned. The brick field is 6 rows × 8 lines; each row is 6 unique bricks (8 px each, 4-px gap) mirrored to 12 by reflect mode; the PF bytes come from a **64-entry × 3-byte `BrickPF` table** keyed by the 6-bit row mask. The play area is 32 rows × 4 lines driven by a **32-byte `PlayRowTable`** at `$D8-$F7` (bit 0 P0 paddle, bit 1 ball); the brick zone's ball uses a **12-byte `BrickRowTable`** at `$86-$91` (bit 0 ball). RAM: `$80-$85` BrickMap, `$86-$91` BrickRowTable, `$92-$9F` 14 game variables, `$A0-$D7` the score library, `$D8-$F7` PlayRowTable, `$F8-$FF` stack. The brick collision is CXBLPF bit 7: row `(BallY-15)/8`, unique column `(BallX+2-8)/12` on the left and `5-((X-80)/12)` on the right. Lives 3; a miss at BallY>190; levels when all 36 unique bricks clear; three patterns. Captures: `bricks-start.png` (2 s), `bricks-broken.png` (6 s), `level-two.png` (10 s), title `Stella 7.0: "70-breakout"`, no cursor. The Part 10 index row 70 flips in the lesson commit. Red baseline confirmed: no `lessons/part10-capstones/70-breakout`, no `docs/public/images/lesson70`, no Part 10 70 ROMs, index row 70 Coming Soon, sidebar `config.ts:165`, `verify.sh --no-docs` green at `43fb603`. The 03 spec's Lesson 63 references were corrected to Lesson 39 (the scoreboard and score library). No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-07 23:43): `70-breakout.asm` (4,096) with the 9-line score band, the 48-line brick field (6 rows x 8 lines, 6 unique bricks mirrored to 12), the 64x3 `BrickPF` table, the 32-byte play row table, the 12-byte brick ball table, the score library + reposition, three lives, three patterns, and the auto-demo; three 4,096-byte solutions (multi-hit bricks, level progression, angle/power-up); three captures. The critical review fix was the PF2 bit order; the major was the positioner overrun; the minors were the alignment, timers, comments, and doc precision.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-08 01:20): `bash scripts/verify.sh` PASSED (260 sources, no drift, docs build); four ROMs 4,096 and byte-identical; Full Source exact (1,434 source / 2,190 doc lines); `npm run roms` 260. Frame: `StartFrame` `$F1B9` 259/3, `VblankStart` `$F1C7` 0/5, `BodyStart` `$F255` 37/5, `ScoreDone` `$F258` 46/5, `BrickStart` `$F298` 51/2, `PlayStart` `$F31A` 99/19, `OverscanStart` `$F388` 229/2; 259/3, 51/2, 99/19, 229/2 at all 12 paddle/ball X extremes. State: `BrickHit` A=5 at 118/236/354; `BrickClear` A=$37/$17/$15; `ScoreAdd` A=1/2/3; `LevelStart` A=1 at 481 (demo) and 1261 (post-restart); `LifeLost` A=2/1/0 at 182/363/660. Captures: bricks-start (000000, 72 bricks), bricks-broken (000002, 2 unique bricks/four visible halves), level-two (000004, the diamond 4/8/12/12/8/4), 1010x807, titles `Stella 7.0: "70-breakout"`, no cursor. Site: index row 70 Done, rows 71-72 Coming Soon; prev 69/next 71; sidebar `config.ts:165`; README row 10 unchanged. Reviews (AR-5): atari2600-reviewer — 1 critical (PF2) + 1 major (positioner) + 11 minor, then no critical/major; curriculum-auditor — 1 major (disclosure) + 13 minor, then no critical/major. All fixed; final 0 critical, 0 major open. Lesson 70 is complete.
 
 **Deliverables**:
-- [ ] `70-breakout.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
-- [ ] The brick map (6 bytes), the 64×3 PF table, the dual-zone ball, the score library, three
+- [x] `70-breakout.asm` (4,096) + `exercise-01/02/03-solution.asm` (4,096 each).
+- [x] The brick map (6 bytes), the 64×3 PF table, the dual-zone ball, the score library, three
   levels, three lives, the auto-demo.
-- [ ] `docs/part10-capstones/70-breakout.md` (six-section template, Full Source verbatim, 3 images,
+- [x] `docs/part10-capstones/70-breakout.md` (six-section template, Full Source verbatim, 3 images,
   1 player, three exercises with solutions).
-- [ ] Index row 70 ✅; prev 69 / next 71; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] Index row 70 ✅; prev 69 / next 71; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 

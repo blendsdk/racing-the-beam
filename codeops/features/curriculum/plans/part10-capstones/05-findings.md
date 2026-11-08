@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Lesson 69 complete after round 2 — 0 critical, 0 major open. Lessons 70–72 pending.
+> **Status**: Lesson 70 complete after round 2 — 0 critical, 0 major open. Lessons 71–72 pending.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
@@ -13,7 +13,7 @@
 | Lesson | Critical | Major | Minor | Open critical/major |
 | --- | --- | --- | --- | --- |
 | 69 | 1 | 4 | 12 | 0 |
-| 70 | 0 | 0 | 0 | 0 |
+| 70 | 1 | 2 | 20 | 0 |
 | 71 | 0 | 0 | 0 | 0 |
 | 72 | 0 | 0 | 0 | 0 |
 
@@ -31,7 +31,13 @@
 
 ## Lesson 70 — Breakout
 
-_No phase findings yet._
+**Round 1** (atari2600-reviewer: 1 critical + 1 major + 11 minor; curriculum-auditor: 1 major + 13 minor):
+- **SR-001 (critical, reviewer):** the `BrickPF2` column was bit-reversed (PF2 bit 0 = chunk 12, not bit 7). The last three unique bricks and their mirrors rendered at the wrong X, and the collision geometry disagreed with the picture. Fixed with the TIA order (`$04` -> PF1 `$01` + PF2 `$01`; `$02` -> PF2 `$0C`; `$01` -> PF2 `$60`; full row `$3F` -> `$C0/$6D/$6D`) in all four sources and the doc; the three main captures were re-taken.
+- **SR-002 (major, reviewer):** the visible positioners overran the line for `PaddleX >= 102` / `BallX >= 146`; the frame grew to 263/264 and the zones shifted. Fixed by positioning the ball in VBLANK before `ScoreSetup` (the score's HMOVE applies it) and giving the P0 positioner a fixed-length 42-cycle fill; the frame is 259/3, 51/2, 99/19, 229/2 at all 12 paddle/ball extremes.
+- **Auditor SR-01 (major):** the game-over restart and natural level clear were claimed as observed; the restart is now observed (main `LevelStart` 1261; ex2 1021) and the natural `BricksLeft=0` clear is disclosed as code-verified.
+- Minors fixed: the `!align` 64-byte columns, the ex3 power timer, `NUSIZ0=5`, the ex2/ex3 game-over/aim counters, the play area 32x4 (row 0 four lines), the technical prose (VX ±4, mirror arithmetic, ENABL line 5, speeds, 42-cycle burn), the ex2 banner preload, the ex1 6-byte table and bit-7 flag, the doc's level-display/patterns/.bin/TS/32-byte table wording, the planning references removed, the caption/alt text, the scratch-capture wording, and the disclosure.
+
+**Round 2** (no critical/major): the PF2 table, the VBLANK ball positioner, the `!align`, and the timer splits are confirmed. The residual minor items (the mirror arithmetic, the WSYNC wording, the ball-in-VBLANK prose, the ex3 header demo references, the ex2/main comments, the RAM map `$94`, the TS clamp, the alt text, the `.asm` 4,096 claims, the ex2/ex3 effect clears, and plan 03:146) were fixed in the final polish. Final 0 critical, 0 major open.
 
 ## Lesson 71 — Maze Explorer
 

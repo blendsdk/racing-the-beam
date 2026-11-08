@@ -135,7 +135,7 @@
   a playfield field with a row-table play area.
 - **Prerequisites:** Lesson 03, 04, 12, 14, 17, 19 (the playfield), 25, 26, 29 (the ball), 31
   (`NUSIZ`), 33 (controllers), 38 (collision), 41 (game states), 49 (the two-line kernel), 50
-  (multi-zone), 63 (the score library), 69 (the row table).
+  (multi-zone), 39 (the scoreboard and score library), 69 (the row table).
 - **Concepts:** the brick map (6 bits per row, mirrored); the 64×3 brick PF table; the brick
   collision math (row from Y, unique column from X); clearing a brick and rebuilding the PF row;
   the zone partition (score 9, gap 1, positioner 5, bricks 48, play 128, blank 1); the ball in
@@ -143,40 +143,50 @@
 - **Screen (192 visible lines):**
   - Score band 0-8: `ScoreDraw` (nine lines, `000000`).
   - Blank line 9.
-  - Positioner lines 10-14: P0 to `PaddleX`, the ball to `BallX`, one `HMOVE`.
-  - Brick field 15-62: 6 brick rows × 8 lines; each row's PF0/PF1/PF2 from the brick mask; the
-    ball's ENABL is set per line when the line is within `BallY..BallY+3`.
+  - Positioner lines 10-14: P0 to `PaddleX`; the ball is positioned in VBLANK.
+  - Brick field 15-62: 6 brick rows × 8 lines (the eighth line of every row is blanked, so the
+    bricks read as six rows of 7-line bricks with a 1-line vertical gap); each row's PF0/PF1/PF2
+    from the brick mask; the ball's ENABL is set by the 12-byte `BrickRowTable` (one bit per
+    4-line row).
   - Play area 63-190: 32 rows × 4 lines; the row table (bit 0 = P0 paddle, bit 1 = ball) drives
-    P0 and the ball; the paddle is 8×8 (2 rows), the ball 4×4 (1 row).
+    P0 and the ball; the paddle is 8×8 (2 rows) and the ball 4×4 (1 row); row 0 is prepared on
+    picture line 62 and is four lines tall (32 × 4 = 128).
   - Blank line 191.
   - Total: 9 + 1 + 5 + 48 + 128 + 1 = 192.
 - **Frame:** 259/3, 0/5, 37/5, 229 (measured).
 - **RAM map:**
   - `$80-$85` `BrickMap` (6 bytes; 6 bits per row; bit 5 = leftmost unique brick).
   - `$86-$91` `BrickRowTable` (12 bytes; the brick zone's ball rows, one bit per 4-line row).
-  - `$92-$9F` game variables: `BallX`, `BallY`, `BallVX`, `BallVY`, `PaddleX`, `Lives`, `Level`,
-    `BricksLeft`, `Frame`, `ServeTimer`, `GameState`, `Temp`, `CurP0`, `CurBall`.
+  - `$92-$9F` game variables: `BallX`, `BallY`, `BallVX`, `BallVY`, `PaddleX`, `DemoTimer`,
+    `Lives`, `Level`, `BricksLeft`, `Frame`, `ServeTimer`, `GameState`, `Temp`, `CurP0`; the
+    paddle's Y is the constant `PADDLE_Y=179` (play rows 29-30), so `$97` is the demo timer.
   - `$A0-$D7` the score library.
   - `$D8-$F7` `PlayRowTable` (32 bytes; bit 0 = P0 paddle, bit 1 = ball).
   - `$F8-$FF` stack.
 - **Brick field:** 6 rows × 6 unique bricks; each brick is 8 px (2 chunks) with a 4-px gap;
-  the 64-entry × 3-byte `BrickPF` table maps a 6-bit row mask to PF0/PF1/PF2; reflect mode
-  mirrors the 6 bricks to 12 visible per row. The first brick is at chunk 0 (PF0 bit 4).
+  the 64-entry × 3-byte `BrickPF` table (stored as three 64-byte columns, PF0/PF1/PF2) maps a
+  6-bit row mask to PF0/PF1/PF2; reflect mode mirrors the 6 bricks to 12 visible per row. The
+  first brick starts at X=8 (chunk 2, PF0 bits 6-7), so the field is symmetric: the mirrored
+  rightmost brick covers X=144-151.
 - **Brick collision:** read CXBLPF bit 7 in VBLANK. On a hit: `row = (BallY - 15) / 8` (0..5);
   the ball's centre X = BallX + 2; if X < 80, `col = (X - 8) / 12` (0..5); else the visible
   column is mirrored: `col = 5 - ((X - 80) / 12)`. If the brick bit is set, clear it, decrement
   `BricksLeft`, `ScoreAddOne`, reload the row's PF bytes, and bounce (reverse VY when the ball
   came from above/below; otherwise reverse VX). The capstone uses the simpler vertical bounce
-  with a horizontal reversal when the ball's centre is within 2 px of the brick's edge.
+  with a horizontal reversal when the ball's centre is within 2 px of the brick's edge. The top
+  wall is the top of the brick field (Y=15), not the play-area top Y=63: the ball must pass the
+  play-area top to reach the bricks.
 - **Paddle:** P0, 8×8, X 8..152, 4 px/frame with the joystick; the ball collides via CXP0FB bit 6;
   the paddle's angle zones set the ball's VX (`-2,-1,0,1,2`) and keep VY negative.
 - **Lives/levels:** 3 lives; a miss (BallY > 190) decrements; 0 -> game over (fire restarts).
-  Clearing all 36 unique bricks advances the level; three patterns (`Level0/1/2` masks) and a
-  speed-up; after level 3 the patterns repeat faster.
+  Clearing all the unique bricks advances the level; three patterns (`Level0` full 36,
+  `Level1` diamond 24, `Level2` checkerboard 18) and a speed-up; after level 3 the patterns
+  repeat faster.
 - **Score library:** `ScoreSetup` every frame in VBLANK, `ScoreDraw` in the body, then reposition
   P0 and the ball. Score 1 per brick; the six-digit display works.
 - **Auto-demo:** the paddle tracks the ball with a 4-px/frame cap; the ball breaks bricks; a miss
-  respawns; the captures at 2 s/6 s/10 s show the start, a broken field, and level 2.
+  respawns; the demo advances the pattern once at frame 480 (8 s), so the 2 s/6 s/10 s captures
+  show the start, a broken field, and the second (diamond) pattern.
 - **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `ScoreDone`, `BrickStart`,
   `PlayStart`, `OverscanStart`, `BrickHit` (A=the row), `BrickClear` (A=the new mask),
   `ScoreAdd` (the score library's checkpoint), `LifeLost`, `LevelStart`, `PaddleXRead`,
@@ -184,8 +194,8 @@
 - **Screenshots:** `bricks-start.png`, `bricks-broken.png`, `level-two.png`. 1010×807, title bar
   `Stella 7.0: "70-breakout"`, no cursor.
 - **Exercises (4,096 each):**
-  1. **Multi-hit bricks.** A 6-byte HP map (2 bits per brick) so a brick takes two hits; the
-     colour changes after the first hit; the score is 1 per hit and 2 for the final.
+  1. **Multi-hit bricks.** A 6-byte 1-bit-per-brick HP map so a brick takes two hits; the colour
+     changes after the first hit; the score is 1 per hit and 2 for the final.
      `exercise-01-solution.asm`.
   2. **Level progression.** Three brick patterns, a level-clear banner (a playfield bar), a
      speed-up, and a level counter in the score's high digits. `exercise-02-solution.asm`.
@@ -206,7 +216,7 @@
   enemies with a chase AI, three keys, a win and a lose state — and learn how a generator and a
   table-driven kernel produce a playable world.
 - **Prerequisites:** Lesson 03, 04, 12, 14, 17, 19 (the playfield), 25, 26, 31, 33, 38, 41, 43
-  (random), 44 (AI), 49, 50, 53, 63 (the score library), 67 (the generator), 69 (the row table),
+  (random), 44 (AI), 49, 50, 53, 39 (the scoreboard and score library), 67 (the generator), 69 (the row table),
   70 (the zones).
 - **Concepts:** the mirror maze (10 unique columns, 20 visible via reflect); the cell/pixel
   transform; the wall map and movement check; the mirror column transform; the four-line object
