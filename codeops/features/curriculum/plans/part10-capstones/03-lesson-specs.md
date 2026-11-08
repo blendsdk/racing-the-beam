@@ -312,9 +312,11 @@
   - Three clearly marked sections: `YOUR GAME — INPUT`, `YOUR GAME — UPDATE`,
     `YOUR GAME — DRAW`; the reader replaces them.
 - **Frame:** 259/3, 0/5, 37/5, 229 (measured).
-- **RAM:** `$80-$9F` the game variables (`GameState`, `PlayerX`, `ItemX`, `ItemY`, `Score`,
-  `Lives`, `Timer`, `Frame`, `PrevFire`, `CurItem`, etc.); `$A0-$D7` the score library;
-  `$D8-$F7` free; `$F8-$FF` stack.
+- **RAM:** `$80-$87`, `$8E-$8F` and `$D8-$DC` the game variables (`GameState`, `PlayerX`,
+  `ItemX`, `ItemY`, `Score`, `Lives`, `Timer`, `Frame`, `PrevFire`, `CurItem`, etc.); `$88-$8D`
+  and `$90-$9F` the sound library; `$A0-$D7` the score library; `$DD-$F7` free; `$F8-$FF` stack.
+  The sound library owns `$88-$8D`/`$90-$9F`, leaving only ten of the `$80-$9F` bytes for the
+  game; the source header is the exact map.
 - **Checkpoints:** `StartFrame`, `VblankStart`, `BodyStart`, `StateChange` (A=the new state),
   `ScoreWrite` (A=the new score), `ItemSpawn` (A=the item's X), `Catch` (A=the score),
   `Miss` (A=the lives), `OverscanStart`.

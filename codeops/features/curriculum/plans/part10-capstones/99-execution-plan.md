@@ -2,8 +2,8 @@
 
 > **Document**: 99-execution-plan.md
 > **Parent**: [Index](00-index.md)
-> **Last Updated**: 2026-11-08 04:37
-> **Progress**: 3/5 tasks (60%)
+> **Last Updated**: 2026-11-08 06:11
+> **Progress**: 4/5 tasks (80%)
 > **CodeOps Artifact Schema**: 1
 
 ## Overview
@@ -190,23 +190,23 @@ is authorized by the user's directive to execute RD-10 and the Part 1–9 practi
 **Objective**: ship the skeleton mini-game, the production templates, the design exercises, and
 the document.
 
-- [ ] 4.1.1 Lesson 72 — Capstone 4: Your Own Game: Session A freezes ST-72.1–ST-72.5 (red
+- [x] 4.1.1 Lesson 72 — Capstone 4: Your Own Game: Session A freezes ST-72.1–ST-72.5 (red
   baseline), Session B implements `demo-72.asm`, the GDD/RAM/screen/4K/milestone templates, the
   three design exercises, and the document, Session C verifies to green and hardens; commit via
-  the `git-commit` skill in push mode — `feat(lesson72): Capstone 4 — Your Own Game`
+  the `git-commit` skill in push mode — `feat(lesson72): Capstone 4 — Your Own Game` ✅ (completed: 2026-11-08 06:11)
 
-**Session A record**:
+**Session A record** (freeze + red baseline, 2026-11-08 04:41): ST-72.1–ST-72.5 re-affirmed against [03](03-lesson-specs.md) §Lesson 72. Design pins: the doc title is the curriculum/stub title **"Lesson 72: Capstone 4 — Your Own Game"**; the ROM is `demo-72.asm` (4,096), the "star catcher" skeleton: state 0 TITLE (a gold emblem and a blinking PRESS FIRE), state 1 PLAY (P0 left/right with the joystick, a ball item falls from the top at a pseudo-random X, a catch scores 1 and respawns, a miss costs a life; 3 lives; a 30-second timer shown as a bar), state 2 OVER (the final score, a red field, FIRE restarts). The score library shows the score; the sound library plays a catch blip and a miss buzz; the fire edge starts/restarts; the auto-demo catches/misses for deterministic captures. The three marked sections are `YOUR GAME — INPUT`, `YOUR GAME — UPDATE`, `YOUR GAME — DRAW`. RAM: `$80-$87`/`$8E-$8F`/`$D8-$DC` the variables, `$88-$8D`/`$90-$9F` the sound library, `$A0-$D7` the score library, `$DD-$F7` free, `$F8-$FF` stack. Frame: 259/3, 0/5, 37/5, 229. Captures: `title.png` (2 s), `play.png` (6 s), title `Stella 7.0: "demo-72"`, no cursor. The doc carries the GDD template, the RAM/screen map worksheets, the 4K budget, the milestone plan, the production checklist, and the three design exercises answered (no solution files). Red baseline confirmed: no `lessons/part10-capstones/72-your-game`, no `docs/public/images/lesson72`, no Part 10 72 ROMs, index row 72 Coming Soon, sidebar `config.ts:167`, `verify.sh --no-docs` green at `499c7cb`. No implementation logic read (AR-2).
 
-**Session B record**:
+**Session B record** (implementation, 2026-11-08 05:20): `demo-72.asm` (4,096) with the star-catcher title/play/over states, the score and sound libraries, the fire edge, the 3 lives, the 30-second timer bar, the auto-demo, and the three `YOUR GAME` sections; the doc with the GDD/RAM/screen/4K/milestone/production templates and the three design exercises; two captures. The review fixes were the HMOVE-window order and the timer-bar PF1 table; the minors fixed the positioner comments, the stack depth, the fire edge, the SoundTable/score wording, the prerequisite, the verification basis, and the plan records.
 
-**Session C record**:
+**Session C record** (verify + evidence, 2026-11-08 06:11): `bash scripts/verify.sh` PASSED (265 sources, no drift, docs build); the ROM 4,096 and byte-identical; Full Source exact (1,200 source / 2,023 doc lines); `npm run roms` 265. Frame: `StartFrame` `$F2AE` 259/3, `VblankStart` `$F2BC` 0/5, `BodyStart` `$F350` 37/5, `ScoreDone` `$F353` 46/5, `PlayStart` `$F395` 51/2, `OverscanStart` `$F3D0` 229/2. State: `StateChange` A=1 at 180, A=2 at 645; `ScoreWrite` A=1 at 252; `ItemSpawn` 128/8/24/148; `Catch` A=0 at 252; `Miss` A=2/1/0 at 409/488/645. Captures: title/play 1010x807, titles `Stella 7.0: "demo-72"`, no cursor; the play image shows score 000001, the timer bar, the lives, the star, and the ship. The late-game timer bar is checked at n=6/n=2 (diagnostic builds) and by a host-side n=0..20 simulation. The 4K budget is 1,935 used (1,929 code/data + 6 vectors) and 2,161 padding. Site: index row 72 Done; prev 71/next the Part 11 index; sidebar `config.ts:167`; README row 10 unchanged. Reviews (AR-5): atari2600-reviewer — 2 major (HMOVE, timer bar) + 10 minor, then no critical/major; curriculum-auditor — 1 major (timer bar) + 7 minor, then one minor (TS model) fixed. All fixed; final 0 critical, 0 major open. Lesson 72 is complete.
 
 **Deliverables**:
-- [ ] `demo-72.asm` (4,096) — the skeleton mini-game with the three `YOUR GAME` sections.
-- [ ] `docs/part10-capstones/72-your-game.md` (six-section template, Full Source verbatim, 2
+- [x] `demo-72.asm` (4,096) — the skeleton mini-game with the three `YOUR GAME` sections.
+- [x] `docs/part10-capstones/72-your-game.md` (six-section template, Full Source verbatim, 2
   images, 1 player, the GDD/RAM/screen/4K/milestone templates, three design exercises answered).
-- [ ] Index row 72 ✅; prev 71 / next Part 11; sidebar; README unchanged.
-- [ ] `verify.sh` green; both reviews 0 critical/major.
+- [x] Index row 72 ✅; prev 71 / next Part 11; sidebar; README unchanged.
+- [x] `verify.sh` green; both reviews 0 critical/major.
 
 **Verify**: `bash scripts/verify.sh`
 

@@ -2,7 +2,7 @@
 
 > **Document**: 05-findings.md
 > **Parent**: [Index](00-index.md)
-> **Status**: Lesson 71 complete after three rounds — 0 critical, 0 major open. Lesson 72 pending.
+> **Status**: Part 10 lessons complete — 0 critical, 0 major open. Lessons 69–72 are committed; the completion gate remains.
 > **Rule**: every reviewer finding is recorded with its severity, the lesson, the evidence, and
 > the resolution. A lesson is not done while a critical/major is open. The plan-level preflight
 > findings live in [00-preflight-report.md](00-preflight-report.md); this ledger is for the
@@ -15,7 +15,7 @@
 | 69 | 1 | 4 | 12 | 0 |
 | 70 | 1 | 2 | 20 | 0 |
 | 71 | 0 | 3 | 20 | 0 |
-| 72 | 0 | 0 | 0 | 0 |
+| 72 | 0 | 2 | 12 | 0 |
 
 ## Lesson 69 — Pong
 
@@ -53,4 +53,9 @@
 
 ## Lesson 72 — Your Own Game
 
-_No phase findings yet._
+**Round 1** (atari2600-reviewer: 2 major + 10 minor; curriculum-auditor: 1 major + 7 minor):
+- **SR-001 (major, reviewer):** `HMP1`/`HMBL` were written ~14/17 cycles after `ScoreSetup`'s HMOVE, inside the TIA's 24-cycle window; the score/ball fine offsets could be applied wrongly on hardware. Fixed by zeroing them after `SetCoarseP0`, just before the second HMOVE.
+- **SR-002 / auditor SR-001 (major):** the timer-bar PF1 table was shifted 8 entries; the bar froze at 16 chunks and then split with a hole. Fixed with the contiguous 21-entry PF0/PF1/PF2 tables (nine zeros, seven increasing, five `$FF` for PF1); diagnostic n=6/n=2 builds show one contiguous bar; a host-side n=0..20 simulation confirms the run.
+- Minors fixed: the positioner comments (the WSYNC halts to the third line), the 14-byte stack depth, the first-second fire edge (the `Startup` gate removed), the SetState wording, the SoundTable rate, the score-byte/display wrap, the title capture phase, Lesson 37 as a prerequisite, the verification-basis sentence, the over prompt colour, and the plan records.
+
+**Round 2** (no critical/major): the HMOVE window, the timer tables, the budget (1,935 used/2,161 padding), the checkpoint addresses, and the captures are confirmed. The residual doc slips (the `$F2` example, the old-table wording) and the TypeScript `prevFire`/`startup` model were fixed. Final 0 critical, 0 major open.
