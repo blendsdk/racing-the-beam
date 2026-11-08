@@ -2,14 +2,14 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'Racing the Beam',
-  description: 'Learn Atari 2600 assembly programming from scratch — 78 hands-on lessons from zero to homebrew mastery',
+  description: 'Learn Atari 2600 assembly programming from scratch — 79 hands-on lessons from zero to homebrew mastery',
   base: '/racing-the-beam/',
 
   head: [
     ['meta', { name: 'theme-color', content: '#e85d04' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:title', content: 'Racing the Beam — Atari 2600 Programming' }],
-    ['meta', { property: 'og:description', content: '78 hands-on lessons from zero to homebrew mastery' }],
+    ['meta', { property: 'og:description', content: '79 hands-on lessons from zero to homebrew mastery' }],
   ],
 
   themeConfig: {
@@ -178,6 +178,7 @@ export default defineConfig({
             { text: '76 — Procedural Worlds (LFSR)', link: '/part11-legendary/' },
             { text: '77 — Interlaced Flicker', link: '/part11-legendary/' },
             { text: '78 — Room & Object Engine', link: '/part11-legendary/' },
+            { text: '79 — The Publisher Mark', link: '/part11-legendary/' },
           ],
         },
         {

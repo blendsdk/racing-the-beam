@@ -70,7 +70,8 @@ verified lesson — never a partial one.
 
 ## Hard constraints
 
-- The 78-lesson curriculum is frozen: never add, remove, rename, or reorder lessons or parts.
+- The 79-lesson curriculum is frozen: never add, remove, rename, or reorder lessons or parts.
+  Lesson 79 was authorized on 2026-11-08.
 - Never emit DASM syntax; this project uses ACME (`!cpu`, `!source`, `* =`).
 - Hardware facts follow the `atari-2600-expert` claim discipline (observed / documented /
   derived) — no invented numbers. Register names/bits come from `include/vcs.asm`.

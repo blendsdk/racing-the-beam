@@ -1,6 +1,6 @@
 # 🕹️ Racing the Beam
 
-**Learn Atari 2600 assembly programming from scratch — 78 hands-on lessons from zero to homebrew mastery.**
+**Learn Atari 2600 assembly programming from scratch — 79 hands-on lessons from zero to homebrew mastery.**
 
 🌐 **Live Site**: [blendsdk.github.io/racing-the-beam](https://blendsdk.github.io/racing-the-beam/)
 
@@ -23,7 +23,7 @@ A step-by-step masterclass in Atari 2600 game development using 6502 assembly la
 | 8 | Advanced Topics | 56–65 |
 | 9 | The DSL Path | 66–68 |
 | 10 | Capstone Projects | 69–72 |
-| 11 | Legendary Techniques | 73–78 |
+| 11 | Legendary Techniques | 73–79 |
 
 ## Prerequisites
 

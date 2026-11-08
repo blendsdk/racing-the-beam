@@ -1,12 +1,12 @@
 # Ambiguity Register: Curriculum
 
-> **Status**: ✅ GATE PASSED — all 9 items resolved
-> **Last Updated**: 2026-10-10
+> **Status**: ✅ GATE PASSED — all 9 items resolved; AR-1 amended 2026-11-08
+> **Last Updated**: 2026-11-08
 > **Authority**: `--auto-design` active for this requirements chain (policy version 1, root invocation ID `curriculum-reqs-2026-10-10`). AR #1 is a user decision; AR #2–#9 are delegated technical decisions.
 
 | # | Category | Ambiguity / Gap | Options Presented | User Decision | Status |
 |---|----------|-----------------|-------------------|---------------|--------|
-| 1 | Scope | May lessons or parts be added, removed, renamed, or reordered? | Freeze the structure / allow restructuring | **User:** curriculum frozen — deliver the existing 78-lesson structure; structural changes are out of scope | ✅ Resolved |
+| 1 | Scope | May lessons or parts be added, removed, renamed, or reordered? | Freeze the structure / allow restructuring | **User:** curriculum was frozen at the original 78-lesson structure; on 2026-11-08 the user authorized adding Lesson 79 (Part 11). The amended 79-lesson structure is frozen; other structural changes remain out of scope | ✅ Resolved |
 | 2 | Technical | How is the remaining lesson work modeled in CodeOps? | One feature `curriculum` / task-lane backlog rows | **AI (auto-design):** one feature `curriculum` covering Parts 1–11 | ✅ Resolved |
 | 3 | Technical | RD granularity for the feature. | One RD per part / one mega-RD / one RD per lesson | **AI (auto-design):** one RD per part — RD-01..RD-11 | ✅ Resolved |
 | 4 | Technical | Plan and task granularity. | One plan per RD + one task per lesson / one feature-level plan / one task per RD | **AI (auto-design):** one plan per RD, one task per lesson; RD-01 plans first | ✅ Resolved |
@@ -20,13 +20,18 @@
 
 **Shared delegated provenance (AR #2–#9).** Authority: AI — delegated by `--auto-design`.
 Eligibility: implementation mechanisms inside the confirmed frozen-curriculum scope. Objective:
-deliver lessons 07–78 at the established quality bar. Policy version: 1. Root invocation ID:
+deliver lessons 07–79 at the established quality bar. Policy version: 1. Root invocation ID:
 `curriculum-reqs-2026-10-10`. Hardening: not required — low-risk, reversible choices inside an
 existing pipeline.
 
 **AR-1.** Decision: keep the 78-lesson structure frozen. Evidence: `README.md` curriculum table;
 the project rules in `AGENTS.md`. Rejected alternative: restructuring the course (contradicts the
 user's decision). Reopen trigger: the user requests a curriculum change.
+
+**AR-1 amendment (2026-11-08).** The user authorized adding **Lesson 79 — The Publisher Mark**
+to Part 11. Lessons 73–78 keep their numbers; the total becomes 79. Evidence: the user's
+2026-11-08 decision and the adopted plan at `plans/part11-legendary/`. The structure is frozen
+again at 79. Reopen trigger: another explicit user curriculum decision. Confidence: High.
 
 **AR-2.** Decision: one feature `curriculum` over Parts 1–11. Evidence: the parts share one
 production pipeline (`vcs-lesson-production`), one verification gate (`scripts/verify.sh`), and

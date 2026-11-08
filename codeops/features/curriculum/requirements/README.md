@@ -1,6 +1,6 @@
 # Curriculum — Requirements Documents
 
-> **Project**: Racing the Beam — 78-lesson Atari 2600 assembly course published as a static site
+> **Project**: Racing the Beam — 79-lesson Atari 2600 assembly course published as a static site
 > **Status**: Draft
 > **Created**: 2026-10-10
 > **Architecture**: ACME 0.97 assembly lessons + VitePress 1.6.4 site
@@ -10,11 +10,12 @@
 
 ## Overview
 
-**Feature goal:** deliver the remaining lessons of the frozen 78-lesson curriculum at the quality
-bar of the six completed lessons (01–06): real ROMs, Stella screenshots, working navigation.
+**Feature goal:** deliver the remaining lessons of the amended 79-lesson curriculum at the
+established lesson quality bar: real ROMs, Stella screenshots, working navigation.
 
-The curriculum is **frozen** (AR #1): no lesson or part may be added, removed, renamed, or
-reordered. These requirements cover the existing Parts 1–11 — lessons 07–78 (72 lessons).
+The curriculum is **frozen** (AR #1) at the amended 79-lesson structure: Lesson 79 (Part 11)
+was authorized by the user on 2026-11-08; no other lesson or part may be added, removed,
+renamed, or reordered. These requirements cover Parts 1–11 — lessons 07–79 (73 lessons).
 
 **Domain lenses** (per `.opencode/references/domains/selection.md`): **web-application** — the
 published static site (VitePress pages, sidebar, navigation, in-browser Javatari player); and
@@ -22,7 +23,7 @@ published static site (VitePress pages, sidebar, navigation, in-browser Javatari
 
 ## Minimum-Sufficient Baseline
 
-**Original goal:** a complete course site for all 78 frozen lessons. **Smallest viable design:**
+**Original goal:** a complete course site for all 79 frozen lessons. **Smallest viable design:**
 the existing per-lesson production pipeline. **Excluded support machinery:** content generators,
 new build or test frameworks, hosting changes. **Approved complexity:** None.
 
@@ -41,7 +42,7 @@ new build or test frameworks, hosting changes. **Approved complexity:** None.
 | **RD-08** | [Part 8 — Advanced Topics](RD-08-part8-advanced.md) | Lessons 56–65 | Draft |
 | **RD-09** | [Part 9 — The DSL Path](RD-09-part9-dsl-path.md) | Lessons 66–68 | Draft |
 | **RD-10** | [Part 10 — Capstone Projects](RD-10-part10-capstones.md) | Lessons 69–72 | Draft |
-| **RD-11** | [Part 11 — Legendary Techniques](RD-11-part11-legendary.md) | Lessons 73–78 | Draft |
+| **RD-11** | [Part 11 — Legendary Techniques](RD-11-part11-legendary.md) | Lessons 73–79 | Draft |
 
 ## Dependency Graph
 

@@ -1,6 +1,6 @@
 # Racing the Beam — Agent Guide
 
-Racing the Beam is a 78-lesson Atari 2600 assembly masterclass: buildable ACME lessons that run
+Racing the Beam is a 79-lesson Atari 2600 assembly masterclass: buildable ACME lessons that run
 in Stella, published as a VitePress site with per-lesson screenshots, downloadable ROMs, and an
 in-browser Javatari player. This file is the entry point for every agent working in this repo.
 
@@ -26,9 +26,10 @@ The detailed procedure and checklists live in the `vcs-lesson-production` skill.
 
 ## Curriculum is frozen
 
-The 78-lesson structure (Parts 0–11) is fixed. Do not add, remove, rename, or reorder lessons
-or parts. Fixing text that disagrees with the curriculum (counts, stale tool names) is
-expected; changing the structure is not.
+The 79-lesson structure (Parts 0–11) is fixed. Lesson 79 (Part 11) was added by the
+user's decision on 2026-11-08; the structure is frozen again at 79. Do not add, remove,
+rename, or reorder lessons or parts. Fixing text that disagrees with the curriculum
+(counts, stale tool names) is expected; changing the structure is not.
 
 ## Commit & branch conventions
 

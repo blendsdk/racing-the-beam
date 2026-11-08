@@ -3,7 +3,7 @@
 > **Feature-Set**: Curriculum
 > **Status**: In Progress
 > **Created**: 2026-10-10
-> **Last Updated**: 2026-11-07
+> **Last Updated**: 2026-11-08
 > **Progress**: 10 / 11 (91%)
 > **CodeOps Artifact Schema**: 1
 
@@ -25,4 +25,7 @@
 | RD-08 | Part 8 — Advanced Topics | [RD-08](requirements/RD-08-part8-advanced.md) | [part8-advanced](plans/part8-advanced/00-index.md) | Done | ✅ | 2026-11-07 | depends on RD-07 |
 | RD-09 | Part 9 — The DSL Path | [RD-09](requirements/RD-09-part9-dsl-path.md) | [part9-dsl-path](plans/part9-dsl-path/00-index.md) | Done | ✅ | 2026-11-07 | depends on RD-08 |
 | RD-10 | Part 10 — Capstone Projects | [RD-10](requirements/RD-10-part10-capstones.md) | [part10-capstones](plans/part10-capstones/00-index.md) | Done | ✅ | 2026-11-08 | depends on RD-09 |
-| RD-11 | Part 11 — Legendary Techniques | [RD-11](requirements/RD-11-part11-legendary.md) | — | RD Drafted | ✏️ | 2026-10-10 | depends on RD-10 |
+| RD-11 | Part 11 — Legendary Techniques (73–79) | [RD-11](requirements/RD-11-part11-legendary.md) | [part11-legendary](plans/part11-legendary/00-index.md) | Plan Created | 📋 | 2026-11-08 | depends on RD-10; Lesson 79 authorized 2026-11-08 |
+
+**Amendment (2026-11-08):** the user authorized adding Lesson 79 to Part 11. Lessons
+73–78 keep their numbers; the total becomes 79. The structure is frozen again at 79.
