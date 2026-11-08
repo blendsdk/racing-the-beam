@@ -1,9 +1,9 @@
 # Lesson 79 — The Publisher Mark
 
-> **Status**: Adopted 2026-11-08 — Lesson 79 planned; implementation starts at Session A.
+> **Status**: Lesson 79 complete 2026-11-08; lessons 73–78 pending.
 > **Created**: 2026-11-08
 > **Repository**: `/home/gevik/workdir/2600/racing-the-beam`
-> **Base commit**: `255b534` (Part 10 complete); plan adopted in `d7a952a`
+> **Base commit**: `255b534` (Part 10 complete); plan adopted in `d7a952a`; lesson in `9da653b`
 > **Curriculum change**: added Lesson 79 to Part 11 (73–79); total 79 lessons.
 
 ## 1. What this is
@@ -38,11 +38,9 @@ The user's decisions on 2026-11-08:
 
 ## 3. Current repository state
 
-Part 10 is complete at `255b534`. The working tree is clean except for unrelated
-`.opencode` skill/config edits; do not stage them. Lesson 79 is not started.
-
-The pending work is Session A (freeze + red baseline), Session B (implement), and
-Session C (verify + review), followed by the atomic lesson commit.
+Part 10 is complete at `255b534`. Lesson 79 is complete at `9da653b` (the atomic
+lesson commit); lessons 73–78 remain pending. The plan directory stays as the
+historical record for Lesson 79; the next work is the 73–78 research and plans.
 
 ## 4. File map
 

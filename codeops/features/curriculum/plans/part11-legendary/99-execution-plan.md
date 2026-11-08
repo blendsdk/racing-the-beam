@@ -1,10 +1,10 @@
 # Execution Plan: Lesson 79 — The Publisher Mark
 
 > **Document**: `99-execution-plan.md`
-> **Status**: Sessions A/B/C complete; committing. Phase 0 done.
+> **Status**: Complete — Lesson 79 committed at `9da653b`; 73–78 pending.
 > **Base**: `255b534` (Part 10 complete)
 > **Plan adoption**: `d7a952a` (curriculum amendment and plan)
-> **Progress**: 4/6 tasks (Phase 0, Session A, Session B, Session C)
+> **Progress**: 6/6 tasks
 > **Plan directory**: `codeops/features/curriculum/plans/part11-legendary/`
 
 ## 1. Overview
@@ -167,6 +167,11 @@ feat(lesson79): The Publisher Mark — An Activision-Style In-Game Logo
 3. The next natural progression is Lessons 73–78; their research/plans are separate.
 4. Leave this plan directory in place as the historical draft; the repo plan is the
    source of truth after adoption.
+
+**Phase 5 record** (2026-11-08): RD-11 is **Executing** with Lesson 79 complete and
+73–78 pending; the feature roadmap stays at 10/11 RDs, and the portfolio remains 10/11
+RDs. The plan directory stays as the historical record for Lesson 79. The next work
+is the 73–78 research and plans. Lesson 79 was committed at `9da653b`.
 
 ## 9. Handoff notes
 
