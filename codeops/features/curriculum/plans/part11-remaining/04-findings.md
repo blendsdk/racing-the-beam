@@ -8,8 +8,8 @@
 | Severity | Raised | Open | Accepted | Fixed |
 |---|---:|---:|---:|---:|
 | Critical | 4 | 0 | 0 | 4 |
-| Major | 13 | 0 | 0 | 13 |
-| Minor | 33 | 0 | 0 | 33 |
+| Major | 30 | 0 | 0 | 30 |
+| Minor | 45 | 0 | 0 | 45 |
 
 ## Lesson 73
 
@@ -89,6 +89,42 @@
 | L74-m9 | Pixel boxes were short of the 8-px/24-row extents | Inclusive x 76–83 (half-open 84), rows 144–167; sampling artifacts labelled | Fixed |
 | L74-m10 | GRP0 ground invariant not stated | Last flight line is always a skip for RocketY≤144; widening the table needs a clear | Fixed |
 | L74-m11 | History sourcing was unnamed | 8bitworkshop VCS material + AtariAge community descriptions; no universal claim | Fixed |
+
+## Lesson 75
+
+### Critical / major
+
+| ID | Source | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|
+| L75-M1 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The scroll/dash phase moved the road markings toward the horizon (`ADC Scroll`), opposite the stated "rushes toward the viewer" | `SBC Scroll`/`SBC Dash`; captures 0.5 s apart show the dashes moving down | Fixed |
+| L75-M2 | atari2600-reviewer | 🟠 Major | The dash was fixed at chunk 19, not the road centre; the curve dashes were off-centre | Gap chunk `20 + c` with `GapL2Tab`/`GapR0Tab`; curve gaps 22/21/18/17 | Fixed |
+| L75-M3 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The cycle ledger counted `LDY zp,X` as 3; the macro is 54 and the stores 11/18/25/36/43/54 | Ledger, doc, source and exercise headers corrected | Fixed |
+| L75-M4 | curriculum-auditor, atari2600-reviewer | 🟠 Major | The checkpoint table/commands used a stale address set (`$F14F...` vs `$F15D...`) | One `acme -l` set: `$F063/$F071/$F1AB/$F1C0/$F1D7/$F293`; table/commands/prose agree | Fixed |
+| L75-M5 | atari2600-reviewer | 🟠 Major | The VBLANK arithmetic used `CMP #$80`=3 and `STA zp,X`=5; the pass counts were wrong | Recounted: `CMP`=2, `STA zp,X`=4; pass A/B counts updated | Fixed |
+| L75-M6 | atari2600-reviewer | 🟠 Major | The 22.67-cycle probe formula was internally inconsistent (`16+(32-28)*3=28`, not 31) | Formula removed; the observed split and the mid-chunk caveat stated | Fixed |
+| L75-M7 | atari2600-reviewer | 🟠 Major | The capture shows three dashes, not five; rows 0-7 are suppressed | Text corrected (three dashes, rows 0-7) | Fixed |
+| L75-M8 | atari2600-reviewer, curriculum-auditor | 🟠 Major | `CurveDirty` stored the new mask, not 1; SELECT-to-straight skipped the rebuild | `LDA #1` on every phase change, main and ex2 | Fixed |
+| L75-M9 | atari2600-reviewer, curriculum-auditor | 🟠 Major | Ex2's phase 0 was 120 frames (the 2 s capture on the boundary) and the wave base was added before the 6-bit wrap | Phase 0 = 150; wrap the wave first; 2 s straight, 5 s left curve | Fixed |
+| L75-M10 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The walkthrough/TypeScript still taught `row + Scroll`/`ADC`, `cSave`, `DashTable`, `SzR1`, the old `$F04E` checkpoints and the 52-cycle ledger | Theory/TypeScript/Steps 2/5 rewritten from the source; old table removed; exercise headers and build paths fixed | Fixed |
+| L75-M11 | atari2600-reviewer, curriculum-auditor | 🟠 Major | Ex2's 5 s state was labelled phase 1/right; with 150+120+120 it is phase 2/left | Doc/ex2 header corrected to phase 2, x20-103 | Fixed |
+| L75-M12 | atari2600-reviewer, curriculum-auditor | 🟠 Major | Ex2 SELECT did not advance Phase/CurveBase | SELECT calls the same `NextPhase`/`SetPhase` | Fixed |
+
+### Minor
+
+| ID | Finding | Resolution | Status |
+|---|---|---|---|
+| L75-m1 | The horizon band was one gold line, not two | Header/table corrected to one gold line + one verge | Fixed |
+| L75-m2 | The source header's write order was backwards | "This line's left group, then this line's right group" | Fixed |
+| L75-m3 | Lesson 26 missing from the prerequisites | Added; Lesson 15 noted for the timer | Fixed |
+| L75-m4 | Ex1 header daylight/moon and build path | Night palette, own build path, 2..10 widths, rows 0-4 | Fixed |
+| L75-m5 | Ex2 header 180/360/6 s, 32-entry table, RAM map | 150/120/120, 64-entry, `$E3/$E4` map | Fixed |
+| L75-m6 | SunTable "(12-15 sun)" | Rows 12-19 | Fixed |
+| L75-m7 | RAM map `$CE-$F7` vs `$D0-$F7` | `$E3-$F7`; 99 used/21 free (main), 101/19 (ex2) | Fixed |
+| L75-m8 | The edge rebuild cleared MaskDirty; the dash lag is up to two frames | "Up to two frames"; dash seeded | Fixed |
+| L75-m9 | "11 lines of margin"/"5.7-12.7"/"2.6" | 10 lines; 4.7 tightest; 4.7 | Fixed |
+| L75-m10 | The 5-line row was described as a hardware necessity | Deliberate band/resolution choice; a 2-line row is mechanically possible | Fixed |
+| L75-m11 | The first-frame seed used row-0 masks for all rows | All four tables seeded per row; no first-frame holes | Fixed |
+| L75-m12 | Frame-count/stale text residuals (457/398/393; `PhaseTimer`) | One count (393); "frames elapsed" | Fixed |
 
 ### Accepted limitations
 
