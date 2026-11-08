@@ -3,6 +3,7 @@
 > **Document**: `99-execution-plan.md`
 > **Status**: Adopted 2026-11-08 — Phase 0 done; Session A next
 > **Base**: `255b534` (Part 10 complete)
+> **Plan adoption**: `d7a952a` (curriculum amendment and plan)
 > **Progress**: 1/6 tasks (Phase 0)
 > **Plan directory**: `codeops/features/curriculum/plans/part11-legendary/`
 
@@ -56,8 +57,7 @@ is in the Phase 0 commit.
 chore(curriculum): add Lesson 79 and amend the lesson count
 ```
 
-4. Phase 0 commit: `chore(curriculum): add Lesson 79 and amend the lesson count`
-   (see `git log --oneline`).
+4. Phase 0 commit: `d7a952a chore(curriculum): add Lesson 79 and amend the lesson count`.
 
 **Gate**: `git status` clean for the lesson paths; `bash scripts/verify.sh --no-docs`
 green; the README and site say 79 / 73–79.
@@ -73,11 +73,13 @@ green; the README and site say 79 / 73–79.
    - `MARK_P0_X=16`, `MARK_P1_X=24`, `MARK_BUF` page-aligned;
    - 3 HMOVEs; 24-cycle rule;
    - captures `game.png`, `no-mark.png`.
-3. Record the red baseline:
+3. Record the red baseline at the current HEAD (after the plan-adoption commit):
    - no `lessons/part11-legendary/79-publisher-mark`;
    - no `docs/public/images/lesson79`;
    - no `docs/public/roms/part11-legendary/79-publisher-mark`;
-   - Part 11 index has no 79 row/status; sidebar points 79 to the index;
+   - the Part 11 index lists 79 as `🔮 Coming Soon`;
+   - the sidebar has a 79 entry pointing to `/part11-legendary/`;
+   - the README says 79 / 73–79;
    - `bash scripts/verify.sh --no-docs` green.
 4. Confirm no implementation logic has been read (AR-2).
 

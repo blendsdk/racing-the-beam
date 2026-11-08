@@ -3,8 +3,8 @@
 > **Rule**: the curriculum listing change and the README sync belong to the amendment
 > commit; the lesson artifacts and site status belong to the atomic lesson commit.
 >
-> **Phase 0**: executed 2026-11-08 in the curriculum-amendment commit. The lesson commit
-> section below remains pending.
+> **Phase 0**: executed 2026-11-08 in `d7a952a` (curriculum amendment and plan
+> adoption). The lesson commit section below remains pending.
 
 ## 1. Curriculum amendment commit
 

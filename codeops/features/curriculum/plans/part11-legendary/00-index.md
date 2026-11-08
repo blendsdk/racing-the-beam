@@ -3,7 +3,7 @@
 > **Status**: Adopted 2026-11-08 — Lesson 79 planned; implementation starts at Session A.
 > **Created**: 2026-11-08
 > **Repository**: `/home/gevik/workdir/2600/racing-the-beam`
-> **Base commit**: `255b534` (Part 10 complete)
+> **Base commit**: `255b534` (Part 10 complete); plan adopted in `d7a952a`
 > **Curriculum change**: added Lesson 79 to Part 11 (73–79); total 79 lessons.
 
 ## 1. What this is

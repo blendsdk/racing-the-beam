@@ -1,6 +1,7 @@
 # Lesson 79 — Preflight Report
 
-> **Status**: Draft preflight — re-run at Session A at `255b534` (Part 10 complete).
+> **Status**: Draft preflight — re-run at Session A at the current HEAD (after the
+> plan-adoption commit `d7a952a`).
 > **Rule**: Any gap is a hard stop. Do not write lesson content around a gap.
 
 ## 1. Prerequisites coverage
