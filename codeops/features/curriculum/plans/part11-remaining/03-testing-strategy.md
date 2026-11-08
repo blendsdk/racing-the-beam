@@ -23,7 +23,7 @@
 | ST-75.4 | Curve | Pixel check + state log | `curve.png` centre differs from `straight.png` by at least 4 px at the bottom |
 | ST-75.5 | Exercises | Assemble + run | ex1 recolour; ex2 second curve phase; 4,096 and 262 |
 | ST-76.1 | Assemble | `acme` | 3 x 4,096 |
-| ST-76.2 | Frame | State log | 262; Body 37/5; Overscan 229/6 |
+| ST-76.2 | Frame | State log | 262; Body 37/5; Overscan 229/4 |
 | ST-76.3 | Determinism | Host model + state log | Seed A repeats the same 16 rows; seed B differs in at least 4 rows |
 | ST-76.4 | World | Pixel check | Four tile types visible; the player sprite sits in the world band |
 | ST-76.5 | Exercises | Assemble + run | ex1 palette/density; ex2 reverse step; 4,096 and 262 |

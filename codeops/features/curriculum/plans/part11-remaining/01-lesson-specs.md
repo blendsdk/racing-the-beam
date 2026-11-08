@@ -75,23 +75,32 @@ the dashed centre line are visible in both).
 
 ## Lesson 76 — Procedural Worlds from a Seed — Pitfall! & River Raid
 
-**Artifact**: a top-down 16-row world scrolling upward: each row is 8 lines tall and 160 px
-wide (20 playfield bits); tiles are jungle, water, wall, and empty. A player sprite sits near
-the bottom and moves left/right.
+**Artifact**: a top-down world scrolling upward: 16 terrain rows x 10 lines (160) + a 32-line
+status band = 192. Each row is four bytes (a colour byte + PF0/1/2), a disclosed deviation from
+the planned three: the colour byte avoids a per-line type lookup and makes the 10-line tiles
+fill the world under the 32-line status. Four terrain types: river (blue), jungle (green),
+wall (grey), open (black). A white P0 player at the bottom moves left/right.
 
-**Mechanism**: an 8-bit Galois LFSR (taps `$B8`) steps once per generated tile; 2 bits select
-the tile type, and the same seed always rebuilds the same 16-row ring. SELECT changes the seed;
-the auto-demo scrolls the ring. The doc proves determinism by replaying a seed and comparing
-the row bytes, and explains why the generator is smaller than the world it describes.
+**Mechanism**: an 8-bit Galois LFSR with taps `$B8`, period 255, one step per generated terrain
+row. The low bits select the type/variant; the 16-row ring (64 bytes) shifts up every 8 frames
+and a new bottom row is generated. SELECT/the auto-demo changes the seed at frame 240 (A->B)
+and returns to A at 480; the same seed rebuilds the identical 16 rows. The reverse step
+(`ASL`/`EOR #$70`/`ADC #0`) is the Exercise 2 stretch.
 
-**Frame**: 37 VBLANK; 192 visible (16 rows x 8 lines = 128 lines, 24-line status band with the
-seed bits, 24-line lower band; adjust the split to 128 + 32 + 32 if cleaner); 30 overscan.
+**Frame**: 37 VBLANK; 192 visible (32 status + 160 world); 30 overscan; 262. Body 37/5;
+Overscan 229/4 (`STA VBLANK`).
 
-**Captures**: `world-seed-a.png` and `world-seed-b.png` (two seeds produce visibly different
-worlds).
+**Captures**: `world-seed-a.png` (2 s, seed `$FA`, game frames 64-71) and `world-seed-b.png`
+(5 s, seed `$D0`, frames 256-263); the four terrain types; the player; both 1010x807.
 
-**Exercises**: (1) change the tile palette and density; (2) add the reverse LFSR step so the
-world can be rebuilt behind the player (stretch).
+**Exercises**: (1) a wetter palette/density (8 river / 4 jungle / 4 wall / 0 open); (2) the
+reverse LFSR step (a 16-row rewind) — both 4,096 and 262.
+
+> **Amended 2026-11-08** after the build and reviews: the planned 8-line rows / 128+32+32 split
+> became 10-line rows / 160+32 (the tiles fill the world under the status band) and the ring
+> stores four bytes per row (colour + PF0/1/2, 64 bytes) rather than three. The frame log is
+> model-based plus a Stella instruction trace, not multi-frame Stella breakpoints; the doc says
+> so.
 
 ## Lesson 77 — Interlaced Flicker — Faking More Colours & Resolution
 

@@ -9,7 +9,7 @@
 |---|---:|---:|---:|---:|
 | Critical | 4 | 0 | 0 | 4 |
 | Major | 30 | 0 | 0 | 30 |
-| Minor | 45 | 0 | 0 | 45 |
+| Minor | 57 | 0 | 0 | 57 |
 
 ## Lesson 73
 
@@ -125,6 +125,31 @@
 | L75-m10 | The 5-line row was described as a hardware necessity | Deliberate band/resolution choice; a 2-line row is mechanically possible | Fixed |
 | L75-m11 | The first-frame seed used row-0 masks for all rows | All four tables seeded per row; no first-frame holes | Fixed |
 | L75-m12 | Frame-count/stale text residuals (457/398/393; `PhaseTimer`) | One count (393); "frames elapsed" | Fixed |
+
+## Lesson 76
+
+### Critical / major
+
+| ID | Source | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|
+| — | — | — | No critical or major findings. The LFSR math (period 255, zero never visited, exact reverse), the seed tables, the ring replay and the ex2 rewind verified. | — | — |
+
+### Minor
+
+| ID | Finding | Resolution | Status |
+|---|---|---|---|
+| L76-m1 | "Central water band" is mirrored by REFLECT into two bands | "A water band centred in the 20-chunk field; REFLECT mirrors it" | Fixed |
+| L76-m2 | Player-row GRP0 cycles said 4/7; the write lands at 13 (12 last), first line 44 | Corrected in the doc/source/exercises | Fixed |
+| L76-m3 | The LFSR tap parenthetical was off by one | "bits 7,5,4,3 of the shifted value; pre-shift 6,5,4 plus the shifted-in bit 7" | Fixed |
+| L76-m4 | "Four bars" vs eight; meta "128-byte ring" | Eight bars; 64-byte ring in 128 bytes of RAM | Fixed |
+| L76-m5 | "255 rows could not fit 4K" overclaim | 255 rows = 1,020 bytes (a quarter of 4K); the generator is 1 byte + a 96-byte table | Fixed |
+| L76-m6 | 229/6 vs 229/4 | 229/4 (`STA VBLANK`); plan ST-76.2 updated | Fixed |
+| L76-m7 | "Third change" mislabels the frame-480 A return | "The second change after power-on; frame 480 returns to A" | Fixed |
+| L76-m8 | Capture frames 64/256 vs windows 64-71/256-263 | Windows stated; wall-clock approximate | Fixed |
+| L76-m9 | Exercise build paths/RAM map/reverse comment | Own source/bin; `$D3-$F7` free; bottom row of the previous window | Fixed |
+| L76-m10 | Seed-B "four-row wall block"; player X=40 vs 72 | Three-row wall block; X=40 at power-on, X=72 in the capture | Fixed |
+| L76-m11 | ShiftRing "900 cycles"/"a third of VBLANK" | ~600 cycles (~22%) | Fixed |
+| L76-m12 | "Three moments"/frame 8-14; prerequisites; What's Next 77; provenance | Four moments; through frame 15; Lesson 26 added; Lesson 77 named; model + Stella trace disclosed | Fixed |
 
 ### Accepted limitations
 
