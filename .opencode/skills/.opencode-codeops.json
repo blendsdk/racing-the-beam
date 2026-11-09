@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "source": "opencode-codeops",
-  "version": "2.1.1",
-  "installedAt": "2026-10-10T11:51:08.882Z",
+  "version": "2.5.0",
+  "installedAt": "2026-11-03T21:27:06.060Z",
   "skills": [
     "analyze-agents",
     "analyze-project",
