@@ -2,8 +2,8 @@
 title: "Lesson 79: The Publisher Mark — An Activision-Style In-Game Logo"
 description: "Build the calling card: a 4,096-byte game with a six-digit score, a falling star, and a 48-pixel RACING publisher mark in the bottom band, drawn by a page-aligned ROM table and an unrolled 48-pixel kernel."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 78: Room & Object Engine — The Adventure Architecture"
+  link: "/part11-legendary/78-room-object-engine"
 ---
 
 # Lesson 79: The Publisher Mark — An Activision-Style In-Game Logo

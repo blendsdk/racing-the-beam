@@ -2,11 +2,11 @@
 title: "Lesson 75: Pseudo-3D Road — The Enduro / Pole Position Effect"
 description: "Draw a road that widens to a horizon by writing the playfield twice per scanline: two 20-entry mask tables give the left and right edges, a 32-entry curve table shifts the centre, a clamp keeps the road across the screen's midpoint, and 22 rows of five scanlines rebuild the edge tables in the vertical blank."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 74: Skipdraw — The Classic Sprite Kernel Idiom"
+  link: "/part11-legendary/74-skipdraw-kernel"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 76: Procedural Worlds from a Seed — Pitfall! & River Raid"
+  link: "/part11-legendary/76-procedural-worlds"
 ---
 
 # Lesson 75: Pseudo-3D Road — The Enduro / Pole Position Effect

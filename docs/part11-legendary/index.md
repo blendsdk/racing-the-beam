@@ -27,7 +27,7 @@ Part 11 is the anthology of the techniques that defined the platform:
 - **Lesson 75** renders a pseudo-3D road with per-scanline width, colour bands, and a curve table.
 - **Lesson 76** generates a procedural world from a tiny LFSR seed, deterministic in both directions.
 - **Lesson 77** uses interlaced flicker to fake more colours and resolution than the TIA has.
-- **Lesson 78** builds the room-and-object engine that invented the action-adventure genre.
+- **Lesson 78** builds the room-and-object engine widely credited with establishing the action-adventure genre.
 - **Lesson 79** puts the 48-pixel trick in the bottom band: a static `RACING` publisher mark drawn from a page-aligned ROM table, with a second handover and a SELECT toggle, beside the score and a small play field.
 
 *The anthology completes the masterclass at 79 lessons. All seven Part 11 lessons, 73–79, are live.*

@@ -5,8 +5,8 @@ prev:
   text: "Part 11: Legendary Techniques"
   link: "/part11-legendary/"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 74: Skipdraw — The Classic Sprite Kernel Idiom"
+  link: "/part11-legendary/74-skipdraw-kernel"
 ---
 
 # Lesson 73: The HMOVE Comb & the Cosmic Ark Starfield

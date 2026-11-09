@@ -2,11 +2,11 @@
 title: "Lesson 77: Interlaced Flicker — Faking More Colours & Resolution"
 description: "Draw the same eight bands twice, once in palette A and once in palette B, and let the eye add the two 30 Hz frames into eight colours the TIA cannot show at once: a frame-parity phase byte, a Phase*8 + Band table staged into RAM in the vertical blank, a 192-line band kernel with one COLUBK write per band, an auto-demo that holds each phase for a still capture, and the same trick stacked vertically as a field-interlaced 96-line bitmap."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 76: Procedural Worlds from a Seed — Pitfall! & River Raid"
+  link: "/part11-legendary/76-procedural-worlds"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 78: Room & Object Engine — The Adventure Architecture"
+  link: "/part11-legendary/78-room-object-engine"
 ---
 
 # Lesson 77: Interlaced Flicker — Faking More Colours & Resolution

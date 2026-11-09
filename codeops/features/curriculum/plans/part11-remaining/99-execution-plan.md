@@ -1,7 +1,7 @@
 # Lessons 73–78 — Execution Plan
 
-> **Status**: Adopted 2026-11-08. Six lessons, one atomic commit each, then one integration
-> commit, then push and watch CI.
+> **Status**: Complete 2026-11-09. Six lessons and the Part 11 integration committed; RD-11
+> closes at 11/11.
 
 ## Order
 
@@ -36,9 +36,9 @@ the summary in `04-findings.md` and the final state in this file.
 | Lesson | Commit | Gate | Reviews |
 |---|---|---|---|
 | 73 | `14706c2` | PASSED (272 sources, docs build) | 3 critical, 10 major, 22 minor fixed |
-| 74 | `pending-commit` | PASSED (275 sources, docs build) | 1 critical, 3 major, 11 minor fixed |
-| 75 | `pending-commit` | PASSED (278 sources, docs build) | 12 major, 12 minor fixed |
-| 76 | `pending-commit` | PASSED (281 sources, docs build) | 0 critical/major, 12 minor fixed |
-| 77 | `pending-commit` | PASSED (284 sources, docs build) | 0 critical, 11 minor fixed |
-| 78 | `pending-commit` | PASSED (287 sources, docs build) | 3 major, 11 minor fixed |
-| Integration | pending | — | — |
+| 74 | `0521de9` | PASSED (275 sources, docs build) | 1 critical, 3 major, 11 minor fixed |
+| 75 | `86723e6` | PASSED (278 sources, docs build) | 12 major, 12 minor fixed |
+| 76 | `11c43cf` | PASSED (281 sources, docs build) | 0 critical/major, 12 minor fixed |
+| 77 | `a492af4` | PASSED (284 sources, docs build) | 0 critical, 11 minor fixed |
+| 78 | `868cc37` | PASSED (287 sources, docs build) | 3 major, 11 minor fixed |
+| Integration | `pending-commit` | PASSED (287 sources, docs build) | prev/next chain wired; Part 11 7/7 |

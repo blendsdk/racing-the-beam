@@ -2,11 +2,11 @@
 title: "Lesson 74: Skipdraw — The Classic Sprite Kernel Idiom"
 description: "Draw a 16-row sprite in a one-line kernel with one branch and one unconditional store: the unsigned carry test skips the graphic load above and below the sprite, the missile gets a branchless carry form, and the 192-line schedule fits 24 star lines, 144 flight lines and 24 ground lines into 262."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 73: The HMOVE Comb & the Cosmic Ark Starfield"
+  link: "/part11-legendary/73-cosmic-ark-starfield"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 75: Pseudo-3D Road — The Enduro / Pole Position Effect"
+  link: "/part11-legendary/75-pseudo-3d-road"
 ---
 
 # Lesson 74: Skipdraw — The Classic Sprite Kernel Idiom

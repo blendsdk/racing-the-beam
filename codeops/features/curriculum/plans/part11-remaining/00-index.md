@@ -1,6 +1,6 @@
 # Lessons 73–78 — The Rest of Part 11
 
-> **Status**: Adopted 2026-11-08. Lessons 73–78 are the remaining six lessons of RD-11.
+> **Status**: Complete 2026-11-09. Lessons 73–78 shipped; Part 11 is 7/7.
 > **Base commit**: `496a346` (Lesson 79 complete; Part 11 at 1/7 lessons).
 > **Repository**: `/home/gevik/workdir/2600/racing-the-beam`
 

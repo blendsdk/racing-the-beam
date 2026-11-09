@@ -168,7 +168,7 @@ export default defineConfig({
           ],
         },
         {
-          text: 'Part 11: Legendary Techniques 🔮',
+          text: 'Part 11: Legendary Techniques',
           collapsed: true,
           items: [
             { text: 'Overview', link: '/part11-legendary/' },

@@ -1,7 +1,7 @@
 # RD-11: Part 11 — Legendary Techniques (lessons 73–79)
 
 > **Document**: RD-11-part11-legendary.md
-> **Status**: Draft
+> **Status**: Complete 2026-11-09
 > **Created**: 2026-10-10
 > **Project**: Racing the Beam
 > **Depends On**: RD-10 (Part 10 — Capstone Projects)
@@ -41,17 +41,17 @@ Lesson 79 is the 2026-11-08 user-authorized addition; Lessons 73–78 keep their
 
 ## Acceptance Criteria
 
-1. [ ] For each of lessons 73–79: the full artifact set exists per `vcs-lesson-production` —
+1. [x] For each of lessons 73–79: the full artifact set exists per `vcs-lesson-production` —
    assembly source (`exercise-NN-solution.asm` when the lesson has exercises; `demo-NN.asm` for
    theory lessons), a lesson document following the lesson template, Stella screenshots captured
    from the real ROM under `docs/public/images/lessonNN/`, and each buildable lesson's `.bin`
    committed under `docs/public/roms/<part-folder>/NN-slug/` with a `<RomPlayer>` embed under the
    screenshot; the VitePress sidebar, part index, and prev/next links are updated; `README.md` is
    synced when the listing changes.
-2. [ ] `bash scripts/verify.sh` passes (ROM drift check + docs build) with all listed lessons included.
-3. [ ] Technical claims follow the `atari-2600-expert` claim discipline; `atari2600-reviewer` and
+2. [x] `bash scripts/verify.sh` passes (ROM drift check + docs build) with all listed lessons included.
+3. [x] Technical claims follow the `atari-2600-expert` claim discipline; `atari2600-reviewer` and
    `curriculum-auditor` report no critical/major findings before a lesson is considered done.
-4. [ ] No further lesson or part is added, removed, renamed, or reordered — the amended
+4. [x] No further lesson or part is added, removed, renamed, or reordered — the amended
    79-lesson structure stays frozen (AR #1).
 
 ## Dependencies

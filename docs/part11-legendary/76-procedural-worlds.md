@@ -2,11 +2,11 @@
 title: "Lesson 76: Procedural Worlds from a Seed — Pitfall! & River Raid"
 description: "Generate a scrolling 16-row world from one byte: an 8-bit Galois LFSR with taps $B8 steps once per terrain row, a four-entry map chooses jungle, river, wall or open, a 96-byte pattern table turns the state into three playfield bytes, and a 64-byte ring shifts one row every eight frames while the seed is displayed as bars in the status band."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 75: Pseudo-3D Road — The Enduro / Pole Position Effect"
+  link: "/part11-legendary/75-pseudo-3d-road"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 77: Interlaced Flicker — Faking More Colours & Resolution"
+  link: "/part11-legendary/77-interlaced-flicker"
 ---
 
 # Lesson 76: Procedural Worlds from a Seed — Pitfall! & River Raid

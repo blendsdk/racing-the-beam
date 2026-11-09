@@ -2,11 +2,11 @@
 title: "Lesson 78: Room & Object Engine — The Adventure Architecture"
 description: "Build Warren Robinett's data-driven idea in 4 KB: an 8-byte room record, a 6-byte object record, one interpreter, P0 for the player, P1 for the key and the ball for the door, collision latches for pickup, a 24-line status gauge, a 144-line room and a 262-line frame. The lesson explains why tables save ROM and logic, verifies the engine in Stella, and ships two exercises: a fifth room with a vertical exit, and a locked-door behaviour with a third object."
 prev:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 77: Interlaced Flicker — Faking More Colours & Resolution"
+  link: "/part11-legendary/77-interlaced-flicker"
 next:
-  text: "Part 11: Legendary Techniques"
-  link: "/part11-legendary/"
+  text: "Lesson 79: The Publisher Mark — An Activision-Style In-Game Logo"
+  link: "/part11-legendary/79-publisher-mark"
 ---
 
 # Lesson 78: Room & Object Engine — The Adventure Architecture
