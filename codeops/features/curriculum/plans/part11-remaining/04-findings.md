@@ -8,8 +8,8 @@
 | Severity | Raised | Open | Accepted | Fixed |
 |---|---:|---:|---:|---:|
 | Critical | 4 | 0 | 0 | 4 |
-| Major | 30 | 0 | 0 | 30 |
-| Minor | 68 | 0 | 0 | 68 |
+| Major | 33 | 0 | 0 | 33 |
+| Minor | 87 | 0 | 0 | 87 |
 
 ## Lesson 73
 
@@ -175,6 +175,32 @@
 | L77-m9 | Muted-player note missing | "Javatari starts muted; this ROM is silent." | Fixed |
 | L77-m10 | The build-time assertion was vacuous | `!if BAND_COUNT * BAND_LINES != 192` | Fixed |
 | L77-m11 | StagePalette 136 vs ~155; "six instructions" vs nine; ex1 capture times | ~155 (135 loop); eight instructions + WSYNC; 3.5/5.5/7.5 s | Fixed |
+
+## Lesson 78
+
+### Critical / major
+
+| ID | Source | Severity | Finding | Resolution | Status |
+|---|---|---|---|---|---|
+| L78-M1 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The status gauge's row 0 was not blank: the prelude stored the next row's enable in ENAM0, so the gauge was 5/9/15/17-19 and grew when the key was held | The prelude stores zero to ENAM0/ENAM1; M0 line 0, M1 line 1; the loop enters with TmpM0/TmpM1; captures 8/12 | Fixed |
+| L78-M2 | atari2600-reviewer, curriculum-auditor | 🟠 Major | The room kernel never computed row 0 (a player at row 0 lost the top 4 lines) and never cleared GRP0/GRP1/ENABL (a player at row 32 repeated the bottom row through the lower band) | Row 0 computed in VBLANK and loaded in the room band; the lower band clears GRP0/GRP1/ENABL; row 0/32 checks | Fixed |
+| L78-M3 | atari2600-reviewer, curriculum-auditor | 🟠 Major | Exercise 1's room-4 gauge was 19 visible lines, not 20, because the disable landed before the last missile pixel | The clear moved to the room setup after the last status line's pixel 0; ex1 gauge 61 px / 20 lines | Fixed |
+
+### Minor
+
+| ID | Finding | Resolution | Status |
+|---|---|---|---|
+| L78-m1 | ex2 ResetGame did not clear DoorOpen/DoorLocked/CarryGfxOffset | Cleared; CarryColor defaults to C_KEY | Fixed |
+| L78-m2 | ex2 gem at x=4 (picked up on entry); no-carry state unreachable | Gem at x=40; the no-carry variant omits both pickups | Fixed |
+| L78-m3 | "Full-width edge" was 64 px; later 4 vs 3 lines | PF0/1/2=$FF; three full-width lines stated | Fixed |
+| L78-m4 | C_WALL0=$46 called blue-grey | Red (hue 4) in the source/doc | Fixed |
+| L78-m5 | Key "four rows below" | Four rows above | Fixed |
+| L78-m6 | What's Next did not link Lesson 79 | Lesson 79 linked | Fixed |
+| L78-m7 | Frame 248 vs 249 | 249 | Fixed |
+| L78-m8 | Stale headers (8 vs 10-byte, five rooms, six vs seven objects, RAM maps) | Corrected in main/ex1/ex2 | Fixed |
+| L78-m9 | RowEffects seam claimed "without recolouring a wall" | One-line seam documented; the header split | Fixed |
+| L78-m10 | HMM0/HMM1 clears inside the 24-cycle window | Moved to VBLANK; captures gauge x≈21/key x≈41 | Fixed |
+| L78-m11 | Room setup top seam; lower-band/LowerStart line numbers; ex2 BEH_LOCKED/P1 comments | Documented/corrected | Fixed |
 
 ### Accepted limitations
 

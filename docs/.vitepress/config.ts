@@ -177,7 +177,7 @@ export default defineConfig({
             { text: '75 — Pseudo-3D Road', link: '/part11-legendary/75-pseudo-3d-road' },
             { text: '76 — Procedural Worlds (LFSR)', link: '/part11-legendary/76-procedural-worlds' },
             { text: '77 — Interlaced Flicker', link: '/part11-legendary/77-interlaced-flicker' },
-            { text: '78 — Room & Object Engine', link: '/part11-legendary/' },
+            { text: '78 — Room & Object Engine', link: '/part11-legendary/78-room-object-engine' },
             { text: '79 — The Publisher Mark', link: '/part11-legendary/79-publisher-mark' },
           ],
         },

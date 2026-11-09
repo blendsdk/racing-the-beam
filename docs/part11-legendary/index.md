@@ -4,7 +4,7 @@
 
 An anthology of famous, historically documented Atari 2600 tricks — the masters' greatest hits. By this point in the course you know enough to *appreciate* and *reimplement* the techniques that defined the platform.
 
-**Lessons 73–77 and 79 are complete; lesson 78 is in production.**
+**All seven lessons, 73–79, are complete.**
 
 ## Lessons
 
@@ -15,7 +15,7 @@ An anthology of famous, historically documented Atari 2600 tricks — the master
 | 75 | [**Pseudo-3D Road — The Enduro / Pole Position Effect**](./75-pseudo-3d-road) — a perspective road that rushes toward the player using per-scanline width, colour bands, and a curve-offset table | ✅ Complete |
 | 76 | [**Procedural Worlds from a Seed — Pitfall! & River Raid**](./76-procedural-worlds) — an entire world generated from a tiny LFSR seed, deterministic forward and backward | ✅ Complete |
 | 77 | [**Interlaced Flicker — Faking More Colours & Resolution**](./77-interlaced-flicker) — time-multiplexing the display across alternating frames to exceed the hardware's limits | ✅ Complete |
-| 78 | **Room & Object Engine — The Adventure Architecture** — Warren Robinett's data-driven room/object engine, all in 4KB | 🔮 Coming Soon |
+| 78 | [**Room & Object Engine — The Adventure Architecture**](./78-room-object-engine) — Warren Robinett's data-driven room/object engine, all in 4KB | ✅ Complete |
 | 79 | [**The Publisher Mark — An Activision-Style In-Game Logo**](./79-publisher-mark) — how Activision put its wordmark in the bottom band; the 48-pixel trick as a static mark; a ROM table instead of a RAM buffer; the second handover | ✅ Complete |
 
 ## What You'll Learn
@@ -30,4 +30,4 @@ Part 11 is the anthology of the techniques that defined the platform:
 - **Lesson 78** builds the room-and-object engine that invented the action-adventure genre.
 - **Lesson 79** puts the 48-pixel trick in the bottom band: a static `RACING` publisher mark drawn from a page-aligned ROM table, with a second handover and a SELECT toggle, beside the score and a small play field.
 
-*The anthology completes the masterclass at 79 lessons. Lessons 73–77 and 79 are live; lesson 78 is coming soon.*
+*The anthology completes the masterclass at 79 lessons. All seven Part 11 lessons, 73–79, are live.*
