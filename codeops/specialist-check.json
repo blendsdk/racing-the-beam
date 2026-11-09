@@ -1,4 +1,17 @@
 {
-  "checkedAt": "2026-10-10T20:33:05Z",
-  "plans": ["part1-6502", "part2-tv-tia"]
+  "checkedAt": "2026-11-09T08:49:33Z",
+  "plans": [
+    "part1-6502",
+    "part10-capstones",
+    "part11-legendary",
+    "part11-remaining",
+    "part2-tv-tia",
+    "part3-playfield",
+    "part4-sprites",
+    "part5-sound",
+    "part6-game-dev",
+    "part7-kernel-mastery",
+    "part8-advanced",
+    "part9-dsl-path"
+  ]
 }

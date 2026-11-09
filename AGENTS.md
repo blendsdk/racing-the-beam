@@ -43,29 +43,33 @@ rename, or reorder lessons or parts. Fixing text that disagrees with the curricu
 
 ## Project facts (managed)
 
-- **Type:** educational content repository — assembly lesson sources + VitePress static site.
+- **Type:** educational content repository — 79 Atari 2600 assembly lessons + a VitePress static site.
 - **Languages:** 6502 assembly (ACME 0.97), TypeScript/Markdown (VitePress 1.6.4), Bash scripts.
 - **Node:** 20+ (CI uses 20; local 24 works). Install with `npm ci`.
 
-### Commands (use these; verified unless marked)
+### Commands (use these; verified 2026-11-09 unless marked)
 
 | Purpose | Command | Status |
 | --- | --- | --- |
-| Full verify (ROM drift + docs build) | `bash scripts/verify.sh` | ✅ verified |
-| Assemble all lesson ROMs into `docs/public/roms/` | `npm run roms` | ✅ verified (acme 0.97) |
+| Full verify (starter ROM + ROM drift + docs build) | `bash scripts/verify.sh` | ✅ verified (287 sources, docs build) |
+| Assemble all lesson ROMs into `docs/public/roms/` | `npm run roms` | ✅ verified (287 ROMs, no drift) |
 | Starter ROM | `acme -f plain -o build/game.bin src/main.asm` (or `make`) | ✅ verified |
-| Docs dev / build / preview | `npm run docs:dev` · `npm run docs:build` · `npm run docs:preview` | build ✅ verified |
-| Stella screenshot | `bash scripts/capture-screenshot.sh <rom.bin> <out.png>` | ✅ verified (Stella 7.0 + ImageMagick) |
+| Docs build | `npm run docs:build` | ✅ verified |
+| Docs dev / preview | `npm run docs:dev` · `npm run docs:preview` | not exercised this run |
+| Stella screenshot | `bash scripts/capture-screenshot.sh <rom.bin> <out.png>` | ✅ verified (1010x807 capture) |
 | Run in Stella | `stella <rom.bin>` | ✅ installed (Stella 7.0) |
 
 ### Structure
 
-- `lessons/partN-topic/NN-slug/` — lesson assembly (+ `exercise-NN-solution.asm`, `demo-NN.asm`).
-- `docs/partN-topic/NN-slug.md` — lesson documents; `docs/reference/` — reference pages.
+- `lessons/partN-topic/NN-slug/` — lesson assembly (+ `exercise-NN-solution.asm`, `demo-NN.asm`);
+  287 ACME sources across Parts 0–11.
+- `docs/partN-topic/NN-slug.md` — 79 lesson documents; `docs/reference/` — instruction,
+  TIA-register, colour and glossary pages.
 - `include/vcs.asm` — TIA/RIOT register definitions (**ground truth for addresses**);
   `include/macro.asm` — `+clean_start`, `+vsync`, `+set_timer`, `+wait_timer`.
 - `src/main.asm` — starter ROM. `scripts/` — ROM build, verify, screenshot tooling.
-- `docs/public/roms/` — committed `.bin` outputs; `docs/public/images/` — committed screenshots;
+- `docs/public/roms/` — committed `.bin` outputs (287 lesson ROMs + the Part 9 batari Basic
+  reference = 288 total); `docs/public/images/` — committed screenshots;
   `docs/public/javatari/` — third-party Javatari emulator (AGPL-3.0; do not modify, keep
   `license.txt`); see `THIRD-PARTY-NOTICES.md`.
 
@@ -83,13 +87,16 @@ rename, or reorder lessons or parts. Fixing text that disagrees with the curricu
 
 ### CodeOps artifacts
 
-- Nested layout: `codeops/` (portfolio roadmap, per-feature requirements/plans, specialist
-  briefs). Layout marker: `codeops/.codeops.yml` (`integrationBranch: master`).
+- Nested layout: `codeops/` — `00-roadmap.md` (portfolio), `features/curriculum/`
+  (requirements and 12 plan folders), `specialists/` (briefs), `codeops.json` (routing).
+  Layout marker: `codeops/.codeops.yml` (`integrationBranch: master`); the curriculum
+  roadmap is complete at 11/11 RDs.
 - Project agents live in `.opencode/agents/`; project skills in `.opencode/skills/`.
 
 ### Specialist coverage
 
-`up to date (2026-10-10)` — `lesson-author`, `atari2600-reviewer`, `curriculum-auditor`
+`up to date (2026-11-09)` — `lesson-author`, `atari2600-reviewer`, `curriculum-auditor`
+(`codeops/specialist-check.json`)
 
 <!-- CODEOPS-PROJECT:END -->
 
