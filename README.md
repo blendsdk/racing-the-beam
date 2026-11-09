@@ -24,6 +24,7 @@ A step-by-step masterclass in Atari 2600 game development using 6502 assembly la
 | 9 | The DSL Path | 66–68 |
 | 10 | Capstone Projects | 69–72 |
 | 11 | Legendary Techniques | 73–79 |
+| **Total** | **Parts 0–11** | **79 lessons** |
 
 ## Prerequisites
 
