@@ -33,6 +33,8 @@ the summary in `04-findings.md` and the final state in this file.
 
 ## Completion record
 
+**Final** (2026-11-09): all seven Part 11 lessons (73–79) are complete; RD-11 is Done at 11/11; the repository builds 287 ACME ROMs (288 total `.bin` including the Part 9 bB reference); `bash scripts/verify.sh` passes and the site deploys.
+
 | Lesson | Commit | Gate | Reviews |
 |---|---|---|---|
 | 73 | `14706c2` | PASSED (272 sources, docs build) | 3 critical, 10 major, 22 minor fixed |
@@ -41,4 +43,4 @@ the summary in `04-findings.md` and the final state in this file.
 | 76 | `11c43cf` | PASSED (281 sources, docs build) | 0 critical/major, 12 minor fixed |
 | 77 | `a492af4` | PASSED (284 sources, docs build) | 0 critical, 11 minor fixed |
 | 78 | `868cc37` | PASSED (287 sources, docs build) | 3 major, 11 minor fixed |
-| Integration | `pending-commit` | PASSED (287 sources, docs build) | prev/next chain wired; Part 11 7/7 |
+| Integration | `a2f56f9` | PASSED (287 sources, docs build) | prev/next chain wired; Part 11 7/7 |

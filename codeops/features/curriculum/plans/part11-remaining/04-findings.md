@@ -1,6 +1,6 @@
 # Lessons 73–78 — Findings
 
-> **Status**: Lesson 73 reviewed and fixed; 74–78 pending.
+> **Status**: Complete 2026-11-09. All six lessons reviewed and fixed; 4 critical, 33 major, 87 minor; 0 open.
 > **Rule**: every finding gets a stable ID, a severity, a status, and file:line evidence.
 
 ## Summary
