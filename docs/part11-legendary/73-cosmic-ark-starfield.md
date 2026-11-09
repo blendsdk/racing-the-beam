@@ -1268,6 +1268,18 @@ The frame log: `StartFrame` 259/3, `VblankStart` 0/5, `BodyStart` 37/5, `PlanetS
 
 ## What You Should See
 
+::: warning Deliberate: the black strip and the blank top are not bugs
+The **eight-pixel black strip on the left** is the TIA's HMOVE blanking bar. This lesson
+strobes `HMOVE` on every star-band line to walk the stars across the screen, and an `HMOVE`
+in HBLANK always blanks the leftmost eight pixels. It is the technique's signature, not a
+rendering fault.
+
+The **blank band at the top** is vertical blanking — the 37 scanlines of every NTSC frame
+that a real TV never shows. The in-browser player includes part of that interval (and some
+overscan) in its viewport; the Stella screenshots below are cropped to the 192 visible lines,
+so the band is absent there. Neither the ROM nor the emulator is broken.
+:::
+
 At power-on the star band is a blue field of white and bright-blue single-pixel stars. The stars are the points that the mask samples along the HMOVE walk, so short diagonal runs appear where the motion table repeats a value and the runs turn where the table changes. The three missile copies sit at X, X+16 and X+32 (mod 160); the ball adds a fourth star from its own walk. The eight-pixel HMOVE bar runs down the left edge of all 160 star-band lines. A green/brown planet limb fills the bottom 32 lines with a continuous surface (no detached corner blocks), and a small red ship spans X = 57–65 (left edge 57), just left of centre. The sky cycles through four blues.
 
 ![Stella running Lesson 73 in the single-strobe state: a blue field of white and bright-blue one-pixel stars tracing the HMOVE walk, an eight-pixel bar at the left of the star band, a continuous green/brown planet limb and a red ship; the title bar reads Stella 7.0: "73-cosmic-ark-starfield"](/images/lesson73/starfield.png)
@@ -1276,7 +1288,9 @@ At power-on the star band is a blue field of white and bright-blue single-pixel 
 
 <RomPlayer rom="/roms/part11-legendary/73-cosmic-ark-starfield/73-cosmic-ark-starfield.bin" title="Lesson 73 — The HMOVE Comb & the Cosmic Ark Starfield" />
 
-*Javatari starts muted; this ROM is silent.*
+*Javatari starts muted; this ROM is silent. The black strip at the left is the HMOVE bar; the
+black band above and below the picture is the player showing VBLANK/overscan. Both are
+expected.*
 
 At frame 240 (about four seconds) the auto-demo sets `CombMode=1`. From the next frame each line's second `HMOVE` stalls the not-yet-drawn pixels rightward; the field shifts by a line-dependent, bounded amount (the measured full-mask trace shows 36–133 pixels mod 160). The eight-pixel bar is unchanged, and the planet and ship are untouched. SELECT does the same thing at any time; the second-strobe capture is taken at about five seconds, after the toggle.
 
